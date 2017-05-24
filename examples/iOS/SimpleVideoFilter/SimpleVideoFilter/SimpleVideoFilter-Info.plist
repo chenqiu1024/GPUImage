@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please enable photolibrary usage</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Please enable microphone usage</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Please enable camera usage</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
