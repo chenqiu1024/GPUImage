@@ -208,6 +208,11 @@
 			attributes = {
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Cell Phone";
+				TargetAttributes = {
+					BCB5DDC914E86899000AF3C2 = {
+						DevelopmentTeam = QBAB3CS86A;
+					};
+				};
 			};
 			buildConfigurationList = BCB5DDC414E86899000AF3C2 /* Build configuration list for PBXProject "SimpleVideoFileFilter" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -383,6 +388,7 @@
 		BCB5DDE314E86899000AF3C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SimpleVideoFileFilter/SimpleVideoFileFilter-Prefix.pch";
@@ -395,6 +401,7 @@
 		BCB5DDE414E86899000AF3C2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SimpleVideoFileFilter/SimpleVideoFileFilter-Prefix.pch";
