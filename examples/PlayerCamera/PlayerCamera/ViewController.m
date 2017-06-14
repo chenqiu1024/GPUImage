@@ -55,7 +55,7 @@
         //        [videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOn];
         //        [videoCamera.inputCamera unlockForConfiguration];
         
-        double delayInSeconds = 10.0;
+        double delayInSeconds = 15.0;
         dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
             
@@ -65,7 +65,7 @@
             [movieWriter finishRecording];
             NSLog(@"Movie completed");
             [filter removeAllTargets];
-            
+            /*
             ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
             if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:movieURL])
             {
@@ -87,6 +87,9 @@
                      [self startRecordingVideoSegment];
                  }];
             }
+            /*/
+            [self startRecordingVideoSegment];
+            //*/
             
             //            [videoCamera.inputCamera lockForConfiguration:nil];
             //            [videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOff];
