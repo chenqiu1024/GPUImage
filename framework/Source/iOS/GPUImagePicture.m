@@ -85,7 +85,6 @@
     imageUpdateSemaphore = dispatch_semaphore_create(0);
     dispatch_semaphore_signal(imageUpdateSemaphore);
 
-
     // TODO: Dispatch this whole thing asynchronously to move image loading off main thread
     CGFloat widthOfImage = CGImageGetWidth(newImageSource);
     CGFloat heightOfImage = CGImageGetHeight(newImageSource);

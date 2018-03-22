@@ -7,9 +7,14 @@
 //
 
 #import "ViewController.h"
+#import "IJKGPUImageMovie.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
 @interface ViewController ()
+{
+    IJKGPUImageMovie* _ijkMovie;
+    GPUImageView* _filterView;
+}
 
 @end
 
@@ -17,13 +22,15 @@
 
 - (void) startRecordingVideoSegment {
     videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
-    //    videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionFront];
-    //    videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1280x720 cameraPosition:AVCaptureDevicePositionBack];
-    //    videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1920x1080 cameraPosition:AVCaptureDevicePositionBack];
     videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
     videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     videoCamera.horizontallyMirrorRearFacingCamera = NO;
+    /*
     [videoCamera addTarget:filter];
+    /*/
+    _ijkMovie = [[IJKGPUImageMovie alloc] initWithSize:CGSizeMake(640, 480) FPS:2.f];
+    [_ijkMovie addTarget:filter];
+    //*/
     
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyyMMdd_hhmmss";
@@ -37,14 +44,18 @@
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(720.0, 1280.0)];
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(1080.0, 1920.0)];
     [filter addTarget:movieWriter];
+    [filter addTarget:_filterView];
     
     double delayToStartRecording = 0.5;
     dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, delayToStartRecording * NSEC_PER_SEC);
     dispatch_after(startTime, dispatch_get_main_queue(), ^(void){
         NSLog(@"Start recording");
-        
+
         videoCamera.audioEncodingTarget = movieWriter;
         [videoCamera startCameraCapture];
+
+        [_ijkMovie startPlay];
+        //*/
         [movieWriter startRecording];
         
         //        NSError *error = nil;
@@ -60,8 +71,12 @@
         dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
             
             [filter removeTarget:movieWriter];
+
             videoCamera.audioEncodingTarget = nil;
             [videoCamera stopCameraCapture];
+
+            [_ijkMovie stopPlay];
+            //*/
             [movieWriter finishRecording];
             NSLog(@"Movie completed");
             [filter removeAllTargets];
@@ -124,13 +139,13 @@
     //    filter = [[GPUImageSmoothToonFilter alloc] init];
     //    GPUImageRotationFilter *rotationFilter = [[GPUImageRotationFilter alloc] initWithRotation:kGPUImageRotateRightFlipVertical];
 
-//    GPUImageView *filterView = (GPUImageView *)self.gpuImageView;
-//    GPUImageView* filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
-//    filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//    [self.view addSubview:filterView];
-    //    filterView.fillMode = kGPUImageFillModeStretch;
-    //    filterView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
-//    [filter addTarget:filterView];
+    //GPUImageView *filterView = (GPUImageView *)self.gpuImageView;
+    _filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
+    _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view addSubview:_filterView];
+    _filterView.fillMode = kGPUImageFillModeStretch;
+    _filterView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
+    [filter addTarget:_filterView];
     
     // Record a movie for 10 s and store it in /Documents, visible via iTunes file sharing
     [self startRecordingVideoSegment];
