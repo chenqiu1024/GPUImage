@@ -24,6 +24,7 @@
 		523390C4206402F00007FC5D /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CB035620550F0F00329861 /* IJKMediaFramework.framework */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
+		52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,8 @@
 		52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IJKMediaPlayer.xcodeproj; path = ../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer.xcodeproj; sourceTree = "<group>"; };
 		52CB035B205511E000329861 /* IJKGPUImageMovie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImageMovie.h; path = IJKGPUImage/IJKGPUImageMovie.h; sourceTree = "<group>"; };
 		52CB035C205511E000329861 /* IJKGPUImageMovie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IJKGPUImageMovie.m; path = IJKGPUImage/IJKGPUImageMovie.m; sourceTree = "<group>"; };
+		52FAF1C52067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImage_Vout_iOS_OpenGLES2.h; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.h; sourceTree = "<group>"; };
+		52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IJKGPUImage_Vout_iOS_OpenGLES2.m; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +175,8 @@
 				520DA6D71ED7248C009E4705 /* Supporting Files */,
 				52CB035B205511E000329861 /* IJKGPUImageMovie.h */,
 				52CB035C205511E000329861 /* IJKGPUImageMovie.m */,
+				52FAF1C52067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.h */,
+				52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -383,6 +388,7 @@
 			files = (
 				520DA6DF1ED7248C009E4705 /* ViewController.m in Sources */,
 				520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */,
+				52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,
 			);
