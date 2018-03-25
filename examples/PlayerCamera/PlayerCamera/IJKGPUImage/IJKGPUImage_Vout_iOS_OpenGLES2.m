@@ -146,7 +146,7 @@ static void JKGPUImage_Vout_iOS_SetGLMovieOutput_l(SDL_Vout* vout, IJKGPUImageMo
     }
     
     if (glMovieOutput)
-        opaque->glMovieOutput = [view glMovieOutput];
+        opaque->glMovieOutput = glMovieOutput;
 }
 
 void JKGPUImage_Vout_iOS_SetGLMovieOutput(SDL_Vout* vout, IJKGPUImageMovie* glMovieOutput)

@@ -16,19 +16,58 @@
 #import "ijkplayer/ijkplayer_internal.h"
 #import "ijkplayer/pipeline/ffpipeline_ffplay.h"
 #import "pipeline/ffpipeline_ios.h"
-#import "../IJKFFOptions.h"
 
-//#import "IJKFFMoviePlayerDef.h"
-//#import "IJKMediaPlayback.h"
-//#import "IJKMediaModule.h"
-//#import "IJKAudioKit.h"
-//#import "IJKNotificationManager.h"
 //#import "NSString+IJKMedia.h"
 #import "ijkioapplication.h"
+
+@class IJKNotificationManager;
+@class IJKMediaUrlOpenData;
 
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+
+#pragma mark    IJKGPUImageMovie()
+
+@interface IJKGPUImageMovie()
+{
+    CGSize _framebufferSize;
+    float _FPS;
+    
+    NSUInteger _currentFrame;
+    
+    IjkMediaPlayer* _ijkMediaPlayer;
+    //    IJKSDLGLView *_glView;
+    IJKFFMoviePlayerMessagePool *_msgPool;
+    NSString *_urlString;
+    
+    NSInteger _videoWidth;
+    NSInteger _videoHeight;
+    NSInteger _sampleAspectRatioNumerator;
+    NSInteger _sampleAspectRatioDenominator;
+    
+    BOOL      _seeking;
+    NSInteger _bufferingTime;
+    NSInteger _bufferingPosition;
+    
+    BOOL _keepScreenOnWhilePlaying;
+    BOOL _pauseInBackground;
+    BOOL _isVideoToolboxOpen;
+    BOOL _playingBeforeInterruption;
+    
+    IJKNotificationManager *_notificationManager;
+    
+    AVAppAsyncStatistic _asyncStat;
+    IjkIOAppCacheStatistic _cacheStat;
+    BOOL _shouldShowHudView;
+    NSTimer *_hudTimer;
+}
+
+@property (nonatomic, strong) NSTimer* tickTimer;
+
+@end
+
+#pragma mark    ijkgpuplayer
 
 IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
 {
@@ -89,21 +128,259 @@ bool ijkgpuplayer_is_videotoolbox_open(IjkMediaPlayer *mp)
     return ret;
 }
 
-@interface IJKGPUImageMovie()
+#pragma mark av_format_control_message
+
+static int onInjectIOControl(IJKGPUImageMovie* ijkgpuMovie, id<IJKMediaUrlOpenDelegate> delegate, int type, void* data, size_t data_size)
 {
-    CGSize _framebufferSize;
-    float _FPS;
+    AVAppIOControl* realData = data;
+    assert(realData);
+    assert(sizeof(AVAppIOControl) == data_size);
+    realData->is_handled     = NO;
+    realData->is_url_changed = NO;
     
-    NSUInteger _currentFrame;
+    if (delegate == nil)
+        return 0;
     
-    IjkMediaPlayer* _ijkMediaPlayer;
+    NSString* urlString = [NSString stringWithUTF8String:realData->url];
+    
+    IJKMediaUrlOpenData* openData = [[IJKMediaUrlOpenData alloc] initWithUrl:urlString event:(IJKMediaEvent)type segmentIndex:realData->segment_index retryCounter:realData->retry_counter];
+    if ([delegate respondsToSelector:@selector(willOpenUrl:)])
+    {
+        [delegate willOpenUrl:openData];
+    }
+    if (openData.error < 0)
+        return -1;
+    
+    if (openData.isHandled)
+    {
+        realData->is_handled = YES;
+        if (openData.isUrlChanged && openData.url != nil)
+        {
+            realData->is_url_changed = YES;
+            const char *newUrlUTF8 = [openData.url UTF8String];
+            strlcpy(realData->url, newUrlUTF8, sizeof(realData->url));
+            realData->url[sizeof(realData->url) - 1] = 0;
+        }
+    }
+    
+    return 0;
 }
 
-@property (nonatomic, strong) NSTimer* tickTimer;
+static int onInjectTcpIOControl(IJKGPUImageMovie* ijkgpuMovie, id<IJKMediaUrlOpenDelegate> delegate, int type, void *data, size_t data_size)
+{
+    AVAppTcpIOControl *realData = data;
+    assert(realData);
+    assert(sizeof(AVAppTcpIOControl) == data_size);
+    
+    switch (type) {
+        case IJKMediaCtrl_WillTcpOpen:
+            
+            break;
+        case IJKMediaCtrl_DidTcpOpen:
+            ijkgpuMovie->_monitor.tcpError = realData->error;
+            ijkgpuMovie->_monitor.remoteIp = [NSString stringWithUTF8String:realData->ip];
+//            [ijkgpuMovie->_glView setHudValue: mpc->_monitor.remoteIp forKey:@"ip"];
+            break;
+        default:
+            assert(!"unexcepted type for tcp io control");
+            break;
+    }
+    
+    if (delegate == nil)
+        return 0;
+    
+    NSString* urlString = [NSString stringWithUTF8String:realData->ip];
+    
+    IJKMediaUrlOpenData* openData =
+    [[IJKMediaUrlOpenData alloc] initWithUrl:urlString
+                                       event:(IJKMediaEvent)type
+                                segmentIndex:0
+                                retryCounter:0];
+    openData.fd = realData->fd;
+    
+    [delegate willOpenUrl:openData];
+    if (openData.error < 0)
+        return -1;
+//    [ijkgpuMovie->_glView setHudValue: [NSString stringWithFormat:@"fd:%d %@", openData.fd, openData.msg?:@"unknown"] forKey:@"tcp-info"];
+    return 0;
+}
 
-@end
+static int onInjectAsyncStatistic(IJKGPUImageMovie* ijkgpuMovie, int type, void *data, size_t data_size)
+{
+    AVAppAsyncStatistic* realData = data;
+    assert(realData);
+    assert(sizeof(AVAppAsyncStatistic) == data_size);
+    
+    ijkgpuMovie->_asyncStat = *realData;
+    return 0;
+}
+
+static int onInectIJKIOStatistic(IJKGPUImageMovie* ijkgpuMovie, int type, void *data, size_t data_size)
+{
+    IjkIOAppCacheStatistic* realData = data;
+    assert(realData);
+    assert(sizeof(IjkIOAppCacheStatistic) == data_size);
+    
+    ijkgpuMovie->_cacheStat = *realData;
+    return 0;
+}
+
+static int64_t calculateElapsed(int64_t begin, int64_t end)
+{
+    if (begin <= 0)
+        return -1;
+    
+    if (end < begin)
+        return -1;
+    
+    return end - begin;
+}
+
+static int onInjectOnHttpEvent(IJKGPUImageMovie* ijkgpuMovie, int type, void* data, size_t data_size)
+{
+    AVAppHttpEvent* realData = data;
+    assert(realData);
+    assert(sizeof(AVAppHttpEvent) == data_size);
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSURL        *nsurl   = nil;
+    IJKFFMonitor *monitor = ijkgpuMovie->_monitor;
+    NSString     *url  = monitor.httpUrl;
+    NSString     *host = monitor.httpHost;
+    int64_t       elapsed = 0;
+    
+    id<IJKMediaNativeInvokeDelegate> delegate = ijkgpuMovie.nativeInvokeDelegate;
+    
+    switch (type)
+    {
+        case AVAPP_EVENT_WILL_HTTP_OPEN:
+            url   = [NSString stringWithUTF8String:realData->url];
+            nsurl = [NSURL URLWithString:url];
+            host  = nsurl.host;
+            
+            monitor.httpUrl      = url;
+            monitor.httpHost     = host;
+            monitor.httpOpenTick = SDL_GetTickHR();
+            [mpc setHudUrl:url];
+            
+            if (delegate != nil) {
+                dict[IJKMediaEventAttrKey_host]         = [NSString ijk_stringBeEmptyIfNil:host];
+                dict[IJKMediaEventAttrKey_url]          = [NSString ijk_stringBeEmptyIfNil:monitor.httpUrl];
+                [delegate invoke:type attributes:dict];
+            }
+            break;
+        case AVAPP_EVENT_DID_HTTP_OPEN:
+            elapsed = calculateElapsed(monitor.httpOpenTick, SDL_GetTickHR());
+            monitor.httpError = realData->error;
+            monitor.httpCode  = realData->http_code;
+            monitor.httpOpenCount++;
+            monitor.httpOpenTick = 0;
+            monitor.lastHttpOpenDuration = elapsed;
+            [mpc->_glView setHudValue:@(realData->http_code).stringValue forKey:@"http"];
+            
+            if (delegate != nil) {
+                dict[IJKMediaEventAttrKey_time_of_event]    = @(elapsed).stringValue;
+                dict[IJKMediaEventAttrKey_url]              = [NSString ijk_stringBeEmptyIfNil:monitor.httpUrl];
+                dict[IJKMediaEventAttrKey_host]             = [NSString ijk_stringBeEmptyIfNil:host];
+                dict[IJKMediaEventAttrKey_error]            = @(realData->error).stringValue;
+                dict[IJKMediaEventAttrKey_http_code]        = @(realData->http_code).stringValue;
+                [delegate invoke:type attributes:dict];
+            }
+            break;
+        case AVAPP_EVENT_WILL_HTTP_SEEK:
+            monitor.httpSeekTick = SDL_GetTickHR();
+            
+            if (delegate != nil) {
+                dict[IJKMediaEventAttrKey_host]         = [NSString ijk_stringBeEmptyIfNil:host];
+                dict[IJKMediaEventAttrKey_offset]       = @(realData->offset).stringValue;
+                [delegate invoke:type attributes:dict];
+            }
+            break;
+        case AVAPP_EVENT_DID_HTTP_SEEK:
+            elapsed = calculateElapsed(monitor.httpSeekTick, SDL_GetTickHR());
+            monitor.httpError = realData->error;
+            monitor.httpCode  = realData->http_code;
+            monitor.httpSeekCount++;
+            monitor.httpSeekTick = 0;
+            monitor.lastHttpSeekDuration = elapsed;
+            [mpc->_glView setHudValue:@(realData->http_code).stringValue forKey:@"http"];
+            
+            if (delegate != nil) {
+                dict[IJKMediaEventAttrKey_time_of_event]    = @(elapsed).stringValue;
+                dict[IJKMediaEventAttrKey_url]              = [NSString ijk_stringBeEmptyIfNil:monitor.httpUrl];
+                dict[IJKMediaEventAttrKey_host]             = [NSString ijk_stringBeEmptyIfNil:host];
+                dict[IJKMediaEventAttrKey_offset]           = @(realData->offset).stringValue;
+                dict[IJKMediaEventAttrKey_error]            = @(realData->error).stringValue;
+                dict[IJKMediaEventAttrKey_http_code]        = @(realData->http_code).stringValue;
+                [delegate invoke:type attributes:dict];
+            }
+            break;
+    }
+    
+    return 0;
+}
+
+// NOTE: could be called from multiple thread
+static int ijkff_inject_callback(void* opaque, int message, void* data, size_t data_size)
+{
+    IJKWeakHolder* weakHolder = (__bridge IJKWeakHolder*)opaque;
+    IJKGPUImageMovie* ijkgpuMovie = weakHolder.object;
+    if (!mpc)
+        return 0;
+    
+    switch (message)
+    {
+        case AVAPP_CTRL_WILL_CONCAT_SEGMENT_OPEN:
+            return onInjectIOControl(ijkgpuMovie, ijkgpuMovie.segmentOpenDelegate, message, data, data_size);
+        case AVAPP_CTRL_WILL_TCP_OPEN:
+            return onInjectTcpIOControl(ijkgpuMovie, ijkgpuMovie.tcpOpenDelegate, message, data, data_size);
+        case AVAPP_CTRL_WILL_HTTP_OPEN:
+            return onInjectIOControl(ijkgpuMovie, ijkgpuMovie.httpOpenDelegate, message, data, data_size);
+        case AVAPP_CTRL_WILL_LIVE_OPEN:
+            return onInjectIOControl(ijkgpuMovie, ijkgpuMovie.liveOpenDelegate, message, data, data_size);
+        case AVAPP_EVENT_ASYNC_STATISTIC:
+            return onInjectAsyncStatistic(mijkgpuMoviepc, message, data, data_size);
+        case IJKIOAPP_EVENT_CACHE_STATISTIC:
+            return onInectIJKIOStatistic(ijkgpuMovie, message, data, data_size);
+        case AVAPP_CTRL_DID_TCP_OPEN:
+            return onInjectTcpIOControl(ijkgpuMovie, ijkgpuMovie.tcpOpenDelegate, message, data, data_size);
+        case AVAPP_EVENT_WILL_HTTP_OPEN:
+        case AVAPP_EVENT_DID_HTTP_OPEN:
+        case AVAPP_EVENT_WILL_HTTP_SEEK:
+        case AVAPP_EVENT_DID_HTTP_SEEK:
+            return onInjectOnHttpEvent(ijkgpuMovie, message, data, data_size);
+        default: {
+            return 0;
+        }
+    }
+}
+
+#pragma mark    IJKGPUImageMovie
 
 @implementation IJKGPUImageMovie
+
+@synthesize view = _view;
+@synthesize currentPlaybackTime;
+@synthesize duration;
+@synthesize playableDuration;
+@synthesize bufferingProgress = _bufferingProgress;
+
+@synthesize numberOfBytesTransferred = _numberOfBytesTransferred;
+
+@synthesize isPreparedToPlay = _isPreparedToPlay;
+@synthesize playbackState = _playbackState;
+@synthesize loadState = _loadState;
+
+@synthesize naturalSize = _naturalSize;
+@synthesize scalingMode = _scalingMode;
+@synthesize shouldAutoplay = _shouldAutoplay;
+
+@synthesize allowsMediaAirPlay = _allowsMediaAirPlay;
+@synthesize airPlayMediaActive = _airPlayMediaActive;
+
+@synthesize isDanmakuMediaAirPlay = _isDanmakuMediaAirPlay;
+
+@synthesize monitor = _monitor;
 
 - (id)initWithContentURLString:(NSString *)aUrlString
                    withOptions:(IJKFFOptions *)options

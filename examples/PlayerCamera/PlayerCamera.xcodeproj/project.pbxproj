@@ -543,7 +543,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"../../framework/**",
-					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/ijkmedia/**",
+					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
 					"../../../ijkplayer_iOS/ijkmedia/**",
 					../../../ijkplayer_iOS/ios/build/universal/include,
 				);
@@ -564,7 +564,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"../../framework/**",
-					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/ijkmedia/**",
+					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
 					"../../../ijkplayer_iOS/ijkmedia/**",
 					../../../ijkplayer_iOS/ios/build/universal/include,
 				);
