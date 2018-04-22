@@ -403,6 +403,33 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 @synthesize asyncStat = _asyncStat;
 @synthesize cacheStat = _cacheStat;
 
+#pragma mark    Transplant from IJKFFMoviePlayerController
+
+- (id)initWithContentURL:(NSURL *)aUrl
+{
+    IJKFFOptions* options = [IJKFFOptions optionsByDefault];
+    return [self initWithContentURL:aUrl withOptions:options];
+}
+
+- (id)initWithContentURL:(NSURL *)aUrl
+             withOptions:(IJKFFOptions *)options
+{
+    if (aUrl == nil)
+        return nil;
+    
+    // Detect if URL is file path and return proper string for it
+    NSString *aUrlString = [aUrl isFileURL] ? [aUrl path] : [aUrl absoluteString];
+    
+    return [self initWithContentURLString:aUrlString
+                              withOptions:options];
+}
+
+- (id)initWithContentURLString:(NSString *)aUrlString
+{
+    IJKFFOptions* options = [IJKFFOptions optionsByDefault];
+    return [self initWithContentURLString:aUrlString withOptions:options];
+}
+
 - (id)initWithContentURLString:(NSString *)aUrlString
                    withOptions:(IJKFFOptions *)options
 {
@@ -1444,6 +1471,8 @@ int media_player_msg_loop(void* arg)
         return 0;
     }
 }
+
+#pragma mark    Playground
 
 -(instancetype) initWithSize:(CGSize)size FPS:(float)FPS {
     if (self = [super init])
