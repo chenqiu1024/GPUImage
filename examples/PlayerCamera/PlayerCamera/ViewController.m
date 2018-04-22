@@ -10,6 +10,12 @@
 #import "IJKGPUImageMovie.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
+#define VideoSource_Camera 0
+#define VideoSource_IJKGPUImageMovie_RandomColor 1
+#define VideoSource_IJKGPUImageMovie_VideoPlay 2
+
+#define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
+
 @interface ViewController ()
 {
     IJKGPUImageMovie* _ijkMovie;
@@ -30,18 +36,18 @@
     videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
     videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     videoCamera.horizontallyMirrorRearFacingCamera = NO;
-    /*
+#if VideoSource == VideoSource_Camera
     [videoCamera addTarget:filter];
-    /*
+#elif VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithSize:CGSizeMake(640, 480) FPS:2.f];
     [_ijkMovie addTarget:filter];
-    /*/
+#elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
     [self installMovieNotificationObservers];
     NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
     [_ijkMovie addTarget:filter];
     [_ijkMovie prepareToPlay];
-    //*/
+#endif
     
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyyMMdd_hhmmss";
@@ -64,12 +70,11 @@
 
         videoCamera.audioEncodingTarget = movieWriter;
         [videoCamera startCameraCapture];
-
-        /*
+#if VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
         [_ijkMovie startPlay];
-        /*/
+#elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
         [_ijkMovie play];
-        //*/
+#endif
         [movieWriter startRecording];
         
         //        NSError *error = nil;
@@ -128,6 +133,10 @@
 }
 
 #pragma mark - View lifecycle
+
+-(void) dealloc {
+    [self removeMovieNotificationObservers];
+}
 
 - (BOOL) prefersStatusBarHidden {
     return YES;
