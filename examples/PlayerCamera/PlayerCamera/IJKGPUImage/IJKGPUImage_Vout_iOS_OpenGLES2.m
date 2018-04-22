@@ -38,6 +38,8 @@
 #include "ijksdl_vout_overlay_videotoolbox.h"
 #import "IJKGPUImageMovie.h"
 
+/// Immitate from ijksdl_vout_ios_gles2
+
 typedef struct SDL_VoutSurface_Opaque {
     SDL_Vout* vout;
 } SDL_VoutSurface_Opaque;
@@ -104,7 +106,7 @@ static int vout_display_overlay_l(SDL_Vout* vout, SDL_VoutOverlay* overlay)
         return -1;
     }
     
-    [glMovie render:overlay];//TODO:
+    [glMovie render:overlay];
     return 0;
 }
 

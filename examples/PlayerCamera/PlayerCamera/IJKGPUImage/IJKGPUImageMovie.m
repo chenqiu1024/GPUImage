@@ -89,7 +89,7 @@ IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
     if (!mp)
         goto fail;
     
-    mp->ffplayer->vout = SDL_VoutIos_CreateForGLES2();
+    mp->ffplayer->vout = IJKGPUImage_Vout_iOS_CreateForOpenGLES2();
     if (!mp->ffplayer->vout)
         goto fail;
     
@@ -460,7 +460,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         _urlString = aUrlString;
         
         // init player
-        _mediaPlayer = ijkmp_ios_create(media_player_msg_loop);
+        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop);
         _msgPool = [[IJKFFMoviePlayerMessagePool alloc] init];
         IJKWeakHolder *weakHolder = [IJKWeakHolder new];
         weakHolder.object = self;
@@ -489,7 +489,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         //*/
         self.shouldShowHudView = options.showHudView;
         
-        ijkgpuplayer_set_ijkgpuMovie_l(_mediaPlayer, self);
+        ijkgpuplayer_set_ijkgpuMovie(_mediaPlayer, self);
         ijkmp_set_option(_mediaPlayer, IJKMP_OPT_CATEGORY_PLAYER, "overlay-format", "fcc-_es2");
 #ifdef DEBUG
         [IJKGPUImageMovie setLogLevel:k_IJK_LOG_DEBUG];
@@ -1637,6 +1637,11 @@ int media_player_msg_loop(void* arg)
             [self pause];
         }
     });
+}
+
+-(void) render:(SDL_VoutOverlay*)overlay {
+    //TODO:
+    NSLog(@"IJKGPUImageMovie render:");
 }
 
 @end

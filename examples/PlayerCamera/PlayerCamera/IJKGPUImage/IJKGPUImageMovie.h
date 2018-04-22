@@ -76,7 +76,9 @@ typedef enum IJKLogLevel {
 
 - (id)initWithContentURL:(NSURL *)aUrl;
 
-- (id)initWithContentURLString;
+- (id)initWithContentURLString:(NSString *)aUrlString;
+
+-(void) render:(SDL_VoutOverlay*)overlay;
 
 - (void)prepareToPlay;
 - (void)play;
