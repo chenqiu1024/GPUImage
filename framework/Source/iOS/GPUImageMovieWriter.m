@@ -386,6 +386,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
                 }
                 [assetWriter startSessionAtSourceTime:currentSampleTime];
                 startTime = currentSampleTime;
+                NSLog(@"#Timestamp# startTime = currentSampleTime = %f", CMTimeGetSeconds(startTime));
             });
         }
 
@@ -744,6 +745,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             
             [assetWriter startSessionAtSourceTime:frameTime];
             startTime = frameTime;
+            NSLog(@"#Timestamp# startTime = frameTime = %f", CMTimeGetSeconds(startTime));
         });
     }
 
@@ -800,6 +802,10 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             {
                 if (![assetWriterPixelBufferInput appendPixelBuffer:pixel_buffer withPresentationTime:frameTime])
                     NSLog(@"Problem appending pixel buffer at time: %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, frameTime)));
+                else
+                {
+                    NSLog(@"#Timestamp# appendPixelBuffer withPresentationTime:%f", CMTimeGetSeconds(frameTime));
+                }
             }
             else
             {
