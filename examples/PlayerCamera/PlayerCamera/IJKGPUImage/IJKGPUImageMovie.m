@@ -1483,12 +1483,24 @@ int media_player_msg_loop(void* arg)
     return self;
 }
 
+-(void) tick:(id)sender {
+    [self processOneFrame];
+    _currentFrame++;
+}
+
 -(void) startPlay {
     _currentFrame = 0;
-    self.tickTimer = [NSTimer scheduledTimerWithTimeInterval:1.f/_FPS repeats:YES block:^(NSTimer * _Nonnull timer) {
-        [self processOneFrame];
-        _currentFrame++;
-    }];
+    if ([NSTimer.class respondsToSelector:@selector(scheduledTimerWithTimeInterval:repeats:block:)])
+    {
+        self.tickTimer = [NSTimer scheduledTimerWithTimeInterval:1.f/_FPS repeats:YES block:^(NSTimer * _Nonnull timer) {
+            [self processOneFrame];
+            _currentFrame++;
+        }];
+    }
+    else
+    {
+        self.tickTimer = [NSTimer timerWithTimeInterval:1.f/_FPS target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+    }
     [[NSRunLoop currentRunLoop] addTimer:self.tickTimer forMode:NSDefaultRunLoopMode];
 }
 

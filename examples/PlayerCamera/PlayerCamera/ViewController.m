@@ -14,12 +14,13 @@
 #define VideoSource_IJKGPUImageMovie_RandomColor 1
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
-#define VideoSource VideoSource_IJKGPUImageMovie_RandomColor
+#define VideoSource VideoSource_Camera
 
 @interface ViewController ()
 {
     IJKGPUImageMovie* _ijkMovie;
     GPUImageView* _filterView;
+    GPUImageMovieWriter* _movieWriter;
 }
 
 -(void)removeMovieNotificationObservers;
@@ -55,12 +56,12 @@
     NSString* pathToMovie = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
-    GPUImageMovieWriter* movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(480.0, 640.0)];
-    movieWriter.encodingLiveVideo = YES;
+    _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(480.0, 640.0)];
+    _movieWriter.encodingLiveVideo = YES;
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(640.0, 480.0)];
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(720.0, 1280.0)];
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(1080.0, 1920.0)];
-    [filter addTarget:movieWriter];
+    [filter addTarget:_movieWriter];
     [filter addTarget:_filterView];
     
     double delayToStartRecording = 0.5;
@@ -68,14 +69,14 @@
     dispatch_after(startTime, dispatch_get_main_queue(), ^(void){
         NSLog(@"Start recording");
 
-        videoCamera.audioEncodingTarget = movieWriter;
+        videoCamera.audioEncodingTarget = _movieWriter;
         [videoCamera startCameraCapture];
 #if VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
         [_ijkMovie startPlay];
 #elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
         [_ijkMovie play];
 #endif
-        [movieWriter startRecording];
+        [_movieWriter startRecording];
         
         //        NSError *error = nil;
         //        if (![videoCamera.inputCamera lockForConfiguration:&error])
@@ -89,14 +90,14 @@
         dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
             
-            [filter removeTarget:movieWriter];
+            [filter removeTarget:_movieWriter];
 
             videoCamera.audioEncodingTarget = nil;
             [videoCamera stopCameraCapture];
 
             [_ijkMovie stopPlay];
             //*/
-            [movieWriter finishRecording];
+            [_movieWriter finishRecording];
             NSLog(@"Movie completed");
             [filter removeAllTargets];
             /*
@@ -134,7 +135,16 @@
 
 #pragma mark - View lifecycle
 
+-(void) applicationDidBecomeActive:(id)sender {
+    [_movieWriter setPaused:NO];
+}
+
+-(void) applicationWillResignActive:(id)sender {
+    [_movieWriter setPaused:YES];
+}
+
 -(void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeMovieNotificationObservers];
 }
 
@@ -145,6 +155,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     self.navigationController.navigationBarHidden = YES;
     
 //    return;
