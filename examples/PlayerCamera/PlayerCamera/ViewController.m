@@ -14,7 +14,7 @@
 #define VideoSource_IJKGPUImageMovie_RandomColor 1
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
-#define VideoSource VideoSource_Camera
+#define VideoSource VideoSource_IJKGPUImageMovie_RandomColor
 
 @interface ViewController ()
 {

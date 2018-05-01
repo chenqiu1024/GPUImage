@@ -1654,6 +1654,26 @@ int media_player_msg_loop(void* arg)
 -(void) render:(SDL_VoutOverlay*)overlay {
     //TODO:
     NSLog(@"IJKGPUImageMovie render:");
+    if (NULL == overlay)
+        return;
+    
+    [GPUImageContext useImageProcessingContext];
+    
+    CGSize overlaySize = CGSizeMake(overlay->w, overlay->h);
+    if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, overlaySize))
+    {
+        outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:overlaySize onlyTexture:NO];
+    }
+    [outputFramebuffer activateFramebuffer];
+    
+    if ([GPUImageContext supportsFastTextureUpload])
+    {
+        
+    }
+    else
+    {
+        // iOS5.0+ will not go into here
+    }
 }
 
 @end
