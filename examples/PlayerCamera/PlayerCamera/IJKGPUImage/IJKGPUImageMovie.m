@@ -1680,7 +1680,7 @@ int media_player_msg_loop(void* arg)
 
 -(void) render:(SDL_VoutOverlay*)overlay {
     NSLog(@"IJKGPUImageMovie render:");
-    /*
+    //*
     if (NULL == overlay)
         return;
     

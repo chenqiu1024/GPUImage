@@ -30,7 +30,7 @@
 
 @implementation ViewController
 
-#define SourceVideoFileName @" "
+#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 
 - (void) startRecordingVideoSegment {
     videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
