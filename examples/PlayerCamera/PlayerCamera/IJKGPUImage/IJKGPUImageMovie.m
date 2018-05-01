@@ -11,6 +11,7 @@
 
 #import "ijkplayer_ios.h"
 #import "ijksdl/ios/ijksdl_ios.h"
+#include "ijksdl/ijksdl_gles2.h"
 
 #import "ijkplayer/ff_fferror.h"
 #import "ijkplayer/ff_ffplay.h"
@@ -49,6 +50,8 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
     NSUInteger _currentFrame;
     
     IjkMediaPlayer* _mediaPlayer;
+    IJK_GLES2_Renderer* _renderer;
+    CGSize _inputVideoSize;
     //    IJKSDLGLView *_glView;
     IJKFFMoviePlayerMessagePool *_msgPool;
     NSString *_urlString;
@@ -1651,29 +1654,69 @@ int media_player_msg_loop(void* arg)
     });
 }
 
+- (BOOL)setupRenderer: (SDL_VoutOverlay *) overlay
+{
+    if (overlay == nil)
+        return _renderer != nil;
+    
+    if (!IJK_GLES2_Renderer_isValid(_renderer) ||
+        !IJK_GLES2_Renderer_isFormat(_renderer, overlay->format)) {
+        
+        IJK_GLES2_Renderer_reset(_renderer);
+        IJK_GLES2_Renderer_freeP(&_renderer);
+        
+        _renderer = IJK_GLES2_Renderer_create(overlay);
+        if (!IJK_GLES2_Renderer_isValid(_renderer))
+            return NO;
+        
+        if (!IJK_GLES2_Renderer_use(_renderer))
+            return NO;
+        
+        IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE, _inputVideoSize.width, _inputVideoSize.height);
+    }
+    
+    return YES;
+}
+
 -(void) render:(SDL_VoutOverlay*)overlay {
-    //TODO:
     NSLog(@"IJKGPUImageMovie render:");
+    /*
     if (NULL == overlay)
         return;
     
     [GPUImageContext useImageProcessingContext];
     
-    CGSize overlaySize = CGSizeMake(overlay->w, overlay->h);
-    if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, overlaySize))
+    _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
+    if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
     {
-        outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:overlaySize onlyTexture:NO];
+        outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_inputVideoSize onlyTexture:NO];
     }
     [outputFramebuffer activateFramebuffer];
     
     if ([GPUImageContext supportsFastTextureUpload])
     {
+        if (![self setupRenderer:overlay])
+        {
+            if (!overlay && !_renderer)
+            {
+                NSLog(@"IJKSDLGLView: setupDisplay not ready\n");
+            }
+            else
+            {
+                NSLog(@"IJKSDLGLView: setupDisplay failed\n");
+            }
+            return;
+        }
+        
+        if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay))
+            ALOGE("[EGL] IJK_GLES2_render failed\n");
         
     }
     else
     {
         // iOS5.0+ will not go into here
     }
+    //*/
 }
 
 @end

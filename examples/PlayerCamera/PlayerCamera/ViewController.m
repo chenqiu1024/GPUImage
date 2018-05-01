@@ -14,7 +14,7 @@
 #define VideoSource_IJKGPUImageMovie_RandomColor 1
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
-#define VideoSource VideoSource_IJKGPUImageMovie_RandomColor
+#define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
 @interface ViewController ()
 {
@@ -30,7 +30,7 @@
 
 @implementation ViewController
 
-#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
+#define SourceVideoFileName @" "
 
 - (void) startRecordingVideoSegment {
     videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
@@ -74,7 +74,7 @@
 #if VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
         [_ijkMovie startPlay];
 #elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
-        [_ijkMovie play];
+        ///!!![_ijkMovie play];
 #endif
         [_movieWriter startRecording];
         
@@ -310,6 +310,9 @@
         }
         case IJKMPMoviePlaybackStatePaused: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_ijkMovie.playbackState);
+#if VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
+            ///!!![_ijkMovie play];
+#endif
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {
