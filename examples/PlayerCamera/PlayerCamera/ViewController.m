@@ -123,7 +123,7 @@
                  }];
             }
             /*/
-            [self startRecordingVideoSegment];
+            ///!!![self startRecordingVideoSegment];
             //*/
             
             //            [videoCamera.inputCamera lockForConfiguration:nil];

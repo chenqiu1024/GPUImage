@@ -49,6 +49,9 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
     
     NSUInteger _currentFrame;
     
+    double _prevAbsoluteTime;
+    double _absoluteTimeBase;
+    
     IjkMediaPlayer* _mediaPlayer;
     IJK_GLES2_Renderer* _renderer;
     CGSize _inputVideoSize;
@@ -524,6 +527,9 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 - (void)dealloc
 {
     //    [self unregisterApplicationObservers];
+    [GPUImageContext useImageProcessingContext];
+    IJK_GLES2_Renderer_reset(_renderer);
+    IJK_GLES2_Renderer_freeP(&_renderer);
 }
 
 - (void)setShouldAutoplay:(BOOL)shouldAutoplay
@@ -574,6 +580,10 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     if (!_mediaPlayer)
         return;
     
+    double timeNow = CFAbsoluteTimeGetCurrent();
+    _absoluteTimeBase = timeNow - (_prevAbsoluteTime - _absoluteTimeBase);
+    _prevAbsoluteTime = timeNow;
+    
     [self setScreenOn:_keepScreenOnWhilePlaying];
     
     [self startHudTimer];
@@ -593,6 +603,9 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 {
     if (!_mediaPlayer)
         return;
+    
+    _absoluteTimeBase = 0;
+    _prevAbsoluteTime = 0;
     
     [self setScreenOn:NO];
     
@@ -1687,12 +1700,12 @@ int media_player_msg_loop(void* arg)
     [GPUImageContext useImageProcessingContext];
     
     _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
-    if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
+    ///!!!if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
     {
         outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_inputVideoSize onlyTexture:NO];
     }
     [outputFramebuffer activateFramebuffer];
-    
+//*
     if ([GPUImageContext supportsFastTextureUpload])
     {
         if (![self setupRenderer:overlay])
@@ -1708,13 +1721,33 @@ int media_player_msg_loop(void* arg)
             return;
         }
         
-        if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay))
-            ALOGE("[EGL] IJK_GLES2_render failed\n");
+        ///!!!if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
         
     }
     else
     {
         // iOS5.0+ will not go into here
+    }
+/*
+    for (id<GPUImageInput> currentTarget in targets)
+    {
+        NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+        NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+        [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
+        [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
+    }
+
+    [outputFramebuffer unlock];
+    
+    _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
+    int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
+    CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
+
+    for (id<GPUImageInput> currentTarget in targets)
+    {
+        NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+        NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+        [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
     }
     //*/
 }
