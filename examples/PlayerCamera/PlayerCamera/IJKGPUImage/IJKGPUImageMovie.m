@@ -1700,7 +1700,7 @@ int media_player_msg_loop(void* arg)
     [GPUImageContext useImageProcessingContext];
     
     _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
-    ///!!!if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
+    //if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
     {
         outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_inputVideoSize onlyTexture:NO];
     }

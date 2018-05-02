@@ -87,7 +87,7 @@
         //        [videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOn];
         //        [videoCamera.inputCamera unlockForConfiguration];
         
-        double delayInSeconds = 15.0;
+        double delayInSeconds = 5.0;
         dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
             
@@ -96,7 +96,8 @@
             videoCamera.audioEncodingTarget = nil;
             [videoCamera stopCameraCapture];
 #endif
-            [_ijkMovie stopPlay];
+            ///!!![_ijkMovie stopPlay];
+            [_ijkMovie shutdown];
             //*/
             [_movieWriter finishRecording];
             NSLog(@"Movie completed");
@@ -124,7 +125,7 @@
                  }];
             }
             /*/
-            ///!!![self startRecordingVideoSegment];
+            [self startRecordingVideoSegment];
             //*/
             
             //            [videoCamera.inputCamera lockForConfiguration:nil];
