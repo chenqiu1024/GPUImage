@@ -1685,7 +1685,7 @@ int media_player_msg_loop(void* arg)
         if (!IJK_GLES2_Renderer_use(_renderer))
             return NO;
         
-        IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE, _inputVideoSize.width, _inputVideoSize.height);
+        IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT_FILL, _inputVideoSize.width, _inputVideoSize.height);
     }
     
     return YES;
@@ -1721,14 +1721,14 @@ int media_player_msg_loop(void* arg)
             return;
         }
         
-        ///!!!if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
+        if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
         
     }
     else
     {
         // iOS5.0+ will not go into here
     }
-/*
+//*
     for (id<GPUImageInput> currentTarget in targets)
     {
         NSInteger indexOfObject = [targets indexOfObject:currentTarget];

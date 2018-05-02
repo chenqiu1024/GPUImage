@@ -69,12 +69,13 @@
     dispatch_after(startTime, dispatch_get_main_queue(), ^(void){
         NSLog(@"Start recording");
 
-        videoCamera.audioEncodingTarget = _movieWriter;
-        [videoCamera startCameraCapture];
 #if VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
         [_ijkMovie startPlay];
 #elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
         ///!!![_ijkMovie play];
+#elif VideoSource == VideoSource_Camera
+        videoCamera.audioEncodingTarget = _movieWriter;
+        [videoCamera startCameraCapture];
 #endif
         [_movieWriter startRecording];
         
@@ -91,10 +92,10 @@
         dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
             
             [filter removeTarget:_movieWriter];
-
+#if VideoSource == VideoSource_Camera
             videoCamera.audioEncodingTarget = nil;
             [videoCamera stopCameraCapture];
-
+#endif
             [_ijkMovie stopPlay];
             //*/
             [_movieWriter finishRecording];
