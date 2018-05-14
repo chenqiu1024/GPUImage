@@ -16,9 +16,11 @@
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
-@interface ViewController ()
+@interface ViewController () <IJKGPUImageMovieDelegate>
 {
     IJKGPUImageMovie* _ijkMovie;
+    UIImageView* _imageView;
+    
     GPUImageView* _filterView;
     GPUImageMovieWriter* _movieWriter;
 }
@@ -46,6 +48,7 @@
     [self installMovieNotificationObservers];
     NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
+    _ijkMovie.delegate = self;
     [_ijkMovie addTarget:filter];
     [_ijkMovie prepareToPlay];
 #endif
@@ -86,18 +89,15 @@
         //        }
         //        [videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOn];
         //        [videoCamera.inputCamera unlockForConfiguration];
-        
-        double delayInSeconds = 5.0;
+#if VideoSource != VideoSource_IJKGPUImageMovie_VideoPlay
+        double delayInSeconds = 15.0;
         dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
-            
             [filter removeTarget:_movieWriter];
-#if VideoSource == VideoSource_Camera
+
             videoCamera.audioEncodingTarget = nil;
             [videoCamera stopCameraCapture];
-#endif
-            ///!!![_ijkMovie stopPlay];
-            [_ijkMovie shutdown];
+
             //*/
             [_movieWriter finishRecording];
             NSLog(@"Movie completed");
@@ -132,6 +132,7 @@
             //            [videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOff];
             //            [videoCamera.inputCamera unlockForConfiguration];
         });
+#endif //#if VideoSource != VideoSource_IJKGPUImageMovie_VideoPlay
     });
 }
 
@@ -186,6 +187,13 @@
     _filterView.fillMode = kGPUImageFillModeStretch;
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
     [filter addTarget:_filterView];
+#if VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
+    ///!!!For Debug:
+    _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    _imageView.backgroundColor = [UIColor greenColor];
+    _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view addSubview:_imageView];
+#endif
     
     // Record a movie for 10 s and store it in /Documents, visible via iTunes file sharing
     [self startRecordingVideoSegment];
@@ -303,7 +311,9 @@
     switch (_ijkMovie.playbackState)
     {
         case IJKMPMoviePlaybackStateStopped: {
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped", (int)_ijkMovie.playbackState);
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped#0", (int)_ijkMovie.playbackState);
+            [_ijkMovie shutdownClose:_ijkMovie];
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped#1", (int)_ijkMovie.playbackState);
             break;
         }
         case IJKMPMoviePlaybackStatePlaying: {
@@ -368,6 +378,15 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackDidFinishNotification object:_ijkMovie];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_ijkMovie];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_ijkMovie];
+}
+
+#pragma mark IJKGPUImageMovieDelegate
+-(void) ijkGPUImageMovieRenderedOneFrame:(id)ijkgpuMovie {
+    UIImage* image = [ijkgpuMovie snapshotImage];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _imageView.image = image;
+        NSLog(@"#ImageView# image.size=(%f,%f)", image.size.width, image.size.height);
+    });
 }
 
 @end

@@ -61,12 +61,23 @@ typedef enum IJKLogLevel {
     k_IJK_LOG_SILENT  = 8,
 } IJKLogLevel;
 
+@class IJKGPUImageMovie;
+@protocol IJKGPUImageMovieDelegate <NSObject>
+
+-(void) ijkGPUImageMovieRenderedOneFrame:(IJKGPUImageMovie*)ijkgpuMovie;
+
+@end
+
 @interface IJKGPUImageMovie : GPUImageOutput<IJKMediaPlayback>
 
 -(instancetype) initWithSize:(CGSize)size FPS:(float)FPS;
 
 -(void) startPlay;
 -(void) stopPlay;
+
+- (void)shutdownWaitStop:(IJKGPUImageMovie*)mySelf;
+
+- (void)shutdownClose:(IJKGPUImageMovie*)mySelf;
 
 - (id)initWithContentURL:(NSURL *)aUrl
              withOptions:(IJKFFOptions *)options;
@@ -79,6 +90,7 @@ typedef enum IJKLogLevel {
 - (id)initWithContentURLString:(NSString *)aUrlString;
 
 -(void) render:(SDL_VoutOverlay*)overlay;
+-(void) render:(SDL_VoutOverlay*)overlay frameRenderedCallback:(void(^)())frameRenderedCallback;
 
 - (void)prepareToPlay;
 - (void)play;
@@ -100,6 +112,8 @@ typedef enum IJKLogLevel {
 @property(nonatomic, readonly) CGFloat fpsInMeta;
 @property(nonatomic, readonly) CGFloat fpsAtOutput;
 @property(nonatomic) BOOL shouldShowHudView;
+
+@property(nonatomic, strong) id<IJKGPUImageMovieDelegate> delegate;
 
 - (void)setOptionValue:(NSString *)value
                 forKey:(NSString *)key
@@ -129,6 +143,8 @@ typedef enum IJKLogLevel {
 @property (nonatomic, retain) id<IJKMediaNativeInvokeDelegate> nativeInvokeDelegate;
 
 - (void)didShutdown;
+
+-(UIImage*) snapshotImage;
 
 #pragma mark KVO properties
 @property (nonatomic, readonly) IJKFFMonitor *monitor;

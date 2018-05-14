@@ -107,6 +107,11 @@ static int vout_display_overlay_l(SDL_Vout* vout, SDL_VoutOverlay* overlay)
     }
     
     [glMovie render:overlay];
+    if (glMovie.delegate && [glMovie.delegate respondsToSelector:@selector(ijkGPUImageMovieRenderedOneFrame:)])
+    {
+        [glMovie.delegate ijkGPUImageMovieRenderedOneFrame:glMovie];
+    }
+    
     return 0;
 }
 

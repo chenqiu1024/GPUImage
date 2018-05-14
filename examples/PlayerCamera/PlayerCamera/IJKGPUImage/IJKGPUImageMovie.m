@@ -383,6 +383,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 
 @implementation IJKGPUImageMovie
 
+@synthesize delegate;
 //@synthesize view = _view;
 @synthesize currentPlaybackTime;
 @synthesize duration;
@@ -775,6 +776,7 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
 
 - (void)didShutdown
 {
+    NSLog(@"IJKGPUImageMovie didShutdown");
 }
 
 - (IJKMPMoviePlaybackState)playbackState
@@ -1729,6 +1731,7 @@ int media_player_msg_loop(void* arg)
         // iOS5.0+ will not go into here
     }
 //*
+    
     for (id<GPUImageInput> currentTarget in targets)
     {
         NSInteger indexOfObject = [targets indexOfObject:currentTarget];
@@ -1750,6 +1753,12 @@ int media_player_msg_loop(void* arg)
         [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
     }
     //*/
+}
+
+-(UIImage*) snapshotImage {
+    GPUImageFramebuffer* framebuffer = [self framebufferForOutput];
+    CGImageRef image = [framebuffer newCGImageFromFramebufferContents];
+    return [UIImage imageWithCGImage:image];
 }
 
 @end
