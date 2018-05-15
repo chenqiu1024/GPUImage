@@ -12,6 +12,7 @@
 #import "ijkplayer_ios.h"
 #import "ijksdl/ios/ijksdl_ios.h"
 #include "ijksdl/ijksdl_gles2.h"
+#include "ijksdl/ios/ijksdl_vout_overlay_videotoolbox.h"
 
 #import "ijkplayer/ff_fferror.h"
 #import "ijkplayer/ff_ffplay.h"
@@ -1693,6 +1694,24 @@ int media_player_msg_loop(void* arg)
     return YES;
 }
 
++(UIImage*) imageFromCVPixelBufferRef:(CVPixelBufferRef)pixelBuffer{
+    // MUST READ-WRITE LOCK THE PIXEL BUFFER!!!!
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    CIContext *temporaryContext = [CIContext contextWithOptions:nil];
+    CGImageRef videoImage = [temporaryContext
+                             createCGImage:ciImage
+                             fromRect:CGRectMake(0, 0,
+                                                 CVPixelBufferGetWidth(pixelBuffer),
+                                                 CVPixelBufferGetHeight(pixelBuffer))];
+    
+    UIImage *uiImage = [UIImage imageWithCGImage:videoImage];
+    CGImageRelease(videoImage);
+    ///CVPixelBufferRelease(pixelBuffer);
+    return uiImage;
+}
+
 -(void) render:(SDL_VoutOverlay*)overlay {
     NSLog(@"IJKGPUImageMovie render:");
     //*
@@ -1722,7 +1741,13 @@ int media_player_msg_loop(void* arg)
             }
             return;
         }
-        
+        /*For Debug:
+        CVPixelBufferRef pixel_buffer = SDL_VoutOverlayVideoToolBox_GetCVPixelBufferRef(overlay);///!!!For Debug
+        UIImage* snapshotImage = [self.class imageFromCVPixelBufferRef:pixel_buffer];
+        NSData* snapshotData = UIImageJPEGRepresentation(snapshotImage, 1.0f);
+        NSString* snapshotPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:[NSString stringWithFormat:@"snapshot%03d.jpg", (int)_currentFrame++]];
+        [snapshotData writeToFile:snapshotPath atomically:YES];
+        //*/
         if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
         
     }
