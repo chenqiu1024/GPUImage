@@ -19,7 +19,7 @@
 @interface ViewController () <IJKGPUImageMovieDelegate>
 {
     IJKGPUImageMovie* _ijkMovie;
-    UIImageView* _imageView;
+//    UIImageView* _imageView;
     
     GPUImageView* _filterView;
     GPUImageMovieWriter* _movieWriter;
@@ -197,11 +197,12 @@
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
     [filter addTarget:_filterView];
 #if VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
-    ///!!!For Debug:
+    /*///!!!For Debug:
     _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     _imageView.backgroundColor = [UIColor greenColor];
     _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:_imageView];
+    //*/
 #endif
     
     // Record a movie for 10 s and store it in /Documents, visible via iTunes file sharing
@@ -391,11 +392,11 @@
 
 #pragma mark IJKGPUImageMovieDelegate
 -(void) ijkGPUImageMovieRenderedOneFrame:(id)ijkgpuMovie {
-    UIImage* image = [ijkgpuMovie snapshotImage];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _imageView.image = image;
-        NSLog(@"#ImageView# image.size=(%f,%f)", image.size.width, image.size.height);
-    });
+//    UIImage* image = [ijkgpuMovie snapshotImage];
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        _imageView.image = image;
+//        NSLog(@"#ImageView# image.size=(%f,%f)", image.size.width, image.size.height);
+//    });
 }
 
 @end

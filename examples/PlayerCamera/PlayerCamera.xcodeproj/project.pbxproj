@@ -568,6 +568,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
@@ -582,6 +583,7 @@
 				LIBRARY_SEARCH_PATHS = ../../../ijkplayer_iOS/ios/build/universal/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_STYLE = "non-global";
 			};
 			name = Debug;
 		};
@@ -604,6 +606,7 @@
 				LIBRARY_SEARCH_PATHS = ../../../ijkplayer_iOS/ios/build/universal/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_STYLE = "non-global";
 			};
 			name = Release;
 		};
