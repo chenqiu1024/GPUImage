@@ -1690,7 +1690,7 @@ int media_player_msg_loop(void* arg)
     if (!IJK_GLES2_Renderer_use(_renderer))
         return NO;
     
-    IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT_FILL, _inputVideoSize.width, _inputVideoSize.height);
+    IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT, _inputVideoSize.width, _inputVideoSize.height);
     
     return YES;
 }

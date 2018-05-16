@@ -241,7 +241,6 @@
         //    CGFloat viewAspectRatio = currentViewSize.width / currentViewSize.height;
         
         CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputImageSize, self.bounds);
-        
         switch(_fillMode)
         {
             case kGPUImageFillModeStretch:

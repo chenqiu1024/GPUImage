@@ -32,8 +32,9 @@
 
 @implementation ViewController
 
+#define SourceVideoFileName @"I.Am.Legend.2007.iPhone-YYeTs.mp4"
 //#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
-#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
+//#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
 
 - (void) startRecordingVideoSegment {
@@ -195,9 +196,9 @@
     //GPUImageView *filterView = (GPUImageView *)self.gpuImageView;
     _filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
     _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
     [self.view addSubview:_filterView];
-    _filterView.fillMode = kGPUImageFillModeStretch;
-    _filterView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
+    _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     [filter addTarget:_filterView];
 #if VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
     /*///!!!For Debug:
