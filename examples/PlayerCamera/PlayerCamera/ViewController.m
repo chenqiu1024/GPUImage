@@ -32,7 +32,8 @@
 
 @implementation ViewController
 
-#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
+#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
+//#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
 
 - (void) startRecordingVideoSegment {
@@ -48,7 +49,14 @@
 #elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
     [self installMovieNotificationObservers];
     NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
+    if ([SourceVideoFileName hasPrefix:@"http"])
+    {
+        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:SourceVideoFileName];
+    }
+    else
+    {
+        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
+    }
     _ijkMovie.delegate = self;
     [_ijkMovie addTarget:filter];
     [_ijkMovie prepareToPlay];

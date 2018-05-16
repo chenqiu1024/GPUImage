@@ -1741,15 +1741,14 @@ int media_player_msg_loop(void* arg)
             }
             return;
         }
-        /*For Debug:
+        if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
+        //*For Debug:
         CVPixelBufferRef pixel_buffer = SDL_VoutOverlayVideoToolBox_GetCVPixelBufferRef(overlay);///!!!For Debug
         UIImage* snapshotImage = [self.class imageFromCVPixelBufferRef:pixel_buffer];
         NSData* snapshotData = UIImageJPEGRepresentation(snapshotImage, 1.0f);
         NSString* snapshotPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:[NSString stringWithFormat:@"snapshot%03d.jpg", (int)_currentFrame++]];
         [snapshotData writeToFile:snapshotPath atomically:YES];
         //*/
-        if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
-        
     }
     else
     {

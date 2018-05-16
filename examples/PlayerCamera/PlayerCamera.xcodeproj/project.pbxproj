@@ -21,7 +21,8 @@
 		520DA7311ED72AE1009E4705 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 520DA7301ED72AE1009E4705 /* AVFoundation.framework */; };
 		520DA7331ED72AE6009E4705 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 520DA7321ED72AE6009E4705 /* QuartzCore.framework */; };
 		5214AF63206405920076405A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5214AF62206405910076405A /* libz.tbd */; };
-		523390C4206402F00007FC5D /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CB035620550F0F00329861 /* IJKMediaFramework.framework */; };
+		52257C7F20ABE01600140039 /* IJKMediaFrameworkWithSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CB035820550F0F00329861 /* IJKMediaFrameworkWithSSL.framework */; };
+		52257C8020ABE01600140039 /* IJKMediaFrameworkWithSSL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52CB035820550F0F00329861 /* IJKMediaFrameworkWithSSL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
 		52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -63,6 +64,13 @@
 			remoteGlobalIDString = E654EA891B6B27E600B0F2D0;
 			remoteInfo = IJKMediaFramework;
 		};
+		52257C8120ABE01600140039 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5450AFC11E63EA4300568494;
+			remoteInfo = IJKMediaFrameworkWithSSL;
+		};
 		52CB035520550F0F00329861 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */;
@@ -85,6 +93,20 @@
 			remoteInfo = IJKMediaFrameworkTests;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		52257C8320ABE01600140039 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				52257C8020ABE01600140039 /* IJKMediaFrameworkWithSSL.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		520DA6D41ED7248C009E4705 /* PlayerCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayerCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,13 +143,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				5214AF63206405920076405A /* libz.tbd in Frameworks */,
-				523390C4206402F00007FC5D /* IJKMediaFramework.framework in Frameworks */,
 				52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */,
 				520DA7331ED72AE6009E4705 /* QuartzCore.framework in Frameworks */,
 				520DA7311ED72AE1009E4705 /* AVFoundation.framework in Frameworks */,
 				520DA72F1ED72ADC009E4705 /* CoreVideo.framework in Frameworks */,
 				520DA72D1ED72ACD009E4705 /* OpenGLES.framework in Frameworks */,
 				520DA72B1ED72AC7009E4705 /* CoreMedia.framework in Frameworks */,
+				52257C7F20ABE01600140039 /* IJKMediaFrameworkWithSSL.framework in Frameworks */,
 				520DA7291ED72AC1009E4705 /* libGPUImage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,12 +265,14 @@
 				520DA6D01ED7248C009E4705 /* Sources */,
 				520DA6D11ED7248C009E4705 /* Frameworks */,
 				520DA6D21ED7248C009E4705 /* Resources */,
+				52257C8320ABE01600140039 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				5214AF55206404140076405A /* PBXTargetDependency */,
 				520DA7251ED72ABE009E4705 /* PBXTargetDependency */,
+				52257C8220ABE01600140039 /* PBXTargetDependency */,
 			);
 			name = PlayerCamera;
 			productName = PlayerCamera;
@@ -419,6 +443,11 @@
 			isa = PBXTargetDependency;
 			name = IJKMediaFramework;
 			targetProxy = 5214AF54206404140076405A /* PBXContainerItemProxy */;
+		};
+		52257C8220ABE01600140039 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = IJKMediaFrameworkWithSSL;
+			targetProxy = 52257C8120ABE01600140039 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
