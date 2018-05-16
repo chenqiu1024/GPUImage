@@ -1719,65 +1719,67 @@ int media_player_msg_loop(void* arg)
     if (NULL == overlay)
         return;
     
-    [GPUImageContext useImageProcessingContext];
-    
-    _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
-    //if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
-    {
-        outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_inputVideoSize onlyTexture:NO];
-    }
-    [outputFramebuffer activateFramebuffer];
-//*
-    if ([GPUImageContext supportsFastTextureUpload])
-    {
-        if (![self setupRenderer:overlay])
+    runSynchronouslyOnVideoProcessingQueue(^{
+        [GPUImageContext useImageProcessingContext];
+        
+        _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
+        //if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
         {
-            if (!overlay && !_renderer)
-            {
-                NSLog(@"IJKSDLGLView: setupDisplay not ready\n");
-            }
-            else
-            {
-                NSLog(@"IJKSDLGLView: setupDisplay failed\n");
-            }
-            return;
+            outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_inputVideoSize onlyTexture:NO];
         }
-        if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
-        /*For Debug:
-        CVPixelBufferRef pixel_buffer = SDL_VoutOverlayVideoToolBox_GetCVPixelBufferRef(overlay);///!!!For Debug
-        UIImage* snapshotImage = [self.class imageFromCVPixelBufferRef:pixel_buffer];
-        NSData* snapshotData = UIImageJPEGRepresentation(snapshotImage, 1.0f);
-        NSString* snapshotPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:[NSString stringWithFormat:@"snapshot%03d.jpg", (int)_currentFrame++]];
-        [snapshotData writeToFile:snapshotPath atomically:YES];
+        [outputFramebuffer activateFramebuffer];
+        //*
+        if ([GPUImageContext supportsFastTextureUpload])
+        {
+            if (![self setupRenderer:overlay])
+            {
+                if (!overlay && !_renderer)
+                {
+                    NSLog(@"IJKSDLGLView: setupDisplay not ready\n");
+                }
+                else
+                {
+                    NSLog(@"IJKSDLGLView: setupDisplay failed\n");
+                }
+                return;
+            }
+            if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
+            /*For Debug:
+             CVPixelBufferRef pixel_buffer = SDL_VoutOverlayVideoToolBox_GetCVPixelBufferRef(overlay);///!!!For Debug
+             UIImage* snapshotImage = [self.class imageFromCVPixelBufferRef:pixel_buffer];
+             NSData* snapshotData = UIImageJPEGRepresentation(snapshotImage, 1.0f);
+             NSString* snapshotPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:[NSString stringWithFormat:@"snapshot%03d.jpg", (int)_currentFrame++]];
+             [snapshotData writeToFile:snapshotPath atomically:YES];
+             //*/
+        }
+        else
+        {
+            // iOS5.0+ will not go into here
+        }
+        //*
+        
+        for (id<GPUImageInput> currentTarget in targets)
+        {
+            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+            [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
+            [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
+        }
+        
+        [outputFramebuffer unlock];
+        
+        _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
+        int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
+        CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
+        
+        for (id<GPUImageInput> currentTarget in targets)
+        {
+            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+            [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
+        }
         //*/
-    }
-    else
-    {
-        // iOS5.0+ will not go into here
-    }
-//*
-    
-    for (id<GPUImageInput> currentTarget in targets)
-    {
-        NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-        NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-        [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
-        [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
-    }
-
-    [outputFramebuffer unlock];
-    
-    _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
-    int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
-    CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
-
-    for (id<GPUImageInput> currentTarget in targets)
-    {
-        NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-        NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-        [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
-    }
-    //*/
+    });
 }
 
 -(UIImage*) snapshotImage {

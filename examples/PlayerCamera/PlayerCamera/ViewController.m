@@ -73,7 +73,8 @@
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(640.0, 480.0)];
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(720.0, 1280.0)];
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(1080.0, 1920.0)];
-    [filter addTarget:_movieWriter];
+    ///!!![filter addTarget:_movieWriter];
+    [videoCamera addTarget:_movieWriter];
     [filter addTarget:_filterView];
     
     double delayToStartRecording = 0.5;
@@ -86,9 +87,11 @@
 #elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
         ///!!![_ijkMovie play];
 #elif VideoSource == VideoSource_Camera
+        
+#endif
         videoCamera.audioEncodingTarget = _movieWriter;
         [videoCamera startCameraCapture];
-#endif
+        
         [_movieWriter startRecording];
         
         //        NSError *error = nil;
