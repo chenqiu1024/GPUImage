@@ -1682,14 +1682,15 @@ int media_player_msg_loop(void* arg)
         IJK_GLES2_Renderer_freeP(&_renderer);
         
         _renderer = IJK_GLES2_Renderer_create(overlay);
-        if (!IJK_GLES2_Renderer_isValid(_renderer))
-            return NO;
-        
-        if (!IJK_GLES2_Renderer_use(_renderer))
-            return NO;
-        
-        IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT_FILL, _inputVideoSize.width, _inputVideoSize.height);
     }
+    
+    if (!IJK_GLES2_Renderer_isValid(_renderer))
+        return NO;
+    
+    if (!IJK_GLES2_Renderer_use(_renderer))
+        return NO;
+    
+    IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT_FILL, _inputVideoSize.width, _inputVideoSize.height);
     
     return YES;
 }
@@ -1742,7 +1743,7 @@ int media_player_msg_loop(void* arg)
             return;
         }
         if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
-        //*For Debug:
+        /*For Debug:
         CVPixelBufferRef pixel_buffer = SDL_VoutOverlayVideoToolBox_GetCVPixelBufferRef(overlay);///!!!For Debug
         UIImage* snapshotImage = [self.class imageFromCVPixelBufferRef:pixel_buffer];
         NSData* snapshotData = UIImageJPEGRepresentation(snapshotImage, 1.0f);

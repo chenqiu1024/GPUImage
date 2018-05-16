@@ -32,8 +32,8 @@
 
 @implementation ViewController
 
-#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
-//#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
+//#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
+#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
 
 - (void) startRecordingVideoSegment {
