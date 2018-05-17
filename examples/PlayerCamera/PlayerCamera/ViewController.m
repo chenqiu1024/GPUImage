@@ -10,8 +10,6 @@
 #import "IJKGPUImageMovie.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
-#define VideoSource_Camera 0
-#define VideoSource_IJKGPUImageMovie_RandomColor 1
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
@@ -41,127 +39,79 @@
 //#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
 
-- (void) startRecordingVideoSegment {
-    _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
-    _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
-    _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
-    _videoCamera.horizontallyMirrorRearFacingCamera = NO;
-#if VideoSource == VideoSource_Camera
-    [_videoCamera addTarget:_filter];
-#elif VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
-    _ijkMovie = [[IJKGPUImageMovie alloc] initWithSize:CGSizeMake(640, 480) FPS:2.f];
-    [_ijkMovie addTarget:_filter];
-#elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
-    [self installMovieNotificationObservers];
-    NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    if ([SourceVideoFileName hasPrefix:@"http"])
+-(void) stopAndReleaseMovieWriter {
+    if (!_movieWriter)
+        return;
+    
+    [_movieWriter finishRecording];
+    _movieWriter = nil;
+    /*
+     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+     if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:movieURL])
+     {
+     [library writeVideoAtPathToSavedPhotosAlbum:movieURL completionBlock:^(NSURL *assetURL, NSError *error)
+     {
+     dispatch_async(dispatch_get_main_queue(), ^{
+     
+     if (error) {
+     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed"
+     delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+     [alert show];
+     } else {
+     //                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album"
+     //                                                                            delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+     //                             [alert show];
+     }
+     remove(pathToMovie.UTF8String);
+     });
+     [self startRecordingVideoSegment];
+     }];
+     }
+     //*/
+}
+
+-(void) disassembleMovieWriter {
+    [_videoCamera removeTarget:_movieWriter];
+    _videoCamera.audioEncodingTarget = nil;
+    [self stopAndReleaseMovieWriter];
+}
+
+-(void) initMovieWriterWithDateTime:(NSDate*)dateTime size:(CGSize)size {
+    if (_movieWriter)
     {
-        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:SourceVideoFileName];
+        [self stopAndReleaseMovieWriter];
     }
-    else
-    {
-        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
-    }
-    _ijkMovie.delegate = self;
-    [_ijkMovie addTarget:_filter];
-    [_ijkMovie prepareToPlay];
-#endif
     
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyyMMdd_hhmmss";
-    NSString* fileName = [NSString stringWithFormat:@"MOV_%@.mp4", [formatter stringFromDate:[NSDate date]]];
+    NSString* fileName = [NSString stringWithFormat:@"MOV_%@.mp4", [formatter stringFromDate:dateTime]];
     NSString* pathToMovie = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
-    NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
-    _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(480.0, 640.0)];
+    NSURL* movieURL = [NSURL fileURLWithPath:pathToMovie];
+    _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:size];
     _movieWriter.encodingLiveVideo = YES;
-    //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(640.0, 480.0)];
-    //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(720.0, 1280.0)];
-    //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(1080.0, 1920.0)];
-    ///!!![_filter addTarget:_movieWriter];
+}
+
+-(void) setupMovieWriter {
+    [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
     [_videoCamera addTarget:_movieWriter];
-    [_filter addTarget:_filterView];
-    
-    double delayToStartRecording = 0.5;
-    dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, delayToStartRecording * NSEC_PER_SEC);
-    dispatch_after(startTime, dispatch_get_main_queue(), ^(void){
-        NSLog(@"Start recording");
+    _videoCamera.audioEncodingTarget = _movieWriter;
+}
 
-#if VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
-        [_ijkMovie startPlay];
-#elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
-        ///!!![_ijkMovie play];
-#elif VideoSource == VideoSource_Camera
-        
-#endif
-        _videoCamera.audioEncodingTarget = _movieWriter;
-        [_videoCamera startCameraCapture];
-        
-        [_movieWriter startRecording];
-        
-        //        NSError *error = nil;
-        //        if (![_videoCamera.inputCamera lockForConfiguration:&error])
-        //        {
-        //            NSLog(@"Error locking for configuration: %@", error);
-        //        }
-        //        [_videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOn];
-        //        [_videoCamera.inputCamera unlockForConfiguration];
-#if VideoSource != VideoSource_IJKGPUImageMovie_VideoPlay
-        double delayInSeconds = 15.0;
-        dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-        dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
-            [_filter removeTarget:_movieWriter];
-
-            _videoCamera.audioEncodingTarget = nil;
-            [_videoCamera stopCameraCapture];
-
-            //*/
-            [_movieWriter finishRecording];
-            NSLog(@"Movie completed");
-            [_filter removeAllTargets];
-            /*
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:movieURL])
-            {
-                [library writeVideoAtPathToSavedPhotosAlbum:movieURL completionBlock:^(NSURL *assetURL, NSError *error)
-                 {
-                     dispatch_async(dispatch_get_main_queue(), ^{
-                         
-                         if (error) {
-                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed"
-                                                                            delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                             [alert show];
-                         } else {
-//                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album"
-//                                                                            delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                             [alert show];
-                         }
-                         remove(pathToMovie.UTF8String);
-                     });
-                     [self startRecordingVideoSegment];
-                 }];
-            }
-            /*/
-            [self startRecordingVideoSegment];
-            //*/
-            
-            //            [_videoCamera.inputCamera lockForConfiguration:nil];
-            //            [_videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOff];
-            //            [_videoCamera.inputCamera unlockForConfiguration];
-        });
-#endif //#if VideoSource != VideoSource_IJKGPUImageMovie_VideoPlay
-    });
+-(void) startMovieWriteRecording {
+    [_movieWriter startRecording];
 }
 
 #pragma mark - View lifecycle
 
 -(void) applicationDidBecomeActive:(id)sender {
+    [self setupMovieWriter];
     [_videoCamera resumeCameraCapture];
-    [_movieWriter setPaused:NO];
+    [self startMovieWriteRecording];
 }
 
 -(void) applicationWillResignActive:(id)sender {
-    [_movieWriter setPaused:YES];
+    [self disassembleMovieWriter];
     [_videoCamera pauseCameraCapture];
 }
 
@@ -182,41 +132,38 @@
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    self.navigationController.navigationBarHidden = YES;
-    
-//    return;
-    _filter = [[GPUImageSepiaFilter alloc] init];
-    [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
-    
-    //    _filter = [[GPUImageTiltShiftFilter alloc] init];
-    //    [(GPUImageTiltShiftFilter *)_filter setTopFocusLevel:0.65];
-    //    [(GPUImageTiltShiftFilter *)_filter setBottomFocusLevel:0.85];
-    //    [(GPUImageTiltShiftFilter *)_filter setBlurSize:1.5];
-    //    [(GPUImageTiltShiftFilter *)_filter setFocusFallOffRate:0.2];
-    
-    //    _filter = [[GPUImageSketchFilter alloc] init];
-    //    _filter = [[GPUImageColorInvertFilter alloc] init];
-    //    _filter = [[GPUImageSmoothToonFilter alloc] init];
-    //    GPUImageRotationFilter *rotationFilter = [[GPUImageRotationFilter alloc] initWithRotation:kGPUImageRotateRightFlipVertical];
+//    self.navigationController.navigationBarHidden = YES;
 
-    //GPUImageView *filterView = (GPUImageView *)self.gpuImageView;
+    _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
+    _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
+    _videoCamera.horizontallyMirrorRearFacingCamera = NO;
+    
     _filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
     _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
     [self.view addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
-    [_filter addTarget:_filterView];
-#if VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
-    /*///!!!For Debug:
-    _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    _imageView.backgroundColor = [UIColor greenColor];
-    _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self.view addSubview:_imageView];
-    //*/
-#endif
     
-    // Record a movie for 10 s and store it in /Documents, visible via iTunes file sharing
-    [self startRecordingVideoSegment];
+    _filter = [[GPUImageSepiaFilter alloc] init];
+    [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
+    [_filter addTarget:_filterView];
+    
+    [self installMovieNotificationObservers];
+    NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    if ([SourceVideoFileName hasPrefix:@"http"])
+    {
+        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:SourceVideoFileName];
+    }
+    else
+    {
+        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
+    }
+    _ijkMovie.delegate = self;
+    [_ijkMovie addTarget:_filter];
+    [_ijkMovie prepareToPlay];
+    
+    [_videoCamera startCameraCapture];
 }
 
 - (void)viewDidUnload
