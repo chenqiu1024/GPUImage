@@ -11,11 +11,6 @@
 #import "GPUImageView.h"
 
 @interface ViewController : UIViewController
-{
-    GPUImageVideoCamera *videoCamera;
-    GPUImageOutput<GPUImageInput> *filter;
-//    GPUImageMovieWriter *movieWriter;
-}
 
 @property (nonatomic, strong) IBOutlet GPUImageView* gpuImageView;
 

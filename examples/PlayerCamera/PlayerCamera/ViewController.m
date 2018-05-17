@@ -18,6 +18,10 @@
 
 @interface ViewController () <IJKGPUImageMovieDelegate>
 {
+    GPUImageVideoCamera* _videoCamera;
+    GPUImageOutput<GPUImageInput>* _filter;
+    //    GPUImageMovieWriter *movieWriter;
+    
     IJKGPUImageMovie* _ijkMovie;
 //    UIImageView* _imageView;
     
@@ -38,15 +42,15 @@
 //#define SourceVideoFileName @"testin.mp4"
 
 - (void) startRecordingVideoSegment {
-    videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
-    videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
-    videoCamera.horizontallyMirrorFrontFacingCamera = NO;
-    videoCamera.horizontallyMirrorRearFacingCamera = NO;
+    _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
+    _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
+    _videoCamera.horizontallyMirrorRearFacingCamera = NO;
 #if VideoSource == VideoSource_Camera
-    [videoCamera addTarget:filter];
+    [_videoCamera addTarget:_filter];
 #elif VideoSource == VideoSource_IJKGPUImageMovie_RandomColor
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithSize:CGSizeMake(640, 480) FPS:2.f];
-    [_ijkMovie addTarget:filter];
+    [_ijkMovie addTarget:_filter];
 #elif VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
     [self installMovieNotificationObservers];
     NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
@@ -59,7 +63,7 @@
         _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
     }
     _ijkMovie.delegate = self;
-    [_ijkMovie addTarget:filter];
+    [_ijkMovie addTarget:_filter];
     [_ijkMovie prepareToPlay];
 #endif
     
@@ -74,9 +78,9 @@
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(640.0, 480.0)];
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(720.0, 1280.0)];
     //    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(1080.0, 1920.0)];
-    ///!!![filter addTarget:_movieWriter];
-    [videoCamera addTarget:_movieWriter];
-    [filter addTarget:_filterView];
+    ///!!![_filter addTarget:_movieWriter];
+    [_videoCamera addTarget:_movieWriter];
+    [_filter addTarget:_filterView];
     
     double delayToStartRecording = 0.5;
     dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, delayToStartRecording * NSEC_PER_SEC);
@@ -90,31 +94,31 @@
 #elif VideoSource == VideoSource_Camera
         
 #endif
-        videoCamera.audioEncodingTarget = _movieWriter;
-        [videoCamera startCameraCapture];
+        _videoCamera.audioEncodingTarget = _movieWriter;
+        [_videoCamera startCameraCapture];
         
         [_movieWriter startRecording];
         
         //        NSError *error = nil;
-        //        if (![videoCamera.inputCamera lockForConfiguration:&error])
+        //        if (![_videoCamera.inputCamera lockForConfiguration:&error])
         //        {
         //            NSLog(@"Error locking for configuration: %@", error);
         //        }
-        //        [videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOn];
-        //        [videoCamera.inputCamera unlockForConfiguration];
+        //        [_videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOn];
+        //        [_videoCamera.inputCamera unlockForConfiguration];
 #if VideoSource != VideoSource_IJKGPUImageMovie_VideoPlay
         double delayInSeconds = 15.0;
         dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
-            [filter removeTarget:_movieWriter];
+            [_filter removeTarget:_movieWriter];
 
-            videoCamera.audioEncodingTarget = nil;
-            [videoCamera stopCameraCapture];
+            _videoCamera.audioEncodingTarget = nil;
+            [_videoCamera stopCameraCapture];
 
             //*/
             [_movieWriter finishRecording];
             NSLog(@"Movie completed");
-            [filter removeAllTargets];
+            [_filter removeAllTargets];
             /*
             ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
             if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:movieURL])
@@ -141,9 +145,9 @@
             [self startRecordingVideoSegment];
             //*/
             
-            //            [videoCamera.inputCamera lockForConfiguration:nil];
-            //            [videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOff];
-            //            [videoCamera.inputCamera unlockForConfiguration];
+            //            [_videoCamera.inputCamera lockForConfiguration:nil];
+            //            [_videoCamera.inputCamera setTorchMode:AVCaptureTorchModeOff];
+            //            [_videoCamera.inputCamera unlockForConfiguration];
         });
 #endif //#if VideoSource != VideoSource_IJKGPUImageMovie_VideoPlay
     });
@@ -152,11 +156,13 @@
 #pragma mark - View lifecycle
 
 -(void) applicationDidBecomeActive:(id)sender {
+    [_videoCamera resumeCameraCapture];
     [_movieWriter setPaused:NO];
 }
 
 -(void) applicationWillResignActive:(id)sender {
     [_movieWriter setPaused:YES];
+    [_videoCamera pauseCameraCapture];
 }
 
 -(void) dealloc {
@@ -179,18 +185,18 @@
     self.navigationController.navigationBarHidden = YES;
     
 //    return;
-    filter = [[GPUImageSepiaFilter alloc] init];
-    [(GPUImageSepiaFilter*)filter setIntensity:0.f];
+    _filter = [[GPUImageSepiaFilter alloc] init];
+    [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
     
-    //    filter = [[GPUImageTiltShiftFilter alloc] init];
-    //    [(GPUImageTiltShiftFilter *)filter setTopFocusLevel:0.65];
-    //    [(GPUImageTiltShiftFilter *)filter setBottomFocusLevel:0.85];
-    //    [(GPUImageTiltShiftFilter *)filter setBlurSize:1.5];
-    //    [(GPUImageTiltShiftFilter *)filter setFocusFallOffRate:0.2];
+    //    _filter = [[GPUImageTiltShiftFilter alloc] init];
+    //    [(GPUImageTiltShiftFilter *)_filter setTopFocusLevel:0.65];
+    //    [(GPUImageTiltShiftFilter *)_filter setBottomFocusLevel:0.85];
+    //    [(GPUImageTiltShiftFilter *)_filter setBlurSize:1.5];
+    //    [(GPUImageTiltShiftFilter *)_filter setFocusFallOffRate:0.2];
     
-    //    filter = [[GPUImageSketchFilter alloc] init];
-    //    filter = [[GPUImageColorInvertFilter alloc] init];
-    //    filter = [[GPUImageSmoothToonFilter alloc] init];
+    //    _filter = [[GPUImageSketchFilter alloc] init];
+    //    _filter = [[GPUImageColorInvertFilter alloc] init];
+    //    _filter = [[GPUImageSmoothToonFilter alloc] init];
     //    GPUImageRotationFilter *rotationFilter = [[GPUImageRotationFilter alloc] initWithRotation:kGPUImageRotateRightFlipVertical];
 
     //GPUImageView *filterView = (GPUImageView *)self.gpuImageView;
@@ -199,7 +205,7 @@
     _filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
     [self.view addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
-    [filter addTarget:_filterView];
+    [_filter addTarget:_filterView];
 #if VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
     /*///!!!For Debug:
     _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -247,7 +253,7 @@
             orient = fromInterfaceOrientation;
             break;
     }
-    videoCamera.outputImageOrientation = orient;
+    _videoCamera.outputImageOrientation = orient;
     
 }
 
@@ -258,7 +264,7 @@
 
 - (IBAction)updateSliderValue:(id)sender
 {
-    [(GPUImageSepiaFilter *)filter setIntensity:[(UISlider *)sender value]];
+    [(GPUImageSepiaFilter *)_filter setIntensity:[(UISlider *)sender value]];
 }
 
 #pragma mark    Immitated from IJKMoviePlayerViewController

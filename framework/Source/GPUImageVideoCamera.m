@@ -552,7 +552,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 #define INITIALFRAMESTOIGNOREFORBENCHMARK 5
 
 - (void)updateTargetsForVideoCameraUsingCacheTextureAtWidth:(int)bufferWidth height:(int)bufferHeight time:(CMTime)currentTime;
-{
+{//NSLog(@"#Timestamp# GPUImageVideoCamera : New frame at %f", CMTimeGetSeconds(currentTime));
     // First, update all the framebuffers in the targets
     for (id<GPUImageInput> currentTarget in targets)
     {
