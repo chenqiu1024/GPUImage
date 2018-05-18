@@ -33,6 +33,7 @@
 -(void)installMovieNotificationObservers;
 
 @property (nonatomic, strong) IBOutlet UIView* controlPanelView;
+@property (nonatomic, strong) IBOutlet UIButton* playOrPauseButton;
 @property (nonatomic, strong) IBOutlet UISlider* progressSlider;
 @property (nonatomic, strong) IBOutlet UILabel* durationLabel;
 @property (nonatomic, strong) IBOutlet UILabel* currentTimeLabel;
@@ -57,6 +58,14 @@
 //#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
 
+-(void) setPlayOrPauseButtonState:(BOOL)isPlaying {
+    NSUInteger newTag = isPlaying ? 1 : 0;
+    if (newTag == self.playOrPauseButton.tag)
+        return;
+    self.playOrPauseButton.tag = newTag;
+    [self.playOrPauseButton setImage:[UIImage imageNamed:(isPlaying? @"btn_player_pause.png" : @"btn_player_play.png")] forState:UIControlStateNormal];
+}
+
 -(void) refreshMediaControl {
     NSTimeInterval duration = _ijkMovie.duration;
     NSInteger intDuration = duration + 0.5;
@@ -76,6 +85,8 @@
     self.progressSlider.value = (intPosition > 0) ? position : 0.0f;
     self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(intPosition/60), (int)(intPosition%60)];
     
+    [self setPlayOrPauseButtonState:_ijkMovie.isPlaying];
+
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(refreshMediaControl) object:nil];
     if (!self.controlPanelView.hidden)
     {
@@ -116,7 +127,16 @@
 }
 
 -(IBAction)onClickPlayOrPause:(id)sender {
-    
+    if (_ijkMovie.isPlaying)
+    {
+        [_ijkMovie pause];
+        [self setPlayOrPauseButtonState:NO];
+    }
+    else
+    {
+        [_ijkMovie play];
+        [self setPlayOrPauseButtonState:YES];
+    }
 }
 
 -(void) stopAndReleaseMovieWriter {
@@ -228,6 +248,7 @@
     [self.view bringSubviewToFront:self.controlPanelView];
     
     _isProgressSliderBeingDragged = NO;
+    self.playOrPauseButton.tag = 100;
     
     _filter = [[GPUImageSepiaFilter alloc] init];
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
@@ -244,6 +265,7 @@
         _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
     }
     _ijkMovie.delegate = self;
+    [_ijkMovie setPauseInBackground:YES];
     [_ijkMovie addTarget:_filter];
     [_ijkMovie prepareToPlay];
     

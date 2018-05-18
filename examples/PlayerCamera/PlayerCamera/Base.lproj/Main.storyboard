@@ -45,6 +45,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P8p-xi-Ouz" userLabel="PlayAndPause">
                                         <rect key="frame" x="167" y="12" width="16" height="22"/>
                                         <state key="normal" image="btn_player_pause.png"/>
+                                        <connections>
+                                            <action selector="onClickPlayOrPause:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jtR-xR-KxZ"/>
+                                        </connections>
                                     </button>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="HRy-g7-XYH" userLabel="ProgressSlider">
                                         <rect key="frame" x="63.5" y="48" width="224" height="31"/>
@@ -88,6 +91,7 @@
                         <outlet property="controlPanelView" destination="dbX-yz-hfO" id="BwC-bJ-QSq"/>
                         <outlet property="currentTimeLabel" destination="9ll-Cg-edD" id="2jd-uZ-7Eb"/>
                         <outlet property="durationLabel" destination="8wu-Lw-zHJ" id="H76-jb-FM6"/>
+                        <outlet property="playOrPauseButton" destination="P8p-xi-Ouz" id="gK6-bd-V14"/>
                         <outlet property="progressSlider" destination="HRy-g7-XYH" id="LdI-at-Q8J"/>
                     </connections>
                 </viewController>
