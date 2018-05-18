@@ -25,10 +25,28 @@
     
     GPUImageView* _filterView;
     GPUImageMovieWriter* _movieWriter;
+    
+    BOOL _isProgressSliderBeingDragged;
 }
 
 -(void)removeMovieNotificationObservers;
 -(void)installMovieNotificationObservers;
+
+@property (nonatomic, strong) IBOutlet UIView* controlPanelView;
+@property (nonatomic, strong) IBOutlet UISlider* progressSlider;
+@property (nonatomic, strong) IBOutlet UILabel* durationLabel;
+@property (nonatomic, strong) IBOutlet UILabel* currentTimeLabel;
+
+-(IBAction)onClickOverlay:(id)sender;
+-(IBAction)onClickControlPanel:(id)sender;
+
+-(IBAction)didSliderTouchDown:(id)sender;
+-(IBAction)didSliderTouchUpInside:(id)sender;
+-(IBAction)didSliderTouchUpOutside:(id)sender;
+-(IBAction)didSliderTouchCancel:(id)sender;
+-(IBAction)didSliderValueChanged:(id)sender;
+
+-(IBAction)onClickPlayOrPause:(id)sender;
 
 @end
 
@@ -38,6 +56,68 @@
 //#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
 //#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
+
+-(void) refreshMediaControl {
+    NSTimeInterval duration = _ijkMovie.duration;
+    NSInteger intDuration = duration + 0.5;
+    if (intDuration > 0)
+    {
+        self.progressSlider.maximumValue = duration;
+        self.durationLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(intDuration/60), (int)(intDuration%60)];
+    }
+    else
+    {
+        self.progressSlider.maximumValue = 1.0f;
+        self.durationLabel.text = @"--:--";
+    }
+    
+    NSTimeInterval position = _isProgressSliderBeingDragged ? self.progressSlider.value : _ijkMovie.currentPlaybackTime;
+    NSInteger intPosition = position + 0.5;
+    self.progressSlider.value = (intPosition > 0) ? position : 0.0f;
+    self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(intPosition/60), (int)(intPosition%60)];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(refreshMediaControl) object:nil];
+    if (!self.controlPanelView.hidden)
+    {
+        [self performSelector:@selector(refreshMediaControl) withObject:nil afterDelay:0.5];
+    }
+}
+
+-(IBAction)onClickOverlay:(id)sender {
+    
+}
+
+-(IBAction)onClickControlPanel:(id)sender {
+    
+}
+
+-(IBAction)didSliderTouchDown:(id)sender {
+    _isProgressSliderBeingDragged = YES;
+}
+
+-(IBAction)didSliderTouchUpInside:(id)sender {
+    _ijkMovie.currentPlaybackTime = self.progressSlider.value;
+    _isProgressSliderBeingDragged = NO;
+}
+
+-(IBAction)didSliderTouchUpOutside:(id)sender {
+    _isProgressSliderBeingDragged = NO;
+}
+
+-(IBAction)didSliderTouchCancel:(id)sender {
+    _isProgressSliderBeingDragged = NO;
+}
+
+-(IBAction)didSliderValueChanged:(id)sender {
+    if (_isProgressSliderBeingDragged)
+    {
+        [self refreshMediaControl];
+    }
+}
+
+-(IBAction)onClickPlayOrPause:(id)sender {
+    
+}
 
 -(void) stopAndReleaseMovieWriter {
     if (!_movieWriter)
@@ -147,6 +227,8 @@
     
     [self.view bringSubviewToFront:self.controlPanelView];
     
+    _isProgressSliderBeingDragged = NO;
+    
     _filter = [[GPUImageSepiaFilter alloc] init];
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
     [_filter addTarget:_filterView];
@@ -164,6 +246,8 @@
     _ijkMovie.delegate = self;
     [_ijkMovie addTarget:_filter];
     [_ijkMovie prepareToPlay];
+    
+    [self refreshMediaControl];
     
     [_videoCamera startCameraCapture];
 }
