@@ -145,6 +145,8 @@
     [self.view addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
+    [self.view bringSubviewToFront:self.controlPanelView];
+    
     _filter = [[GPUImageSepiaFilter alloc] init];
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
     [_filter addTarget:_filterView];

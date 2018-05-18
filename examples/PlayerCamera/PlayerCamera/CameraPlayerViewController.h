@@ -12,7 +12,7 @@
 
 @interface CameraPlayerViewController : UIViewController
 
-@property (nonatomic, strong) IBOutlet GPUImageView* gpuImageView;
+@property (nonatomic, strong) IBOutlet UIView* controlPanelView;
 
 - (IBAction)updateSliderValue:(id)sender;
 
