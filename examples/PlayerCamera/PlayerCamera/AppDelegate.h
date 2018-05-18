@@ -7,16 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ViewController.h"
 #import "GPUImage.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-{
-    ViewController *rootViewController;
-}
 
 @property (strong, nonatomic) UIWindow *window;
-
 
 @end
 

@@ -1,12 +1,12 @@
 //
-//  ViewController.m
+//  CameraPlayerViewController.m
 //  PlayerCamera
 //
 //  Created by DOM QIU on 2017/5/25.
 //  Copyright © 2017年 DOM QIU. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "CameraPlayerViewController.h"
 #import "IJKGPUImageMovie.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
@@ -14,7 +14,7 @@
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
-@interface ViewController () <IJKGPUImageMovieDelegate>
+@interface CameraPlayerViewController () <IJKGPUImageMovieDelegate>
 {
     GPUImageVideoCamera* _videoCamera;
     GPUImageOutput<GPUImageInput>* _filter;
@@ -32,7 +32,7 @@
 
 @end
 
-@implementation ViewController
+@implementation CameraPlayerViewController
 
 #define SourceVideoFileName @"I.Am.Legend.2007.iPhone-YYeTs.mp4"
 //#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"

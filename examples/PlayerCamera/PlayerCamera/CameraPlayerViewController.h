@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CameraPlayerViewController.h
 //  PlayerCamera
 //
 //  Created by DOM QIU on 2017/5/25.
@@ -10,7 +10,7 @@
 #import "GPUImage.h"
 #import "GPUImageView.h"
 
-@interface ViewController : UIViewController
+@interface CameraPlayerViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet GPUImageView* gpuImageView;
 

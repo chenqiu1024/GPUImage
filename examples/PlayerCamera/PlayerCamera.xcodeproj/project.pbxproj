@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		520DA6D91ED7248C009E4705 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6D81ED7248C009E4705 /* main.m */; };
 		520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6DB1ED7248C009E4705 /* AppDelegate.m */; };
-		520DA6DF1ED7248C009E4705 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6DE1ED7248C009E4705 /* ViewController.m */; };
+		520DA6DF1ED7248C009E4705 /* CameraPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6DE1ED7248C009E4705 /* CameraPlayerViewController.m */; };
 		520DA6E21ED7248C009E4705 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E01ED7248C009E4705 /* Main.storyboard */; };
 		520DA6E41ED7248C009E4705 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E31ED7248C009E4705 /* Assets.xcassets */; };
 		520DA6E71ED7248C009E4705 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E51ED7248C009E4705 /* LaunchScreen.storyboard */; };
@@ -113,8 +113,8 @@
 		520DA6D81ED7248C009E4705 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		520DA6DA1ED7248C009E4705 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		520DA6DB1ED7248C009E4705 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		520DA6DD1ED7248C009E4705 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		520DA6DE1ED7248C009E4705 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		520DA6DD1ED7248C009E4705 /* CameraPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraPlayerViewController.h; sourceTree = "<group>"; };
+		520DA6DE1ED7248C009E4705 /* CameraPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraPlayerViewController.m; sourceTree = "<group>"; };
 		520DA6E11ED7248C009E4705 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		520DA6E31ED7248C009E4705 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		520DA6E61ED7248C009E4705 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -188,8 +188,8 @@
 			children = (
 				520DA6DA1ED7248C009E4705 /* AppDelegate.h */,
 				520DA6DB1ED7248C009E4705 /* AppDelegate.m */,
-				520DA6DD1ED7248C009E4705 /* ViewController.h */,
-				520DA6DE1ED7248C009E4705 /* ViewController.m */,
+				520DA6DD1ED7248C009E4705 /* CameraPlayerViewController.h */,
+				520DA6DE1ED7248C009E4705 /* CameraPlayerViewController.m */,
 				520DA6E01ED7248C009E4705 /* Main.storyboard */,
 				520DA6E31ED7248C009E4705 /* Assets.xcassets */,
 				520DA6E51ED7248C009E4705 /* LaunchScreen.storyboard */,
@@ -410,7 +410,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				520DA6DF1ED7248C009E4705 /* ViewController.m in Sources */,
+				520DA6DF1ED7248C009E4705 /* CameraPlayerViewController.m in Sources */,
 				520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */,
 				52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
