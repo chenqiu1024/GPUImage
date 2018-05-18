@@ -869,7 +869,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 #pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{
+{NSLog(@"captureOutput");
     if (!self.captureSession.isRunning)
     {
         return;
