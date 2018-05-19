@@ -32,6 +32,7 @@
 -(void)removeMovieNotificationObservers;
 -(void)installMovieNotificationObservers;
 
+@property (nonatomic, strong) IBOutlet UIView* overlayView;
 @property (nonatomic, strong) IBOutlet UIView* controlPanelView;
 @property (nonatomic, strong) IBOutlet UIButton* playOrPauseButton;
 @property (nonatomic, strong) IBOutlet UISlider* progressSlider;
@@ -94,8 +95,22 @@
     }
 }
 
--(IBAction)onClickOverlay:(id)sender {
+-(void) hideMediaControl {
     
+}
+
+-(IBAction)onClickOverlay:(id)sender {
+    if (self.controlPanelView.isHidden)
+    {
+        self.controlPanelView.hidden = NO;
+        [self refreshMediaControl];
+        [self performSelector:@selector(hideMediaControl) withObject:nil afterDelay:5.0f];
+    }
+    else
+    {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMediaControl) object:nil];
+        self.controlPanelView.hidden = YES;
+    }
 }
 
 -(IBAction)onClickControlPanel:(id)sender {
@@ -245,6 +260,7 @@
     [self.view addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
+    [self.view bringSubviewToFront:self.overlayView];
     [self.view bringSubviewToFront:self.controlPanelView];
     
     _isProgressSliderBeingDragged = NO;
