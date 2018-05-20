@@ -26,6 +26,21 @@
 //    [self.window makeKeyAndVisible];
 //    [self.window layoutSubviews];
 //    self.window.rootViewController = rootViewController;
+    NSFileManager* fm = [NSFileManager defaultManager];
+    NSString* docDirectoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    NSString* thumbnailDirectory = [docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory];
+    NSString* videoDirectory = [docDirectoryPath stringByAppendingPathComponent:VideoDirectory];
+    BOOL isDirectory = NO;
+    if (![fm fileExistsAtPath:thumbnailDirectory isDirectory:&isDirectory] || !isDirectory)
+    {
+        [fm createDirectoryAtPath:thumbnailDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    isDirectory = NO;
+    if (![fm fileExistsAtPath:videoDirectory isDirectory:&isDirectory] || !isDirectory)
+    {
+        [fm createDirectoryAtPath:videoDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
     return YES;
 }
 

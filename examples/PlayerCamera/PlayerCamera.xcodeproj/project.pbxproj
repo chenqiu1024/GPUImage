@@ -23,6 +23,10 @@
 		5214AF63206405920076405A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5214AF62206405910076405A /* libz.tbd */; };
 		52257C7F20ABE01600140039 /* IJKMediaFrameworkWithSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CB035820550F0F00329861 /* IJKMediaFrameworkWithSSL.framework */; };
 		52257C8020ABE01600140039 /* IJKMediaFrameworkWithSSL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52CB035820550F0F00329861 /* IJKMediaFrameworkWithSSL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F115E20B1B5390045795F /* VideoCollectionViewController.m */; };
+		524F116020B1B5390045795F /* VideoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F115E20B1B5390045795F /* VideoCollectionViewController.m */; };
+		524F116720B1B6E40045795F /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F116620B1B6E40045795F /* UIImage+Blur.m */; };
+		524F116820B1B6E40045795F /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F116620B1B6E40045795F /* UIImage+Blur.m */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
 		52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -129,6 +133,11 @@
 		520DA7301ED72AE1009E4705 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		520DA7321ED72AE6009E4705 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5214AF62206405910076405A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		524F115D20B1B5390045795F /* VideoCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCollectionViewController.h; sourceTree = "<group>"; };
+		524F115E20B1B5390045795F /* VideoCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoCollectionViewController.m; sourceTree = "<group>"; };
+		524F116620B1B6E40045795F /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Blur.m"; path = "Utils/UIImage+Blur.m"; sourceTree = "<group>"; };
+		524F116920B1B6EC0045795F /* UIImage+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Blur.h"; path = "Utils/UIImage+Blur.h"; sourceTree = "<group>"; };
+		524F116B20B1DA4C0045795F /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		52CAA9D31F66D3D000351014 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IJKMediaPlayer.xcodeproj; path = ../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer.xcodeproj; sourceTree = "<group>"; };
 		52CB035B205511E000329861 /* IJKGPUImageMovie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImageMovie.h; path = IJKGPUImage/IJKGPUImageMovie.h; sourceTree = "<group>"; };
@@ -167,6 +176,7 @@
 		520DA6CB1ED7248B009E4705 = {
 			isa = PBXGroup;
 			children = (
+				524F116B20B1DA4C0045795F /* PrefixHeader.pch */,
 				520DA7121ED7280C009E4705 /* Frameworks */,
 				520DA6D61ED7248C009E4705 /* PlayerCamera */,
 				520DA6F01ED7248C009E4705 /* PlayerCameraUITests */,
@@ -186,6 +196,7 @@
 		520DA6D61ED7248C009E4705 /* PlayerCamera */ = {
 			isa = PBXGroup;
 			children = (
+				524F116520B1B67B0045795F /* Utils */,
 				520DA6DA1ED7248C009E4705 /* AppDelegate.h */,
 				520DA6DB1ED7248C009E4705 /* AppDelegate.m */,
 				520DA6DD1ED7248C009E4705 /* CameraPlayerViewController.h */,
@@ -199,6 +210,8 @@
 				52CB035C205511E000329861 /* IJKGPUImageMovie.m */,
 				52FAF1C52067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.h */,
 				52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */,
+				524F115D20B1B5390045795F /* VideoCollectionViewController.h */,
+				524F115E20B1B5390045795F /* VideoCollectionViewController.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -243,6 +256,15 @@
 				520DA71C1ED72823009E4705 /* GPUImage.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		524F116520B1B67B0045795F /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				524F116920B1B6EC0045795F /* UIImage+Blur.h */,
+				524F116620B1B6E40045795F /* UIImage+Blur.m */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 		52CB034E20550F0F00329861 /* Products */ = {
@@ -411,9 +433,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				520DA6DF1ED7248C009E4705 /* CameraPlayerViewController.m in Sources */,
+				524F116720B1B6E40045795F /* UIImage+Blur.m in Sources */,
 				520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */,
 				52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
+				524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,6 +446,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				524F116820B1B6E40045795F /* UIImage+Blur.m in Sources */,
+				524F116020B1B5390045795F /* VideoCollectionViewController.m in Sources */,
 				520DA6F21ED7248C009E4705 /* PlayerCameraUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -571,6 +597,8 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"../../framework/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
@@ -594,6 +622,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"../../framework/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
