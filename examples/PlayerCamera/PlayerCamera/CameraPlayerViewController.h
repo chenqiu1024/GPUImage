@@ -12,5 +12,7 @@
 
 @interface CameraPlayerViewController : UIViewController
 
+@property (nonatomic, copy) NSString* sourceVideoFile;
+
 @end
 

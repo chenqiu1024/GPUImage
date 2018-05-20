@@ -7,6 +7,7 @@
 //
 
 #import "VideoCollectionViewController.h"
+#import "CameraPlayerViewController.h"
 #import "UIImage+Blur.h"
 
 NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
@@ -115,15 +116,22 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 - (void)cache:(NSCache *)cache willEvictObject:(id)obj {
     ThumbnailCacheItem* thumbnailItem = (ThumbnailCacheItem*)obj;
     NSData* thumbnailData = UIImagePNGRepresentation(thumbnailItem.thumbnail);
-    NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:thumbnailItem.key];
-    [thumbnailData writeToFile:filePath atomically:NO];
+    NSString* thumbnailPath = [[_docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory] stringByAppendingPathComponent:thumbnailItem.key];
+    [thumbnailData writeToFile:thumbnailPath atomically:NO];
 }
 
 #pragma mark UICollectionViewDelegate
+-(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* file = [_files objectAtIndex:indexPath.row];
+    NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
+    CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+    playerVC.sourceVideoFile = filePath;
+    [self presentViewController:playerVC animated:YES completion:nil];
+}
 
 #pragma mark UICollectionViewDataSource
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return _files.count;
 }
 
@@ -138,14 +146,15 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     ThumbnailCacheItem* cacheItem = [_thumbnailCache objectForKey:file];
     if (!cacheItem || !cacheItem.thumbnail)
     {
-        NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
+        NSString* thumbnailPath = [[_docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory] stringByAppendingPathComponent:cacheItem.key];
         UIImage* thumbnail;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+        if ([[NSFileManager defaultManager] fileExistsAtPath:thumbnailPath])
         {
-            thumbnail = [UIImage imageWithContentsOfFile:filePath];
+            thumbnail = [UIImage imageWithContentsOfFile:thumbnailPath];
         }
         else
         {
+            NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
             thumbnail = [UIImage getVideoImage:filePath time:32.f];
         }
         cacheItem = [[ThumbnailCacheItem alloc] initWithKey:file thumbnail:thumbnail];

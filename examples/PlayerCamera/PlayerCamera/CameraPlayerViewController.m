@@ -54,7 +54,7 @@
 
 @implementation CameraPlayerViewController
 
-#define SourceVideoFileName @"I.Am.Legend.2007.iPhone-YYeTs.mp4"
+//#define SourceVideoFileName @"I.Am.Legend.2007.iPhone-YYeTs.mp4"
 //#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
 //#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
@@ -271,15 +271,11 @@
     [_filter addTarget:_filterView];
     
     [self installMovieNotificationObservers];
-    NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    if ([SourceVideoFileName hasPrefix:@"http"])
-    {
-        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:SourceVideoFileName];
-    }
-    else
-    {
-        _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[docPath stringByAppendingPathComponent:SourceVideoFileName]];
-    }
+#ifdef SourceVideoFileName
+    _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:SourceVideoFileName]];
+#else
+    _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:self.sourceVideoFile];
+#endif
     _ijkMovie.delegate = self;
     [_ijkMovie setPauseInBackground:YES];
     [_ijkMovie addTarget:_filter];

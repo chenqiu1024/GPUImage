@@ -99,7 +99,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Rg-oC-cri" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-823.20000000000005" y="-539.28035982008998"/>
+            <point key="canvasLocation" x="-807" y="-539"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="VZU-jj-5QN">
@@ -122,7 +122,7 @@
         <!--Camera Player View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="RootVC" id="BYZ-38-t0r" customClass="CameraPlayerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CameraPlayer" id="BYZ-38-t0r" customClass="CameraPlayerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -221,7 +221,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="135.38230884557723"/>
+            <point key="canvasLocation" x="-41" y="-539"/>
         </scene>
     </scenes>
     <resources>
