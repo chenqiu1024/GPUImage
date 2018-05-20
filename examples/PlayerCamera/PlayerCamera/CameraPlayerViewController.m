@@ -54,7 +54,7 @@
 
 @implementation CameraPlayerViewController
 
-//#define SourceVideoFileName @"I.Am.Legend.2007.iPhone-YYeTs.mp4"
+#define SourceVideoFileName @"玩命直播BD1280高清中英双字.MP4"
 //#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
 //#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
@@ -201,6 +201,7 @@
     formatter.dateFormat = @"yyyyMMdd_hhmmss";
     NSString* fileName = [NSString stringWithFormat:@"MOV_%@.mp4", [formatter stringFromDate:dateTime]];
     NSString* pathToMovie = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:VideoDirectory] stringByAppendingPathComponent:fileName];
+    //NSString* pathToMovie = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     NSURL* movieURL = [NSURL fileURLWithPath:pathToMovie];
     _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:size];
