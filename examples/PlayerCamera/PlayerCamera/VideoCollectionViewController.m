@@ -75,7 +75,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     _thumbnailCache = [[NSCache alloc] init];
-    _thumbnailCache.totalCostLimit = 0;
+    _thumbnailCache.totalCostLimit = 1048576 * 16;
     _thumbnailCache.delegate = self;
     
     _files = [[NSMutableArray alloc] init];
@@ -94,7 +94,9 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
             [_thumbnailCache setObject:cacheItem forKey:file cost:cacheItem.cost];
         }
     }
-    _thumbnailCache.totalCostLimit = 1048576 * 16;
+    
+//    CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+//    [self presentViewController:playerVC animated:YES completion:nil];///!!!For Debug
 }
 
 - (void)didReceiveMemoryWarning {
@@ -112,11 +114,15 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 }
 */
 
+-(NSString*) thumbnailPathForKey:(NSString*)key {
+    return [[[_docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory] stringByAppendingPathComponent:key] stringByAppendingPathExtension:@"thumb"];
+}
+
 #pragma mark NSCacheDelegate
 - (void)cache:(NSCache *)cache willEvictObject:(id)obj {
     ThumbnailCacheItem* thumbnailItem = (ThumbnailCacheItem*)obj;
     NSData* thumbnailData = UIImagePNGRepresentation(thumbnailItem.thumbnail);
-    NSString* thumbnailPath = [[_docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory] stringByAppendingPathComponent:thumbnailItem.key];
+    NSString* thumbnailPath = [self thumbnailPathForKey:thumbnailItem.key];
     [thumbnailData writeToFile:thumbnailPath atomically:NO];
 }
 
@@ -146,7 +152,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     ThumbnailCacheItem* cacheItem = [_thumbnailCache objectForKey:file];
     if (!cacheItem || !cacheItem.thumbnail)
     {
-        NSString* thumbnailPath = [[_docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory] stringByAppendingPathComponent:cacheItem.key];
+        NSString* thumbnailPath = [self thumbnailPathForKey:cacheItem.key];
         UIImage* thumbnail;
         if ([[NSFileManager defaultManager] fileExistsAtPath:thumbnailPath])
         {

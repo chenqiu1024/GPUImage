@@ -54,7 +54,7 @@
 
 @implementation CameraPlayerViewController
 
-#define SourceVideoFileName @"玩命直播BD1280高清中英双字.MP4"
+//#define SourceVideoFileName @"玩命直播BD1280高清中英双字.MP4"
 //#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
 //#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
 //#define SourceVideoFileName @"testin.mp4"
@@ -271,6 +271,12 @@
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
     [_filter addTarget:_filterView];
     
+    [_videoCamera startCameraCapture];
+    
+    [self setupMovieWriter];
+    [_videoCamera resumeCameraCapture];
+    [self startMovieWriteRecording];
+    
     [self installMovieNotificationObservers];
 #ifdef SourceVideoFileName
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:SourceVideoFileName]];
@@ -281,10 +287,7 @@
     [_ijkMovie setPauseInBackground:YES];
     [_ijkMovie addTarget:_filter];
     [_ijkMovie prepareToPlay];
-    
     [self refreshMediaControl];
-    
-    [_videoCamera startCameraCapture];
 }
 
 - (void)viewDidUnload
