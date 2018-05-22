@@ -86,6 +86,10 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 @property (nonatomic, assign) AVAppAsyncStatistic asyncStat;
 @property (nonatomic, assign) IjkIOAppCacheStatistic cacheStat;
 
+//@property (nonatomic, assign) BOOL isUsedForSnapshot;
+
+@property (nonatomic, strong) SnapshotCompletionHandler snapshotCompletionHandler;
+
 @end
 
 #pragma mark    ijkgpuplayer
@@ -411,6 +415,35 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 @synthesize asyncStat = _asyncStat;
 @synthesize cacheStat = _cacheStat;
 
++(void) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
+    IJKGPUImageMovie* ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:videoURL];
+//    ijkMovie.isUsedForSnapshot = YES;
+    ijkMovie.snapshotCompletionHandler = completionHandler;
+    [ijkMovie setCurrentPlaybackTime:CMTimeGetSeconds(videoTime)];
+    [ijkMovie prepareToPlay];
+}
+
++(UIImage*) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime {
+    __block BOOL finished = NO;
+    __block UIImage* snapshotImage = nil;
+    NSCondition* cond = [[NSCondition alloc] init];
+    [IJKGPUImageMovie takeImageOfVideo:videoURL atTime:videoTime completionHandler:^(UIImage* image) {
+        snapshotImage = image;
+        
+        finished = YES;
+        [cond lock];
+        [cond signal];
+        [cond unlock];
+    }];
+    [cond lock];
+    while (!finished)
+    {
+        [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0f]];
+    }
+    [cond unlock];
+    return snapshotImage;
+}
+
 #pragma mark    Transplant from IJKFFMoviePlayerController
 
 - (id)initWithContentURL:(NSURL *)aUrl
@@ -446,6 +479,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     
     self = [super init];
     if (self) {
+//        self.isUsedForSnapshot = NO;
+        self.snapshotCompletionHandler = nil;
         ijkmp_global_init();
         ijkmp_global_set_inject_callback(ijkff_inject_callback);
         
@@ -731,6 +766,31 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
         }
         return NO;
     }
+}
+
+-(void) shutdownSynchronously {
+    if (!_mediaPlayer)
+        return;
+    
+    [self stopHudTimer];
+    [self unregisterApplicationObservers];
+    [self setScreenOn:NO];
+    
+    ijkmp_stop(_mediaPlayer);
+    ijkmp_shutdown(_mediaPlayer);
+    
+    _segmentOpenDelegate    = nil;
+    _tcpOpenDelegate        = nil;
+    _httpOpenDelegate       = nil;
+    _liveOpenDelegate       = nil;
+    _nativeInvokeDelegate   = nil;
+    
+    __unused id weakPlayer = (__bridge_transfer IJKGPUImageMovie*)ijkmp_set_weak_thiz(_mediaPlayer, NULL);
+    __unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
+    __unused id weakijkHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_ijkio_inject_opaque(_mediaPlayer, NULL);
+    ijkmp_dec_ref_p(&_mediaPlayer);
+    
+    [self didShutdown];
 }
 
 - (void)shutdown
@@ -1757,28 +1817,38 @@ int media_player_msg_loop(void* arg)
             // iOS5.0+ will not go into here
         }
         //*
-        
-        for (id<GPUImageInput> currentTarget in targets)
+        if (self.snapshotCompletionHandler)
         {
-            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-            [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
-            [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
+            UIImage* snapshot = [self snapshotImage];
+            [outputFramebuffer unlock];
+            self.snapshotCompletionHandler(snapshot);
+            [self shutdownSynchronously];
         }
-        
-        [outputFramebuffer unlock];
-        
-        _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
-        int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
-        CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
-        
-        for (id<GPUImageInput> currentTarget in targets)
+        else
         {
-            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-            [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
+            for (id<GPUImageInput> currentTarget in targets)
+            {
+                NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+                NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+                [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
+                [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
+            }
+            
+            [outputFramebuffer unlock];
+            
+            _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
+            int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
+            CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
+            
+            for (id<GPUImageInput> currentTarget in targets)
+            {
+                NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+                NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+                [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
+            }
         }
         //*/
+        NSLog(@"#Thubmnail# IJKGPUImageMovie$render");
     });
 }
 

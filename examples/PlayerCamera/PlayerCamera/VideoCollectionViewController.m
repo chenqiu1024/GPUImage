@@ -8,6 +8,7 @@
 
 #import "VideoCollectionViewController.h"
 #import "CameraPlayerViewController.h"
+#import "IJKGPUImageMovie.h"
 #import "UIImage+Blur.h"
 
 NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
@@ -90,6 +91,10 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
             [_files addObject:file];
             NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
             UIImage* thumbnail = [UIImage getVideoImage:filePath time:32.f];
+            if (!thumbnail)
+            {
+                thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(3000, 1)];
+            }
             ThumbnailCacheItem* cacheItem = [[ThumbnailCacheItem alloc] initWithKey:file thumbnail:thumbnail];
             [_thumbnailCache setObject:cacheItem forKey:file cost:cacheItem.cost];
         }
@@ -162,6 +167,10 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
         {
             NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
             thumbnail = [UIImage getVideoImage:filePath time:32.f];
+            if (!thumbnail)
+            {
+                thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(3000, 1)];
+            }
         }
         cacheItem = [[ThumbnailCacheItem alloc] initWithKey:file thumbnail:thumbnail];
         [_thumbnailCache setObject:cacheItem forKey:file cost:cacheItem.cost];

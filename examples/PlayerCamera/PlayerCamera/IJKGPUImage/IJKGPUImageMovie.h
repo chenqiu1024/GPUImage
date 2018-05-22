@@ -61,6 +61,8 @@ typedef enum IJKLogLevel {
     k_IJK_LOG_SILENT  = 8,
 } IJKLogLevel;
 
+typedef void(^SnapshotCompletionHandler)(UIImage*);
+
 @class IJKGPUImageMovie;
 @protocol IJKGPUImageMovieDelegate <NSObject>
 
@@ -70,6 +72,12 @@ typedef enum IJKLogLevel {
 
 @interface IJKGPUImageMovie : GPUImageOutput<IJKMediaPlayback>
 
+//@property (nonatomic, readonly) BOOL isUsedForSnapshot;
+
++(void) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler;
+
++(UIImage*) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime;
+
 -(instancetype) initWithSize:(CGSize)size FPS:(float)FPS;
 
 -(void) startPlay;
@@ -78,6 +86,8 @@ typedef enum IJKLogLevel {
 - (void)shutdownWaitStop:(IJKGPUImageMovie*)mySelf;
 
 - (void)shutdownClose:(IJKGPUImageMovie*)mySelf;
+
+-(void) shutdownSynchronously;
 
 - (id)initWithContentURL:(NSURL *)aUrl
              withOptions:(IJKFFOptions *)options;
