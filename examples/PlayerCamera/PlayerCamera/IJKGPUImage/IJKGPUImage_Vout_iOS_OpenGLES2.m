@@ -118,6 +118,7 @@ static int vout_display_overlay_l(SDL_Vout* vout, SDL_VoutOverlay* overlay)
 static int vout_display_overlay(SDL_Vout* vout, SDL_VoutOverlay* overlay)
 {
     @autoreleasepool {
+        NSLog(@"#Crash# vout_display_overlay");
         SDL_LockMutex(vout->mutex);
         int retval = vout_display_overlay_l(vout, overlay);
         SDL_UnlockMutex(vout->mutex);

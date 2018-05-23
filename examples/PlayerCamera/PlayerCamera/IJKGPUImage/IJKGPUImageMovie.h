@@ -74,7 +74,7 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 
 //@property (nonatomic, readonly) BOOL isUsedForSnapshot;
 
-+(void) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler;
++(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler;
 
 +(UIImage*) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime;
 

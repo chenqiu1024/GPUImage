@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <math.h>
 
 static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001";
 
@@ -88,7 +89,8 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 
 //@property (nonatomic, assign) BOOL isUsedForSnapshot;
 
-@property (nonatomic, strong) SnapshotCompletionHandler snapshotCompletionHandler;
+@property (nonatomic, copy) SnapshotCompletionHandler snapshotCompletionHandler;
+@property (nonatomic, assign) float snapshotDestTime;
 
 @end
 
@@ -415,32 +417,39 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 @synthesize asyncStat = _asyncStat;
 @synthesize cacheStat = _cacheStat;
 
-+(void) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
++(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
     IJKGPUImageMovie* ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:videoURL];
 //    ijkMovie.isUsedForSnapshot = YES;
     ijkMovie.snapshotCompletionHandler = completionHandler;
-    [ijkMovie setCurrentPlaybackTime:CMTimeGetSeconds(videoTime)];
     [ijkMovie prepareToPlay];
+    ijkMovie.snapshotDestTime = CMTimeGetSeconds(videoTime);
+    [ijkMovie setCurrentPlaybackTime:ijkMovie.snapshotDestTime];
+    return ijkMovie;
 }
 
 +(UIImage*) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime {
     __block BOOL finished = NO;
     __block UIImage* snapshotImage = nil;
     NSCondition* cond = [[NSCondition alloc] init];
-    [IJKGPUImageMovie takeImageOfVideo:videoURL atTime:videoTime completionHandler:^(UIImage* image) {
+    IJKGPUImageMovie* ijkMovie = [IJKGPUImageMovie takeImageOfVideo:videoURL atTime:videoTime completionHandler:^(UIImage* image) {
         snapshotImage = image;
         
         finished = YES;
         [cond lock];
         [cond signal];
+        NSLog(@"#Crash# imageOfVideo : [cond signal];");
         [cond unlock];
     }];
     [cond lock];
-    while (!finished)
-    {
-        [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0f]];
+    BOOL signaled = YES;
+    while (!finished && signaled)
+    {NSLog(@"#Crash# imageOfVideo : [cond wait];");
+        ///!!!signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0f]];
+        [cond wait];
     }
     [cond unlock];
+    ijkMovie = nil;
+    NSLog(@"#Crash# imageOfVideo : ijkMovie = nil; signaled=%d", signaled);
     return snapshotImage;
 }
 
@@ -775,7 +784,7 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     [self stopHudTimer];
     [self unregisterApplicationObservers];
     [self setScreenOn:NO];
-    
+    /*///!!!
     ijkmp_stop(_mediaPlayer);
     ijkmp_shutdown(_mediaPlayer);
     
@@ -789,7 +798,9 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     __unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
     __unused id weakijkHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_ijkio_inject_opaque(_mediaPlayer, NULL);
     ijkmp_dec_ref_p(&_mediaPlayer);
-    
+    /*/
+    _mediaPlayer->ffplayer->is->abort_request = 1;
+    //*/
     [self didShutdown];
 }
 
@@ -1817,12 +1828,14 @@ int media_player_msg_loop(void* arg)
             // iOS5.0+ will not go into here
         }
         //*
-        if (self.snapshotCompletionHandler)
+        if (self.snapshotCompletionHandler && fabsf(self.currentPlaybackTime - self.snapshotDestTime) < 27.0f)
         {
             UIImage* snapshot = [self snapshotImage];
             [outputFramebuffer unlock];
-            self.snapshotCompletionHandler(snapshot);
+            NSLog(@"#Crash# render : [self shutdownSynchronously];");
             [self shutdownSynchronously];
+            NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
+            self.snapshotCompletionHandler(snapshot);
         }
         else
         {

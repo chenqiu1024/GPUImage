@@ -86,17 +86,19 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     for (NSString* file in fileEnumerator)
     {
         NSString* ext = [[file pathExtension] lowercaseString];
-        if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"])
+        if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"])
         {
             [_files addObject:file];
             NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
-            UIImage* thumbnail = [UIImage getVideoImage:filePath time:32.f];
+            UIImage* thumbnail = nil;///!!![UIImage getVideoImage:filePath time:32.f];
             if (!thumbnail)
             {
-                thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(3000, 1)];
+                thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(32, 1)];
             }
             ThumbnailCacheItem* cacheItem = [[ThumbnailCacheItem alloc] initWithKey:file thumbnail:thumbnail];
             [_thumbnailCache setObject:cacheItem forKey:file cost:cacheItem.cost];
+            ///!!!For Debug:
+            [self cache:_thumbnailCache willEvictObject:cacheItem];
         }
     }
     
@@ -166,10 +168,10 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
         else
         {
             NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
-            thumbnail = [UIImage getVideoImage:filePath time:32.f];
+            thumbnail = nil;///!!![UIImage getVideoImage:filePath time:32.f];
             if (!thumbnail)
             {
-                thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(3000, 1)];
+                ///!!!thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(32, 1)];
             }
         }
         cacheItem = [[ThumbnailCacheItem alloc] initWithKey:file thumbnail:thumbnail];
