@@ -1828,37 +1828,41 @@ int media_player_msg_loop(void* arg)
             // iOS5.0+ will not go into here
         }
         //*
-        if (self.snapshotCompletionHandler && fabsf(self.currentPlaybackTime - self.snapshotDestTime) < 27.0f)
+        if (self.snapshotCompletionHandler)
         {
-            UIImage* snapshot = [self snapshotImage];
-            [outputFramebuffer unlock];
-            NSLog(@"#Crash# render : [self shutdownSynchronously];");
-            [self shutdownSynchronously];
-            NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
-            self.snapshotCompletionHandler(snapshot);
+            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) < 1.0f)
+            {
+                UIImage* snapshot = [self snapshotImage];
+                NSLog(@"#Crash# render : [self shutdownSynchronously];");
+                [self shutdownSynchronously];
+                NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
+                self.snapshotCompletionHandler(snapshot);
+            }
+            else
+            {
+                self.currentPlaybackTime = self.snapshotDestTime;
+            }
         }
-        else
+        
+        for (id<GPUImageInput> currentTarget in targets)
         {
-            for (id<GPUImageInput> currentTarget in targets)
-            {
-                NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-                NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-                [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
-                [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
-            }
-            
-            [outputFramebuffer unlock];
-            
-            _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
-            int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
-            CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
-            
-            for (id<GPUImageInput> currentTarget in targets)
-            {
-                NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-                NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-                [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
-            }
+            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+            [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
+            [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
+        }
+        
+        [outputFramebuffer unlock];
+        
+        _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
+        int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
+        CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
+        
+        for (id<GPUImageInput> currentTarget in targets)
+        {
+            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+            [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
         }
         //*/
         NSLog(@"#Thubmnail# IJKGPUImageMovie$render");
