@@ -583,6 +583,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     [GPUImageContext useImageProcessingContext];
     IJK_GLES2_Renderer_reset(_renderer);
     IJK_GLES2_Renderer_freeP(&_renderer);
+    NSLog(@"#Crash# IJKGPUImageMovie dealloc");
 }
 
 - (void)setShouldAutoplay:(BOOL)shouldAutoplay
@@ -795,11 +796,11 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     ijkmp_stop(_mediaPlayer);
     ijkmp_shutdown(_mediaPlayer);
     
-    ///!!!_segmentOpenDelegate    = nil;
-    ///!!!_tcpOpenDelegate        = nil;
-    ///!!!_httpOpenDelegate       = nil;
-    ///!!!_liveOpenDelegate       = nil;
-    ///!!!_nativeInvokeDelegate   = nil;
+    _segmentOpenDelegate    = nil;
+    _tcpOpenDelegate        = nil;
+    _httpOpenDelegate       = nil;
+    _liveOpenDelegate       = nil;
+    _nativeInvokeDelegate   = nil;
     
     ///!!!__unused id weakPlayer = (__bridge_transfer IJKGPUImageMovie*)ijkmp_set_weak_thiz(_mediaPlayer, NULL);
     ///!!!__unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
@@ -808,7 +809,7 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     /*/
     _mediaPlayer->ffplayer->is->abort_request = 1;
     //*/
-    ///!!![self didShutdown];
+    [self didShutdown];
 }
 
 - (void)shutdown
