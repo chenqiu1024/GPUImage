@@ -427,6 +427,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     return ijkMovie;
 }
 
+//IJKGPUImageMovie* _debugIjkMovie = nil;///!!!For Debug
 +(UIImage*) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime {
     __block BOOL finished = NO;
     __block UIImage* snapshotImage = nil;
@@ -444,15 +445,18 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     BOOL signaled = YES;
     while (!finished && signaled)
     {NSLog(@"#Crash# imageOfVideo : [cond wait];");
-        ///!!!signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0f]];
-        [cond wait];
+        signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0f]];
+        ///!!![cond wait];
     }
     [cond unlock];
-    NSLog(@"#Crash# render : [self shutdownSynchronously];");
-    [ijkMovie shutdown];
-    NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
-    ///ijkMovie = nil;
+//    ijkMovie = nil;
     NSLog(@"#Crash# imageOfVideo : ijkMovie = nil; signaled=%d", signaled);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"#Crash# render : [self shutdownSynchronously]; ijkMovie=%@", ijkMovie);
+        [ijkMovie shutdownSynchronously];
+        NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
+        ///!!!ijkMovie = nil;
+    });
     return snapshotImage;
 }
 
@@ -787,24 +791,24 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     [self stopHudTimer];
     [self unregisterApplicationObservers];
     [self setScreenOn:NO];
-    ///!!!
+
     ijkmp_stop(_mediaPlayer);
     ijkmp_shutdown(_mediaPlayer);
     
-    _segmentOpenDelegate    = nil;
-    _tcpOpenDelegate        = nil;
-    _httpOpenDelegate       = nil;
-    _liveOpenDelegate       = nil;
-    _nativeInvokeDelegate   = nil;
+    ///!!!_segmentOpenDelegate    = nil;
+    ///!!!_tcpOpenDelegate        = nil;
+    ///!!!_httpOpenDelegate       = nil;
+    ///!!!_liveOpenDelegate       = nil;
+    ///!!!_nativeInvokeDelegate   = nil;
     
-    __unused id weakPlayer = (__bridge_transfer IJKGPUImageMovie*)ijkmp_set_weak_thiz(_mediaPlayer, NULL);
-    __unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
-    __unused id weakijkHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_ijkio_inject_opaque(_mediaPlayer, NULL);
-    ijkmp_dec_ref_p(&_mediaPlayer);
+    ///!!!__unused id weakPlayer = (__bridge_transfer IJKGPUImageMovie*)ijkmp_set_weak_thiz(_mediaPlayer, NULL);
+    ///!!!__unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
+    ///!!!__unused id weakijkHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_ijkio_inject_opaque(_mediaPlayer, NULL);
+    ///!!!ijkmp_dec_ref_p(&_mediaPlayer);
     /*/
     _mediaPlayer->ffplayer->is->abort_request = 1;
     //*/
-    [self didShutdown];
+    ///!!![self didShutdown];
 }
 
 - (void)shutdown
@@ -1264,6 +1268,8 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
         }
         case FFP_MSG_PREPARED: {
             NSLog(@"FFP_MSG_PREPARED:\n");
+            if (!_mediaPlayer)
+                break;
             
             _monitor.prepareDuration = (int64_t)SDL_GetTickHR() - _monitor.prepareStartTick;
             int64_t vdec = ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_VIDEO_DECODER, FFP_PROPV_DECODER_UNKNOWN);
