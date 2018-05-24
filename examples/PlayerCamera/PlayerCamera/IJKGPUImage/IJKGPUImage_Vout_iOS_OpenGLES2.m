@@ -78,7 +78,7 @@ static void vout_free_l(SDL_Vout* vout)
         if (opaque->glMovieOutput)
         {
             // TODO: post to MainThread?
-            [opaque->glMovieOutput release];
+///!!!            [opaque->glMovieOutput release];
             opaque->glMovieOutput = nil;
         }
     }
@@ -149,7 +149,7 @@ static void JKGPUImage_Vout_iOS_SetGLMovieOutput_l(SDL_Vout* vout, IJKGPUImageMo
         return;
     
     if (opaque->glMovieOutput) {
-        [opaque->glMovieOutput release];
+        ///!!![opaque->glMovieOutput release];
         opaque->glMovieOutput = nil;
     }
     
