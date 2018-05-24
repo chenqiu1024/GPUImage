@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <math.h>
 
 static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001";
 
@@ -86,6 +87,11 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 @property (nonatomic, assign) AVAppAsyncStatistic asyncStat;
 @property (nonatomic, assign) IjkIOAppCacheStatistic cacheStat;
 
+//@property (nonatomic, assign) BOOL isUsedForSnapshot;
+
+@property (nonatomic, copy) SnapshotCompletionHandler snapshotCompletionHandler;
+@property (nonatomic, assign) float snapshotDestTime;
+
 @end
 
 #pragma mark    ijkgpuplayer
@@ -103,7 +109,7 @@ IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
     mp->ffplayer->pipeline = ffpipeline_create_from_ios(mp->ffplayer);
     if (!mp->ffplayer->pipeline)
         goto fail;
-    
+//    mp->ffplayer->pipeline->func_open_audio_output = NULL;
     return mp;
     
 fail:
@@ -411,6 +417,50 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 @synthesize asyncStat = _asyncStat;
 @synthesize cacheStat = _cacheStat;
 
++(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
+    IJKGPUImageMovie* ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:videoURL];
+//    ijkMovie.isUsedForSnapshot = YES;
+    ijkMovie.snapshotCompletionHandler = completionHandler;
+    [ijkMovie prepareToPlay];
+    ijkMovie.snapshotDestTime = CMTimeGetSeconds(videoTime);
+    [ijkMovie setCurrentPlaybackTime:ijkMovie.snapshotDestTime];
+    return ijkMovie;
+}
+
+//IJKGPUImageMovie* _debugIjkMovie = nil;///!!!For Debug
++(UIImage*) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime {
+    __block BOOL finished = NO;
+    __block UIImage* snapshotImage = nil;
+    NSCondition* cond = [[NSCondition alloc] init];
+    IJKGPUImageMovie* ijkMovie = [IJKGPUImageMovie takeImageOfVideo:videoURL atTime:videoTime completionHandler:^(UIImage* image) {
+        snapshotImage = image;
+        
+        finished = YES;
+        [cond lock];
+        [cond signal];
+        NSLog(@"#Crash# imageOfVideo : [cond signal];");
+        [cond unlock];
+    }];
+    [cond lock];
+    BOOL signaled = YES;
+    while (!finished && signaled)
+    {NSLog(@"#Crash# imageOfVideo : [cond wait];");
+        signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0f]];
+        ///!!![cond wait];
+    }
+    [cond unlock];
+//    ijkMovie = nil;
+    NSLog(@"#Crash# imageOfVideo : ijkMovie = nil; signaled=%d", signaled);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"#Crash# render : [self shutdownSynchronously]; ijkMovie=%@", ijkMovie);
+        [ijkMovie shutdownSynchronously];
+        NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
+        ///!!!ijkMovie = nil;
+    });
+    NSLog(@"#Snapshot# snapshotImage=%@", snapshotImage);
+    return snapshotImage;
+}
+
 #pragma mark    Transplant from IJKFFMoviePlayerController
 
 - (id)initWithContentURL:(NSURL *)aUrl
@@ -446,6 +496,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     
     self = [super init];
     if (self) {
+//        self.isUsedForSnapshot = NO;
+        self.snapshotCompletionHandler = nil;
         ijkmp_global_init();
         ijkmp_global_set_inject_callback(ijkff_inject_callback);
         
@@ -532,6 +584,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     [GPUImageContext useImageProcessingContext];
     IJK_GLES2_Renderer_reset(_renderer);
     IJK_GLES2_Renderer_freeP(&_renderer);
+    NSLog(@"#Crash# IJKGPUImageMovie dealloc");
 }
 
 - (void)setShouldAutoplay:(BOOL)shouldAutoplay
@@ -731,6 +784,33 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
         }
         return NO;
     }
+}
+
+-(void) shutdownSynchronously {
+    if (!_mediaPlayer)
+        return;
+    
+    [self stopHudTimer];
+    [self unregisterApplicationObservers];
+    [self setScreenOn:NO];
+
+    ijkmp_stop(_mediaPlayer);
+    ijkmp_shutdown(_mediaPlayer);
+    
+    _segmentOpenDelegate    = nil;
+    _tcpOpenDelegate        = nil;
+    _httpOpenDelegate       = nil;
+    _liveOpenDelegate       = nil;
+    _nativeInvokeDelegate   = nil;
+    
+    __unused id weakPlayer = (__bridge_transfer IJKGPUImageMovie*)ijkmp_set_weak_thiz(_mediaPlayer, NULL);
+    __unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
+    __unused id weakijkHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_ijkio_inject_opaque(_mediaPlayer, NULL);
+    ijkmp_dec_ref_p(&_mediaPlayer);
+    /*/
+    _mediaPlayer->ffplayer->is->abort_request = 1;
+    //*/
+    [self didShutdown];
 }
 
 - (void)shutdown
@@ -1190,6 +1270,8 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
         }
         case FFP_MSG_PREPARED: {
             NSLog(@"FFP_MSG_PREPARED:\n");
+            if (!_mediaPlayer)
+                break;
             
             _monitor.prepareDuration = (int64_t)SDL_GetTickHR() - _monitor.prepareStartTick;
             int64_t vdec = ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_VIDEO_DECODER, FFP_PROPV_DECODER_UNKNOWN);
@@ -1757,6 +1839,18 @@ int media_player_msg_loop(void* arg)
             // iOS5.0+ will not go into here
         }
         //*
+        if (self.snapshotCompletionHandler)
+        {
+            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) < 0.5f || self.snapshotDestTime > self.duration)
+            {
+                UIImage* snapshot = [self snapshotImage];
+                self.snapshotCompletionHandler(snapshot);
+            }
+            else
+            {
+                self.currentPlaybackTime = self.snapshotDestTime;
+            }
+        }
         
         for (id<GPUImageInput> currentTarget in targets)
         {
@@ -1779,13 +1873,14 @@ int media_player_msg_loop(void* arg)
             [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
         }
         //*/
+        NSLog(@"#Thubmnail# IJKGPUImageMovie$render");
     });
 }
 
 -(UIImage*) snapshotImage {
     GPUImageFramebuffer* framebuffer = [self framebufferForOutput];
-    CGImageRef image = [framebuffer newCGImageFromFramebufferContents];
-    return [UIImage imageWithCGImage:image];
+    CGImageRef image = [framebuffer newCGImageFromFramebufferContentsSync];
+    return [UIImage imageWithCGImage:image scale:1.0f orientation:UIImageOrientationDownMirrored];
 }
 
 @end

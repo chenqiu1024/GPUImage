@@ -47,6 +47,7 @@ typedef struct GPUTextureOptions {
 
 // Image capture
 - (CGImageRef)newCGImageFromFramebufferContents;
+- (CGImageRef)newCGImageFromFramebufferContentsSync;
 - (void)restoreRenderTarget;
 
 // Raw data bytes

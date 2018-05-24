@@ -79,18 +79,26 @@
 //生成缩略图
 +(UIImage *)getVideoImage:(NSString *)videoURL time:(float)time
 {
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
-    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    gen.appliesPreferredTrackTransform = NO;///!!!
-    CMTime ctime = CMTimeMakeWithSeconds(time, 600);
-    NSError *error = nil;
-    CMTime actualTime;
-    CGImageRef image = [gen copyCGImageAtTime:ctime actualTime:&actualTime error:&error];
-    if (error)
-        NSLog(@"#Bug3763# getVideoImage(%f) error:%@", time, error);
-    UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
-    CGImageRelease(image);
-    return thumb;
+    NSString* fileExt = videoURL.pathExtension.lowercaseString;
+    if ([fileExt isEqualToString:@"mp4"] || [fileExt isEqualToString:@"mpg"] || [fileExt isEqualToString:@"mpeg"] || [fileExt isEqualToString:@"avi"] || [fileExt isEqualToString:@"mov"] || [fileExt isEqualToString:@"3gpp"])
+    {
+        AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
+        AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+        gen.appliesPreferredTrackTransform = NO;///!!!
+        CMTime ctime = CMTimeMakeWithSeconds(time, 600);
+        NSError *error = nil;
+        CMTime actualTime;
+        CGImageRef image = [gen copyCGImageAtTime:ctime actualTime:&actualTime error:&error];
+        if (error)
+            NSLog(@"#Bug3763# getVideoImage(%f) error:%@", time, error);
+        UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+        CGImageRelease(image);
+        return thumb;
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 @end
