@@ -109,7 +109,7 @@ IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
     mp->ffplayer->pipeline = ffpipeline_create_from_ios(mp->ffplayer);
     if (!mp->ffplayer->pipeline)
         goto fail;
-    
+//    mp->ffplayer->pipeline->func_open_audio_output = NULL;
     return mp;
     
 fail:
@@ -448,7 +448,10 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         [cond wait];
     }
     [cond unlock];
-    ijkMovie = nil;
+    NSLog(@"#Crash# render : [self shutdownSynchronously];");
+    [ijkMovie shutdown];
+    NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
+    ///ijkMovie = nil;
     NSLog(@"#Crash# imageOfVideo : ijkMovie = nil; signaled=%d", signaled);
     return snapshotImage;
 }
@@ -784,7 +787,7 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     [self stopHudTimer];
     [self unregisterApplicationObservers];
     [self setScreenOn:NO];
-    /*///!!!
+    ///!!!
     ijkmp_stop(_mediaPlayer);
     ijkmp_shutdown(_mediaPlayer);
     
@@ -1830,12 +1833,9 @@ int media_player_msg_loop(void* arg)
         //*
         if (self.snapshotCompletionHandler)
         {
-            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) < 1.0f)
+            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) < 0.5f || self.snapshotDestTime > self.duration)
             {
                 UIImage* snapshot = [self snapshotImage];
-                NSLog(@"#Crash# render : [self shutdownSynchronously];");
-                [self shutdownSynchronously];
-                NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
                 self.snapshotCompletionHandler(snapshot);
             }
             else
