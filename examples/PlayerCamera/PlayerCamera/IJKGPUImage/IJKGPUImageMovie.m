@@ -457,6 +457,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
         ///!!!ijkMovie = nil;
     });
+    NSLog(@"#Snapshot# snapshotImage=%@", snapshotImage);
     return snapshotImage;
 }
 
@@ -802,9 +803,9 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     _liveOpenDelegate       = nil;
     _nativeInvokeDelegate   = nil;
     
-    ///!!!__unused id weakPlayer = (__bridge_transfer IJKGPUImageMovie*)ijkmp_set_weak_thiz(_mediaPlayer, NULL);
-    ///!!!__unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
-    ///!!!__unused id weakijkHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_ijkio_inject_opaque(_mediaPlayer, NULL);
+    __unused id weakPlayer = (__bridge_transfer IJKGPUImageMovie*)ijkmp_set_weak_thiz(_mediaPlayer, NULL);
+    __unused id weakHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_inject_opaque(_mediaPlayer, NULL);
+    __unused id weakijkHolder = (__bridge_transfer IJKWeakHolder*)ijkmp_set_ijkio_inject_opaque(_mediaPlayer, NULL);
     ijkmp_dec_ref_p(&_mediaPlayer);
     /*/
     _mediaPlayer->ffplayer->is->abort_request = 1;
@@ -1878,8 +1879,8 @@ int media_player_msg_loop(void* arg)
 
 -(UIImage*) snapshotImage {
     GPUImageFramebuffer* framebuffer = [self framebufferForOutput];
-    CGImageRef image = [framebuffer newCGImageFromFramebufferContents];
-    return [UIImage imageWithCGImage:image];
+    CGImageRef image = [framebuffer newCGImageFromFramebufferContentsSync];
+    return [UIImage imageWithCGImage:image scale:1.0f orientation:UIImageOrientationDownMirrored];
 }
 
 @end
