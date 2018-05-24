@@ -85,6 +85,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     NSEnumerator<NSString* >* fileEnumerator = [fm enumeratorAtPath:_docDirectoryPath];
     for (NSString* file in fileEnumerator)
     {
+        if ([file pathComponents].count > 1) continue;
         NSString* ext = [[file pathExtension] lowercaseString];
         if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"])
         {
@@ -101,6 +102,8 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
             [self cache:_thumbnailCache willEvictObject:cacheItem];
         }
     }
+    [_files insertObject:@"rtsp://192.168.42.1/live" atIndex:0];
+    [_files insertObject:@"https://tzn8.com/bunnies.mp4" atIndex:0];
     
 //    CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
 //    [self presentViewController:playerVC animated:YES completion:nil];///!!!For Debug
