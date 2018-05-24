@@ -139,7 +139,15 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 #pragma mark UICollectionViewDelegate
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSString* file = [_files objectAtIndex:indexPath.row];
-    NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
+    NSString* filePath;
+    if ([file hasPrefix:@"http"] || [file hasPrefix:@"rtsp"] || [file hasPrefix:@"rtmp"])
+    {
+        filePath = file;
+    }
+    else
+    {
+        filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
+    }
     CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
     playerVC.sourceVideoFile = filePath;
     [self presentViewController:playerVC animated:YES completion:nil];
