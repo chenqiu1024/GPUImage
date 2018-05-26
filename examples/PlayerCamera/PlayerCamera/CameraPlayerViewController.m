@@ -212,6 +212,7 @@
     [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
     [_videoCamera addTarget:_movieWriter];
     _videoCamera.audioEncodingTarget = _movieWriter;
+    ///!!![_ijkMovie addTarget:_movieWriter];
 }
 
 -(void) startMovieWriteRecording {
@@ -257,7 +258,7 @@
     
     _filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
     _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
+    //_filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
     [self.view addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
@@ -272,10 +273,7 @@
     [_filter addTarget:_filterView];
     
     [_videoCamera startCameraCapture];
-    
-    [self setupMovieWriter];
     [_videoCamera resumeCameraCapture];
-    [self startMovieWriteRecording];
     
     [self installMovieNotificationObservers];
 #ifdef SourceVideoFileName
@@ -288,6 +286,9 @@
     [_ijkMovie addTarget:_filter];
     [_ijkMovie prepareToPlay];
     [self refreshMediaControl];
+    
+    [self setupMovieWriter];
+    [self startMovieWriteRecording];
 }
 
 - (void)viewDidUnload

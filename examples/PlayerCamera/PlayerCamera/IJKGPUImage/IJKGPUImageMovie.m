@@ -11,6 +11,7 @@
 
 #import "ijkplayer_ios.h"
 #import "ijksdl/ios/ijksdl_ios.h"
+#import "ijksdl/gles2/internal.h"
 #include "ijksdl/ijksdl_gles2.h"
 #include "ijksdl/ios/ijksdl_vout_overlay_videotoolbox.h"
 
@@ -1771,6 +1772,17 @@ int media_player_msg_loop(void* arg)
     
     if (!IJK_GLES2_Renderer_use(_renderer))
         return NO;
+    // Mirror in Y axis:
+    _renderer->texcoords[0] = 0.0f;
+    _renderer->texcoords[1] = 0.0f;
+    _renderer->texcoords[2] = 1.0f;
+    _renderer->texcoords[3] = 0.0f;
+    _renderer->texcoords[4] = 0.0f;
+    _renderer->texcoords[5] = 1.0f;
+    _renderer->texcoords[6] = 1.0f;
+    _renderer->texcoords[7] = 1.0f;
+    glVertexAttribPointer(_renderer->av2_texcoord, 2, GL_FLOAT, GL_FALSE, 0, _renderer->texcoords);   IJK_GLES2_checkError_TRACE("glVertexAttribPointer(av2_texcoord)");
+    glEnableVertexAttribArray(_renderer->av2_texcoord);                                              IJK_GLES2_checkError_TRACE("glEnableVertexAttribArray(av2_texcoord)");
     
     IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT, _inputVideoSize.width, _inputVideoSize.height);
     
@@ -1880,7 +1892,7 @@ int media_player_msg_loop(void* arg)
 -(UIImage*) snapshotImage {
     GPUImageFramebuffer* framebuffer = [self framebufferForOutput];
     CGImageRef image = [framebuffer newCGImageFromFramebufferContentsSync];
-    return [UIImage imageWithCGImage:image scale:1.0f orientation:UIImageOrientationDownMirrored];
+    return [UIImage imageWithCGImage:image];
 }
 
 @end

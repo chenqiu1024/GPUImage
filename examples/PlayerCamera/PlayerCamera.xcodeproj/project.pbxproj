@@ -27,6 +27,7 @@
 		524F116020B1B5390045795F /* VideoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F115E20B1B5390045795F /* VideoCollectionViewController.m */; };
 		524F116720B1B6E40045795F /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F116620B1B6E40045795F /* UIImage+Blur.m */; };
 		524F116820B1B6E40045795F /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F116620B1B6E40045795F /* UIImage+Blur.m */; };
+		524FB92D20B7F5ED006F5FED /* VideoThumbnailCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 524FB92C20B7F5ED006F5FED /* VideoThumbnailCache.m */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
 		52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -108,7 +109,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		520DA6D41ED7248C009E4705 /* PlayerCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayerCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		520DA6D41ED7248C009E4705 /* GijkPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GijkPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		520DA6D81ED7248C009E4705 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		520DA6DA1ED7248C009E4705 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		520DA6DB1ED7248C009E4705 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -133,6 +134,8 @@
 		524F116620B1B6E40045795F /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Blur.m"; path = "Utils/UIImage+Blur.m"; sourceTree = "<group>"; };
 		524F116920B1B6EC0045795F /* UIImage+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Blur.h"; path = "Utils/UIImage+Blur.h"; sourceTree = "<group>"; };
 		524F116B20B1DA4C0045795F /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		524FB92B20B7F5ED006F5FED /* VideoThumbnailCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoThumbnailCache.h; sourceTree = "<group>"; };
+		524FB92C20B7F5ED006F5FED /* VideoThumbnailCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoThumbnailCache.m; sourceTree = "<group>"; };
 		52CAA9D31F66D3D000351014 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IJKMediaPlayer.xcodeproj; path = ../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer.xcodeproj; sourceTree = "<group>"; };
 		52CB035B205511E000329861 /* IJKGPUImageMovie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImageMovie.h; path = IJKGPUImage/IJKGPUImageMovie.h; sourceTree = "<group>"; };
@@ -186,7 +189,7 @@
 		520DA6D51ED7248C009E4705 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				520DA6D41ED7248C009E4705 /* PlayerCamera.app */,
+				520DA6D41ED7248C009E4705 /* GijkPlayer.app */,
 				520DA6ED1ED7248C009E4705 /* PlayerCameraUITests.xctest */,
 			);
 			name = Products;
@@ -211,6 +214,8 @@
 				52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */,
 				524F115D20B1B5390045795F /* VideoCollectionViewController.h */,
 				524F115E20B1B5390045795F /* VideoCollectionViewController.m */,
+				524FB92B20B7F5ED006F5FED /* VideoThumbnailCache.h */,
+				524FB92C20B7F5ED006F5FED /* VideoThumbnailCache.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -281,9 +286,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		520DA6D31ED7248C009E4705 /* PlayerCamera */ = {
+		520DA6D31ED7248C009E4705 /* GijkPlayer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 520DA6F61ED7248C009E4705 /* Build configuration list for PBXNativeTarget "PlayerCamera" */;
+			buildConfigurationList = 520DA6F61ED7248C009E4705 /* Build configuration list for PBXNativeTarget "GijkPlayer" */;
 			buildPhases = (
 				520DA6D01ED7248C009E4705 /* Sources */,
 				520DA6D11ED7248C009E4705 /* Frameworks */,
@@ -296,9 +301,9 @@
 				520DA7251ED72ABE009E4705 /* PBXTargetDependency */,
 				52257C8220ABE01600140039 /* PBXTargetDependency */,
 			);
-			name = PlayerCamera;
+			name = GijkPlayer;
 			productName = PlayerCamera;
-			productReference = 520DA6D41ED7248C009E4705 /* PlayerCamera.app */;
+			productReference = 520DA6D41ED7248C009E4705 /* GijkPlayer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		520DA6EC1ED7248C009E4705 /* PlayerCameraUITests */ = {
@@ -363,7 +368,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				520DA6D31ED7248C009E4705 /* PlayerCamera */,
+				520DA6D31ED7248C009E4705 /* GijkPlayer */,
 				520DA6EC1ED7248C009E4705 /* PlayerCameraUITests */,
 			);
 		};
@@ -439,6 +444,7 @@
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
 				524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,
+				524FB92D20B7F5ED006F5FED /* VideoThumbnailCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +463,7 @@
 /* Begin PBXTargetDependency section */
 		520DA6EF1ED7248C009E4705 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 520DA6D31ED7248C009E4705 /* PlayerCamera */;
+			target = 520DA6D31ED7248C009E4705 /* GijkPlayer */;
 			targetProxy = 520DA6EE1ED7248C009E4705 /* PBXContainerItemProxy */;
 		};
 		520DA7251ED72ABE009E4705 /* PBXTargetDependency */ = {
@@ -601,7 +607,7 @@
 					../../../ijkplayer_iOS/ios/build/universal/include,
 				);
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = ../../../ijkplayer_iOS/ios/build/universal/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
@@ -626,7 +632,7 @@
 					../../../ijkplayer_iOS/ios/build/universal/include,
 				);
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = ../../../ijkplayer_iOS/ios/build/universal/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
@@ -669,7 +675,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		520DA6F61ED7248C009E4705 /* Build configuration list for PBXNativeTarget "PlayerCamera" */ = {
+		520DA6F61ED7248C009E4705 /* Build configuration list for PBXNativeTarget "GijkPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				520DA6F71ED7248C009E4705 /* Debug */,

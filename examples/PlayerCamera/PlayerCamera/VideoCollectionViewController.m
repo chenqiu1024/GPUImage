@@ -87,7 +87,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     {
         if ([file pathComponents].count > 1) continue;
         NSString* ext = [[file pathExtension] lowercaseString];
-        if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"])
+        if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"] || [ext isEqualToString:@"mov"])
         {
             [_files addObject:file];
             NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
