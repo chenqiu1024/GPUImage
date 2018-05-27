@@ -176,7 +176,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 //            {
 //                thumbnail = [IJKGPUImageMovie imageOfVideo:fileURL atTime:CMTimeMake(32, 1)];
 //            }
-            [IJKGPUImageMovie imageOfVideo:fileURL atTime:CMTimeMake(32, 1) completionHandler:^(UIImage* image) {
+            [IJKGPUImageMovie imageOfVideo:fileURL atTime:CMTimeMake(45, 1) completionHandler:^(UIImage* image) {
                 ThumbnailCacheItem* cacheItem = [[ThumbnailCacheItem alloc] initWithKey:fileURL thumbnail:image];
                 [_thumbnailCache setObject:cacheItem forKey:fileURL cost:cacheItem.cost];
                 dispatch_async(dispatch_get_main_queue(), ^{

@@ -1820,7 +1820,7 @@ int media_player_msg_loop(void* arg)
     _renderer->texcoords[7] = 1.0f;
     glVertexAttribPointer(_renderer->av2_texcoord, 2, GL_FLOAT, GL_FALSE, 0, _renderer->texcoords);   IJK_GLES2_checkError_TRACE("glVertexAttribPointer(av2_texcoord)");
     glEnableVertexAttribArray(_renderer->av2_texcoord);                                              IJK_GLES2_checkError_TRACE("glEnableVertexAttribArray(av2_texcoord)");
-    
+//*/
     IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT, _inputVideoSize.width, _inputVideoSize.height);
     
     return YES;
@@ -1899,7 +1899,7 @@ int media_player_msg_loop(void* arg)
             {
                 //self.currentPlaybackTime = (self.snapshotDestTime > self.duration) ? self.duration : self.snapshotDestTime;
                 self.currentPlaybackTime = self.snapshotDestTime;
-            }
+            }//*/
         }
         
         for (id<GPUImageInput> currentTarget in targets)
