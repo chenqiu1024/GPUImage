@@ -89,24 +89,26 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
         NSString* ext = [[file pathExtension] lowercaseString];
         if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"] || [ext isEqualToString:@"mov"])
         {
-            [_files addObject:file];
             NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
-            UIImage* thumbnail = nil;///!!![UIImage getVideoImage:filePath time:32.f];
-            if (!thumbnail)
-            {
-                thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(32, 1)];
-            }
-            ThumbnailCacheItem* cacheItem = [[ThumbnailCacheItem alloc] initWithKey:file thumbnail:thumbnail];
-            [_thumbnailCache setObject:cacheItem forKey:file cost:cacheItem.cost];
-            ///!!!For Debug:
-            [self cache:_thumbnailCache willEvictObject:cacheItem];
+            [_files addObject:filePath];
+            
         }
     }
     [_files insertObject:@"rtsp://192.168.42.1/live" atIndex:0];
     [_files insertObject:@"https://tzn8.com/bunnies.mp4" atIndex:0];
     
-//    CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
-//    [self presentViewController:playerVC animated:YES completion:nil];///!!!For Debug
+//    for (NSString* fileURL in _files)
+//    {
+//        UIImage* thumbnail = nil;///!!![UIImage getVideoImage:filePath time:32.f];
+//        if (!thumbnail)
+//        {
+//            thumbnail = [IJKGPUImageMovie imageOfVideo:fileURL atTime:CMTimeMake(32, 1)];
+//        }
+//        ThumbnailCacheItem* cacheItem = [[ThumbnailCacheItem alloc] initWithKey:fileURL thumbnail:thumbnail];
+//        [_thumbnailCache setObject:cacheItem forKey:fileURL cost:cacheItem.cost];
+//        ///!!!For Debug:
+//        [self cache:_thumbnailCache willEvictObject:cacheItem];
+//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -138,18 +140,9 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 
 #pragma mark UICollectionViewDelegate
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString* file = [_files objectAtIndex:indexPath.row];
-    NSString* filePath;
-    if ([file hasPrefix:@"http"] || [file hasPrefix:@"rtsp"] || [file hasPrefix:@"rtmp"])
-    {
-        filePath = file;
-    }
-    else
-    {
-        filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
-    }
+    NSString* fileURL = [_files objectAtIndex:indexPath.row];
     CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
-    playerVC.sourceVideoFile = filePath;
+    playerVC.sourceVideoFile = fileURL;
     [self presentViewController:playerVC animated:YES completion:nil];
 }
 
@@ -165,9 +158,9 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 
 -(__kindof UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     VideoCollectionCell* cell = (VideoCollectionCell*) [collectionView dequeueReusableCellWithReuseIdentifier:VideoCollectionCellIdentifier forIndexPath:indexPath];
-    NSString* file = [_files objectAtIndex:indexPath.row];
-    cell.titleLabel.text = file;
-    ThumbnailCacheItem* cacheItem = [_thumbnailCache objectForKey:file];
+    NSString* fileURL = [_files objectAtIndex:indexPath.row];
+    cell.titleLabel.text = [fileURL hasPrefix:_docDirectoryPath] ? fileURL.lastPathComponent : fileURL;
+    ThumbnailCacheItem* cacheItem = [_thumbnailCache objectForKey:fileURL];
     if (!cacheItem || !cacheItem.thumbnail)
     {
         NSString* thumbnailPath = [self thumbnailPathForKey:cacheItem.key];
@@ -178,15 +171,24 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
         }
         else
         {
-            NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
-            thumbnail = nil;///!!![UIImage getVideoImage:filePath time:32.f];
-            if (!thumbnail)
-            {
-                ///!!!thumbnail = [IJKGPUImageMovie imageOfVideo:filePath atTime:CMTimeMake(32, 1)];
-            }
+//            thumbnail = [UIImage getVideoImage:filePath time:32.f];
+//            if (!thumbnail)
+//            {
+//                thumbnail = [IJKGPUImageMovie imageOfVideo:fileURL atTime:CMTimeMake(32, 1)];
+//            }
+            [IJKGPUImageMovie imageOfVideo:fileURL atTime:CMTimeMake(32, 1) completionHandler:^(UIImage* image) {
+                ThumbnailCacheItem* cacheItem = [[ThumbnailCacheItem alloc] initWithKey:fileURL thumbnail:image];
+                [_thumbnailCache setObject:cacheItem forKey:fileURL cost:cacheItem.cost];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.videoCollectionView reloadItemsAtIndexPaths:@[indexPath]];
+                });
+            }];
         }
-        cacheItem = [[ThumbnailCacheItem alloc] initWithKey:file thumbnail:thumbnail];
-        [_thumbnailCache setObject:cacheItem forKey:file cost:cacheItem.cost];
+        if (!thumbnail)
+        {
+            cacheItem = [[ThumbnailCacheItem alloc] initWithKey:fileURL thumbnail:thumbnail];
+            [_thumbnailCache setObject:cacheItem forKey:fileURL cost:cacheItem.cost];
+        }
     }
     cell.thumbnailImageView.image = cacheItem.thumbnail;
     return cell;

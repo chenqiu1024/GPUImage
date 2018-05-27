@@ -78,6 +78,8 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 
 +(UIImage*) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime;
 
++(void) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler;
+
 -(instancetype) initWithSize:(CGSize)size FPS:(float)FPS;
 
 -(void) startPlay;

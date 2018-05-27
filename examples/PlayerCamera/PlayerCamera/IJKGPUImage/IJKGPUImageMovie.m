@@ -446,7 +446,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     BOOL signaled = YES;
     while (!finished && signaled)
     {NSLog(@"#Crash# imageOfVideo : [cond wait];");
-        signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0f]];
+        signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3.0f]];
         ///!!![cond wait];
     }
     [cond unlock];
@@ -460,6 +460,43 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     });
     NSLog(@"#Snapshot# snapshotImage=%@", snapshotImage);
     return snapshotImage;
+}
+
++(void) imageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
+    __block BOOL finished = NO;
+    __block UIImage* snapshotImage = nil;
+    NSCondition* cond = [[NSCondition alloc] init];
+    IJKGPUImageMovie* ijkMovie = [IJKGPUImageMovie takeImageOfVideo:videoURL atTime:videoTime completionHandler:^(UIImage* image) {
+        snapshotImage = image;
+        
+        finished = YES;
+        [cond lock];
+        [cond signal];
+        NSLog(@"#Crash# imageOfVideo : [cond signal];");
+        [cond unlock];
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [cond lock];
+        BOOL signaled = YES;
+        while (!finished && signaled)
+        {NSLog(@"#Crash# imageOfVideo : [cond wait];");
+            signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:5.0f]];
+            ///!!![cond wait];
+        }
+        [cond unlock];
+        //    ijkMovie = nil;
+        NSLog(@"#Crash# imageOfVideo : ijkMovie = nil; signaled=%d", signaled);
+        NSLog(@"#Crash# render : [self shutdownSynchronously]; ijkMovie=%@", ijkMovie);
+        [ijkMovie shutdownSynchronously];
+        NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
+        ///!!!ijkMovie = nil;
+        if (completionHandler)
+        {
+            completionHandler(snapshotImage);
+        }
+        NSLog(@"#Snapshot# snapshotImage=%@", snapshotImage);
+    });
 }
 
 #pragma mark    Transplant from IJKFFMoviePlayerController
@@ -1853,13 +1890,14 @@ int media_player_msg_loop(void* arg)
         //*
         if (self.snapshotCompletionHandler)
         {
-            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) < 0.5f || self.snapshotDestTime > self.duration)
+            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) <= 1.0f || self.snapshotDestTime > self.duration)
             {
                 UIImage* snapshot = [self snapshotImage];
                 self.snapshotCompletionHandler(snapshot);
             }
             else
             {
+                //self.currentPlaybackTime = (self.snapshotDestTime > self.duration) ? self.duration : self.snapshotDestTime;
                 self.currentPlaybackTime = self.snapshotDestTime;
             }
         }
