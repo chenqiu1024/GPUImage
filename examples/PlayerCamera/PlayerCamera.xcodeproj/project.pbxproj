@@ -30,6 +30,7 @@
 		524FB92D20B7F5ED006F5FED /* VideoThumbnailCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 524FB92C20B7F5ED006F5FED /* VideoThumbnailCache.m */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
+		52CED8C120BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CED8C020BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m */; };
 		52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BBB7962F20B2F6E90059C1DA /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB7962B20B2F6E80059C1DA /* libbz2.tbd */; };
 		BBB7963120B2F6EE0059C1DA /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB7963020B2F6EE0059C1DA /* libiconv.tbd */; };
@@ -140,6 +141,8 @@
 		52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IJKMediaPlayer.xcodeproj; path = ../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer.xcodeproj; sourceTree = "<group>"; };
 		52CB035B205511E000329861 /* IJKGPUImageMovie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImageMovie.h; path = IJKGPUImage/IJKGPUImageMovie.h; sourceTree = "<group>"; };
 		52CB035C205511E000329861 /* IJKGPUImageMovie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IJKGPUImageMovie.m; path = IJKGPUImage/IJKGPUImageMovie.m; sourceTree = "<group>"; };
+		52CED8BF20BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImage_GLES2_Renderer.h; path = IJKGPUImage/IJKGPUImage_GLES2_Renderer.h; sourceTree = "<group>"; };
+		52CED8C020BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IJKGPUImage_GLES2_Renderer.m; path = IJKGPUImage/IJKGPUImage_GLES2_Renderer.m; sourceTree = "<group>"; };
 		52FAF1C52067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImage_Vout_iOS_OpenGLES2.h; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.h; sourceTree = "<group>"; };
 		52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IJKGPUImage_Vout_iOS_OpenGLES2.m; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.m; sourceTree = "<group>"; };
 		BBB7962B20B2F6E80059C1DA /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
@@ -216,6 +219,8 @@
 				524F115E20B1B5390045795F /* VideoCollectionViewController.m */,
 				524FB92B20B7F5ED006F5FED /* VideoThumbnailCache.h */,
 				524FB92C20B7F5ED006F5FED /* VideoThumbnailCache.m */,
+				52CED8BF20BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.h */,
+				52CED8C020BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -444,6 +449,7 @@
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
 				524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,
+				52CED8C120BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m in Sources */,
 				524FB92D20B7F5ED006F5FED /* VideoThumbnailCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,6 +8,7 @@
 
 #import "IJKGPUImageMovie.h"
 #import "IJKGPUImage_Vout_iOS_OpenGLES2.h"
+#import "IJKGPUImage_GLES2_Renderer.h"
 
 #import "ijkplayer_ios.h"
 #import "ijksdl/ios/ijksdl_ios.h"
@@ -620,8 +621,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 {
     //    [self unregisterApplicationObservers];
     [GPUImageContext useImageProcessingContext];
-    IJK_GLES2_Renderer_reset(_renderer);
-    IJK_GLES2_Renderer_freeP(&_renderer);
+    IJKGPUImage_GLES2_Renderer_reset(_renderer);
+    IJKGPUImage_GLES2_Renderer_freeP(&_renderer);
     NSLog(@"#Crash# IJKGPUImageMovie dealloc");
 }
 
@@ -1795,33 +1796,22 @@ int media_player_msg_loop(void* arg)
     if (overlay == nil)
         return _renderer != nil;
     
-    if (!IJK_GLES2_Renderer_isValid(_renderer) ||
-        !IJK_GLES2_Renderer_isFormat(_renderer, overlay->format)) {
+    if (!IJKGPUImage_GLES2_Renderer_isValid(_renderer) ||
+        !IJKGPUImage_GLES2_Renderer_isFormat(_renderer, overlay->format)) {
         
-        IJK_GLES2_Renderer_reset(_renderer);
-        IJK_GLES2_Renderer_freeP(&_renderer);
+        IJKGPUImage_GLES2_Renderer_reset(_renderer);
+        IJKGPUImage_GLES2_Renderer_freeP(&_renderer);
         
-        _renderer = IJK_GLES2_Renderer_create(overlay);
+        _renderer = IJKGPUImage_GLES2_Renderer_create(overlay);
     }
     
-    if (!IJK_GLES2_Renderer_isValid(_renderer))
+    if (!IJKGPUImage_GLES2_Renderer_isValid(_renderer))
         return NO;
     
-    if (!IJK_GLES2_Renderer_use(_renderer))
+    if (!IJKGPUImage_GLES2_Renderer_use(_renderer))
         return NO;
-    // Mirror in Y axis:
-    _renderer->texcoords[0] = 0.0f;
-    _renderer->texcoords[1] = 0.0f;
-    _renderer->texcoords[2] = 1.0f;
-    _renderer->texcoords[3] = 0.0f;
-    _renderer->texcoords[4] = 0.0f;
-    _renderer->texcoords[5] = 1.0f;
-    _renderer->texcoords[6] = 1.0f;
-    _renderer->texcoords[7] = 1.0f;
-    glVertexAttribPointer(_renderer->av2_texcoord, 2, GL_FLOAT, GL_FALSE, 0, _renderer->texcoords);   IJK_GLES2_checkError_TRACE("glVertexAttribPointer(av2_texcoord)");
-    glEnableVertexAttribArray(_renderer->av2_texcoord);                                              IJK_GLES2_checkError_TRACE("glEnableVertexAttribArray(av2_texcoord)");
 //*/
-    IJK_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT, _inputVideoSize.width, _inputVideoSize.height);
+    IJKGPUImage_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT, _inputVideoSize.width, _inputVideoSize.height);
     
     return YES;
 }
@@ -1874,7 +1864,7 @@ int media_player_msg_loop(void* arg)
                 }
                 return;
             }
-            if (!IJK_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
+            if (!IJKGPUImage_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
             /*For Debug:
              CVPixelBufferRef pixel_buffer = SDL_VoutOverlayVideoToolBox_GetCVPixelBufferRef(overlay);///!!!For Debug
              UIImage* snapshotImage = [self.class imageFromCVPixelBufferRef:pixel_buffer];
