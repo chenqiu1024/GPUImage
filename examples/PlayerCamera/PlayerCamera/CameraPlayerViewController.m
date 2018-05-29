@@ -32,12 +32,14 @@
 -(void)removeMovieNotificationObservers;
 -(void)installMovieNotificationObservers;
 
-@property (nonatomic, strong) IBOutlet UIView* overlayView;
-@property (nonatomic, strong) IBOutlet UIView* controlPanelView;
-@property (nonatomic, strong) IBOutlet UIButton* playOrPauseButton;
-@property (nonatomic, strong) IBOutlet UISlider* progressSlider;
-@property (nonatomic, strong) IBOutlet UILabel* durationLabel;
-@property (nonatomic, strong) IBOutlet UILabel* currentTimeLabel;
+@property (nonatomic, weak) IBOutlet UIView* overlayView;
+@property (nonatomic, weak) IBOutlet UINavigationBar* navigationBar;
+@property (nonatomic, weak) IBOutlet UIView* controlPanelView;
+@property (nonatomic, weak) IBOutlet UIButton* playOrPauseButton;
+@property (nonatomic, weak) IBOutlet UISlider* progressSlider;
+@property (nonatomic, weak) IBOutlet UILabel* durationLabel;
+@property (nonatomic, weak) IBOutlet UILabel* currentTimeLabel;
+@property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 
 -(IBAction)onClickOverlay:(id)sender;
 -(IBAction)onClickControlPanel:(id)sender;
@@ -241,9 +243,16 @@
     return YES;
 }
 
+-(void) dismissSelf {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIBarButtonItem* buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissSelf)];
+    self.navItem.leftBarButtonItem = buttonItem;
     
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];

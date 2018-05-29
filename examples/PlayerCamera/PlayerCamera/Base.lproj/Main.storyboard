@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="joo-Sg-RWn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14112" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="joo-Sg-RWn">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item 2-->
+        <!--Mine-->
         <scene sceneID="Ocr-Ph-7ty">
             <objects>
-                <viewController id="qw9-If-LlL" sceneMemberID="viewController">
+                <viewController id="qw9-If-LlL" userLabel="Mine" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="o0u-PQ-C02"/>
                         <viewControllerLayoutGuide type="bottom" id="fsJ-ig-8Ua"/>
@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="jWb-Nh-MyQ"/>
+                    <tabBarItem key="tabBarItem" title="Item 2" id="jWb-Nh-MyQ" userLabel="Mine"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H3h-QN-lUC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -190,12 +190,29 @@
                                             <constraint firstItem="ky0-vS-Tfx" firstAttribute="leading" secondItem="dbX-yz-hfO" secondAttribute="leading" id="slu-hb-zbw"/>
                                         </constraints>
                                     </view>
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gmc-nY-Gs1">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <textAttributes key="titleTextAttributes">
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </textAttributes>
+                                        <textAttributes key="largeTitleTextAttributes">
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </textAttributes>
+                                        <items>
+                                            <navigationItem title="Title" id="qeT-nX-Yae"/>
+                                        </items>
+                                    </navigationBar>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="dbX-yz-hfO" secondAttribute="bottom" id="UAB-eU-s0u"/>
+                                    <constraint firstItem="Gmc-nY-Gs1" firstAttribute="leading" secondItem="dcC-gQ-lwS" secondAttribute="leading" id="UJ6-nF-ZLH"/>
+                                    <constraint firstItem="Gmc-nY-Gs1" firstAttribute="top" secondItem="dcC-gQ-lwS" secondAttribute="top" id="X1g-32-c1p"/>
                                     <constraint firstItem="dbX-yz-hfO" firstAttribute="leading" secondItem="dcC-gQ-lwS" secondAttribute="leading" constant="20" id="qV7-IO-cKg"/>
                                     <constraint firstAttribute="trailing" secondItem="dbX-yz-hfO" secondAttribute="trailing" constant="20" id="wkH-RZ-efj"/>
+                                    <constraint firstAttribute="trailing" secondItem="Gmc-nY-Gs1" secondAttribute="trailing" id="zNN-0A-4hi"/>
                                 </constraints>
                                 <connections>
                                     <action selector="onClickOverlay:" destination="BYZ-38-t0r" eventType="touchDown" id="gwx-ht-VO3"/>
@@ -214,6 +231,8 @@
                         <outlet property="controlPanelView" destination="dbX-yz-hfO" id="BwC-bJ-QSq"/>
                         <outlet property="currentTimeLabel" destination="9ll-Cg-edD" id="2jd-uZ-7Eb"/>
                         <outlet property="durationLabel" destination="8wu-Lw-zHJ" id="H76-jb-FM6"/>
+                        <outlet property="navItem" destination="qeT-nX-Yae" id="sLH-tH-SPJ"/>
+                        <outlet property="navigationBar" destination="Gmc-nY-Gs1" id="X1s-Zq-fUo"/>
                         <outlet property="overlayView" destination="dcC-gQ-lwS" id="f63-iw-KkL"/>
                         <outlet property="playOrPauseButton" destination="P8p-xi-Ouz" id="gK6-bd-V14"/>
                         <outlet property="progressSlider" destination="HRy-g7-XYH" id="LdI-at-Q8J"/>
