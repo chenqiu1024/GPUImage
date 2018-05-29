@@ -244,6 +244,9 @@
 }
 
 -(void) dismissSelf {
+    [_ijkMovie shutdown];
+    [self disassembleMovieWriter];
+    [_videoCamera stopCameraCapture];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -253,6 +256,7 @@
     
     UIBarButtonItem* buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = buttonItem;
+    self.navItem.title = [self.sourceVideoFile lastPathComponent];
     
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
