@@ -232,6 +232,7 @@
                         <outlet property="controlPanelView" destination="dbX-yz-hfO" id="BwC-bJ-QSq"/>
                         <outlet property="currentTimeLabel" destination="9ll-Cg-edD" id="2jd-uZ-7Eb"/>
                         <outlet property="durationLabel" destination="8wu-Lw-zHJ" id="H76-jb-FM6"/>
+                        <outlet property="navBar" destination="Gmc-nY-Gs1" id="9Hy-dH-lbw"/>
                         <outlet property="navItem" destination="qeT-nX-Yae" id="sLH-tH-SPJ"/>
                         <outlet property="navigationBar" destination="Gmc-nY-Gs1" id="X1s-Zq-fUo"/>
                         <outlet property="overlayView" destination="dcC-gQ-lwS" id="f63-iw-KkL"/>

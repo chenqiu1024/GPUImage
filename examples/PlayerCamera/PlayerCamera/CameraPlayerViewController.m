@@ -40,6 +40,7 @@
 @property (nonatomic, weak) IBOutlet UILabel* durationLabel;
 @property (nonatomic, weak) IBOutlet UILabel* currentTimeLabel;
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
+@property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 
 -(IBAction)onClickOverlay:(id)sender;
 -(IBAction)onClickControlPanel:(id)sender;
@@ -97,21 +98,26 @@
     }
 }
 
--(void) hideMediaControl {
-    
+-(void) setControlsHidden:(BOOL)hidden {
+    self.controlPanelView.hidden = hidden;
+    self.navigationBar.hidden = hidden;
+}
+
+-(void) hideControls {
+    [self setControlsHidden:YES];
 }
 
 -(IBAction)onClickOverlay:(id)sender {
     if (self.controlPanelView.isHidden)
     {
-        self.controlPanelView.hidden = NO;
+        [self setControlsHidden:NO];
         [self refreshMediaControl];
-        [self performSelector:@selector(hideMediaControl) withObject:nil afterDelay:5.0f];
+        [self performSelector:@selector(hideControls) withObject:nil afterDelay:5.0f];
     }
     else
     {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMediaControl) object:nil];
-        self.controlPanelView.hidden = YES;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControls) object:nil];
+        [self hideControls];
     }
 }
 
