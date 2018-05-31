@@ -98,6 +98,12 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 
 #pragma mark    ijkgpuplayer
 
+static SDL_Aout* func_open_audio_output_empty(IJKFF_Pipeline *pipeline, FFPlayer *ffp)
+{
+    SDL_Aout* emptyAout = (SDL_Aout*)calloc(1, sizeof(SDL_Aout));
+    return emptyAout;
+}
+
 IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
 {
     IjkMediaPlayer *mp = ijkmp_create(msg_loop);
@@ -107,11 +113,11 @@ IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
     mp->ffplayer->vout = IJKGPUImage_Vout_iOS_CreateForOpenGLES2();
     if (!mp->ffplayer->vout)
         goto fail;
-    
+    ///!!!For Debug:
     mp->ffplayer->pipeline = ffpipeline_create_from_ios(mp->ffplayer);
     if (!mp->ffplayer->pipeline)
-        goto fail;
-//    mp->ffplayer->pipeline->func_open_audio_output = NULL;
+        goto fail;//*/
+    ///mp->ffplayer->pipeline->func_open_audio_output = func_open_audio_output_empty;
     return mp;
     
 fail:
