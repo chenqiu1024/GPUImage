@@ -104,7 +104,7 @@ static SDL_Aout* func_open_audio_output_empty(IJKFF_Pipeline *pipeline, FFPlayer
     return emptyAout;
 }
 
-IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
+IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute)
 {
     IjkMediaPlayer *mp = ijkmp_create(msg_loop);
     if (!mp)
@@ -117,7 +117,10 @@ IjkMediaPlayer* ijkgpuplayer_create(int (*msg_loop)(void*))
     mp->ffplayer->pipeline = ffpipeline_create_from_ios(mp->ffplayer);
     if (!mp->ffplayer->pipeline)
         goto fail;//*/
-    ///mp->ffplayer->pipeline->func_open_audio_output = func_open_audio_output_empty;
+    if (mute)
+    {
+        mp->ffplayer->pipeline->func_open_audio_output = func_open_audio_output_empty;
+    }
     return mp;
     
 fail:
@@ -426,7 +429,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 @synthesize cacheStat = _cacheStat;
 
 +(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
-    IJKGPUImageMovie* ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:videoURL];
+    IJKGPUImageMovie* ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:videoURL muted:YES];
 //    ijkMovie.isUsedForSnapshot = YES;
     ijkMovie.snapshotCompletionHandler = completionHandler;
     [ijkMovie prepareToPlay];
@@ -508,14 +511,20 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 
 #pragma mark    Transplant from IJKFFMoviePlayerController
 
-- (id)initWithContentURL:(NSURL *)aUrl
+- (id)initWithContentURL:(NSURL *)aUrl muted:(BOOL)muted
 {
     IJKFFOptions* options = [IJKFFOptions optionsByDefault];
-    return [self initWithContentURL:aUrl withOptions:options];
+    return [self initWithContentURL:aUrl withOptions:options muted:muted];
+}
+
+- (id)initWithContentURL:(NSURL *)aUrl
+{
+    return [self initWithContentURL:aUrl muted:NO];
 }
 
 - (id)initWithContentURL:(NSURL *)aUrl
              withOptions:(IJKFFOptions *)options
+                   muted:(BOOL)muted
 {
     if (aUrl == nil)
         return nil;
@@ -524,17 +533,28 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     NSString *aUrlString = [aUrl isFileURL] ? [aUrl path] : [aUrl absoluteString];
     
     return [self initWithContentURLString:aUrlString
-                              withOptions:options];
+                              withOptions:options
+                                    muted:muted];
 }
 
-- (id)initWithContentURLString:(NSString *)aUrlString
+- (id)initWithContentURL:(NSURL *)aUrl
+             withOptions:(IJKFFOptions *)options {
+    return [self initWithContentURL:aUrl withOptions:options muted:NO];
+}
+
+- (id)initWithContentURLString:(NSString *)aUrlString muted:(BOOL)muted
 {
     IJKFFOptions* options = [IJKFFOptions optionsByDefault];
-    return [self initWithContentURLString:aUrlString withOptions:options];
+    return [self initWithContentURLString:aUrlString withOptions:options muted:muted];
+}
+
+- (id)initWithContentURLString:(NSString *)aUrlString {
+    return [self initWithContentURLString:aUrlString muted:NO];
 }
 
 - (id)initWithContentURLString:(NSString *)aUrlString
                    withOptions:(IJKFFOptions *)options
+                         muted:(BOOL)muted
 {
     if (aUrlString == nil)
         return nil;
@@ -565,7 +585,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         _urlString = aUrlString;
         
         // init player
-        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop);
+        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted);
         _msgPool = [[IJKFFMoviePlayerMessagePool alloc] init];
         IJKWeakHolder *weakHolder = [IJKWeakHolder new];
         weakHolder.object = self;
@@ -615,6 +635,11 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         [self registerApplicationObservers];
     }
     return self;
+}
+
+- (id)initWithContentURLString:(NSString *)aUrlString
+                   withOptions:(IJKFFOptions *)options {
+    return [self initWithContentURLString:aUrlString withOptions:options muted:NO];
 }
 
 - (void)setScreenOn: (BOOL)on

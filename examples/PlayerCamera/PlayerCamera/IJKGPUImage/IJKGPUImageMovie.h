@@ -97,6 +97,10 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 - (id)initWithContentURLString:(NSString *)aUrlString
                    withOptions:(IJKFFOptions *)options;
 
+- (id)initWithContentURLString:(NSString *)aUrlString
+                   withOptions:(IJKFFOptions *)options
+                         muted:(BOOL)muted;
+
 - (id)initWithContentURL:(NSURL *)aUrl;
 
 - (id)initWithContentURLString:(NSString *)aUrlString;

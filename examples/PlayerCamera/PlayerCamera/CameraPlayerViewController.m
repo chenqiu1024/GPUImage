@@ -72,11 +72,12 @@
 
 -(void) refreshMediaControl {
     NSTimeInterval duration = _ijkMovie.duration;
-    NSInteger intDuration = duration + 0.5;
-    if (intDuration > 0)
+    int minutes = floorf(duration / 60.f);
+    int seconds = roundf(duration - minutes * 60);
+    if (duration > 0)
     {
         self.progressSlider.maximumValue = duration;
-        self.durationLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(intDuration/60), (int)(intDuration%60)];
+        self.durationLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
     }
     else
     {
@@ -85,9 +86,10 @@
     }
     
     NSTimeInterval position = _isProgressSliderBeingDragged ? self.progressSlider.value : _ijkMovie.currentPlaybackTime;
-    NSInteger intPosition = position + 0.5;
-    self.progressSlider.value = (intPosition > 0) ? position : 0.0f;
-    self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(intPosition/60), (int)(intPosition%60)];
+    minutes = floorf(position / 60.f);
+    seconds = roundf(position - minutes * 60);
+    self.progressSlider.value = (position > 0) ? position : 0.0f;
+    self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
     
     [self setPlayOrPauseButtonState:_ijkMovie.isPlaying];
 
