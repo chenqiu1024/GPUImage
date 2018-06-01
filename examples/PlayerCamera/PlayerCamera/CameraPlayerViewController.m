@@ -27,6 +27,8 @@
     GPUImageMovieWriter* _movieWriter;
     
     BOOL _isProgressSliderBeingDragged;
+    
+    NSTimeInterval _fastSeekStartTime;
 }
 
 -(void)removeMovieNotificationObservers;
@@ -41,6 +43,7 @@
 @property (nonatomic, weak) IBOutlet UILabel* currentTimeLabel;
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
+@property (nonatomic, weak) IBOutlet UILabel* fastSeekLabel;
 
 -(IBAction)onClickOverlay:(id)sender;
 -(IBAction)onClickControlPanel:(id)sender;
@@ -85,7 +88,13 @@
         self.durationLabel.text = @"--:--";
     }
     
-    NSTimeInterval position = _isProgressSliderBeingDragged ? self.progressSlider.value : _ijkMovie.currentPlaybackTime;
+    NSTimeInterval position;
+    if (_isProgressSliderBeingDragged)
+        position = self.progressSlider.value;
+    else if (_fastSeekStartTime != 0.f)
+        position = _fastSeekStartTime;
+    else
+        position = _ijkMovie.currentPlaybackTime;
     minutes = floorf(position / 60.f);
     seconds = roundf(position - minutes * 60);
     self.progressSlider.value = (position > 0) ? position : 0.0f;
@@ -286,6 +295,11 @@
     [self.view bringSubviewToFront:self.overlayView];
     [self.view bringSubviewToFront:self.controlPanelView];
     
+    UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanRecognized:)];
+    panRecognizer.minimumNumberOfTouches = 1;
+    [self.overlayView addGestureRecognizer:panRecognizer];
+    _fastSeekStartTime = 0.f;
+    
     _isProgressSliderBeingDragged = NO;
     self.playOrPauseButton.tag = 100;
     
@@ -358,6 +372,43 @@
 - (IBAction)updateSliderValue:(id)sender
 {
     [(GPUImageSepiaFilter *)_filter setIntensity:[(UISlider *)sender value]];
+}
+
+-(void) onPanRecognized:(UIPanGestureRecognizer*)pan {
+    CGPoint translation = [pan translationInView:pan.view];
+    float offsetSeconds = 300.f * translation.x / pan.view.frame.size.width;
+    
+    if (UIGestureRecognizerStateBegan == pan.state)
+    {
+        _fastSeekStartTime = _ijkMovie.currentPlaybackTime;
+    }
+    float destTime = _fastSeekStartTime + offsetSeconds;
+    int hours = roundf(destTime);
+    int seconds = hours % 60;
+    hours /= 60;
+    int minutes = hours % 60;
+    hours /= 60;
+    
+    switch (pan.state)
+    {
+        case UIGestureRecognizerStateBegan:
+            self.fastSeekLabel.hidden = NO;
+            break;
+        case UIGestureRecognizerStateChanged:
+            [self setControlsHidden:NO];
+            break;
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+            self.fastSeekLabel.hidden = YES;
+            _ijkMovie.currentPlaybackTime = destTime;
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControls) object:nil];
+            [self performSelector:@selector(hideControls) withObject:nil afterDelay:5.0f];
+            _fastSeekStartTime = 0.f;
+            break;
+        default:
+            break;
+    }
+    self.fastSeekLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
 }
 
 #pragma mark    Immitated from IJKMoviePlayerViewController
