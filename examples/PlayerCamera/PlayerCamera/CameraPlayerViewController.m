@@ -396,6 +396,7 @@
             break;
         case UIGestureRecognizerStateChanged:
             [self setControlsHidden:NO];
+            [self refreshMediaControl];
             break;
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
