@@ -33,13 +33,22 @@ GLuint CreateTextureFromText(const char* text, UIFont* font, UIColor* color, int
     {
         [attributes setObject:font forKey:NSFontAttributeName];
     }
+    NSMutableParagraphStyle* paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    [attributes setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
+    
+//    NSShadow* shadow = [[NSShadow alloc] init];
+//    shadow.shadowColor = [UIColor blackColor];
+//    [attributes setObject:shadow forKey:NSShadowAttributeName];
     
     CGSize renderedSize = [txt sizeWithAttributes:attributes];
     
     const uint32_t height = nextPowerOfTwo((int)renderedSize.height);
-    *pOutHeight = height;
     const uint32_t width = nextPowerOfTwo((int) renderedSize.width);
+//    const uint32_t width = renderedSize.width;
+//    const uint32_t height = renderedSize.height;
     *pOutWidth = width;
+    *pOutHeight = height;
     
     const int bitsPerElement = 8;
     int sizeInBytes = height * width * 4;
@@ -53,16 +62,22 @@ GLuint CreateTextureFromText(const char* text, UIFont* font, UIColor* color, int
     
     CGContextSetTextDrawingMode(context, kCGTextFillStroke);
     
+//    CGContextSetFillColorWithColor(context, [UIColor greenColor].CGColor);
+//    CGContextFillRect(context, CGRectMake(0, 0, width, height));
+//    CGContextSetFillColorWithColor(context, [UIColor redColor].CGColor);
+//    CGContextFillRect(context, CGRectMake(0, 0, renderedSize.width, renderedSize.height));
     CGColorRef cgColor = color.CGColor;
     CGContextSetStrokeColorWithColor(context, cgColor);
     CGContextSetFillColorWithColor(context, cgColor);
-//    CGColorRelease(color);
-    CGContextTranslateCTM(context, 0.0f, height);
-    CGContextScaleCTM(context, 1.0f, -1.0f);
     
     UIGraphicsPushContext(context);
     
+    CGContextScaleCTM(context, 1.0f, -1.0f);
+    CGContextTranslateCTM(context, 0.0f, -renderedSize.height);
     [txt drawInRect:CGRectMake(0, 0, width, height) withAttributes:attributes];
+    
+    
+//    [txt drawInRect:CGRectMake(0, 0, width, height) withAttributes:attributes];
     
     UIGraphicsPopContext();
     

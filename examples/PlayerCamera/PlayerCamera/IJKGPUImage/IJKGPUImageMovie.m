@@ -65,6 +65,9 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
     IJKFFMoviePlayerMessagePool *_msgPool;
     NSString *_urlString;
     
+    NSString* _subtitle;
+    BOOL _subtitleTextureInvalidated;
+    GLuint _subtitleTexture;
     GLProgram* _textRenderingProgram;
     GLuint _positionSlot;
     GLuint _texcoordSlot;
@@ -568,6 +571,9 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     
     self = [super init];
     if (self) {
+        _subtitle = @"";
+        _subtitleTextureInvalidated = YES;
+        _subtitleTexture = 0;
         _textRenderingProgram = nil;
 //        self.isUsedForSnapshot = NO;
         self.snapshotCompletionHandler = nil;
@@ -660,6 +666,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 {
     //    [self unregisterApplicationObservers];
     [GPUImageContext useImageProcessingContext];
+    if (_subtitleTexture) glDeleteTextures(1, &_subtitleTexture);
     _textRenderingProgram = nil;
     IJKGPUImage_GLES2_Renderer_reset(_renderer);
     IJKGPUImage_GLES2_Renderer_freeP(&_renderer);
@@ -1611,6 +1618,18 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
         {
             const char* subtitleText = (const char*)avmsg->obj;
             ALOG(0, "Subtitle", "#Subtitle# subtitleText='%s'\n", subtitleText);
+            _subtitle = [NSString stringWithUTF8String:subtitleText];
+            int eolToDelete = 0;
+            for (NSInteger i=_subtitle.length-1; i>=0; --i)
+            {
+                unichar c = [_subtitle characterAtIndex:i];
+                if (c == '\n' || c == '\r')
+                    eolToDelete++;
+                else
+                    break;
+            }
+            _subtitle = [_subtitle substringWithRange:NSMakeRange(0, _subtitle.length - eolToDelete)];
+            _subtitleTextureInvalidated = YES;
         }
             break;
         default:
@@ -1940,10 +1959,26 @@ int media_player_msg_loop(void* arg)
         }
         [_textRenderingProgram use];
         
-        glEnableVertexAttribArray(_positionSlot);
-        glEnableVertexAttribArray(_texcoordSlot);
         //
-        static GLfloat vertexData[] = {
+        UIFont* font = [UIFont fontWithName:@"PingFangTC-Regular" size:24.f];
+        /*NSArray* fontFamilyNames = [UIFont familyNames];
+         for (NSString* family in fontFamilyNames)
+         {
+         NSArray* fontNames = [UIFont fontNamesForFamilyName:family];
+         NSLog(@"Font names of family '%@' : \n%@", family, fontNames);
+         }//*/
+        CGSize textSize;
+        if (_subtitleTextureInvalidated)
+        {
+            if (_subtitleTexture) glDeleteTextures(1, &_subtitleTexture);
+            _subtitleTexture = [_subtitle createTextureWithFont:font color:[UIColor yellowColor] outSize:&textSize];
+            _subtitleTextureInvalidated = NO;
+        }
+        glActiveTexture(GL_TEXTURE5);
+        glBindTexture(GL_TEXTURE_2D, _subtitleTexture);
+        glUniform1i(_textureSlot, 5);
+        
+        GLfloat vertexData[] = {
             -1.f, -1.f, 0.f, 1.f,
             0.f, 0.f, 0.f, 0.f,
             
@@ -1956,27 +1991,25 @@ int media_player_msg_loop(void* arg)
             1.f, 1.f, 0.f, 1.f,
             1.f, 1.f, 0.f, 0.f,
         };
+        const GLfloat BottomMargin = 10.f;
+        GLint viewport[4];
+        glGetIntegerv(GL_VIEWPORT, viewport);
+        GLfloat x1 = textSize.width / _inputVideoSize.width;
+        GLfloat y0 = 2.f * BottomMargin / _inputVideoSize.height - 1.f;
+        GLfloat y1 = 2.f * (BottomMargin + textSize.height) / _inputVideoSize.height - 1.f;
+        vertexData[0] = vertexData[8] = -x1;
+        vertexData[1] = vertexData[17] = -y1;
+        vertexData[16] = vertexData[24] = x1;
+        vertexData[9] = vertexData[25] = -y0;
+
+        glEnableVertexAttribArray(_positionSlot);
+        glEnableVertexAttribArray(_texcoordSlot);
         glVertexAttribPointer(_positionSlot, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (const GLvoid*)vertexData);
         glVertexAttribPointer(_texcoordSlot, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (const GLvoid*)(vertexData + 4));
 
-        NSString* subtitle = @"Subtitle Showcase\n测试字幕显示";
-        /*NSArray* fontFamilyNames = [UIFont familyNames];
-        for (NSString* family in fontFamilyNames)
-        {
-            NSArray* fontNames = [UIFont fontNamesForFamilyName:family];
-            NSLog(@"Font names of family '%@' : \n%@", family, fontNames);
-        }//*/
-        UIFont* font = [UIFont fontWithName:@"PingFangTC-Regular" size:16.f];
-        GLuint textTexture = [subtitle createTextureWithFont:font color:[UIColor lightTextColor] outSize:NULL];
-        glActiveTexture(GL_TEXTURE5);
-        glBindTexture(GL_TEXTURE_2D, textTexture);
-        glUniform1i(_textureSlot, 5);
-        
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        
-        glDeleteTextures(1, &textTexture);
         //*/
         //*
         if (self.snapshotCompletionHandler)
