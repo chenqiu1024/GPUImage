@@ -68,6 +68,7 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
     NSString* _subtitle;
     BOOL _subtitleTextureInvalidated;
     GLuint _subtitleTexture;
+    CGSize _subtitleSize;
     GLProgram* _textRenderingProgram;
     GLuint _positionSlot;
     GLuint _texcoordSlot;
@@ -1967,12 +1968,12 @@ int media_player_msg_loop(void* arg)
          NSArray* fontNames = [UIFont fontNamesForFamilyName:family];
          NSLog(@"Font names of family '%@' : \n%@", family, fontNames);
          }//*/
-        CGSize textSize;
         if (_subtitleTextureInvalidated)
         {
             if (_subtitleTexture) glDeleteTextures(1, &_subtitleTexture);
-            _subtitleTexture = [_subtitle createTextureWithFont:font color:[UIColor yellowColor] outSize:&textSize];
+            _subtitleTexture = [_subtitle createTextureWithFont:font color:[UIColor yellowColor] outSize:&_subtitleSize];
             _subtitleTextureInvalidated = NO;
+            NSLog(@"Create text texture with '%@'", _subtitle);
         }
         glActiveTexture(GL_TEXTURE5);
         glBindTexture(GL_TEXTURE_2D, _subtitleTexture);
@@ -1994,9 +1995,9 @@ int media_player_msg_loop(void* arg)
         const GLfloat BottomMargin = 10.f;
         GLint viewport[4];
         glGetIntegerv(GL_VIEWPORT, viewport);
-        GLfloat x1 = textSize.width / _inputVideoSize.width;
+        GLfloat x1 = _subtitleSize.width / _inputVideoSize.width;
         GLfloat y0 = 2.f * BottomMargin / _inputVideoSize.height - 1.f;
-        GLfloat y1 = 2.f * (BottomMargin + textSize.height) / _inputVideoSize.height - 1.f;
+        GLfloat y1 = 2.f * (BottomMargin + _subtitleSize.height) / _inputVideoSize.height - 1.f;
         vertexData[0] = vertexData[8] = -x1;
         vertexData[1] = vertexData[17] = -y1;
         vertexData[16] = vertexData[24] = x1;
