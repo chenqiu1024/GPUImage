@@ -9,6 +9,8 @@
 #import "IJKGPUImageMovie.h"
 #import "IJKGPUImage_Vout_iOS_OpenGLES2.h"
 #import "IJKGPUImage_GLES2_Renderer.h"
+#import "GPUImageFilter.h"
+#import "NSString+OpenGLES.h"
 
 #import "ijkplayer_ios.h"
 #import "ijksdl/ios/ijksdl_ios.h"
@@ -62,6 +64,11 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
     //    IJKSDLGLView *_glView;
     IJKFFMoviePlayerMessagePool *_msgPool;
     NSString *_urlString;
+    
+    GLProgram* _textRenderingProgram;
+    GLuint _positionSlot;
+    GLuint _texcoordSlot;
+    GLuint _textureSlot;
     
     NSInteger _videoWidth;
     NSInteger _videoHeight;
@@ -561,6 +568,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     
     self = [super init];
     if (self) {
+        _textRenderingProgram = nil;
 //        self.isUsedForSnapshot = NO;
         self.snapshotCompletionHandler = nil;
         ijkmp_global_init();
@@ -652,6 +660,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 {
     //    [self unregisterApplicationObservers];
     [GPUImageContext useImageProcessingContext];
+    _textRenderingProgram = nil;
     IJKGPUImage_GLES2_Renderer_reset(_renderer);
     IJKGPUImage_GLES2_Renderer_freeP(&_renderer);
     NSLog(@"#Crash# IJKGPUImageMovie dealloc");
@@ -1598,6 +1607,12 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
              userInfo:@{IJKMPMoviePlayerDidAccurateSeekCompleteCurPos: @(avmsg->arg1)}];
             break;
         }
+        case FFP_MSG_TIMED_TEXT:
+        {
+            const char* subtitleText = (const char*)avmsg->obj;
+            ALOG(0, "Subtitle", "#Subtitle# subtitleText='%s'\n", subtitleText);
+        }
+            break;
         default:
             // NSLog(@"unknown FFP_MSG_xxx(%d)\n", avmsg->what);
             break;
@@ -1908,6 +1923,61 @@ int media_player_msg_loop(void* arg)
         {
             // iOS5.0+ will not go into here
         }
+        //*
+        if (!_textRenderingProgram)
+        {
+            _textRenderingProgram = [[GLProgram alloc] initWithVertexShaderString:kGPUImageVertexShaderString fragmentShaderString:kGPUImagePassthroughFragmentShaderString];
+        }
+        if (!_textRenderingProgram.initialized)
+        {
+            [_textRenderingProgram addAttribute:@"position"];
+            [_textRenderingProgram addAttribute:@"inputTextureCoordinate"];
+            
+            [_textRenderingProgram link];
+            _positionSlot = [_textRenderingProgram attributeIndex:@"position"];
+            _texcoordSlot = [_textRenderingProgram attributeIndex:@"inputTextureCoordinate"];
+            _textureSlot = [_textRenderingProgram uniformIndex:@"inputImageTexture"];
+        }
+        [_textRenderingProgram use];
+        
+        glEnableVertexAttribArray(_positionSlot);
+        glEnableVertexAttribArray(_texcoordSlot);
+        //
+        static GLfloat vertexData[] = {
+            -1.f, -1.f, 0.f, 1.f,
+            0.f, 0.f, 0.f, 0.f,
+            
+            -1.f, 1.f, 0.f, 1.f,
+            0.f, 1.f, 0.f, 0.f,
+            
+            1.f, -1.f, 0.f, 1.f,
+            1.f, 0.f, 0.f, 0.f,
+            
+            1.f, 1.f, 0.f, 1.f,
+            1.f, 1.f, 0.f, 0.f,
+        };
+        glVertexAttribPointer(_positionSlot, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (const GLvoid*)vertexData);
+        glVertexAttribPointer(_texcoordSlot, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (const GLvoid*)(vertexData + 4));
+
+        NSString* subtitle = @"Subtitle Showcase\n测试字幕显示";
+        /*NSArray* fontFamilyNames = [UIFont familyNames];
+        for (NSString* family in fontFamilyNames)
+        {
+            NSArray* fontNames = [UIFont fontNamesForFamilyName:family];
+            NSLog(@"Font names of family '%@' : \n%@", family, fontNames);
+        }//*/
+        UIFont* font = [UIFont fontWithName:@"PingFangTC-Regular" size:16.f];
+        GLuint textTexture = [subtitle createTextureWithFont:font color:[UIColor lightTextColor] outSize:NULL];
+        glActiveTexture(GL_TEXTURE5);
+        glBindTexture(GL_TEXTURE_2D, textTexture);
+        glUniform1i(_textureSlot, 5);
+        
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        
+        glDeleteTextures(1, &textTexture);
+        //*/
         //*
         if (self.snapshotCompletionHandler)
         {
