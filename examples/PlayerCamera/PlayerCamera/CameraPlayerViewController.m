@@ -21,6 +21,11 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
 {
     NSMutableArray<NSString* >* _audios;
     NSMutableArray<NSString* >* _subtitles;
+    NSMutableDictionary<NSNumber*, NSNumber* >* _audioIndex2StreamIndex;
+    NSMutableDictionary<NSNumber*, NSNumber* >* _subtitleIndex2StreamIndex;
+    NSInteger _selectedAudio;
+    NSInteger _selectedSubtitle;
+    void(^_completion)(NSInteger, NSInteger);
 }
 
 -(void) setDataSource:(NSDictionary*)mediaMeta;
@@ -32,32 +37,41 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
 -(void) setDataSource:(NSDictionary*)mediaMeta {
     [_audios removeAllObjects];
     [_subtitles removeAllObjects];
+    [_audioIndex2StreamIndex removeAllObjects];
+    [_subtitleIndex2StreamIndex removeAllObjects];
     NSArray<NSDictionary* >* streams = [mediaMeta objectForKey:kk_IJKM_KEY_STREAMS];
-    int i = 0;
+    NSInteger streamIndex = 0;
     for (NSDictionary* stream in streams)
     {
         NSString* type = [stream objectForKey:k_IJKM_KEY_TYPE];
         NSString* title = [stream objectForKey:k_IJKM_KEY_TITLE];
-        NSLog(@"#IjkMeta# [%d] type=%@, title=%@", i++, type, title);
         if ([type isEqualToString:@IJKM_VAL_TYPE__AUDIO] && title)
         {
+            [_audioIndex2StreamIndex setObject:@(streamIndex) forKey:@(_audios.count)];
             [_audios addObject:title];
         }
         if ([type isEqualToString:@IJKM_VAL_TYPE__TIMEDTEXT] && title)
         {
+            [_subtitleIndex2StreamIndex setObject:@(streamIndex) forKey:@(_subtitles.count)];
             [_subtitles addObject:title];
         }
+        streamIndex++;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
 }
 
-- (instancetype)initWithStyle:(UITableViewStyle)style dataSource:(NSDictionary*)mediaMeta {
+- (instancetype)initWithStyle:(UITableViewStyle)style dataSource:(NSDictionary*)mediaMeta selectedAudioStream:(NSInteger)selectedAudioStream selectedSubtitleStream:(NSInteger)selectedSubtitleStream completion:(void(^)(NSInteger, NSInteger))completion {
     if (self = [super initWithStyle:style])
     {
         _audios = [[NSMutableArray alloc] init];
         _subtitles = [[NSMutableArray alloc] init];
+        _audioIndex2StreamIndex = [[NSMutableDictionary alloc] init];
+        _subtitleIndex2StreamIndex = [[NSMutableDictionary alloc] init];
+        _selectedAudio = selectedAudioStream;
+        _selectedSubtitle = selectedSubtitleStream;
+        _completion = completion;
         [self setDataSource:mediaMeta];
     }
     return self;
@@ -65,8 +79,10 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
 
 -(void) viewDidLoad {
     [super viewDidLoad];
-    self.automaticallyAdjustsScrollViewInsets = YES;
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+//    self.automaticallyAdjustsScrollViewInsets = YES;
+//    self.edgesForExtendedLayout = UIRectEdgeNone;
+//    self.extendedLayoutIncludesOpaqueBars = NO;
+    self.tableView.contentInset = UIEdgeInsetsMake(20.0f, 0.0f, 0.0f, 0.0f);
 }
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -97,24 +113,56 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
     if (!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:SelectionTableViewCellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     }
-    cell.textLabel.text = (indexPath.section == 0 ? _audios[indexPath.row] : _subtitles[indexPath.row]);
-    if (indexPath.row == 0)
+    switch (indexPath.section)
     {
-        cell.selected = YES;
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    }
-    else
-    {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        case 0:
+        {
+            cell.textLabel.text = _audios[indexPath.row];
+            NSNumber* streamIndex = [_audioIndex2StreamIndex objectForKey:@(indexPath.row)];
+            if (streamIndex.integerValue == _selectedAudio)
+            {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+            else
+            {
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+        }
+            break;
+        case 1:
+        {
+            cell.textLabel.text = _subtitles[indexPath.row];
+            NSNumber* streamIndex = [_subtitleIndex2StreamIndex objectForKey:@(indexPath.row)];
+            if (streamIndex.integerValue == _selectedSubtitle)
+            {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+            else
+            {
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+        }
+            break;
+        default:
+            break;
     }
     return cell;
 }
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (0 == indexPath.section)
+    {
+        NSNumber* streamIndex = [_audioIndex2StreamIndex objectForKey:@(indexPath.row)];
+        _selectedAudio = streamIndex.integerValue;
+    }
+    else if (1 == indexPath.section)
+    {
+        NSNumber* streamIndex = [_subtitleIndex2StreamIndex objectForKey:@(indexPath.row)];
+        _selectedSubtitle = streamIndex.integerValue;
+    }
+    [tableView reloadData];
 }
 
 @end
@@ -374,8 +422,12 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
 }
 
 -(void) showSubtitleAndAudioSelector {
-    SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta];
-    [self presentViewController:vc animated:NO completion:nil];
+    SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta selectedAudioStream:3 selectedSubtitleStream:8 completion:^(NSInteger selectedAudio, NSInteger selectedSubtitle) {
+        [_ijkMovie play];
+    }];
+    [self presentViewController:vc animated:NO completion:^() {
+        [_ijkMovie pause];
+    }];
 }
 
 - (void)viewDidLoad
@@ -574,8 +626,35 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
 
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
-    UIBarButtonItem* moreButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(showSubtitleAndAudioSelector)];
-    self.navItem.rightBarButtonItem = moreButtonItem;
+    BOOL hasAnythingToSelect = NO;
+    NSArray<NSDictionary* >* streams = [_ijkMovie.monitor.mediaMeta objectForKey:kk_IJKM_KEY_STREAMS];
+    NSInteger streamIndex = 0;
+    for (NSDictionary* stream in streams)
+    {
+        NSString* type = [stream objectForKey:k_IJKM_KEY_TYPE];
+        NSString* title = [stream objectForKey:k_IJKM_KEY_TITLE];
+        if ([type isEqualToString:@IJKM_VAL_TYPE__AUDIO] && title)
+        {
+            hasAnythingToSelect = YES;
+            break;
+        }
+        if ([type isEqualToString:@IJKM_VAL_TYPE__TIMEDTEXT] && title)
+        {
+            hasAnythingToSelect = YES;
+            break;
+        }
+        streamIndex++;
+    }
+    
+    if (hasAnythingToSelect)
+    {
+        UIBarButtonItem* moreButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(showSubtitleAndAudioSelector)];
+        self.navItem.rightBarButtonItem = moreButtonItem;
+    }
+    else
+    {
+        self.navItem.rightBarButtonItem = nil;
+    }
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
