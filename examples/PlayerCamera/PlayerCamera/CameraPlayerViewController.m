@@ -16,6 +16,7 @@
 
 static NSString* SelectionTableViewHeaderIdentifier = @"SelectionTableViewHeaderIdentifier";
 static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIdentifier";
+static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewButtonCellIdentifier";
 
 @interface SubtitleAndAudioSelectionViewController : UITableViewController
 {
@@ -86,7 +87,7 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
 }
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    NSInteger sections = 0;
+    NSInteger sections = 1;
     if (_audios.count > 0) sections++;
     if (_subtitles.count > 0) sections++;
     return sections;
@@ -97,24 +98,35 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
         return _audios.count;
     else if (section == 1)
         return _subtitles.count;
-    return 0;
+    return 1;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 2) return 0;
     return 24.f;
 }
 
 -(NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return (section == 0 ? @"Audio(s):" : @"Subtitle(s):");
+    switch (section)
+    {
+        case 0:
+            return @"Audio(s):";
+        case 1:
+            return @"Subtitle(s):";
+        default:
+            return nil;
+    }
 }
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:SelectionTableViewCellIdentifier];
+    NSString* identifier = (indexPath.section != 2 ? SelectionTableViewCellIdentifier : SelectionTableViewButtonCellIdentifier);
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:SelectionTableViewCellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     }
+    cell.textLabel.textAlignment = NSTextAlignmentLeft;
     switch (indexPath.section)
     {
         case 0:
@@ -145,6 +157,18 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
             }
         }
             break;
+        case 2:
+        {
+            UILabel* label = [[UILabel alloc] init];
+            label.text = @"OK";
+            [label sizeToFit];
+            label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            [cell.contentView addSubview:label];
+            [label setCenter:cell.contentView.center];
+//            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+//            cell.textLabel.text = @"OK";
+        }
+            break;
         default:
             break;
     }
@@ -161,6 +185,15 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
     {
         NSNumber* streamIndex = [_subtitleIndex2StreamIndex objectForKey:@(indexPath.row)];
         _selectedSubtitle = streamIndex.integerValue;
+    }
+    else if (2 == indexPath.section)
+    {
+        [self dismissViewControllerAnimated:NO completion:^{
+            if (_completion)
+            {
+                _completion(_selectedAudio, _selectedSubtitle);
+            }
+        }];
     }
     [tableView reloadData];
 }
@@ -423,6 +456,7 @@ static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIden
 
 -(void) showSubtitleAndAudioSelector {
     SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta selectedAudioStream:3 selectedSubtitleStream:8 completion:^(NSInteger selectedAudio, NSInteger selectedSubtitle) {
+        NSLog(@"SubtitleAndAudioSelectionViewController returns, selectedAudio=%ld, selectedSubtitle=%ld", selectedAudio, selectedSubtitle);
         [_ijkMovie play];
     }];
     [self presentViewController:vc animated:NO completion:^() {
