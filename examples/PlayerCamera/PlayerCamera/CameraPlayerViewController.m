@@ -264,6 +264,7 @@
     [_ijkMovie shutdown];
     [self disassembleMovieWriter];
     [_videoCamera stopCameraCapture];
+    [self removeMovieNotificationObservers];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -461,7 +462,14 @@
 
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
-    NSLog(@"mediaIsPreparedToPlayDidChange\n");
+    NSArray<NSDictionary* >* streams = [_ijkMovie.monitor.mediaMeta objectForKey:kk_IJKM_KEY_STREAMS];
+    int i = 0;
+    for (NSDictionary* stream in streams)
+    {
+        NSString* type = [stream objectForKey:k_IJKM_KEY_TYPE];
+        NSString* title = [stream objectForKey:k_IJKM_KEY_TITLE];
+        NSLog(@"#IjkMeta# [%d] type=%@, title=%@", i++, type, title);
+    }
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
@@ -539,10 +547,11 @@
 /* Remove the movie notification observers from the movie object. */
 -(void)removeMovieNotificationObservers
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_ijkMovie];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackDidFinishNotification object:_ijkMovie];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_ijkMovie];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_ijkMovie];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_ijkMovie];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackDidFinishNotification object:_ijkMovie];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification object:_ijkMovie];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_ijkMovie];
 }
 
 #pragma mark IJKGPUImageMovieDelegate
