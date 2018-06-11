@@ -165,6 +165,12 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 
 -(UIImage*) snapshotImage;
 
+-(int) currentVideoStream;
+-(int) currentAudioStream;
+-(int) currentSubtitleStream;
+
+-(void) selectStream:(int)stream;
+
 #pragma mark KVO properties
 @property (nonatomic, readonly) IJKFFMonitor *monitor;
 

@@ -455,8 +455,10 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 }
 
 -(void) showSubtitleAndAudioSelector {
-    SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta selectedAudioStream:3 selectedSubtitleStream:8 completion:^(NSInteger selectedAudio, NSInteger selectedSubtitle) {
+    SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta selectedAudioStream:_ijkMovie.currentAudioStream selectedSubtitleStream:_ijkMovie.currentSubtitleStream completion:^(NSInteger selectedAudio, NSInteger selectedSubtitle) {
         NSLog(@"SubtitleAndAudioSelectionViewController returns, selectedAudio=%ld, selectedSubtitle=%ld", selectedAudio, selectedSubtitle);
+        [_ijkMovie selectStream:selectedAudio];
+        [_ijkMovie selectStream:selectedSubtitle];
         [_ijkMovie play];
     }];
     [self presentViewController:vc animated:NO completion:^() {

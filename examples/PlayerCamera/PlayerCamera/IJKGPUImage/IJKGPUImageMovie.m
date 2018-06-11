@@ -2063,4 +2063,29 @@ int media_player_msg_loop(void* arg)
     return [UIImage imageWithCGImage:image];
 }
 
+-(int) currentVideoStream {
+    if (_mediaPlayer && _mediaPlayer->ffplayer && _mediaPlayer->ffplayer->is)
+        return _mediaPlayer->ffplayer->is->video_stream;
+    else
+        return -1;
+}
+
+-(int) currentAudioStream {
+    if (_mediaPlayer && _mediaPlayer->ffplayer && _mediaPlayer->ffplayer->is)
+        return _mediaPlayer->ffplayer->is->audio_stream;
+    else
+        return -1;
+}
+
+-(int) currentSubtitleStream {
+    if (_mediaPlayer && _mediaPlayer->ffplayer && _mediaPlayer->ffplayer->is)
+        return _mediaPlayer->ffplayer->is->subtitle_stream;
+    else
+        return -1;
+}
+
+-(void) selectStream:(int)stream {
+    ijkmp_set_stream_selected(_mediaPlayer, stream, 1);
+}
+
 @end
