@@ -14,6 +14,111 @@
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
+static NSString* SelectionTableViewHeaderIdentifier = @"SelectionTableViewHeaderIdentifier";
+static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIdentifier";
+
+@interface SubtitleAndAudioSelectionViewController : UITableViewController
+{
+    NSMutableArray<NSString* >* _audios;
+    NSMutableArray<NSString* >* _subtitles;
+}
+
+-(void) setDataSource:(NSDictionary*)mediaMeta;
+
+@end
+
+@implementation SubtitleAndAudioSelectionViewController
+
+-(void) setDataSource:(NSDictionary*)mediaMeta {
+    [_audios removeAllObjects];
+    [_subtitles removeAllObjects];
+    NSArray<NSDictionary* >* streams = [mediaMeta objectForKey:kk_IJKM_KEY_STREAMS];
+    int i = 0;
+    for (NSDictionary* stream in streams)
+    {
+        NSString* type = [stream objectForKey:k_IJKM_KEY_TYPE];
+        NSString* title = [stream objectForKey:k_IJKM_KEY_TITLE];
+        NSLog(@"#IjkMeta# [%d] type=%@, title=%@", i++, type, title);
+        if ([type isEqualToString:@IJKM_VAL_TYPE__AUDIO] && title)
+        {
+            [_audios addObject:title];
+        }
+        if ([type isEqualToString:@IJKM_VAL_TYPE__TIMEDTEXT] && title)
+        {
+            [_subtitles addObject:title];
+        }
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
+
+- (instancetype)initWithStyle:(UITableViewStyle)style dataSource:(NSDictionary*)mediaMeta {
+    if (self = [super initWithStyle:style])
+    {
+        _audios = [[NSMutableArray alloc] init];
+        _subtitles = [[NSMutableArray alloc] init];
+        [self setDataSource:mediaMeta];
+    }
+    return self;
+}
+
+-(void) viewDidLoad {
+    [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = YES;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+}
+
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    NSInteger sections = 0;
+    if (_audios.count > 0) sections++;
+    if (_subtitles.count > 0) sections++;
+    return sections;
+}
+
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0)
+        return _audios.count;
+    else if (section == 1)
+        return _subtitles.count;
+    return 0;
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 24.f;
+}
+
+-(NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return (section == 0 ? @"Audio(s):" : @"Subtitle(s):");
+}
+
+-(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:SelectionTableViewCellIdentifier];
+    if (!cell)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:SelectionTableViewCellIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    }
+    cell.textLabel.text = (indexPath.section == 0 ? _audios[indexPath.row] : _subtitles[indexPath.row]);
+    if (indexPath.row == 0)
+    {
+        cell.selected = YES;
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else
+    {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    return cell;
+}
+
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+@end
+
 @interface CameraPlayerViewController () <IJKGPUImageMovieDelegate>
 {
     GPUImageVideoCamera* _videoCamera;
@@ -268,12 +373,19 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void) showSubtitleAndAudioSelector {
+    SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta];
+    [self presentViewController:vc animated:NO completion:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    UIBarButtonItem* buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissSelf)];
-    self.navItem.leftBarButtonItem = buttonItem;
+    //UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(dismissSelf)];
+    UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
+    self.navItem.leftBarButtonItem = dismissButtonItem;
+    
     self.navItem.title = [self.sourceVideoFile lastPathComponent];
     
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
@@ -462,14 +574,8 @@
 
 - (void)mediaIsPreparedToPlayDidChange:(NSNotification*)notification
 {
-    NSArray<NSDictionary* >* streams = [_ijkMovie.monitor.mediaMeta objectForKey:kk_IJKM_KEY_STREAMS];
-    int i = 0;
-    for (NSDictionary* stream in streams)
-    {
-        NSString* type = [stream objectForKey:k_IJKM_KEY_TYPE];
-        NSString* title = [stream objectForKey:k_IJKM_KEY_TITLE];
-        NSLog(@"#IjkMeta# [%d] type=%@, title=%@", i++, type, title);
-    }
+    UIBarButtonItem* moreButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(showSubtitleAndAudioSelector)];
+    self.navItem.rightBarButtonItem = moreButtonItem;
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification

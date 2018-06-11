@@ -29,6 +29,7 @@
 #define k_IJKM_KEY_TITLE          @"title"
 #define k_IJKM_VAL_TYPE__VIDEO    @"video"
 #define k_IJKM_VAL_TYPE__AUDIO    @"audio"
+#define k_IJKM_VAL_TYPE__TIMEDTEXT    @"timedtext"
 #define k_IJKM_VAL_TYPE__UNKNOWN  @"unknown"
 
 #define k_IJKM_KEY_CODEC_NAME      @"codec_name"
