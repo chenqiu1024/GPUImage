@@ -469,6 +469,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
         NSLog(@"SubtitleAndAudioSelectionViewController selectedStream=%ld", selectedStream);
         [_ijkMovie selectStream:(int)selectedStream];
     } completion:^() {
+        _ijkMovie.currentPlaybackTime = _ijkMovie.currentPlaybackTime - 1.f;
         [_ijkMovie play];
     }];
     [self presentViewController:vc animated:NO completion:^() {
