@@ -1976,7 +1976,7 @@ int media_player_msg_loop(void* arg)
         if (_subtitleTextureInvalidated)
         {
             if (_subtitleTexture) glDeleteTextures(1, &_subtitleTexture);
-            _subtitleTexture = [_subtitle createTextureWithFont:font color:[UIColor yellowColor] outSize:&_subtitleSize];
+            _subtitleTexture = [_subtitle createTextureWithFont:font color:[UIColor whiteColor] outSize:&_subtitleSize];
             _subtitleTextureInvalidated = NO;
             NSLog(@"Create text texture with '%@'", _subtitle);
         }

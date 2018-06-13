@@ -26,7 +26,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     NSMutableDictionary<NSNumber*, NSNumber* >* _subtitleIndex2StreamIndex;
     NSInteger _selectedAudio;
     NSInteger _selectedSubtitle;
-    void(^_completion)(NSInteger, NSInteger);
+    void(^_selectedHandler)(NSInteger);
+    void(^_completion)();
 }
 
 -(void) setDataSource:(NSDictionary*)mediaMeta;
@@ -63,7 +64,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     });
 }
 
-- (instancetype)initWithStyle:(UITableViewStyle)style dataSource:(NSDictionary*)mediaMeta selectedAudioStream:(NSInteger)selectedAudioStream selectedSubtitleStream:(NSInteger)selectedSubtitleStream completion:(void(^)(NSInteger, NSInteger))completion {
+- (instancetype)initWithStyle:(UITableViewStyle)style dataSource:(NSDictionary*)mediaMeta selectedAudioStream:(NSInteger)selectedAudioStream selectedSubtitleStream:(NSInteger)selectedSubtitleStream selectedHandler:(void(^)(NSInteger))selectedHandler completion:(void(^)())completion {
     if (self = [super initWithStyle:style])
     {
         _audios = [[NSMutableArray alloc] init];
@@ -73,6 +74,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
         _selectedAudio = selectedAudioStream;
         _selectedSubtitle = selectedSubtitleStream;
         _completion = completion;
+        _selectedHandler = selectedHandler;
         [self setDataSource:mediaMeta];
     }
     return self;
@@ -180,18 +182,26 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     {
         NSNumber* streamIndex = [_audioIndex2StreamIndex objectForKey:@(indexPath.row)];
         _selectedAudio = streamIndex.integerValue;
+        if (_selectedHandler)
+        {
+            _selectedHandler(_selectedAudio);
+        }
     }
     else if (1 == indexPath.section)
     {
         NSNumber* streamIndex = [_subtitleIndex2StreamIndex objectForKey:@(indexPath.row)];
         _selectedSubtitle = streamIndex.integerValue;
+        if (_selectedHandler)
+        {
+            _selectedHandler(_selectedSubtitle);
+        }
     }
     else if (2 == indexPath.section)
     {
         [self dismissViewControllerAnimated:NO completion:^{
             if (_completion)
             {
-                _completion(_selectedAudio, _selectedSubtitle);
+                _completion();
             }
         }];
     }
@@ -455,10 +465,10 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 }
 
 -(void) showSubtitleAndAudioSelector {
-    SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta selectedAudioStream:_ijkMovie.currentAudioStream selectedSubtitleStream:_ijkMovie.currentSubtitleStream completion:^(NSInteger selectedAudio, NSInteger selectedSubtitle) {
-        NSLog(@"SubtitleAndAudioSelectionViewController returns, selectedAudio=%ld, selectedSubtitle=%ld", selectedAudio, selectedSubtitle);
-        [_ijkMovie selectStream:selectedAudio];
-        [_ijkMovie selectStream:selectedSubtitle];
+    SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta selectedAudioStream:_ijkMovie.currentAudioStream selectedSubtitleStream:_ijkMovie.currentSubtitleStream selectedHandler:^(NSInteger selectedStream) {
+        NSLog(@"SubtitleAndAudioSelectionViewController selectedStream=%ld", selectedStream);
+        [_ijkMovie selectStream:(int)selectedStream];
+    } completion:^() {
         [_ijkMovie play];
     }];
     [self presentViewController:vc animated:NO completion:^() {

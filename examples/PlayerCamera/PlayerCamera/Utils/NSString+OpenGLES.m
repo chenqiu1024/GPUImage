@@ -37,9 +37,11 @@ GLuint CreateTextureFromText(const char* text, UIFont* font, UIColor* color, int
     paragraphStyle.alignment = NSTextAlignmentCenter;
     [attributes setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
     
-//    NSShadow* shadow = [[NSShadow alloc] init];
+    NSShadow* shadow = [[NSShadow alloc] init];
 //    shadow.shadowColor = [UIColor blackColor];
-//    [attributes setObject:shadow forKey:NSShadowAttributeName];
+//    shadow.shadowBlurRadius = 3.f;
+    shadow.shadowOffset = CGSizeMake(3.f, 2.f);
+    [attributes setObject:shadow forKey:NSShadowAttributeName];
     
     CGSize renderedSize = [txt sizeWithAttributes:attributes];
     
