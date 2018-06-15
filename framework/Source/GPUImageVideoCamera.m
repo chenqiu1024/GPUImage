@@ -76,10 +76,9 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     {
 		return nil;
     }
-    
+
     cameraProcessingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH,0);
 	audioProcessingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW,0);
-
     frameRenderingSemaphore = dispatch_semaphore_create(1);
 
 	_frameRate = 0; // This will not set frame rate unless this value gets set to 1 or above
@@ -206,11 +205,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     
     [videoOutput setSampleBufferDelegate:self queue:cameraProcessingQueue];
 	if ([_captureSession canAddOutput:videoOutput])
-	{
+    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ canAddOutput:%@ by _captureSession:%@, ", _captureSession, _captureSession);
 		[_captureSession addOutput:videoOutput];
 	}
 	else
-	{
+	{NSLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addOutput:%@ by _captureSession:%@, ", _captureSession, _captureSession);
 		NSLog(@"Couldn't add video output");
         return nil;
 	}
@@ -336,18 +335,18 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 }
 
 - (void)startCameraCapture;
-{
+{NSLog(@"#VideoCapture# GPUImageVideoCamera$startCameraCapture");
     if (![_captureSession isRunning])
-	{
+    {NSLog(@"#VideoCapture# GPUImageVideoCamera$startCameraCapture : startRunning");
         startingCaptureTime = [NSDate date];
 		[_captureSession startRunning];
 	};
 }
 
 - (void)stopCameraCapture;
-{
+{NSLog(@"#VideoCapture# GPUImageVideoCamera$stopCameraCapture");
     if ([_captureSession isRunning])
-    {
+    {NSLog(@"#VideoCapture# GPUImageVideoCamera$stopCameraCapture : stopRunning");
         [_captureSession stopRunning];
     }
 }
@@ -869,7 +868,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 #pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{NSLog(@"captureOutput");
+{NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput");
     if (!self.captureSession.isRunning)
     {
         return;

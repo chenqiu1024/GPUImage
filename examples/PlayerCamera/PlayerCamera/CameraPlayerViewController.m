@@ -426,8 +426,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 -(void) setupMovieWriter {
     [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
     [_videoCamera addTarget:_movieWriter];
-    _videoCamera.audioEncodingTarget = _movieWriter;
-    ///!!![_ijkMovie addTarget:_movieWriter];
+    ///!!!_videoCamera.audioEncodingTarget = _movieWriter;
+    ///[_ijkMovie addTarget:_movieWriter];
 }
 
 -(void) startMovieWriteRecording {
@@ -469,7 +469,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
         NSLog(@"SubtitleAndAudioSelectionViewController selectedStream=%ld", selectedStream);
         [_ijkMovie selectStream:(int)selectedStream];
     } completion:^() {
-        _ijkMovie.currentPlaybackTime = _ijkMovie.currentPlaybackTime - 1.f;
+        _ijkMovie.currentPlaybackTime = _ijkMovie.currentPlaybackTime - 0.1f;
         [_ijkMovie play];
     }];
     [self presentViewController:vc animated:NO completion:^() {
