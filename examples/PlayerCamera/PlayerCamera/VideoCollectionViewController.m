@@ -96,6 +96,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     }
     [_files insertObject:@"rtsp://192.168.42.1/live" atIndex:0];
     [_files insertObject:@"https://tzn8.com/bunnies.mp4" atIndex:0];
+    [_files insertObject:@"https://pan.baidu.com/play/video#/video?path=%2F20170820%2FMOVI0001_To0124_1207_1043_2101_2110_2010_2055_2135_0238%20-%20Segment11(00_24_10.000-00_26_11.560).mp4&t=-1" atIndex:0];
     
 //    for (NSString* fileURL in _files)
 //    {

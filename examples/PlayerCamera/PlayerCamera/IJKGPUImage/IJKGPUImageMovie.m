@@ -609,6 +609,11 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         ijkmp_set_inject_opaque(_mediaPlayer, (__bridge_retained void *) weakHolder);
         ijkmp_set_ijkio_inject_opaque(_mediaPlayer, (__bridge_retained void *)weakHolder);
         ijkmp_set_option_int(_mediaPlayer, IJKMP_OPT_CATEGORY_PLAYER, "start-on-prepared", _shouldAutoplay ? 1 : 0);
+        
+//        // Set playback rate:
+//        ijkmp_set_playback_rate(_mediaPlayer, 5.0f);
+//        //设置0，就是变速不变调的状态，设置1，就为变速变调的状态。
+//        ijkmp_set_option_int(_mediaPlayer, IJKMP_OPT_CATEGORY_PLAYER, "soundtouch", 0);
         /*///!!!
         // init video sink
         _glView = [[IJKSDLGLView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
