@@ -426,7 +426,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 -(void) setupMovieWriter {
     [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
     [_videoCamera addTarget:_movieWriter];
-    ///!!!_videoCamera.audioEncodingTarget = _movieWriter;
+    _videoCamera.audioEncodingTarget = _movieWriter;
     ///[_ijkMovie addTarget:_movieWriter];
 }
 
