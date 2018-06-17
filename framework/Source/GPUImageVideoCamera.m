@@ -266,10 +266,10 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
         [_captureSession addInput:audioInput];
     }
     audioOutput = [[AVCaptureAudioDataOutput alloc] init];
-    
+
     if ([_captureSession canAddOutput:audioOutput])
     {
-        [_captureSession addOutput:audioOutput];
+        ///!!![_captureSession addOutput:audioOutput];
     }
     else
     {
