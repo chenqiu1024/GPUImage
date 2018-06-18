@@ -438,8 +438,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 
 -(void) applicationDidBecomeActive:(id)sender {
     [self setupMovieWriter];
-    [_videoCamera resumeCameraCapture];
     [self startMovieWriteRecording];
+    [_videoCamera resumeCameraCapture];
 }
 
 -(void) applicationWillResignActive:(id)sender {
@@ -519,9 +519,6 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
     [_filter addTarget:_filterView];
     
-    [_videoCamera startCameraCapture];
-    [_videoCamera resumeCameraCapture];
-    
     [self installMovieNotificationObservers];
 #ifdef SourceVideoFileName
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:SourceVideoFileName]];
@@ -536,6 +533,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     
     [self setupMovieWriter];
     [self startMovieWriteRecording];
+    [_videoCamera startCameraCapture];
+    [_videoCamera resumeCameraCapture];
 }
 
 - (void)viewDidUnload

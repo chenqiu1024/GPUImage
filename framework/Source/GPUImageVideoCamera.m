@@ -205,11 +205,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     
     [videoOutput setSampleBufferDelegate:self queue:cameraProcessingQueue];
 	if ([_captureSession canAddOutput:videoOutput])
-    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ canAddOutput:%@ by _captureSession:%@, ", _captureSession, _captureSession);
+    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ canAddOutput(V):%@ by _captureSession:%@, ", videoOutput, _captureSession);
 		[_captureSession addOutput:videoOutput];
 	}
 	else
-	{NSLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addOutput:%@ by _captureSession:%@, ", _captureSession, _captureSession);
+	{NSLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addOutput(V):%@ by _captureSession:%@, ", videoOutput, _captureSession);
 		NSLog(@"Couldn't add video output");
         return nil;
 	}
@@ -224,7 +224,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 //        conn.videoMinFrameDuration = CMTimeMake(1,60);
 //    if (conn.supportsVideoMaxFrameDuration)
 //        conn.videoMaxFrameDuration = CMTimeMake(1,60);
-    
+    NSLog(@"#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output");
     [_captureSession commitConfiguration];
     
 	return self;
@@ -268,15 +268,15 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     audioOutput = [[AVCaptureAudioDataOutput alloc] init];
 
     if ([_captureSession canAddOutput:audioOutput])
-    {
-        ///!!![_captureSession addOutput:audioOutput];
+    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ canAddOutput(A):%@ by _captureSession:%@, ", audioOutput, _captureSession);
+        [_captureSession addOutput:audioOutput];
     }
     else
-    {
+    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addOutput(A):%@ by _captureSession:%@, ", audioOutput, _captureSession);
         NSLog(@"Couldn't add audio output");
     }
     [audioOutput setSampleBufferDelegate:self queue:audioProcessingQueue];
-    
+    NSLog(@"#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output");
     [_captureSession commitConfiguration];
     return YES;
 }
@@ -296,7 +296,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     return YES;
 }
 
-- (void)removeInputsAndOutputs;
+- (void)removeInputsAndOutputs
 {
     [_captureSession beginConfiguration];
     if (videoInput) {
@@ -391,7 +391,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:backFacingCamera error:&error];
     
     if (newVideoInput != nil)
-    {
+    {NSLog(@"#VideoCapture# rotateCamera");
         [_captureSession beginConfiguration];
         
         [_captureSession removeInput:videoInput];
@@ -868,7 +868,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 #pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput");
+{NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput = %@", (captureOutput == audioOutput) ? @"A":@"V");
     if (!self.captureSession.isRunning)
     {
         return;
