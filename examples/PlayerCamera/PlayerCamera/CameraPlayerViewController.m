@@ -453,7 +453,11 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 }
 
 - (BOOL) prefersStatusBarHidden {
-    return YES;
+    return NO;
+}
+
+-(UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 -(void) dismissSelf {
@@ -487,6 +491,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     
     self.navItem.title = [self.sourceVideoFile lastPathComponent];
     
+    [self setNeedsStatusBarAppearanceUpdate];
+
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
