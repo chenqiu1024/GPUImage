@@ -868,9 +868,9 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 #pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput = %@", (captureOutput == audioOutput) ? @"A":@"V");
+{//NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput = %@", (captureOutput == audioOutput) ? @"A":@"V");
     if (!self.captureSession.isRunning)
-    {
+    {NSLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#0");
         return;
     }
     else if (captureOutput == audioOutput)
@@ -880,7 +880,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     else
     {
         if (dispatch_semaphore_wait(frameRenderingSemaphore, DISPATCH_TIME_NOW) != 0)
-        {
+        {NSLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#1");
             return;
         }
         
