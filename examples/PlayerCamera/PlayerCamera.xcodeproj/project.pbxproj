@@ -607,17 +607,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = QBAB3CS86A;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
-					"../../framework/**",
+					"../../framework/Source/iOS/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
 					"../../../ijkplayer_iOS/ijkmedia/**",
 					../../../ijkplayer_iOS/ios/build/universal/include,
 					"PlayerCamera/freetype-2.9.1/**",
+					../../framework/Source,
 				);
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -628,7 +631,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_STYLE = "non-global";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -637,16 +643,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				DEVELOPMENT_TEAM = QBAB3CS86A;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
-					"../../framework/**",
+					"../../framework/Source/iOS/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
 					"../../../ijkplayer_iOS/ijkmedia/**",
 					../../../ijkplayer_iOS/ios/build/universal/include,
 					"PlayerCamera/freetype-2.9.1/**",
+					../../framework/Source,
 				);
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -657,7 +666,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_STYLE = "non-global";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
