@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CaptureViewController.h
 //  CartoonShow
 //
 //  Created by DOM QIU on 2018/6/20.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface CaptureViewController : UIViewController
 
 
 @end

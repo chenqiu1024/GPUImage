@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5216EF2C20DA8EE300BCB654 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5216EF2B20DA8EE300BCB654 /* AppDelegate.m */; };
-		5216EF2F20DA8EE300BCB654 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5216EF2E20DA8EE300BCB654 /* ViewController.m */; };
+		5216EF2F20DA8EE300BCB654 /* CaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5216EF2E20DA8EE300BCB654 /* CaptureViewController.m */; };
 		5216EF3220DA8EE300BCB654 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5216EF3020DA8EE300BCB654 /* Main.storyboard */; };
 		5216EF3420DA8EE600BCB654 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5216EF3320DA8EE600BCB654 /* Assets.xcassets */; };
 		5216EF3720DA8EE600BCB654 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5216EF3520DA8EE600BCB654 /* LaunchScreen.storyboard */; };
@@ -127,8 +127,8 @@
 		5216EF2720DA8EE300BCB654 /* CartoonShow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CartoonShow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5216EF2A20DA8EE300BCB654 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5216EF2B20DA8EE300BCB654 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		5216EF2D20DA8EE300BCB654 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		5216EF2E20DA8EE300BCB654 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5216EF2D20DA8EE300BCB654 /* CaptureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureViewController.h; sourceTree = "<group>"; };
+		5216EF2E20DA8EE300BCB654 /* CaptureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptureViewController.m; sourceTree = "<group>"; };
 		5216EF3120DA8EE300BCB654 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5216EF3320DA8EE600BCB654 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5216EF3620DA8EE600BCB654 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -232,8 +232,8 @@
 				5216EF8320DA936300BCB654 /* IJKGPUImage */,
 				5216EF2A20DA8EE300BCB654 /* AppDelegate.h */,
 				5216EF2B20DA8EE300BCB654 /* AppDelegate.m */,
-				5216EF2D20DA8EE300BCB654 /* ViewController.h */,
-				5216EF2E20DA8EE300BCB654 /* ViewController.m */,
+				5216EF2D20DA8EE300BCB654 /* CaptureViewController.h */,
+				5216EF2E20DA8EE300BCB654 /* CaptureViewController.m */,
 				5216EF3020DA8EE300BCB654 /* Main.storyboard */,
 				5216EF3320DA8EE600BCB654 /* Assets.xcassets */,
 				5216EF3520DA8EE600BCB654 /* LaunchScreen.storyboard */,
@@ -507,7 +507,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5216EF2F20DA8EE300BCB654 /* ViewController.m in Sources */,
+				5216EF2F20DA8EE300BCB654 /* CaptureViewController.m in Sources */,
 				5216EF9820DA962600BCB654 /* UIImage+Blur.m in Sources */,
 				5216EF3A20DA8EE600BCB654 /* main.m in Sources */,
 				5216EF8B20DA93C100BCB654 /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,

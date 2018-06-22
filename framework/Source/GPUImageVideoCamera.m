@@ -1,6 +1,7 @@
 #import "GPUImageVideoCamera.h"
 #import "GPUImageMovieWriter.h"
 #import "GPUImageFilter.h"
+#import "LogManager.h"
 
 void setColorConversion601( GLfloat conversionMatrix[9] )
 {
@@ -205,11 +206,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     
     [videoOutput setSampleBufferDelegate:self queue:cameraProcessingQueue];
 	if ([_captureSession canAddOutput:videoOutput])
-    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ canAddOutput(V):%@ by _captureSession:%@, ", videoOutput, _captureSession);
-		[_captureSession addOutput:videoOutput];
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x%ld by _captureSession:0x%ld,  in %s %s %d", videoOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
+        [_captureSession addOutput:videoOutput];
 	}
 	else
-	{NSLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addOutput(V):%@ by _captureSession:%@, ", videoOutput, _captureSession);
+	{DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addVideoOutput(V):0x%ld by _captureSession:0x%ld,  in %s %s %d", videoOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
 		NSLog(@"Couldn't add video output");
         return nil;
 	}
@@ -224,7 +225,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 //        conn.videoMinFrameDuration = CMTimeMake(1,60);
 //    if (conn.supportsVideoMaxFrameDuration)
 //        conn.videoMaxFrameDuration = CMTimeMake(1,60);
-    NSLog(@"#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output");
+    DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
     [_captureSession commitConfiguration];
     
 	return self;
@@ -268,15 +269,15 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     audioOutput = [[AVCaptureAudioDataOutput alloc] init];
 
     if ([_captureSession canAddOutput:audioOutput])
-    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ canAddOutput(A):%@ by _captureSession:%@, ", audioOutput, _captureSession);
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x%ld by _captureSession:0x%ld,  in %s %s %d", audioOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
         [_captureSession addOutput:audioOutput];
     }
     else
-    {NSLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addOutput(A):%@ by _captureSession:%@, ", audioOutput, _captureSession);
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addAudioOutput(A):0x%ld by _captureSession:0x%ld,  in %s %s %d", audioOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
         NSLog(@"Couldn't add audio output");
     }
     [audioOutput setSampleBufferDelegate:self queue:audioProcessingQueue];
-    NSLog(@"#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output");
+    DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
     [_captureSession commitConfiguration];
     return YES;
 }
@@ -335,18 +336,18 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 }
 
 - (void)startCameraCapture;
-{NSLog(@"#VideoCapture# GPUImageVideoCamera$startCameraCapture");
+{DoctorLog(@"#VideoCapture# GPUImageVideoCamera$startCameraCapture in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
     if (![_captureSession isRunning])
-    {NSLog(@"#VideoCapture# GPUImageVideoCamera$startCameraCapture : startRunning");
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera$startCameraCapture : startRunning in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
         startingCaptureTime = [NSDate date];
 		[_captureSession startRunning];
 	};
 }
 
 - (void)stopCameraCapture;
-{NSLog(@"#VideoCapture# GPUImageVideoCamera$stopCameraCapture");
+{DoctorLog(@"#VideoCapture# GPUImageVideoCamera$stopCameraCapture in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
     if ([_captureSession isRunning])
-    {NSLog(@"#VideoCapture# GPUImageVideoCamera$stopCameraCapture : stopRunning");
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera$stopCameraCapture : stopRunning in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
         [_captureSession stopRunning];
     }
 }
@@ -391,7 +392,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:backFacingCamera error:&error];
     
     if (newVideoInput != nil)
-    {NSLog(@"#VideoCapture# rotateCamera");
+    {DoctorLog(@"#VideoCapture# rotateCamera in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
         [_captureSession beginConfiguration];
         
         [_captureSession removeInput:videoInput];
@@ -868,9 +869,9 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 #pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput = %@", (captureOutput == audioOutput) ? @"A":@"V");
+{//DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput = %@", (captureOutput == audioOutput) ? @"A":@ in %s %s %d"V", [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     if (!self.captureSession.isRunning)
-    {
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#0 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
         return;
     }
     else if (captureOutput == audioOutput)
@@ -880,7 +881,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     else
     {
         if (dispatch_semaphore_wait(frameRenderingSemaphore, DISPATCH_TIME_NOW) != 0)
-        {
+        {DoctorLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
             return;
         }
         
