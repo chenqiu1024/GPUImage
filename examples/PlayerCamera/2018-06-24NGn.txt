@@ -1,0 +1,96 @@
+[09:35:18]-#VideoCapture# _captureSession(0x17000c630) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 110
+[09:35:18]-#VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x6176350848 by _captureSession:0x6174066224,  in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 209
+[09:35:18]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 228
+[09:35:18]-#VideoCapture# _captureSession(0x17000c630) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[09:35:18]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6241373536 by _captureSession:0x6174066224,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[09:35:18]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[09:35:18]-#VideoCapture# GPUImageVideoCamera$startCameraCapture in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 339
+[09:35:18]-#VideoCapture# GPUImageVideoCamera$startCameraCapture : startRunning in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 341
+[19:16:41]-#VideoCapture# _captureSession(0x170201ec0) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 110
+[19:16:41]-#VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x6176369088 by _captureSession:0x6176120512,  in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 209
+[19:16:41]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 228
+[19:16:41]-#VideoCapture# _captureSession(0x170201ec0) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[19:16:41]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6243390528 by _captureSession:0x6176120512,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[19:16:41]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[19:16:41]-#VideoCapture# GPUImageVideoCamera$startCameraCapture in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 339
+[19:16:41]-#VideoCapture# GPUImageVideoCamera$startCameraCapture : startRunning in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 341
+[19:43:00]-#VideoCapture# _captureSession(0x170201ec0) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+[19:43:02]-#VideoCapture# _captureSession(0x170201ec0) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[19:43:02]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6178440992 by _captureSession:0x6176120512,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[19:43:02]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[20:27:16]-#VideoCapture# _captureSession(0x170201ec0) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+[20:27:32]-#VideoCapture# _captureSession(0x170201ec0) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[20:27:32]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6178439136 by _captureSession:0x6176120512,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[20:27:32]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[20:27:33]-#VideoCapture# _captureSession(0x170201ec0) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+[20:27:42]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 110
+[20:27:42]-#VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x6241295680 by _captureSession:0x6241154656,  in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 209
+[20:27:42]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 228
+[20:27:42]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[20:27:42]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6176304448 by _captureSession:0x6241154656,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[20:27:42]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[20:27:42]-#VideoCapture# GPUImageVideoCamera$startCameraCapture in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 339
+[20:27:42]-#VideoCapture# GPUImageVideoCamera$startCameraCapture : startRunning in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 341
+[20:28:32]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:28:32]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+[20:28:33]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[20:28:33]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6176317920 by _captureSession:0x6241154656,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[20:28:33]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[20:29:13]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+[20:29:14]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[20:29:14]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6176325696 by _captureSession:0x6241154656,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[20:29:14]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[20:29:15]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:29:15]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+[20:29:16]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[20:29:16]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6241361440 by _captureSession:0x6241154656,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[20:29:16]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[20:29:36]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:29:36]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:29:39]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:30:27]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:30:29]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:30:31]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:30:34]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:30:36]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:30:41]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:30:47]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:31:14]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:31:54]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:31:56]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:31:57]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:01]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:03]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:11]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+[20:32:12]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+[20:32:12]-#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x6241361664 by _captureSession:0x6241154656,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+[20:32:12]-#VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+[20:32:14]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:25]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:26]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:40]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:42]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:32:52]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:03]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:08]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:09]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:14]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:15]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:18]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:18]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:27]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:31]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:36]-#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 884
+[20:33:39]-#VideoCapture# _captureSession(0x174007660) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera removeAudioInputsAndOutputs] 289
+
+Half-NG
+110->209->228 -> 260-272-280 ->339->341
+NG
+289 ->260->272->280
+289 ->260->272->280 ->289
+OK
+110 ->208->228 ->260->272->280 ->339->341
+289->260->272->280
+289->260->272->280
+289->260->272->280
+
