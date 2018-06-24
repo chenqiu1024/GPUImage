@@ -69,7 +69,8 @@
 -(void) initMovieWriterWithDateTime:(NSDate*)dateTime size:(CGSize)size {
     if (_movieWriter)
     {
-        [self stopAndReleaseMovieWriter];
+        ///!!![self stopAndReleaseMovieWriter];
+        [self disassembleMovieWriter];
     }
     
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
@@ -87,14 +88,15 @@
     NSURL* movieURL = [NSURL fileURLWithPath:pathToMovie];
     _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:size];
     _movieWriter.encodingLiveVideo = YES;
-}
-
--(void) setupMovieWriter {
-    [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
+    
     [_videoCamera addTarget:_movieWriter];
     [_videoCamera addTarget:_filter];
     _videoCamera.audioEncodingTarget = _movieWriter;
     ///[_ijkMovie addTarget:_movieWriter];
+}
+
+-(void) setupMovieWriter {
+    [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
 }
 
 -(void) startMovieWriteRecording {
@@ -103,10 +105,10 @@
 
 #pragma mark - View lifecycle
 
--(void) applicationDidBecomeActive:(id)sender {
+-(void) applicationDidBecomeActive:(id)sender {/*///!!!
     [self setupMovieWriter];
     [self startMovieWriteRecording];
-    [_videoCamera resumeCameraCapture];
+    [_videoCamera resumeCameraCapture];//*/
 }
 
 -(void) applicationWillResignActive:(id)sender {

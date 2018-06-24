@@ -107,7 +107,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     
 	// Create the capture session
 	_captureSession = [[AVCaptureSession alloc] init];
-	
+	DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     [_captureSession beginConfiguration];
     
 	// Add the video input	
@@ -206,11 +206,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     
     [videoOutput setSampleBufferDelegate:self queue:cameraProcessingQueue];
 	if ([_captureSession canAddOutput:videoOutput])
-    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x%ld by _captureSession:0x%ld,  in %s %s %d", videoOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x%lx by _captureSession:0x%lx,  in %s %s %d", videoOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
         [_captureSession addOutput:videoOutput];
 	}
 	else
-	{DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addVideoOutput(V):0x%ld by _captureSession:0x%ld,  in %s %s %d", videoOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
+	{DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addVideoOutput(V):0x%lx by _captureSession:0x%lx,  in %s %s %d", videoOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
 		NSLog(@"Couldn't add video output");
         return nil;
 	}
@@ -257,7 +257,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 {
     if (audioOutput)
         return NO;
-    
+    DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     [_captureSession beginConfiguration];
     
     _microphone = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
@@ -269,11 +269,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     audioOutput = [[AVCaptureAudioDataOutput alloc] init];
 
     if ([_captureSession canAddOutput:audioOutput])
-    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x%ld by _captureSession:0x%ld,  in %s %s %d", audioOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x%lx by _captureSession:0x%lx,  in %s %s %d", audioOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
         [_captureSession addOutput:audioOutput];
     }
     else
-    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addAudioOutput(A):0x%ld by _captureSession:0x%ld,  in %s %s %d", audioOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera $ CANNOT addAudioOutput(A):0x%lx by _captureSession:0x%lx,  in %s %s %d", audioOutput.hash, _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
         NSLog(@"Couldn't add audio output");
     }
     [audioOutput setSampleBufferDelegate:self queue:audioProcessingQueue];
@@ -286,7 +286,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 {
     if (!audioOutput)
         return NO;
-    
+    DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     [_captureSession beginConfiguration];
     [_captureSession removeInput:audioInput];
     [_captureSession removeOutput:audioOutput];
@@ -294,11 +294,12 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     audioOutput = nil;
     _microphone = nil;
     [_captureSession commitConfiguration];
+    DoctorLog(@"#VideoCapture# _captureSession(0x%lx) commitConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     return YES;
 }
 
 - (void)removeInputsAndOutputs
-{
+{DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     [_captureSession beginConfiguration];
     if (videoInput) {
         [_captureSession removeInput:videoInput];
@@ -315,6 +316,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
         _microphone = nil;
     }
     [_captureSession commitConfiguration];
+    DoctorLog(@"#VideoCapture# _captureSession(0x%lx) commitConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
 }
 
 #pragma mark -
@@ -392,7 +394,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:backFacingCamera error:&error];
     
     if (newVideoInput != nil)
-    {DoctorLog(@"#VideoCapture# rotateCamera in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
+    {DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
         [_captureSession beginConfiguration];
         
         [_captureSession removeInput:videoInput];
@@ -407,6 +409,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
         }
         //captureSession.sessionPreset = oriPreset;
         [_captureSession commitConfiguration];
+        DoctorLog(@"#VideoCapture# _captureSession(0x%lx) commitConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     }
     
     _inputCamera = backFacingCamera;
@@ -455,13 +458,14 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 }
 
 - (void)setCaptureSessionPreset:(NSString *)captureSessionPreset;
-{
+{DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
 	[_captureSession beginConfiguration];
 	
 	_captureSessionPreset = captureSessionPreset;
 	[_captureSession setSessionPreset:_captureSessionPreset];
 	
 	[_captureSession commitConfiguration];
+    DoctorLog(@"#VideoCapture# _captureSession(0x%lx) commitConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
 }
 
 - (void)setFrameRate:(int32_t)frameRate;
