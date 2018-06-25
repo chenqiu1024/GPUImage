@@ -61,7 +61,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 #pragma mark -
 #pragma mark Initialization and teardown
 
-- (id)init;
+- (id)init
 {
     if (!(self = [self initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack]))
     {
@@ -918,7 +918,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
         [self removeAudioInputsAndOutputs];
         addedAudioInputsDueToEncodingTarget = NO;
     }
-    
+
     [super setAudioEncodingTarget:newValue];
 }
 

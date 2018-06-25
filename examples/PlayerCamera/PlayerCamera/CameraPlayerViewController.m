@@ -402,7 +402,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 
 -(void) disassembleMovieWriter {
     [_videoCamera removeTarget:_movieWriter];
-    _videoCamera.audioEncodingTarget = nil;
+    ///!!!_videoCamera.audioEncodingTarget = nil;
     [self stopAndReleaseMovieWriter];
 }
 
