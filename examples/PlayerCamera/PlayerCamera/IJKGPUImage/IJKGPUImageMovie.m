@@ -115,6 +115,37 @@ static SDL_Aout* func_open_audio_output_empty(IJKFF_Pipeline *pipeline, FFPlayer
     return emptyAout;
 }
 
+void fillSinWaveS16LSB(Uint8* dst, int stride, int sampleCount, int sampleRate, int frequency, float normalizedMaxAmptitude) {
+    static long totalSamples = 0;
+//    totalSamples %= sampleRate;
+    int16_t* pDst = (int16_t*)dst;
+    for (int i=0; i<sampleCount; ++i)
+    {
+        int16_t amptitude = 32767.f * normalizedMaxAmptitude * sinf(2.f * M_PI * (totalSamples++) * frequency / sampleRate);
+        *pDst = amptitude;
+        pDst += stride;
+    }
+}
+
+static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
+    NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
+    if (NULL == stream) return;
+    
+    switch (audioParams.format)
+    {
+        case AUDIO_S16LSB:
+        {
+            for (int i=0; i<audioParams.channels; ++i)
+            {
+//                fillSinWaveS16LSB(stream + 2*i, audioParams.channels, audioParams.samples, audioParams.freq, 300 + 500*i, 0.5f);
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+
 IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute)
 {
     IjkMediaPlayer *mp = ijkmp_create(msg_loop);
@@ -132,6 +163,7 @@ IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute)
     {
         mp->ffplayer->pipeline->func_open_audio_output = func_open_audio_output_empty;
     }
+    mp->ffplayer->audioCallback = audioPlayCallback;///#AudioCallback#
     return mp;
     
 fail:
