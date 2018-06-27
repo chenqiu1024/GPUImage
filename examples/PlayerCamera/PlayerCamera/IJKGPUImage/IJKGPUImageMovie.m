@@ -131,6 +131,8 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
     NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream) return;
     
+    IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
+    
     switch (audioParams.format)
     {
         case AUDIO_S16LSB:
@@ -146,7 +148,11 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
     }
 }
 
-IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute)
+static void releaseAudioCallbackUserData(void* userdata) {
+    __unused id weakObj = (__bridge_transfer id)userdata;
+}
+
+IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute, void* audioCallbackUserData)
 {
     IjkMediaPlayer *mp = ijkmp_create(msg_loop);
     if (!mp)
@@ -164,6 +170,8 @@ IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute)
         mp->ffplayer->pipeline->func_open_audio_output = func_open_audio_output_empty;
     }
     mp->ffplayer->audioCallback = audioPlayCallback;///#AudioCallback#
+    mp->ffplayer->audioCallbackUserData = audioCallbackUserData;
+    mp->ffplayer->audioCallbackUserDataRelease = releaseAudioCallbackUserData;
     return mp;
     
 fail:
@@ -632,7 +640,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         _urlString = aUrlString;
         
         // init player
-        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted);
+        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, (__bridge_retained void*)self);
         _msgPool = [[IJKFFMoviePlayerMessagePool alloc] init];
         IJKWeakHolder *weakHolder = [IJKWeakHolder new];
         weakHolder.object = self;
