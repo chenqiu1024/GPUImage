@@ -15,4 +15,17 @@
 #define ThumbnailDirectory @"thumbs"
 #define VideoDirectory @"videos"
 
+// IFLY
+#define APPID_VALUE           @"5b2a5200"
+#define URL_VALUE             @""                 // url
+#define TIMEOUT_VALUE         @"20000"            // timeout, Unit:ms
+#define BEST_URL_VALUE        @"1"                // best_search_url
+
+#define SEARCH_AREA_VALUE     @"Hefei,Anhui"
+#define ASR_PTT_VALUE         @"1"
+#define VAD_BOS_VALUE         @"5000"
+#define VAD_EOS_VALUE         @"1800"
+#define PLAIN_RESULT_VALUE    @"1"
+#define ASR_SCH_VALUE         @"1"
+
 #endif /* PrefixHeader_pch */
