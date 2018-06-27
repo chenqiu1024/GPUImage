@@ -36,6 +36,7 @@
 		52D32C2E20E3DE6500E93331 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D32C2D20E3DE6400E93331 /* AudioToolbox.framework */; };
 		52D32C3020E3DF3E00E93331 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D32C2F20E3DF3E00E93331 /* CoreTelephony.framework */; };
 		52D32C3220E3DF5D00E93331 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D32C3120E3DF5C00E93331 /* SystemConfiguration.framework */; };
+		52D32C3920E3F8EE00E93331 /* ISRDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D32C3720E3F8EE00E93331 /* ISRDataHelper.m */; };
 		52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BBB7962F20B2F6E90059C1DA /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB7962B20B2F6E80059C1DA /* libbz2.tbd */; };
 		BBB7963120B2F6EE0059C1DA /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB7963020B2F6EE0059C1DA /* libiconv.tbd */; };
@@ -154,6 +155,8 @@
 		52D32C2D20E3DE6400E93331 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		52D32C2F20E3DF3E00E93331 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		52D32C3120E3DF5C00E93331 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		52D32C3720E3F8EE00E93331 /* ISRDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISRDataHelper.m; path = SpeechRecognizer/ISRDataHelper.m; sourceTree = "<group>"; };
+		52D32C3820E3F8EE00E93331 /* ISRDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISRDataHelper.h; path = SpeechRecognizer/ISRDataHelper.h; sourceTree = "<group>"; };
 		52FAF1C52067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImage_Vout_iOS_OpenGLES2.h; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.h; sourceTree = "<group>"; };
 		52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IJKGPUImage_Vout_iOS_OpenGLES2.m; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.m; sourceTree = "<group>"; };
 		BBB7962B20B2F6E80059C1DA /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
@@ -216,6 +219,7 @@
 		520DA6D61ED7248C009E4705 /* PlayerCamera */ = {
 			isa = PBXGroup;
 			children = (
+				52D32C3320E3F88D00E93331 /* SpeechRecognizer */,
 				524F116520B1B67B0045795F /* Utils */,
 				520DA6DA1ED7248C009E4705 /* AppDelegate.h */,
 				520DA6DB1ED7248C009E4705 /* AppDelegate.m */,
@@ -307,6 +311,15 @@
 				52CB035A20550F0F00329861 /* IJKMediaFrameworkTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		52D32C3320E3F88D00E93331 /* SpeechRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				52D32C3820E3F8EE00E93331 /* ISRDataHelper.h */,
+				52D32C3720E3F8EE00E93331 /* ISRDataHelper.m */,
+			);
+			name = SpeechRecognizer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -468,6 +481,7 @@
 				524F116720B1B6E40045795F /* UIImage+Blur.m in Sources */,
 				520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */,
 				52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,
+				52D32C3920E3F8EE00E93331 /* ISRDataHelper.m in Sources */,
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
 				524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,

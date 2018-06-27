@@ -32,6 +32,9 @@
 @class IJKNotificationManager;
 @class IJKMediaUrlOpenData;
 
+#import "IFlyMSC/IFlyMSC.h"
+#import "ISRDataHelper.h"
+
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
@@ -48,7 +51,7 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 
 #pragma mark    IJKGPUImageMovie()
 
-@interface IJKGPUImageMovie()
+@interface IJKGPUImageMovie() <IFlySpeechRecognizerDelegate>
 {
     CGSize _framebufferSize;
     float _FPS;
@@ -105,6 +108,9 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 @property (nonatomic, copy) SnapshotCompletionHandler snapshotCompletionHandler;
 @property (nonatomic, assign) float snapshotDestTime;
 
+@property (nonatomic, strong) IFlySpeechRecognizer *iFlySpeechRecognizer;//Recognition conrol without view
+@property (nonatomic, copy) NSString* speechRecognizerResultString;
+
 @end
 
 #pragma mark    ijkgpuplayer
@@ -137,6 +143,21 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
     {
         case AUDIO_S16LSB:
         {
+            int16_t* singleChannelData = (int16_t*)malloc(audioParams.samples * 2);
+            int16_t *pDst = singleChannelData, *pSrc = (int16_t*)stream;
+            for (int i=0; i<audioParams.samples; ++i)
+            {
+                *(pDst++) = *pSrc;
+                pSrc += audioParams.channels;
+            }
+            NSData* audioBuffer = [NSData dataWithBytes:singleChannelData length:(audioParams.samples * 2)];
+            int ret = [ijkgpuMovie.iFlySpeechRecognizer writeAudio:audioBuffer];
+            if (!ret)
+            {
+                [ijkgpuMovie.iFlySpeechRecognizer stopListening];
+            }
+            free(singleChannelData);
+            
             for (int i=0; i<audioParams.channels; ++i)
             {
 //                fillSinWaveS16LSB(stream + 2*i, audioParams.channels, audioParams.samples, audioParams.freq, 300 + 500*i, 0.5f);
@@ -152,7 +173,7 @@ static void releaseAudioCallbackUserData(void* userdata) {
     __unused id weakObj = (__bridge_transfer id)userdata;
 }
 
-IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute, void* audioCallbackUserData)
+IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute, SDL_AudioCallback audioCallback, void* audioCallbackUserData, void(*audioCallbackUserDataRelease)(void*))
 {
     IjkMediaPlayer *mp = ijkmp_create(msg_loop);
     if (!mp)
@@ -171,7 +192,7 @@ IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute, void* audi
     }
     mp->ffplayer->audioCallback = audioPlayCallback;///#AudioCallback#
     mp->ffplayer->audioCallbackUserData = audioCallbackUserData;
-    mp->ffplayer->audioCallbackUserDataRelease = releaseAudioCallbackUserData;
+    mp->ffplayer->audioCallbackUserDataRelease = audioCallbackUserDataRelease;
     return mp;
     
 fail:
@@ -560,6 +581,78 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     });
 }
 
+#pragma mark    IFLY
+-(void) initIflyVoiceRecognizer
+{
+    //recognition singleton without view
+    if (_iFlySpeechRecognizer == nil)
+    {
+        _iFlySpeechRecognizer = [IFlySpeechRecognizer sharedInstance];
+    }
+    [_iFlySpeechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
+    
+    //set recognition domain
+    [_iFlySpeechRecognizer setParameter:@"iat" forKey:[IFlySpeechConstant IFLY_DOMAIN]];
+    _iFlySpeechRecognizer.delegate = self;
+    
+    if (_iFlySpeechRecognizer != nil)
+    {
+        //set timeout of recording
+        [_iFlySpeechRecognizer setParameter:@"30000" forKey:[IFlySpeechConstant SPEECH_TIMEOUT]];
+        //set VAD timeout of end of speech(EOS)
+        [_iFlySpeechRecognizer setParameter:@"3000" forKey:[IFlySpeechConstant VAD_EOS]];
+        //set VAD timeout of beginning of speech(BOS)
+        [_iFlySpeechRecognizer setParameter:@"3000" forKey:[IFlySpeechConstant VAD_BOS]];
+        //set network timeout
+        [_iFlySpeechRecognizer setParameter:@"20000" forKey:[IFlySpeechConstant NET_TIMEOUT]];
+        
+        //set sample rate, 16K as a recommended option
+        [_iFlySpeechRecognizer setParameter:@"16000" forKey:[IFlySpeechConstant SAMPLE_RATE]];
+        
+        //set language
+        [_iFlySpeechRecognizer setParameter:@"en_us" forKey:[IFlySpeechConstant LANGUAGE]];
+        //set accent
+        [_iFlySpeechRecognizer setParameter:@"" forKey:[IFlySpeechConstant ACCENT]];
+        
+        //set whether or not to show punctuation in recognition results
+        [_iFlySpeechRecognizer setParameter:@"1" forKey:[IFlySpeechConstant ASR_PTT]];
+    }
+}
+
+/**
+ recognition session completion, which will be invoked no matter whether it exits error.
+ error.errorCode =
+ 0     success
+ other fail
+ **/
+- (void) onCompleted:(IFlySpeechError *) error
+{
+    NSString* text = [NSString stringWithFormat:@"Error：%d %@", error.errorCode,error.errorDesc];
+    NSLog(@"#IFLY# onCompleted :%@",text);
+}
+
+/**
+ result callback of recognition without view
+ results：recognition results
+ isLast：whether or not this is the last result
+ **/
+- (void) onResults:(NSArray *) results isLast:(BOOL)isLast
+{
+    NSMutableString* resultString = [[NSMutableString alloc] init];
+    NSDictionary* dic = results[0];
+    
+    for(NSString* key in dic)
+    {
+        [resultString appendFormat:@"%@",key];
+    }
+    
+    NSString* resultFromJson = [ISRDataHelper stringFromJson:resultString];
+    
+    self.speechRecognizerResultString = [NSString stringWithFormat:@"%@%@", self.speechRecognizerResultString, resultFromJson];
+//    NSLog(@"#IFLY# resultFromJson=%@",resultFromJson);
+    NSLog(@"#IFLY# isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
+}
+
 #pragma mark    Transplant from IJKFFMoviePlayerController
 
 - (id)initWithContentURL:(NSURL *)aUrl muted:(BOOL)muted
@@ -640,7 +733,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         _urlString = aUrlString;
         
         // init player
-        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, (__bridge_retained void*)self);
+        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, audioPlayCallback, (__bridge_retained void*)self, releaseAudioCallbackUserData);
         _msgPool = [[IJKFFMoviePlayerMessagePool alloc] init];
         IJKWeakHolder *weakHolder = [IJKWeakHolder new];
         weakHolder.object = self;
@@ -693,6 +786,18 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         
         _notificationManager = [[IJKNotificationManager alloc] init];
         [self registerApplicationObservers];
+        
+        // IFLY:
+        if(_iFlySpeechRecognizer == nil)
+        {
+            [self initIflyVoiceRecognizer];
+        }
+        
+        [_iFlySpeechRecognizer setDelegate:self];
+        [_iFlySpeechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
+        [_iFlySpeechRecognizer setParameter:IFLY_AUDIO_SOURCE_STREAM forKey:@"audio_source"];    //Set audio stream as audio source,which requires the developer import audio data into the recognition control by self through "writeAudio:".
+        BOOL ret  = [_iFlySpeechRecognizer startListening];
+        
     }
     return self;
 }
@@ -954,6 +1059,7 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
     [self unregisterApplicationObservers];
     [self setScreenOn:NO];
     
+    
     [self performSelectorInBackground:@selector(shutdownWaitStop:) withObject:self];
 }
 
@@ -989,6 +1095,9 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
 
 - (void)didShutdown
 {
+    [_iFlySpeechRecognizer cancel];
+    [_iFlySpeechRecognizer setDelegate:nil];
+    [_iFlySpeechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
     NSLog(@"IJKGPUImageMovie didShutdown");
 }
 
