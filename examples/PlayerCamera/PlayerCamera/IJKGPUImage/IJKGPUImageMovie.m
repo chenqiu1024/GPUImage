@@ -629,7 +629,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 {
     NSString* text = [NSString stringWithFormat:@"Error：%d %@", error.errorCode,error.errorDesc];
     NSLog(@"#IFLY# onCompleted :%@",text);
-    [_iFlySpeechRecognizer startListening];
+    if (!error || error.errorCode != 20001)
+        [_iFlySpeechRecognizer startListening];
 }
 
 /**
@@ -734,7 +735,15 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         _urlString = aUrlString;
         
         // init player
-        _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, audioPlayCallback, (__bridge_retained void*)self, releaseAudioCallbackUserData);
+        if (muted)
+        {
+            _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, NULL, NULL, NULL);
+        }
+        else
+        {
+            _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, audioPlayCallback, (__bridge_retained void*)self, releaseAudioCallbackUserData);
+        }
+        
         _msgPool = [[IJKFFMoviePlayerMessagePool alloc] init];
         IJKWeakHolder *weakHolder = [IJKWeakHolder new];
         weakHolder.object = self;
@@ -788,17 +797,19 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         _notificationManager = [[IJKNotificationManager alloc] init];
         [self registerApplicationObservers];
         
-        // IFLY:
-        if(_iFlySpeechRecognizer == nil)
+        if (!muted)
         {
-            [self initIflyVoiceRecognizer];
+            // IFLY:
+            if(_iFlySpeechRecognizer == nil)
+            {
+                [self initIflyVoiceRecognizer];
+            }
+            
+            [_iFlySpeechRecognizer setDelegate:self];
+            [_iFlySpeechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
+            [_iFlySpeechRecognizer setParameter:IFLY_AUDIO_SOURCE_STREAM forKey:@"audio_source"];    //Set audio stream as audio source,which requires the developer import audio data into the recognition control by self through "writeAudio:".
+            [_iFlySpeechRecognizer startListening];
         }
-        
-        [_iFlySpeechRecognizer setDelegate:self];
-        [_iFlySpeechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
-        [_iFlySpeechRecognizer setParameter:IFLY_AUDIO_SOURCE_STREAM forKey:@"audio_source"];    //Set audio stream as audio source,which requires the developer import audio data into the recognition control by self through "writeAudio:".
-        BOOL ret  = [_iFlySpeechRecognizer startListening];
-        
     }
     return self;
 }
