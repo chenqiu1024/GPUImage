@@ -816,6 +816,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
             if (_iFlyFaceDetector == nil)
             {
                 _iFlyFaceDetector = [IFlyFaceDetector sharedInstance];
+                [_iFlyFaceDetector setParameter:@"1" forKey:@"align"];
+                [_iFlyFaceDetector setParameter:@"1" forKey:@"detect"];
             }
         }
     }
