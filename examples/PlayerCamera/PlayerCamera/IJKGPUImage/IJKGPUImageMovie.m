@@ -629,7 +629,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 {
     NSString* text = [NSString stringWithFormat:@"Error：%d %@", error.errorCode,error.errorDesc];
     NSLog(@"#IFLY# onCompleted :%@",text);
-    BOOL ret  = [_iFlySpeechRecognizer startListening];
+    [_iFlySpeechRecognizer startListening];
 }
 
 /**
