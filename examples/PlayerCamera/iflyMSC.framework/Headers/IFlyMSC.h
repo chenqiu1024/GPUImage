@@ -9,7 +9,7 @@
 #ifndef MSC_IFlyMSC_h
 #define MSC_IFlyMSC_h
 
-#import "IFlyAudioSession.h"
+//#import "IFlyAudioSession.h"
 #import "IFlyContact.h"
 #import "IFlyDataUploader.h"
 #import "IFlyDebugLog.h"

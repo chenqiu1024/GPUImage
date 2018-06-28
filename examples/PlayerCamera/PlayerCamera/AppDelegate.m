@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "IFlyMSC/IFlyMSC.h"
+#import "iflyMSC/IFlyMSC.h"
 
 @interface AppDelegate ()
 

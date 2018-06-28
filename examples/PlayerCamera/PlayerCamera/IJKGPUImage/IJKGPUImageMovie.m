@@ -32,7 +32,8 @@
 @class IJKNotificationManager;
 @class IJKMediaUrlOpenData;
 
-#import "IFlyMSC/IFlyMSC.h"
+#import "iflyMSC/IFlyFaceDetector.h"
+#import "iflyMSC/IFlyFaceSDK.h"
 #import "ISRDataHelper.h"
 
 #include <stdio.h>
@@ -110,6 +111,8 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 
 @property (nonatomic, strong) IFlySpeechRecognizer *iFlySpeechRecognizer;//Recognition conrol without view
 @property (nonatomic, copy) NSString* speechRecognizerResultString;
+
+@property (nonatomic, strong) IFlyFaceDetector* iFlyFaceDetector;
 
 @end
 
@@ -800,7 +803,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         if (!muted)
         {
             // IFLY:
-            if(_iFlySpeechRecognizer == nil)
+            if (_iFlySpeechRecognizer == nil)
             {
                 [self initIflyVoiceRecognizer];
             }
@@ -809,6 +812,11 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
             [_iFlySpeechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
             [_iFlySpeechRecognizer setParameter:IFLY_AUDIO_SOURCE_STREAM forKey:@"audio_source"];    //Set audio stream as audio source,which requires the developer import audio data into the recognition control by self through "writeAudio:".
             [_iFlySpeechRecognizer startListening];
+            
+            if (_iFlyFaceDetector == nil)
+            {
+                _iFlyFaceDetector = [IFlyFaceDetector sharedInstance];
+            }
         }
     }
     return self;
@@ -2101,13 +2109,28 @@ int media_player_msg_loop(void* arg)
                 }
                 return;
             }
+            ///!!! IFLY Face Detection:
+            //获取灰度图像数据
+            if (_renderer && _renderer->func_getLuminanceDataPointer)
+            {
+                GLsizei width, height, length;
+                bool isCopied = false;
+                GLubyte* bytes = _renderer->func_getLuminanceDataPointer(&width, &height, &length, &isCopied, overlay);
+                NSData* faceImageData = [NSData dataWithBytes:bytes length:length];
+                NSString* faceDetectResult = [self.iFlyFaceDetector trackFrame:faceImageData withWidth:width height:height direction:0];
+                if (isCopied) free(bytes);
+                NSLog(@"#IFLY#FaceDetect# result:%@",faceDetectResult);
+            }
+            //*/
             if (!IJKGPUImage_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
-            /*For Debug:
+            /*
              CVPixelBufferRef pixel_buffer = SDL_VoutOverlayVideoToolBox_GetCVPixelBufferRef(overlay);///!!!For Debug
              UIImage* snapshotImage = [self.class imageFromCVPixelBufferRef:pixel_buffer];
              NSData* snapshotData = UIImageJPEGRepresentation(snapshotImage, 1.0f);
              NSString* snapshotPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:[NSString stringWithFormat:@"snapshot%03d.jpg", (int)_currentFrame++]];
              [snapshotData writeToFile:snapshotPath atomically:YES];
+             /*/
+            
              //*/
         }
         else
