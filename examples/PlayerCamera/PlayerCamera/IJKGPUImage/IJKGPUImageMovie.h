@@ -75,7 +75,10 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 
 @interface IJKGPUImageMovie : GPUImageOutput<IJKMediaPlayback>
 
-//@property (nonatomic, readonly) BOOL isUsedForSnapshot;
+@property (nonatomic, assign) BOOL mute;
+@property (nonatomic, assign) BOOL withFaceDetect;
+@property (nonatomic, assign) BOOL withSpeechRecognition;
+
 
 +(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler;
 

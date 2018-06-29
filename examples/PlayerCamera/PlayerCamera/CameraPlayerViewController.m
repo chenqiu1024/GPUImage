@@ -530,6 +530,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:SourceVideoFileName]];
 #else
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:self.sourceVideoFile];
+    _ijkMovie.withSpeechRecognition = YES;
+    _ijkMovie.withFaceDetect = YES;
 #endif
     _ijkMovie.delegate = self;
     [_ijkMovie setPauseInBackground:YES];

@@ -115,6 +115,8 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 
 @property (nonatomic, strong) IFlyFaceDetector* iFlyFaceDetector;
 
+-(void) initIflyVoiceRecognizer;
+
 @end
 
 #pragma mark    ijkgpuplayer
@@ -142,6 +144,14 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
     if (NULL == stream) return;
     
     IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
+    if (!ijkgpuMovie || !ijkgpuMovie.withSpeechRecognition || ijkgpuMovie.mute)
+        return;
+    
+    if (ijkgpuMovie.iFlySpeechRecognizer == nil)
+    {
+        [ijkgpuMovie initIflyVoiceRecognizer];
+    }
+    [ijkgpuMovie.iFlySpeechRecognizer startListening];
     
     switch (audioParams.format)
     {
@@ -504,6 +514,10 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 @synthesize asyncStat = _asyncStat;
 @synthesize cacheStat = _cacheStat;
 
+@synthesize mute;
+@synthesize withFaceDetect;
+@synthesize withSpeechRecognition;
+
 +(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
     IJKGPUImageMovie* ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:videoURL muted:YES];
 //    ijkMovie.isUsedForSnapshot = YES;
@@ -620,6 +634,10 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         
         //set whether or not to show punctuation in recognition results
         [_iFlySpeechRecognizer setParameter:@"1" forKey:[IFlySpeechConstant ASR_PTT]];
+        
+        [_iFlySpeechRecognizer setDelegate:self];
+        [_iFlySpeechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
+        [_iFlySpeechRecognizer setParameter:IFLY_AUDIO_SOURCE_STREAM forKey:@"audio_source"];    //Set audio stream as audio source,which requires the developer import audio data into the recognition control by self through "writeAudio:".
     }
 }
 
@@ -801,26 +819,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         _notificationManager = [[IJKNotificationManager alloc] init];
         [self registerApplicationObservers];
         
-        if (!muted)
-        {
-            // IFLY:
-            if (_iFlySpeechRecognizer == nil)
-            {
-                [self initIflyVoiceRecognizer];
-            }
-            
-            [_iFlySpeechRecognizer setDelegate:self];
-            [_iFlySpeechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
-            [_iFlySpeechRecognizer setParameter:IFLY_AUDIO_SOURCE_STREAM forKey:@"audio_source"];    //Set audio stream as audio source,which requires the developer import audio data into the recognition control by self through "writeAudio:".
-            [_iFlySpeechRecognizer startListening];
-
-            if (_iFlyFaceDetector == nil)
-            {
-                _iFlyFaceDetector = [IFlyFaceDetector sharedInstance];
-                [_iFlyFaceDetector setParameter:@"1" forKey:@"align"];
-                [_iFlyFaceDetector setParameter:@"1" forKey:@"detect"];
-            }
-        }
+        self.mute = muted;
     }
     return self;
 }
@@ -844,6 +843,15 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     _textRenderingProgram = nil;
     IJKGPUImage_GLES2_Renderer_reset(_renderer);
     IJKGPUImage_GLES2_Renderer_freeP(&_renderer);
+    
+    if (_iFlyFaceDetector)
+    {
+        [IFlyFaceDetector purgeSharedInstance];
+    }
+    if (_iFlySpeechRecognizer)
+    {
+        [_iFlySpeechRecognizer destroy];
+    }
     NSLog(@"#Crash# IJKGPUImageMovie dealloc");
 }
 
@@ -2112,10 +2120,16 @@ int media_player_msg_loop(void* arg)
                 }
                 return;
             }
-            ///!!! IFLY Face Detection:
-            //获取灰度图像数据
-            if (_renderer && _renderer->func_getLuminanceDataPointer)
+            
+            if (self.withFaceDetect && _renderer && _renderer->func_getLuminanceDataPointer)
             {
+                if (_iFlyFaceDetector == nil)
+                {
+                    _iFlyFaceDetector = [IFlyFaceDetector sharedInstance];
+                    [_iFlyFaceDetector setParameter:@"1" forKey:@"align"];
+                    [_iFlyFaceDetector setParameter:@"1" forKey:@"detect"];
+                }
+                
                 GLsizei width, height, length;
                 bool isCopied = false;
                 GLubyte* bytes = _renderer->func_getLuminanceDataPointer(&width, &height, &length, &isCopied, overlay);
