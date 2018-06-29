@@ -35,6 +35,7 @@
 #import "iflyMSC/IFlyFaceDetector.h"
 #import "iflyMSC/IFlyFaceSDK.h"
 #import "ISRDataHelper.h"
+#import "IFlyFaceDetectResultParser.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -812,7 +813,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
             [_iFlySpeechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
             [_iFlySpeechRecognizer setParameter:IFLY_AUDIO_SOURCE_STREAM forKey:@"audio_source"];    //Set audio stream as audio source,which requires the developer import audio data into the recognition control by self through "writeAudio:".
             [_iFlySpeechRecognizer startListening];
-            
+
             if (_iFlyFaceDetector == nil)
             {
                 _iFlyFaceDetector = [IFlyFaceDetector sharedInstance];
@@ -2119,9 +2120,10 @@ int media_player_msg_loop(void* arg)
                 bool isCopied = false;
                 GLubyte* bytes = _renderer->func_getLuminanceDataPointer(&width, &height, &length, &isCopied, overlay);
                 NSData* faceImageData = [NSData dataWithBytes:bytes length:length];
-                NSString* faceDetectResult = [self.iFlyFaceDetector trackFrame:faceImageData withWidth:width height:height direction:0];
+                NSString* faceDetectResultString = [self.iFlyFaceDetector trackFrame:faceImageData withWidth:width height:height direction:0];
                 if (isCopied) free(bytes);
-                NSLog(@"#IFLY#FaceDetect# result:%@",faceDetectResult);
+                NSArray* faceDetectResults = [IFlyFaceDetectResultParser parseFaceDetectResult:faceDetectResultString];
+                NSLog(@"#IFLY#FaceDetect# result:%@", faceDetectResults);
             }
             //*/
             if (!IJKGPUImage_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");

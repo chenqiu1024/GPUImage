@@ -107,7 +107,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     
 	// Create the capture session
 	_captureSession = [[AVCaptureSession alloc] init];
-	DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
+	DoctorLog(@"#VideoCapture# _captureSession(0x%lx) beginConfiguration in %s %s %d", (long)_captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     [_captureSession beginConfiguration];
     
 	// Add the video input	
