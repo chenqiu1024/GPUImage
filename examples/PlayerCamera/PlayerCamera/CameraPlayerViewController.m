@@ -466,6 +466,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [_videoCamera stopCameraCapture];
     [self removeMovieNotificationObservers];
     [self dismissViewControllerAnimated:YES completion:nil];
+    _ijkMovie = nil;
 }
 
 -(void) showSubtitleAndAudioSelector {
@@ -529,9 +530,9 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 #ifdef SourceVideoFileName
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:SourceVideoFileName]];
 #else
-    _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:self.sourceVideoFile];
-    _ijkMovie.withSpeechRecognition = YES;
-    _ijkMovie.withFaceDetect = YES;
+    _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:self.sourceVideoFile muted:NO];
+    //_ijkMovie.withSpeechRecognition = YES;
+    //_ijkMovie.withFaceDetect = YES;
 #endif
     _ijkMovie.delegate = self;
     [_ijkMovie setPauseInBackground:YES];
