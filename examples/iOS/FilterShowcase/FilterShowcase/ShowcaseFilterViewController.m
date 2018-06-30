@@ -1413,15 +1413,15 @@
         else if (filterType == GPUIMAGE_UIELEMENT)
         {
             GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
-            blendFilter.mix = 1.0;
+            blendFilter.mix = 0.5;
             
             NSDate *startTime = [NSDate date];
             
-            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 240.0f, 320.0f)];
+            UILabel *timeLabel = [[UILabel alloc] initWithFrame:filterView.bounds];
             timeLabel.font = [UIFont systemFontOfSize:17.0f];
             timeLabel.text = @"Time: 0.0 s";
             timeLabel.textAlignment = UITextAlignmentCenter;
-            timeLabel.backgroundColor = [UIColor clearColor];
+            timeLabel.backgroundColor = [UIColor whiteColor];
             timeLabel.textColor = [UIColor whiteColor];
 
             uiElementInput = [[GPUImageUIElement alloc] initWithView:timeLabel];
@@ -1429,6 +1429,7 @@
             [filter addTarget:blendFilter];
             [uiElementInput addTarget:blendFilter];
             
+            [blendFilter addTarget:filterView];
             [blendFilter addTarget:filterView];
 
             __unsafe_unretained GPUImageUIElement *weakUIElementInput = uiElementInput;
