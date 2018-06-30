@@ -8,12 +8,14 @@
 
 #import "CameraPlayerViewController.h"
 #import "IJKGPUImageMovie.h"
+#import "IFlyFaceDetectResultParser.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
+#pragma mark SubtitleAndAudioSelectionViewController
 static NSString* SelectionTableViewHeaderIdentifier = @"SelectionTableViewHeaderIdentifier";
 static NSString* SelectionTableViewCellIdentifier = @"SelectionTableViewCellIdentifier";
 static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewButtonCellIdentifier";
@@ -210,6 +212,87 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 
 @end
 
+#pragma mark    AccessoriesView
+@interface AccessoriesView : UIView
+{
+    CGContextRef context;
+}
+
+@property (nonatomic, strong) NSArray* arrPersons;
+
+@end
+
+@implementation AccessoriesView
+
+-(void) drawPointWithPoints:(NSArray*)arrPersons{
+    if (context)
+    {
+        CGFloat fillColor[4] = {0.f, 0.f, 0.f, 0.f};
+        CGContextSetFillColor(context, fillColor);
+        CGContextClearRect(context, self.bounds);
+    }
+    context = UIGraphicsGetCurrentContext();
+    for (NSDictionary* dicPerson in self.arrPersons)
+    {
+        if ([dicPerson objectForKey:KCIFlyFaceResultPointsKey])
+        {
+            for (NSString* strPoints in [dicPerson objectForKey:KCIFlyFaceResultPointsKey])
+            {
+                CGPoint p = CGPointFromString(strPoints) ;
+                CGContextAddEllipseInRect(context, CGRectMake(p.x - 1 , p.y - 1 , 2 , 2));
+            }
+        }
+        
+        BOOL isOriRect = NO;
+        if ([dicPerson objectForKey:KCIFlyFaceResultRectOri])
+        {
+            isOriRect=[[dicPerson objectForKey:KCIFlyFaceResultRectOri] boolValue];
+        }
+        
+        if ([dicPerson objectForKey:KCIFlyFaceResultRectKey])
+        {
+            CGRect rect = CGRectFromString([dicPerson objectForKey:KCIFlyFaceResultRectKey]);
+            if (isOriRect)
+            {//完整矩形
+                CGContextAddRect(context,rect);
+            }
+            else
+            { //只画四角
+                // 左上
+                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height/8);
+                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y);
+                
+                //右上
+                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height/8);
+                
+                //左下
+                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height*7/8);
+                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y+rect.size.height);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y+rect.size.height);
+                
+                
+                //右下
+                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y+rect.size.height);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height*7/8);
+            }
+        }
+    }
+    [[UIColor greenColor] set];
+    CGContextSetLineWidth(context, 2);
+    CGContextStrokePath(context);
+}
+
+- (void)drawRect:(CGRect)rect {
+    [self drawPointWithPoints:self.arrPersons] ;
+}
+
+@end
+
+#pragma mark    CameraPlayerViewController
 @interface CameraPlayerViewController () <IJKGPUImageMovieDelegate>
 {
     GPUImageVideoCamera* _videoCamera;
@@ -221,6 +304,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     
     GPUImageView* _filterView;
     GPUImageMovieWriter* _movieWriter;
+    
+    AccessoriesView* _accessoriesView;
     
     BOOL _isProgressSliderBeingDragged;
     
@@ -511,6 +596,11 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [self.view addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
+    _accessoriesView = [[AccessoriesView alloc] initWithFrame:self.view.bounds];
+    _accessoriesView.backgroundColor = [UIColor clearColor];
+    _accessoriesView.layer.backgroundColor = [UIColor clearColor].CGColor;
+    [self.view addSubview:_accessoriesView];
+    
     [self.view bringSubviewToFront:self.overlayView];
     [self.view bringSubviewToFront:self.controlPanelView];
     
@@ -524,6 +614,10 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     
     _filter = [[GPUImageSepiaFilter alloc] init];
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
+
+    //GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
+    //blendFilter.mix = 1.f;
+    //[_filter addTarget:blendFilter];
     [_filter addTarget:_filterView];
     
     [self installMovieNotificationObservers];
@@ -795,12 +889,24 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 }
 
 #pragma mark IJKGPUImageMovieDelegate
--(void) ijkGPUImageMovieRenderedOneFrame:(id)ijkgpuMovie {
+-(void) ijkGIMovieRenderedOneFrame:(id)ijkgpuMovie {
 //    UIImage* image = [ijkgpuMovie snapshotImage];
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        _imageView.image = image;
 //        NSLog(@"#ImageView# image.size=(%f,%f)", image.size.width, image.size.height);
 //    });
+}
+
+-(void) ijkGIMovieDidRecognizeSpeech:(IJKGPUImageMovie *)ijkgpuMovie result:(NSString *)result {
+    
+}
+
+-(void) ijkGIMovieDidDetectFaces:(IJKGPUImageMovie *)ijkgpuMovie result:(NSArray *)result {
+    if (!result || result.count == 0) return;
+    _accessoriesView.arrPersons = result;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_accessoriesView setNeedsDisplay];
+    });
 }
 
 @end

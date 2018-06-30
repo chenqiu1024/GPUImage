@@ -140,7 +140,7 @@ void fillSinWaveS16LSB(Uint8* dst, int stride, int sampleCount, int sampleRate, 
 }
 
 static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
-    NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
+//    NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream) return;
     
     IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
@@ -651,8 +651,12 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 {
     NSString* text = [NSString stringWithFormat:@"Error：%d %@", error.errorCode,error.errorDesc];
     NSLog(@"#IFLY# onCompleted :%@",text);
-    if (!error || error.errorCode != 20001)
-        [_iFlySpeechRecognizer startListening];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(ijkGIMovieDidRecognizeSpeech:result:)])
+    {
+        [self.delegate ijkGIMovieDidRecognizeSpeech:self result:text];
+    }
+//    if (!error || error.errorCode != 20001)
+//        [_iFlySpeechRecognizer startListening];
 }
 
 /**
@@ -2137,6 +2141,10 @@ int media_player_msg_loop(void* arg)
                 NSString* faceDetectResultString = [self.iFlyFaceDetector trackFrame:faceImageData withWidth:width height:height direction:0];
                 if (isCopied) free(bytes);
                 NSArray* faceDetectResults = [IFlyFaceDetectResultParser parseFaceDetectResult:faceDetectResultString];
+                if (self.delegate && [self.delegate respondsToSelector:@selector(ijkGIMovieDidDetectFaces:result:)])
+                {
+                    [self.delegate ijkGIMovieDidDetectFaces:self result:faceDetectResults];
+                }
                 NSLog(@"#IFLY#FaceDetect# result:%@", faceDetectResults);
             }
             //*/

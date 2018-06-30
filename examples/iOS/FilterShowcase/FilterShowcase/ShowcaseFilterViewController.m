@@ -1425,7 +1425,7 @@
             timeLabel.textColor = [UIColor whiteColor];
 
             uiElementInput = [[GPUImageUIElement alloc] initWithView:timeLabel];
-            
+
             [filter addTarget:blendFilter];
             [uiElementInput addTarget:blendFilter];
             
