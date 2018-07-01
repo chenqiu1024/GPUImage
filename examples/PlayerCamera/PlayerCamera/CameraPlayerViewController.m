@@ -213,6 +213,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 @end
 
 #pragma mark    AccessoriesView
+
 @interface AccessoriesView : UIView
 {
     CGContextRef context;
@@ -227,82 +228,77 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 -(instancetype) initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame])
     {
-        UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 240.0f, 320.0f)];
-        timeLabel.font = [UIFont systemFontOfSize:17.0f];
-        timeLabel.text = @"Time: 0.0 s";
-        timeLabel.textAlignment = UITextAlignmentCenter;
-        timeLabel.backgroundColor = [UIColor clearColor];
-        timeLabel.textColor = [UIColor whiteColor];
-        [self addSubview:timeLabel];
     }
     return self;
 }
 
-//-(void) drawPointWithPoints:(NSArray*)arrPersons{
-//    context = UIGraphicsGetCurrentContext();
-//    if (context)
-//    {
-//        CGFloat fillColor[4] = {0.f, 1.f, 0.f, 1.f};
-//        CGContextSetFillColor(context, fillColor);
-//        CGContextClearRect(context, self.bounds);
-//    }
-//    for (NSDictionary* dicPerson in self.arrPersons)
-//    {
-//        if ([dicPerson objectForKey:KCIFlyFaceResultPointsKey])
-//        {
-//            for (NSString* strPoints in [dicPerson objectForKey:KCIFlyFaceResultPointsKey])
-//            {
-//                CGPoint p = CGPointFromString(strPoints) ;
-//                CGContextAddEllipseInRect(context, CGRectMake(p.x - 1 , p.y - 1 , 2 , 2));
-//            }
-//        }
-//
-//        BOOL isOriRect = NO;
-//        if ([dicPerson objectForKey:KCIFlyFaceResultRectOri])
-//        {
-//            isOriRect=[[dicPerson objectForKey:KCIFlyFaceResultRectOri] boolValue];
-//        }
-//
-//        if ([dicPerson objectForKey:KCIFlyFaceResultRectKey])
-//        {
-//            CGRect rect = CGRectFromString([dicPerson objectForKey:KCIFlyFaceResultRectKey]);
-//            if (isOriRect)
-//            {//完整矩形
-//                CGContextAddRect(context,rect);
-//            }
-//            else
-//            { //只画四角
-//                // 左上
-//                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height/8);
-//                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
-//                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y);
-//
-//                //右上
-//                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y);
-//                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y);
-//                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height/8);
-//
-//                //左下
-//                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height*7/8);
-//                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y+rect.size.height);
-//                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y+rect.size.height);
-//
-//
-//                //右下
-//                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y+rect.size.height);
-//                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height);
-//                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height*7/8);
-//            }
-//        }
-//    }
+-(void) drawPointWithPoints:(NSArray*)arrPersons{
+    context = UIGraphicsGetCurrentContext();
+    if (context)
+    {
+//        [[UIColor greenColor] set];
+        CGContextSetRGBFillColor(context, 0.5f, 0.75f, 0.25f, 1.f);
+        CGContextFillRect(context, self.bounds);
+//        CGContextSetLineWidth(context, 2);
+//        CGContextStrokePath(context);
+    }
+    for (NSDictionary* dicPerson in self.arrPersons)
+    {
+        if ([dicPerson objectForKey:KCIFlyFaceResultPointsKey])
+        {
+            for (NSString* strPoints in [dicPerson objectForKey:KCIFlyFaceResultPointsKey])
+            {
+                CGPoint p = CGPointFromString(strPoints) ;
+                CGContextAddEllipseInRect(context, CGRectMake(p.x - 1 , p.y - 1 , 2 , 2));
+            }
+        }
+
+        BOOL isOriRect = NO;
+        if ([dicPerson objectForKey:KCIFlyFaceResultRectOri])
+        {
+            isOriRect=[[dicPerson objectForKey:KCIFlyFaceResultRectOri] boolValue];
+        }
+
+        if ([dicPerson objectForKey:KCIFlyFaceResultRectKey])
+        {
+            CGRect rect = CGRectFromString([dicPerson objectForKey:KCIFlyFaceResultRectKey]);
+            if (isOriRect)
+            {//完整矩形
+                CGContextAddRect(context,rect);
+            }
+            else
+            { //只画四角
+                // 左上
+                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height/8);
+                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y);
+
+                //右上
+                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height/8);
+
+                //左下
+                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height*7/8);
+                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y+rect.size.height);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y+rect.size.height);
+
+
+                //右下
+                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y+rect.size.height);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height);
+                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height*7/8);
+            }
+        }
+    }
 //    [[UIColor greenColor] set];
 //    CGContextSetLineWidth(context, 2);
 //    CGContextStrokePath(context);
-//}
-//
-//- (void)drawRect:(CGRect)rect {
-//    [self drawPointWithPoints:self.arrPersons] ;
-//}
+}
+
+- (void)drawRect:(CGRect)rect {
+    [self drawPointWithPoints:self.arrPersons] ;
+}
 
 @end
 
@@ -624,7 +620,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     _filter = [[GPUImageSepiaFilter alloc] init];
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
 /*
-    _accessoriesView = [[AccessoriesView alloc] initWithFrame:self.view.bounds];
+    _accessoriesView = [[AccessoriesView alloc] initWithFrame:_filterView.bounds];
     _accessoriesView.backgroundColor = [UIColor clearColor];
     _accessoriesView.layer.backgroundColor = [UIColor clearColor].CGColor;
     ///[self.view addSubview:_accessoriesView];
@@ -632,9 +628,14 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     GPUImageUIElement* uiElement = [[GPUImageUIElement alloc] initWithView:_accessoriesView];
     GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
     blendFilter.mix = 1.0f;
-    [uiElement addTarget:blendFilter];
     [_filter addTarget:blendFilter];
+    [uiElement addTarget:blendFilter];
     [blendFilter addTarget:_filterView];
+    
+    [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
+        //[_accessoriesView.layer setNeedsDisplay];
+        [uiElement update];
+    }];
 /*
     GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
     blendFilter.mix = 1.0f;
