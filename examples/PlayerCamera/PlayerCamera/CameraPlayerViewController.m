@@ -288,9 +288,9 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
             }
         }
     }
-//    [[UIColor greenColor] set];
-//    CGContextSetLineWidth(context, 2);
-//    CGContextStrokePath(context);
+    [[UIColor greenColor] set];
+    CGContextSetLineWidth(context, 2);
+    CGContextStrokePath(context);
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -616,7 +616,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     
     _filter = [[GPUImageSepiaFilter alloc] init];
     [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
-/*
+//*
     _accessoriesView = [[AccessoriesView alloc] initWithFrame:_filterView.bounds];
     _accessoriesView.backgroundColor = [UIColor clearColor];
     _accessoriesView.layer.backgroundColor = [UIColor clearColor].CGColor;
@@ -630,7 +630,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [blendFilter addTarget:_filterView];
     
     [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
-        //[_accessoriesView.layer setNeedsDisplay];
+        ///!!![_accessoriesView.layer setNeedsDisplay];
         [uiElement update];
     }];
 /*
@@ -657,7 +657,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
         [timeLabel sizeToFit];
         [uiElementInput update];
     }];
- /*/
+ /*
     [_filter addTarget:_filterView];
 //*/
     
