@@ -645,7 +645,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     timeLabel.textAlignment = UITextAlignmentCenter;
     timeLabel.backgroundColor = [UIColor clearColor];
     timeLabel.textColor = [UIColor whiteColor];
-    //[timeLabel sizeToFit];
+    [timeLabel sizeToFit];
     
     GPUImageUIElement* uiElementInput = [[GPUImageUIElement alloc] initWithView:timeLabel];
     [_filter addTarget:blendFilter];
@@ -656,7 +656,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     //__unsafe_unretained GPUImageUIElement *weakUIElementInput = uiElementInput;
     [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime){
         timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
-        //[timeLabel sizeToFit];
+        [timeLabel sizeToFit];
         [uiElementInput update];
     }];
  /*/

@@ -28,7 +28,7 @@
     layer = inputView.layer;
 
     previousLayerSizeInPixels = CGSizeZero;
-    [self update];
+    ///!!![self update];
     
     return self;
 }
@@ -44,7 +44,7 @@
     layer = inputLayer;
 
     previousLayerSizeInPixels = CGSizeZero;
-    [self update];
+    ///!!![self update];
 
     return self;
 }
@@ -106,6 +106,31 @@
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)layerPixelSize.width, (int)layerPixelSize.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, imageData);
     
     free(imageData);
+    
+    ///!!!
+    // Get all targets the framebuffer so they can grab a lock on it
+    for (id<GPUImageInput> currentTarget in targets)
+    {
+        if (currentTarget != self.targetToIgnoreForUpdates)
+        {
+            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
+            NSInteger textureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+            
+            [self setInputFramebufferForTarget:currentTarget atIndex:textureIndex];
+        }
+    }
+    
+    // Release our hold so it can return to the cache immediately upon processing
+    [[self framebufferForOutput] unlock];
+    
+    if (usingNextFrameForImageCapture)
+    {
+        //        usingNextFrameForImageCapture = NO;
+    }
+    else
+    {
+        [self removeOutputFramebuffer];
+    }
     
     for (id<GPUImageInput> currentTarget in targets)
     {
