@@ -639,13 +639,13 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
     blendFilter.mix = 1.0f;
     // UI Element Output:
-    UILabel *timeLabel = [[UILabel alloc] init];
+    UILabel *timeLabel = [[UILabel alloc] initWithFrame:_filterView.bounds];
     timeLabel.font = [UIFont systemFontOfSize:17.0f];
     timeLabel.text = @"Time: 0.0 s";
     timeLabel.textAlignment = UITextAlignmentCenter;
     timeLabel.backgroundColor = [UIColor clearColor];
     timeLabel.textColor = [UIColor whiteColor];
-    [timeLabel sizeToFit];
+    //[timeLabel sizeToFit];
     
     GPUImageUIElement* uiElementInput = [[GPUImageUIElement alloc] initWithView:timeLabel];
     [_filter addTarget:blendFilter];
@@ -656,7 +656,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     //__unsafe_unretained GPUImageUIElement *weakUIElementInput = uiElementInput;
     [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime){
         timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
-        [timeLabel sizeToFit];
+        //[timeLabel sizeToFit];
         [uiElementInput update];
     }];
  /*/
@@ -820,6 +820,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 {
     BOOL hasAnythingToSelect = NO;
     NSArray<NSDictionary* >* streams = [_ijkMovie.monitor.mediaMeta objectForKey:kk_IJKM_KEY_STREAMS];
+    NSLog(@"#Decoder# streams = %@", streams);
     NSInteger streamIndex = 0;
     for (NSDictionary* stream in streams)
     {

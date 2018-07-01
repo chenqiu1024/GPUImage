@@ -335,7 +335,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
     {
         self.frameProcessingCompletionBlock(self, frameTime);
     }
-    
+
     // Get all targets the framebuffer so they can grab a lock on it
     for (id<GPUImageInput> currentTarget in targets)
     {
