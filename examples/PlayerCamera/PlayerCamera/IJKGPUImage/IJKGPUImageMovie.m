@@ -29,6 +29,8 @@
 #import "NSString+IJKMedia.h"
 #import "ijkioapplication.h"
 
+#define DEFAULT_FACE_DETECTION_FPS 6.0f
+
 @class IJKNotificationManager;
 @class IJKMediaUrlOpenData;
 
@@ -114,6 +116,8 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 @property (nonatomic, copy) NSString* speechRecognizerResultString;
 
 @property (nonatomic, strong) IFlyFaceDetector* iFlyFaceDetector;
+@property (nonatomic, assign) float faceDetectInterval;
+@property (nonatomic, copy) NSDate* prevFaceDetectTime;
 
 -(void) initIflyVoiceRecognizer;
 
@@ -824,8 +828,14 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         [self registerApplicationObservers];
         
         self.mute = muted;
+        self.faceDetectFPS = DEFAULT_FACE_DETECTION_FPS;
+        self.prevFaceDetectTime = nil;
     }
     return self;
+}
+
+-(void) setFaceDetectFPS:(float)faceDetectFPS {
+    self.faceDetectInterval = 1.0f / faceDetectFPS;
 }
 
 - (id)initWithContentURLString:(NSString *)aUrlString
@@ -2127,25 +2137,56 @@ int media_player_msg_loop(void* arg)
             
             if (self.withFaceDetect && _renderer && _renderer->func_getLuminanceDataPointer)
             {
-                if (_iFlyFaceDetector == nil)
+                if (!self.prevFaceDetectTime || [[NSDate date] timeIntervalSinceDate:self.prevFaceDetectTime] >= self.faceDetectInterval)
                 {
-                    _iFlyFaceDetector = [IFlyFaceDetector sharedInstance];
-                    [_iFlyFaceDetector setParameter:@"1" forKey:@"align"];
-                    [_iFlyFaceDetector setParameter:@"1" forKey:@"detect"];
+                    self.prevFaceDetectTime = [NSDate date];
+                    
+                    if (_iFlyFaceDetector == nil)
+                    {
+                        _iFlyFaceDetector = [IFlyFaceDetector sharedInstance];
+                        [_iFlyFaceDetector setParameter:@"1" forKey:@"align"];
+                        [_iFlyFaceDetector setParameter:@"1" forKey:@"detect"];
+                    }
+                    
+                    GLsizei width, height, length;
+                    bool isCopied = false;
+                    GLubyte* bytes = _renderer->func_getLuminanceDataPointer(&width, &height, &length, &isCopied, overlay);
+                    
+                    CGColorSpaceRef genericGrayColorspace = CGColorSpaceCreateDeviceGray();
+                    CGContextRef imageContext = CGBitmapContextCreate(bytes, (int)width, (int)height, 8, (int)width, genericGrayColorspace, kCGBitmapByteOrderDefault | kCGImageAlphaOnly);
+                    CGImageRef imageRef = CGBitmapContextCreateImage(imageContext);
+                    UIImage* snapshot = [UIImage imageWithCGImage:imageRef];
+                    
+                    const int destWidth = 736, destHeight = (int)roundf(snapshot.size.height * destWidth / snapshot.size.width);
+                    UIImage* scaledSnapshot = [[UIImage alloc] initWithCGImage:snapshot.CGImage scale:(destWidth / snapshot.size.width) orientation:UIImageOrientationUp];
+                    GLubyte* scaledBytes = (GLubyte*)calloc(1, destWidth * destHeight);
+                    CGContextRef scaledImageContext = CGBitmapContextCreate(scaledBytes, (int)destWidth, (int)destHeight, 8, (int)destWidth, genericGrayColorspace, kCGBitmapByteOrderDefault | kCGImageAlphaOnly);
+                    CGImageRef scaledImageRef = CGBitmapContextCreateImage(scaledImageContext);
+                    CGContextDrawImage(scaledImageContext, CGRectMake(0, 0, destWidth, destHeight), scaledSnapshot.CGImage);
+                    scaledSnapshot = [UIImage imageWithCGImage:scaledImageRef];
+                    CGImageRelease(scaledImageRef);
+                    CGContextRelease(scaledImageContext);
+                    
+                    NSData* snapshotData = UIImageJPEGRepresentation(scaledSnapshot, 1.f);
+                    NSString* snapshotPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingFormat:@"/thumbs/snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
+                    [snapshotData writeToFile:snapshotPath atomically:NO];//*/
+                    
+                    CGImageRelease(imageRef);
+                    CGContextRelease(imageContext);
+                    CGColorSpaceRelease(genericGrayColorspace);
+                    
+                    NSData* faceImageData = [NSData dataWithBytes:scaledBytes length:(destWidth * destHeight)];
+                    NSString* faceDetectResultString = [self.iFlyFaceDetector trackFrame:faceImageData withWidth:destWidth height:destHeight direction:0];
+                    if (isCopied) free(bytes);
+                    free(scaledBytes);
+                    
+                    NSArray* faceDetectResults = [IFlyFaceDetectResultParser parseFaceDetectResult:faceDetectResultString];
+                    if (self.delegate && [self.delegate respondsToSelector:@selector(ijkGIMovieDidDetectFaces:result:)])
+                    {
+                        [self.delegate ijkGIMovieDidDetectFaces:self result:faceDetectResults];
+                    }
+                    NSLog(@"#IFLY#FaceDetect# (w,h)=(%d,%d), result:%@", width, height, faceDetectResults);
                 }
-                
-                GLsizei width, height, length;
-                bool isCopied = false;
-                GLubyte* bytes = _renderer->func_getLuminanceDataPointer(&width, &height, &length, &isCopied, overlay);
-                NSData* faceImageData = [NSData dataWithBytes:bytes length:length];
-                NSString* faceDetectResultString = [self.iFlyFaceDetector trackFrame:faceImageData withWidth:width height:height direction:0];
-                if (isCopied) free(bytes);
-                NSArray* faceDetectResults = [IFlyFaceDetectResultParser parseFaceDetectResult:faceDetectResultString];
-                if (self.delegate && [self.delegate respondsToSelector:@selector(ijkGIMovieDidDetectFaces:result:)])
-                {
-                    [self.delegate ijkGIMovieDidDetectFaces:self result:faceDetectResults];
-                }
-                NSLog(@"#IFLY#FaceDetect# result:%@", faceDetectResults);
             }
             //*/
             if (!IJKGPUImage_GLES2_Renderer_renderOverlay(_renderer, overlay)) ALOGE("[EGL] IJK_GLES2_render failed\n");
