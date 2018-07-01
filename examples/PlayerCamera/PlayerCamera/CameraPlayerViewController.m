@@ -236,11 +236,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     context = UIGraphicsGetCurrentContext();
     if (context)
     {
-//        [[UIColor greenColor] set];
-        CGContextSetRGBFillColor(context, 0.5f, 0.75f, 0.25f, 1.f);
-        CGContextFillRect(context, self.bounds);
-//        CGContextSetLineWidth(context, 2);
-//        CGContextStrokePath(context);
+        CGContextSetRGBFillColor(context, 0.f, 0.75f, 0.25f, 1.f);
+        CGContextClearRect(context, self.bounds);
     }
     for (NSDictionary* dicPerson in self.arrPersons)
     {
