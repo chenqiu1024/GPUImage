@@ -154,8 +154,8 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
     if (ijkgpuMovie.iFlySpeechRecognizer == nil)
     {
         [ijkgpuMovie initIflyVoiceRecognizer];
+        [ijkgpuMovie.iFlySpeechRecognizer startListening];
     }
-    [ijkgpuMovie.iFlySpeechRecognizer startListening];
     
     switch (audioParams.format)
     {
@@ -170,10 +170,10 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
             }
             NSData* audioBuffer = [NSData dataWithBytes:singleChannelData length:(audioParams.samples * 2)];
             int ret = [ijkgpuMovie.iFlySpeechRecognizer writeAudio:audioBuffer];
-            if (!ret)
-            {
-                [ijkgpuMovie.iFlySpeechRecognizer stopListening];
-            }
+//            if (!ret)
+//            {
+//                [ijkgpuMovie.iFlySpeechRecognizer stopListening];
+//            }
             free(singleChannelData);
             
             for (int i=0; i<audioParams.channels; ++i)
