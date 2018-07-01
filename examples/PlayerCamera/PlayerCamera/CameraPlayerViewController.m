@@ -312,8 +312,6 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     GPUImageView* _filterView;
     GPUImageMovieWriter* _movieWriter;
     
-    AccessoriesView* _accessoriesView;
-    
     BOOL _isProgressSliderBeingDragged;
     
     NSTimeInterval _fastSeekStartTime;
@@ -332,6 +330,8 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 @property (nonatomic, weak) IBOutlet UILabel* fastSeekLabel;
+
+@property (nonatomic, strong) AccessoriesView* accessoriesView;
 
 -(IBAction)onClickOverlay:(id)sender;
 -(IBAction)onClickControlPanel:(id)sender;
@@ -620,7 +620,6 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     _accessoriesView = [[AccessoriesView alloc] initWithFrame:_filterView.bounds];
     _accessoriesView.backgroundColor = [UIColor clearColor];
     _accessoriesView.layer.backgroundColor = [UIColor clearColor].CGColor;
-    ///[self.view addSubview:_accessoriesView];
     
     GPUImageUIElement* uiElement = [[GPUImageUIElement alloc] initWithView:_accessoriesView];
     GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
@@ -629,35 +628,13 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [uiElement addTarget:blendFilter];
     [blendFilter addTarget:_filterView];
     
+    __weak typeof(self) wSelf = self;
     [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
-        ///!!![_accessoriesView.layer setNeedsDisplay];
+        __strong typeof(self) sSelf = wSelf;
+        [sSelf.accessoriesView setNeedsDisplay];
         [uiElement update];
     }];
-/*
-    GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
-    blendFilter.mix = 1.0f;
-    // UI Element Output:
-    UILabel *timeLabel = [[UILabel alloc] initWithFrame:_filterView.bounds];
-    timeLabel.font = [UIFont systemFontOfSize:17.0f];
-    timeLabel.text = @"Time: 0.0 s";
-    timeLabel.textAlignment = UITextAlignmentCenter;
-    timeLabel.backgroundColor = [UIColor clearColor];
-    timeLabel.textColor = [UIColor whiteColor];
-    [timeLabel sizeToFit];
-    
-    GPUImageUIElement* uiElementInput = [[GPUImageUIElement alloc] initWithView:timeLabel];
-    [_filter addTarget:blendFilter];
-    [uiElementInput addTarget:blendFilter];
-    [blendFilter addTarget:_filterView];
-    
-    NSDate* startTime = [NSDate date];
-    //__unsafe_unretained GPUImageUIElement *weakUIElementInput = uiElementInput;
-    [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime){
-        timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
-        [timeLabel sizeToFit];
-        [uiElementInput update];
-    }];
- /*
+ /*/
     [_filter addTarget:_filterView];
 //*/
     
@@ -946,9 +923,9 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 -(void) ijkGIMovieDidDetectFaces:(IJKGPUImageMovie *)ijkgpuMovie result:(NSArray *)result {
     if (!result || result.count == 0) return;
     _accessoriesView.arrPersons = result;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_accessoriesView setNeedsDisplay];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [_accessoriesView setNeedsDisplay];
+//    });
 }
 
 @end

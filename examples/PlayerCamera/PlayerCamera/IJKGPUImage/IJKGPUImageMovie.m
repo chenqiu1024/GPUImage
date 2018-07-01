@@ -847,7 +847,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     _textRenderingProgram = nil;
     IJKGPUImage_GLES2_Renderer_reset(_renderer);
     IJKGPUImage_GLES2_Renderer_freeP(&_renderer);
-    
+    /*///!!!
     if (_iFlyFaceDetector)
     {
         [IFlyFaceDetector purgeSharedInstance];
@@ -855,7 +855,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     if (_iFlySpeechRecognizer)
     {
         [_iFlySpeechRecognizer destroy];
-    }
+    }//*/
     NSLog(@"#Crash# IJKGPUImageMovie dealloc");
 }
 
