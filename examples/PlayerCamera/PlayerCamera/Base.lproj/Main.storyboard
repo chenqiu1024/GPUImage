@@ -30,6 +30,24 @@
             </objects>
             <point key="canvasLocation" x="-822" y="126"/>
         </scene>
+        <!--Snapshot Editor Scene-->
+        <scene sceneID="ggd-Ip-kk8">
+            <objects>
+                <viewController id="N3u-MN-3g6" userLabel="Snapshot Editor Scene" customClass="SnapshotEditorViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="IIz-mf-euQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="cGB-bO-tY0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yy1-wn-jNH" userLabel="GPUImage View" customClass="GPUImageView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DCy-eh-7xa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-42" y="143"/>
+        </scene>
         <!--Videos-->
         <scene sceneID="tBN-WD-HHF">
             <objects>
@@ -247,6 +265,7 @@
                         <outlet property="overlayView" destination="dcC-gQ-lwS" id="f63-iw-KkL"/>
                         <outlet property="playOrPauseButton" destination="P8p-xi-Ouz" id="gK6-bd-V14"/>
                         <outlet property="progressSlider" destination="HRy-g7-XYH" id="LdI-at-Q8J"/>
+                        <segue destination="N3u-MN-3g6" kind="show" identifier="ShowEditor" id="LKn-up-VHm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

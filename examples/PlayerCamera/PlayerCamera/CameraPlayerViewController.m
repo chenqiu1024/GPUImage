@@ -9,6 +9,7 @@
 #import "CameraPlayerViewController.h"
 #import "IJKGPUImageMovie.h"
 #import "IFlyFaceDetectResultParser.h"
+#import "SnapshotEditorViewController.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
@@ -606,6 +607,10 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [self.view bringSubviewToFront:self.overlayView];
     [self.view bringSubviewToFront:self.controlPanelView];
     
+    UITapGestureRecognizer* tapRecognizer= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapRecognized:)];
+    tapRecognizer.numberOfTapsRequired = 2;
+    [self.overlayView addGestureRecognizer:tapRecognizer];
+    
     UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanRecognized:)];
     panRecognizer.minimumNumberOfTouches = 1;
     [self.overlayView addGestureRecognizer:panRecognizer];
@@ -663,6 +668,14 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [super viewDidUnload];
 }
 
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ShowEditor"])
+    {
+        SnapshotEditorViewController* destVC = (SnapshotEditorViewController*)segue.destinationViewController;
+        destVC.image = (UIImage*)sender;
+    }
+}
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     // Map UIDeviceOrientation to UIInterfaceOrientation.
@@ -704,6 +717,16 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 - (IBAction)updateSliderValue:(id)sender
 {
     [(GPUImageSepiaFilter *)_filter setIntensity:[(UISlider *)sender value]];
+}
+
+-(void) onDoubleTapRecognized:(UITapGestureRecognizer*)pan {
+    [_ijkMovie pause];
+    [_filter useNextFrameForImageCapture];
+    UIImage* image = [_filter imageFromCurrentFramebuffer];
+    if (image)
+    {
+        [self performSegueWithIdentifier:@"ShowEditor" sender:image];
+    }
 }
 
 -(void) onPanRecognized:(UIPanGestureRecognizer*)pan {
