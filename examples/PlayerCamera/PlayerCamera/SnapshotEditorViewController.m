@@ -186,10 +186,13 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
+    UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self
+                                                                         action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
-    self.navItem.title = @"Picture Editor";
-    
+    self.navItem.title = @"Picture Edit";
+    //*
     self.navBar.translucent = YES;
     UIColor* translucentColor = [UIColor clearColor];
     CGRect rect = CGRectMake(0, 0, self.view.bounds.size.width, 64);
@@ -201,9 +204,9 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
     UIGraphicsEndImageContext();
     [self.navBar setShadowImage:image];
     [self.navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
-    // https://www.jianshu.com/p/fa27ab9fb172
-    
     [self setNeedsStatusBarAppearanceUpdate];
+    //https://www.jianshu.com/p/fa27ab9fb172
+     //*/
     
     // Do any additional setup after loading the view.
     if (!self.image)
@@ -221,7 +224,7 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
     
     self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
     self.uiElementsView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.uiElementsView];
+    [self.view insertSubview:self.uiElementsView belowSubview:self.navBar];
     self.uiElementsView.personFaces = faceDetectResult;
     self.uiElementsView.sourceImageSize = self.image.size;
     self.uiElementsView.fillMode = gpuImageView.fillMode;

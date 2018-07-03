@@ -746,7 +746,13 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     if (image)
     {
         [_ijkMovie pause];
+        //*
         [self performSegueWithIdentifier:@"ShowEditor" sender:image];
+        /*/
+        SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
+        editorVC.image = image;
+        [self presentViewController:editorVC animated:YES completion:nil];
+        //*/
     }
 }
 

@@ -33,7 +33,7 @@
         <!--Snapshot Editor Scene-->
         <scene sceneID="ggd-Ip-kk8">
             <objects>
-                <viewController id="N3u-MN-3g6" userLabel="Snapshot Editor Scene" customClass="SnapshotEditorViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SnapshotEditor" id="N3u-MN-3g6" userLabel="Snapshot Editor Scene" customClass="SnapshotEditorViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="IIz-mf-euQ"/>
                         <viewControllerLayoutGuide type="bottom" id="cGB-bO-tY0"/>
@@ -45,6 +45,14 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wx9-T4-wyg">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </textAttributes>
+                                <textAttributes key="largeTitleTextAttributes">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </textAttributes>
                                 <items>
                                     <navigationItem title="Title" id="v8L-Ye-XMe" userLabel="Back"/>
                                 </items>
