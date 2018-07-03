@@ -182,7 +182,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 - (CGImageRef)newCGImageFromCurrentlyProcessedOutput
 {
     // Give it three seconds to process, then abort if they forgot to set up the image capture properly
-    double timeoutForImageCapture = 3.0;
+    double timeoutForImageCapture = 10.0;///!!!
     dispatch_time_t convertedTimeout = dispatch_time(DISPATCH_TIME_NOW, timeoutForImageCapture * NSEC_PER_SEC);
 
     if (dispatch_semaphore_wait(imageCaptureSemaphore, convertedTimeout) != 0)
