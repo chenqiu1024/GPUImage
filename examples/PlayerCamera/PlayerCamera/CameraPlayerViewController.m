@@ -742,6 +742,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 
 -(void) onDoubleTapRecognized:(UITapGestureRecognizer*)pan {
     [_filter useNextFrameForImageCapture];
+    [_ijkMovie render];
     UIImage* image = [_filter imageFromCurrentFramebuffer];
     if (image)
     {

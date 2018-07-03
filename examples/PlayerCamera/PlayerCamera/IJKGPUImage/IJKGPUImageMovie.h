@@ -122,6 +122,7 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 
 -(void) render:(SDL_VoutOverlay*)overlay;
 -(void) render:(SDL_VoutOverlay*)overlay frameRenderedCallback:(void(^)())frameRenderedCallback;
+-(void) render;
 
 - (void)prepareToPlay;
 - (void)play;
