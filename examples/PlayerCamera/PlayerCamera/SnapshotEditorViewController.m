@@ -170,14 +170,41 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
 
 @property (nonatomic, strong) UIElementsView* uiElementsView;
 
+@property (nonatomic, strong) IBOutlet UINavigationBar* navBar;
+@property (nonatomic, strong) IBOutlet UINavigationItem* navItem;
+
 @end
 
 @implementation SnapshotEditorViewController
 
 @synthesize uiElementsView;
 
+-(void) dismissSelf {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
+    self.navItem.leftBarButtonItem = dismissButtonItem;
+    self.navItem.title = @"Picture Editor";
+    
+    self.navBar.translucent = YES;
+    UIColor* translucentColor = [UIColor clearColor];
+    CGRect rect = CGRectMake(0, 0, self.view.bounds.size.width, 64);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [translucentColor CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self.navBar setShadowImage:image];
+    [self.navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+    // https://www.jianshu.com/p/fa27ab9fb172
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     // Do any additional setup after loading the view.
     if (!self.image)
         return;

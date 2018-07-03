@@ -41,8 +41,26 @@
                     <view key="view" contentMode="scaleToFill" id="yy1-wn-jNH" userLabel="GPUImage View" customClass="GPUImageView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wx9-T4-wyg">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <items>
+                                    <navigationItem title="Title" id="v8L-Ye-XMe" userLabel="Back"/>
+                                </items>
+                            </navigationBar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="wx9-T4-wyg" secondAttribute="trailing" id="3cN-QD-NS2"/>
+                            <constraint firstItem="wx9-T4-wyg" firstAttribute="top" secondItem="IIz-mf-euQ" secondAttribute="bottom" id="B2k-E2-zfT"/>
+                            <constraint firstItem="wx9-T4-wyg" firstAttribute="leading" secondItem="yy1-wn-jNH" secondAttribute="leading" id="GVm-9g-RcI"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="navBar" destination="wx9-T4-wyg" id="NRK-Kz-Dbn"/>
+                        <outlet property="navItem" destination="v8L-Ye-XMe" id="Jag-iL-DF3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DCy-eh-7xa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

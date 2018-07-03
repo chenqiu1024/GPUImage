@@ -605,7 +605,6 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [self.navBar setShadowImage:image];
     [self.navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     // https://www.jianshu.com/p/fa27ab9fb172
-    
     [self setNeedsStatusBarAppearanceUpdate];
 
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
