@@ -401,6 +401,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 -(void) setControlsHidden:(BOOL)hidden {
     self.controlPanelView.hidden = hidden;
     self.navigationBar.hidden = hidden;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 -(void) hideControls {
@@ -546,7 +547,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 }
 
 - (BOOL) prefersStatusBarHidden {
-    return NO;
+    return self.navigationBar.hidden;
 }
 
 -(UIStatusBarStyle) preferredStatusBarStyle {
