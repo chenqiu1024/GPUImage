@@ -582,8 +582,20 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     //UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(dismissSelf)];
     UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
-    
     self.navItem.title = [self.sourceVideoFile lastPathComponent];
+    
+    self.navBar.translucent = YES;
+    UIColor* translucentColor = [UIColor clearColor];
+    CGRect rect = CGRectMake(0, 0, self.view.bounds.size.width, 64);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [translucentColor CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self.navBar setShadowImage:image];
+    [self.navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+    // https://www.jianshu.com/p/fa27ab9fb172
     
     [self setNeedsStatusBarAppearanceUpdate];
 
