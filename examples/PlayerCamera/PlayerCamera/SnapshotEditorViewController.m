@@ -213,6 +213,8 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
         return;
     
     IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];
+    [faceDetector setParameter:@"1" forKey:@"align"];
+    [faceDetector setParameter:@"1" forKey:@"detect"];
     NSString* detectResultString = [faceDetector detectARGB:self.image];
     NSArray* faceDetectResult = [IFlyFaceDetectResultParser parseFaceDetectResult:detectResultString];
     NSLog(@"FaceDetect in (%f, %f) result = '%@', array=%@", self.image.size.width, self.image.size.height, detectResultString, faceDetectResult);

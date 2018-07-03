@@ -57,17 +57,7 @@ NSString* const KCIFlyFaceResultSuccess  = @"success";
     CGFloat top = [[positionDict objectForKey:KCIFlyFaceResultTop] floatValue];
     CGFloat left = [[positionDict objectForKey:KCIFlyFaceResultLeft] floatValue];
     CGFloat right = [[positionDict objectForKey:KCIFlyFaceResultRight] floatValue];
-    
-    
-    float cx = (left+right)/2;
-    float cy = (top + bottom)/2;
-    float w = right - left;
-    float h = bottom - top;
-    
-    float ncx = cy ;
-    float ncy = cx ;
-    
-    CGRect rectFace = CGRectMake(ncx-w/2 ,ncy-w/2 , w, h);
+    CGRect rectFace = CGRectMake(left, top, right - left, bottom - top);
 //    rectFace=rScale(rectFace, widthScaleBy, heightScaleBy);
     return NSStringFromCGRect(rectFace);
     
