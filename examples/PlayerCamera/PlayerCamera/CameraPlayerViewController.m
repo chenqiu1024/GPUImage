@@ -301,7 +301,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 @end
 
 #pragma mark    CameraPlayerViewController
-@interface CameraPlayerViewController () <IJKGPUImageMovieDelegate>
+@interface CameraPlayerViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate>
 {
     GPUImageVideoCamera* _videoCamera;
     GPUImageOutput<GPUImageInput>* _filter;
@@ -448,6 +448,14 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     {
         [self refreshMediaControl];
     }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([gestureRecognizer isKindOfClass:UIPanGestureRecognizer.class] && [touch.view isKindOfClass:UISlider.class])
+    {
+        return NO;
+    }
+    return YES;
 }
 
 -(IBAction)onClickPlayOrPause:(id)sender {
@@ -626,6 +634,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     
     UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanRecognized:)];
     panRecognizer.minimumNumberOfTouches = 1;
+    panRecognizer.delegate = self;
     [self.overlayView addGestureRecognizer:panRecognizer];
     _fastSeekStartTime = 0.f;
     
