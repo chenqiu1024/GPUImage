@@ -227,9 +227,21 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     gpuImageView.snapshotCompletion = ^(UIImage* image) {
         if (image)
         {
-            NSData* data = UIImageJPEGRepresentation(image, 1.f);
+            CGSize layerSize = CGSizeMake(self.view.layer.contentsScale * self.view.bounds.size.width,
+                                          self.view.layer.contentsScale * self.view.bounds.size.height);
+            CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
+            CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+
+            CGContextDrawImage(imageContext, self.view.bounds, image.CGImage);
+            [self.uiElementsView.layer renderInContext:imageContext];
+            
+            UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationDownMirrored];
+            NSData* data = UIImageJPEGRepresentation(snapshot, 1.f);
             NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"snapshot.jpg"];
             [data writeToFile:path atomically:YES];
+            
+            CGContextRelease(imageContext);
+            CGColorSpaceRelease(genericRGBColorspace);
         }
     };
     [self.picture processImage];
