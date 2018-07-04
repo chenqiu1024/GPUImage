@@ -227,8 +227,9 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 -(void) onDoubleTapped:(UITapGestureRecognizer*)recognizer {
     GPUImageView* gpuImageView = (GPUImageView*)self.view;
     gpuImageView.snapshotCompletion = ^(UIImage* image) {
-        if (image)
-        {
+        if (!image)
+            return;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             CGFloat contentScale = self.view.layer.contentsScale;
             CGSize layerSize = CGSizeMake(contentScale * self.view.bounds.size.width,
                                           contentScale * self.view.bounds.size.height);
@@ -261,7 +262,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
             
             CGContextRelease(imageContext);
             CGColorSpaceRelease(genericRGBColorspace);
-        }
+        });
     };
     [self.picture processImage];
 }
