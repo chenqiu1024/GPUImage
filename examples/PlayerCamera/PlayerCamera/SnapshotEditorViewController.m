@@ -223,31 +223,16 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 @synthesize uiElementsView;
 
 -(void) onDoubleTapped:(UITapGestureRecognizer*)recognizer {
-    GPUImageUIElement* uiElementOutput = [[GPUImageUIElement alloc] initWithView:self.uiElementsView];
-    GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
-    blendFilter.mix = 1.0f;
-    //blendFilter.intensity = 0.f;
-    [self.picture addTarget:blendFilter];
-    [uiElementOutput addTarget:blendFilter];
-    
-    [blendFilter useNextFrameForImageCapture];
-    __weak typeof(self) wSelf = self;
-    [self.picture processImageWithCompletionHandler:^{
-        __strong typeof(self) pSelf = wSelf;
-        [pSelf.uiElementsView setNeedsDisplay];
-        [uiElementOutput update];
-    }];
-    
-    UIImage* image = [blendFilter imageFromCurrentFramebuffer];
-    if (image)
-    {
-        NSData* data = UIImageJPEGRepresentation(image, 1.f);
-        NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"snapshot.jpg"];
-        [data writeToFile:path atomically:YES];
-    }
-    
-    [uiElementOutput removeTarget:blendFilter];
-    [self.picture removeTarget:blendFilter];
+    GPUImageView* gpuImageView = (GPUImageView*)self.view;
+    gpuImageView.snapshotCompletion = ^(UIImage* image) {
+        if (image)
+        {
+            NSData* data = UIImageJPEGRepresentation(image, 1.f);
+            NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"snapshot.jpg"];
+            [data writeToFile:path atomically:YES];
+        }
+    };
+    [self.picture processImage];
 }
 
 -(void) dismissSelf {
@@ -291,6 +276,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     NSLog(@"FaceDetect in (%f, %f) result = '%@', array=%@", self.image.size.width, self.image.size.height, detectResultString, faceDetectResult);
     
     GPUImageView* gpuImageView = (GPUImageView*)self.view;
+    gpuImageView.backgroundColor = [UIColor clearColor];
     self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
     [self.picture addTarget:gpuImageView];
     [self.picture processImage];

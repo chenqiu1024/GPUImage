@@ -10,7 +10,7 @@
 
 @interface GPUImageView () 
 {
-    GPUImageFramebuffer *inputFramebufferForDisplay;
+    GPUImageFramebuffer *inputFramebufferForDisplay, *snapshotFramebuffer;
     GLuint displayRenderbuffer, displayFramebuffer;
     
     GLProgram *displayProgram;
@@ -211,20 +211,45 @@
 
 - (void)setDisplayFramebuffer;
 {
-    if (!displayFramebuffer)
+    if (self.snapshotCompletion)
     {
-        [self createDisplayFramebuffer];
+        if (!snapshotFramebuffer)
+        {
+            snapshotFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_sizeInPixels onlyTexture:NO];
+        }
+        [snapshotFramebuffer activateFramebuffer];
     }
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
-    
-    glViewport(0, 0, (GLint)_sizeInPixels.width, (GLint)_sizeInPixels.height);
+    else
+    {
+        if (!displayFramebuffer)
+        {
+            [self createDisplayFramebuffer];
+        }
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
+        glViewport(0, 0, (GLint)_sizeInPixels.width, (GLint)_sizeInPixels.height);
+    }
 }
 
 - (void)presentFramebuffer;
 {
-    glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
-    [[GPUImageContext sharedImageProcessingContext] presentBufferForDisplay];
+    if (snapshotFramebuffer)
+    {
+        CGImageRef imageRef = [snapshotFramebuffer newCGImageFromFramebufferContents];
+        UIImage* image = [UIImage imageWithCGImage:imageRef scale:1.0f orientation:UIImageOrientationDownMirrored];
+        CGImageRelease(imageRef);
+        if (self.snapshotCompletion)
+        {
+            self.snapshotCompletion(image);
+            self.snapshotCompletion = nil;
+        }
+        snapshotFramebuffer = nil;
+    }
+    else
+    {
+        glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
+        [[GPUImageContext sharedImageProcessingContext] presentBufferForDisplay];
+    }
 }
 
 #pragma mark -
