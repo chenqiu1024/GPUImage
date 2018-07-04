@@ -15,41 +15,46 @@
 
 #pragma mark    UIElementsView
 
-CGPoint transformPointByFillMode(CGPoint pointInSource, CGSize sourceSize, CGSize destSize, GPUImageFillModeType fillMode) {
-    float sx, sy;
+CGSize scaleFactor(CGSize sourceSize, CGSize destSize, GPUImageFillModeType fillMode) {
+    CGSize s;
     switch (fillMode)
     {
         case kGPUImageFillModeStretch:
-            sx = destSize.width / sourceSize.width;
-            sy = destSize.height / sourceSize.height;
+            s.width = destSize.width / sourceSize.width;
+            s.height = destSize.height / sourceSize.height;
             break;
         case kGPUImageFillModePreserveAspectRatio:
             if (sourceSize.height * destSize.width / sourceSize.width <= destSize.height)
             {
-                sx = sy = destSize.width / sourceSize.width;
+                s.width = s.height = destSize.width / sourceSize.width;
             }
             else
             {
-                sx = sy = destSize.height / sourceSize.height;
+                s.width = s.height = destSize.height / sourceSize.height;
             }
             break;
         case kGPUImageFillModePreserveAspectRatioAndFill:
             if (sourceSize.height * destSize.width / sourceSize.width > destSize.height)
             {
-                sx = sy = destSize.width / sourceSize.width;
+                s.width = s.height = destSize.width / sourceSize.width;
             }
             else
             {
-                sx = sy = destSize.height / sourceSize.height;
+                s.width = s.height = destSize.height / sourceSize.height;
             }
             break;
         default:
-            sx = 1.f;
-            sy = 1.f;
+            s.width = 1.f;
+            s.height = 1.f;
             break;
     }
-    return CGPointMake(destSize.width / 2 + (pointInSource.x - sourceSize.width / 2) * sx,
-                       destSize.height / 2 + (pointInSource.y - sourceSize.height / 2) * sy);
+    return s;
+}
+
+CGPoint transformPointByFillMode(CGPoint pointInSource, CGSize sourceSize, CGSize destSize, GPUImageFillModeType fillMode) {
+    CGSize s = scaleFactor(sourceSize, destSize, fillMode);
+    return CGPointMake(destSize.width / 2 + (pointInSource.x - sourceSize.width / 2) * s.width,
+                       destSize.height / 2 + (pointInSource.y - sourceSize.height / 2) * s.height);
 }
 
 CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize destSize, GPUImageFillModeType fillMode) {
@@ -60,14 +65,51 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
     return CGRectMake(p0.x, p0.y, p1.x - p0.x, p1.y - p0.y);
 }
 
+NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGSize destSize, GPUImageFillModeType fillMode) {
+    NSMutableArray* ret = [[NSMutableArray alloc] init];
+    for (NSDictionary* dicPerson in personFaces)
+    {
+        NSMutableDictionary* retDictPerson = [[NSMutableDictionary alloc] init];
+        [ret addObject:retDictPerson];
+        
+        if ([dicPerson objectForKey:KCIFlyFaceResultPointsKey])
+        {
+            NSMutableArray* retPoints = [[NSMutableArray alloc] init];
+            [retDictPerson setObject:retPoints forKey:KCIFlyFaceResultPointsKey];
+            
+            for (NSString* strPoints in [dicPerson objectForKey:KCIFlyFaceResultPointsKey])
+            {
+                CGPoint p = CGPointFromString(strPoints) ;
+                p = transformPointByFillMode(p, sourceSize, destSize, fillMode);
+                [retPoints addObject:NSStringFromCGPoint(p)];
+            }
+        }
+        
+        BOOL isOriRect = NO;
+        if ([dicPerson objectForKey:KCIFlyFaceResultRectOri])
+        {
+            isOriRect = [[dicPerson objectForKey:KCIFlyFaceResultRectOri] boolValue];
+            [retDictPerson setObject:@(isOriRect) forKey:KCIFlyFaceResultRectOri];
+        }
+        
+        if ([dicPerson objectForKey:KCIFlyFaceResultRectKey])
+        {
+            CGRect rect = CGRectFromString([dicPerson objectForKey:KCIFlyFaceResultRectKey]);
+            rect = transformRectByFillMode(rect, sourceSize, destSize, fillMode);
+            [retDictPerson setObject:NSStringFromCGRect(rect) forKey:KCIFlyFaceResultRectKey];
+        }
+    }
+    return ret;
+}
+
 @interface UIElementsView : UIView
 {
     CGContextRef context;
 }
 
 @property (nonatomic, strong) NSArray* personFaces;
-@property (nonatomic, assign) CGSize sourceImageSize;
-@property (nonatomic, assign) GPUImageFillModeType fillMode;
+//@property (nonatomic, assign) CGSize sourceImageSize;
+//@property (nonatomic, assign) GPUImageFillModeType fillMode;
 
 @end
 
@@ -81,7 +123,7 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
         CGContextClearRect(context, self.bounds);
     }
     /*
-    CGRect rect = CGRectMake(0, 0, self.bounds.size.width / 2, self.bounds.size.height / 2);
+    CGRect rect = CGRectMake(self.bounds.size.width / 2, self.bounds.size.height / 2, self.bounds.size.width / 2, self.bounds.size.height / 2);
     // 左上
     CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height/8);
     CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
@@ -110,7 +152,7 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
             for (NSString* strPoints in [dicPerson objectForKey:KCIFlyFaceResultPointsKey])
             {
                 CGPoint p = CGPointFromString(strPoints) ;
-                p = transformPointByFillMode(p, self.sourceImageSize, self.bounds.size, self.fillMode);
+                //p = transformPointByFillMode(p, self.sourceImageSize, self.bounds.size, self.fillMode);
                 CGContextAddEllipseInRect(context, CGRectMake(p.x - 1 , p.y - 1 , 2 , 2));
             }
         }
@@ -124,7 +166,7 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
         if ([dicPerson objectForKey:KCIFlyFaceResultRectKey])
         {
             CGRect rect = CGRectFromString([dicPerson objectForKey:KCIFlyFaceResultRectKey]);
-            rect = transformRectByFillMode(rect, self.sourceImageSize, self.bounds.size, self.fillMode);
+            //rect = transformRectByFillMode(rect, self.sourceImageSize, self.bounds.size, self.fillMode);
             if (isOriRect)
             {//完整矩形
                 CGContextAddRect(context,rect);
@@ -257,9 +299,19 @@ CGRect transformRectByFillMode(CGRect rectInSource, CGSize sourceSize, CGSize de
     self.uiElementsView.backgroundColor = [UIColor clearColor];
     //self.uiElementsView.layer.backgroundColor = [UIColor clearColor].CGColor;
     [self.view insertSubview:self.uiElementsView belowSubview:self.navBar];
-    self.uiElementsView.personFaces = faceDetectResult;
+    /*
     self.uiElementsView.sourceImageSize = self.image.size;
-    self.uiElementsView.fillMode = gpuImageView.fillMode;
+    /*
+    CGSize scale = scaleFactor(self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
+    CGAffineTransform t0 = CGAffineTransformMakeTranslation(-self.image.size.width / 2, -self.image.size.height / 2);
+    CGAffineTransform s1 = CGAffineTransformMakeScale(scale.width, scale.height);
+    CGAffineTransform t2 = CGAffineTransformMakeTranslation(self.uiElementsView.frame.size.width / 2, self.uiElementsView.frame.size.height / 2);
+    self.uiElementsView.transform = CGAffineTransformConcat(CGAffineTransformConcat(t2, s1), t0);
+    //*/
+    //self.uiElementsView.sourceImageSize = self.uiElementsView.frame.size;
+    //self.uiElementsView.fillMode = gpuImageView.fillMode;
+    faceDetectResult = transformFaceDetectResults(faceDetectResult, self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
+    self.uiElementsView.personFaces = faceDetectResult;
     [self.uiElementsView setNeedsDisplay];
     
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
