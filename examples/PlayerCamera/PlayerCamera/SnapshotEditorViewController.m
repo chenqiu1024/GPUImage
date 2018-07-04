@@ -227,17 +227,21 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     gpuImageView.snapshotCompletion = ^(UIImage* image) {
         if (image)
         {
-            CGSize layerSize = CGSizeMake(self.view.layer.contentsScale * self.view.bounds.size.width,
-                                          self.view.layer.contentsScale * self.view.bounds.size.height);
+            CGFloat contentScale = self.view.layer.contentsScale;
+            CGSize layerSize = CGSizeMake(contentScale * self.view.bounds.size.width,
+                                          contentScale * self.view.bounds.size.height);
             CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
             CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
 
-            CGContextDrawImage(imageContext, self.view.bounds, image.CGImage);
+            CGContextDrawImage(imageContext, CGRectMake(0, 0, layerSize.width, layerSize.height), image.CGImage);
+            
+            CGContextScaleCTM(imageContext, contentScale, contentScale);
             [self.uiElementsView.layer renderInContext:imageContext];
             
             UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationDownMirrored];
             NSData* data = UIImageJPEGRepresentation(snapshot, 1.f);
-            NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"snapshot.jpg"];
+            NSString* fileName = [NSString stringWithFormat:@"snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
+            NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
             [data writeToFile:path atomically:YES];
             
             CGContextRelease(imageContext);
