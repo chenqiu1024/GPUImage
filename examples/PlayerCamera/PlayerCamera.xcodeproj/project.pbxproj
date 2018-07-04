@@ -728,7 +728,7 @@
 					"-all_load",
 					"-Objc",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.gridshow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -772,7 +772,7 @@
 					"-all_load",
 					"-Objc",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.PlayerCamera;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.gridshow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

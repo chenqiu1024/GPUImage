@@ -8,8 +8,11 @@
 
 #import "AppDelegate.h"
 #import "iflyMSC/IFlyMSC.h"
+#import "WXApi.h"
 
-@interface AppDelegate ()
+#define WX_APP_ID @"wxdf2a54deef888d98"
+
+@interface AppDelegate () <WXApiDelegate>
 
 @end
 
@@ -60,6 +63,8 @@
     //Configure and initialize iflytek services.(This interface must been invoked in application:didFinishLaunchingWithOptions:)
     [IFlySpeechUtility createUtility:initString];
     
+    [WXApi registerApp:WX_APP_ID];
+    
     return YES;
 }
 
@@ -94,5 +99,16 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+-(BOOL) application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+-(BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+-(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [WXApi handleOpenURL:url delegate:self];
+}
 
 @end
