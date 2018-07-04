@@ -926,6 +926,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"PRODUCT_NAME=1",
+					"DEBUG=1",
+				);
 				HEADER_SEARCH_PATHS = (
 					"../../framework/Source/iOS/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
@@ -970,6 +974,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCT_NAME=1";
 				HEADER_SEARCH_PATHS = (
 					"../../framework/Source/iOS/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
@@ -1037,6 +1042,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"PRODUCT_NAME=2",
+					"DEBUG=1",
+				);
 				HEADER_SEARCH_PATHS = (
 					"../../framework/Source/iOS/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
@@ -1081,6 +1090,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCT_NAME=2";
 				HEADER_SEARCH_PATHS = (
 					"../../framework/Source/iOS/**",
 					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",

@@ -14,6 +14,12 @@
 //#define WX_APP_ID @"wxd930ea5d5a258f4f"
 #define WX_APP_ID @"wxdf2a54deef888d98"
 
+#if PRODUCT_NAME == 1
+#define ROOT_VC_ID @"RootTab"
+#elif PRODUCT_NAME == 2
+#define ROOT_VC_ID @"CameraDictate"
+#endif
+
 @interface AppDelegate () <WXApiDelegate>
 
 @end
@@ -69,7 +75,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     //UIViewController* rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraDictate"];
-    UIViewController* rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"RootTab"];
+    NSLog(@"PRODUCT_NAME : %@", ROOT_VC_ID);
+    UIViewController* rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:ROOT_VC_ID];
     rootViewController.view.frame = [[UIScreen mainScreen] bounds];
     [self.window addSubview:rootViewController.view];
     
