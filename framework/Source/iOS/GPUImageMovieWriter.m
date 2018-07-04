@@ -720,7 +720,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         return;
     }
 
-    if (videoOffsetTime.value <= 0)
+    if (CMTIME_IS_NEGATIVE_INFINITY(videoOffsetTime) || videoOffsetTime.value <= 0)
     {
         videoOffsetTime = frameTime;
     }
@@ -731,25 +731,29 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         
         if (videoOffsetTime.value > 0) {
             current = CMTimeSubtract(frameTime, videoOffsetTime);
-//            NSLog(@"#Timestamp# current = CMTimeSubtract(frameTime, videoOffsetTime);// frameTime=%f, videoOffsetTime=%f, current=%f", CMTimeGetSeconds(frameTime), CMTimeGetSeconds(videoOffsetTime), CMTimeGetSeconds(current));
+            NSLog(@"#Timestamp# current = CMTimeSubtract(frameTime, videoOffsetTime);// frameTime=%f, videoOffsetTime=%f, current=%f", CMTimeGetSeconds(frameTime), CMTimeGetSeconds(videoOffsetTime), CMTimeGetSeconds(current));
         } else {
             current = frameTime;
-//            NSLog(@"#Timestamp# current = frameTime;// frameTime=%f, current=%f", CMTimeGetSeconds(frameTime), CMTimeGetSeconds(current));
+            NSLog(@"#Timestamp# current = frameTime;// frameTime=%f, current=%f", CMTimeGetSeconds(frameTime), CMTimeGetSeconds(current));
         }
         
+        if (CMTIME_IS_NEGATIVE_INFINITY(previousFrameTime) || previousFrameTime.value < 0)
+        {
+            previousFrameTime = kCMTimeZero;
+        }
         CMTime offset  = CMTimeSubtract(current, previousFrameTime);
-//        NSLog(@"#Timestamp# CMTime offset  = CMTimeSubtract(current, previousFrameTime); offset=%f, current=%f, previousFrameTime=%f", CMTimeGetSeconds(offset), CMTimeGetSeconds(current), CMTimeGetSeconds(previousFrameTime));
+        NSLog(@"#Timestamp# CMTime offset  = CMTimeSubtract(current, previousFrameTime); offset=%f, current=%f, previousFrameTime=%f", CMTimeGetSeconds(offset), CMTimeGetSeconds(current), CMTimeGetSeconds(previousFrameTime));
         if (videoOffsetTime.value == 0) {
             videoOffsetTime = offset;
-//            NSLog(@"#Timestamp# videoOffsetTime = offset; =%f", CMTimeGetSeconds(offset));
+            NSLog(@"#Timestamp# videoOffsetTime = offset; =%f", CMTimeGetSeconds(offset));
         } else {
-//            NSLog(@"#Timestamp# videoOffsetTime = CMTimeAdd(videoOffsetTime, offset); videoOffsetTime=%f, offset=%f, =%f", CMTimeGetSeconds(videoOffsetTime), CMTimeGetSeconds(offset), CMTimeGetSeconds(CMTimeAdd(videoOffsetTime, offset)));
+            NSLog(@"#Timestamp# videoOffsetTime = CMTimeAdd(videoOffsetTime, offset); videoOffsetTime=%f, offset=%f, =%f", CMTimeGetSeconds(videoOffsetTime), CMTimeGetSeconds(offset), CMTimeGetSeconds(CMTimeAdd(videoOffsetTime, offset)));
             videoOffsetTime = CMTimeAdd(videoOffsetTime, offset);
         }
     }
     
     if (videoOffsetTime.value > 0) {
-//        NSLog(@"#Timestamp# frameTime = CMTimeSubtract(frameTime, videoOffsetTime); frameTime=%f, videoOffsetTime=%f, =%f", CMTimeGetSeconds(frameTime), CMTimeGetSeconds(videoOffsetTime), CMTimeGetSeconds(CMTimeSubtract(frameTime, videoOffsetTime)));
+        NSLog(@"#Timestamp# frameTime = CMTimeSubtract(frameTime, videoOffsetTime); frameTime=%f, videoOffsetTime=%f, =%f", CMTimeGetSeconds(frameTime), CMTimeGetSeconds(videoOffsetTime), CMTimeGetSeconds(CMTimeSubtract(frameTime, videoOffsetTime)));
         frameTime = CMTimeSubtract(frameTime, videoOffsetTime);
     }
     

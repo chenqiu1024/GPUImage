@@ -117,11 +117,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 	{
 		[_captureSession addInput:videoInput];
 	}
-	
+    
 	// Add the video frame output	
 	videoOutput = [[AVCaptureVideoDataOutput alloc] init];
 	[videoOutput setAlwaysDiscardsLateVideoFrames:NO];
-    
+
 //    if (captureAsYUV && [GPUImageContext deviceSupportsRedTextures])
     if (captureAsYUV && [GPUImageContext supportsFastTextureUpload])
     {
@@ -408,6 +408,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
             [_captureSession addInput:videoInput];
         }
         //captureSession.sessionPreset = oriPreset;
+        [_captureSession setSessionPreset:_captureSessionPreset];
         [_captureSession commitConfiguration];
         DoctorLog(@"#VideoCapture# _captureSession(0x%lx) commitConfiguration in %s %s %d", _captureSession.hash, [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __FUNCTION__, __LINE__);
     }

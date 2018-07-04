@@ -10,7 +10,6 @@
 		520DA6D91ED7248C009E4705 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6D81ED7248C009E4705 /* main.m */; };
 		520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6DB1ED7248C009E4705 /* AppDelegate.m */; };
 		520DA6DF1ED7248C009E4705 /* CameraPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6DE1ED7248C009E4705 /* CameraPlayerViewController.m */; };
-		520DA6E21ED7248C009E4705 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E01ED7248C009E4705 /* Main.storyboard */; };
 		520DA6E41ED7248C009E4705 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E31ED7248C009E4705 /* Assets.xcassets */; };
 		520DA6E71ED7248C009E4705 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E51ED7248C009E4705 /* LaunchScreen.storyboard */; };
 		520DA6F21ED7248C009E4705 /* PlayerCameraUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6F11ED7248C009E4705 /* PlayerCameraUITests.m */; };
@@ -84,6 +83,9 @@
 		5281154D20ECBEEA00E2B133 /* WXApiResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281154A20ECBEEA00E2B133 /* WXApiResponseHandler.m */; };
 		5281154E20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281154B20ECBEEA00E2B133 /* WXApiRequestHandler.m */; };
 		5281154F20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281154B20ECBEEA00E2B133 /* WXApiRequestHandler.m */; };
+		5281155220ED0F0600E2B133 /* CameraDictateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281155120ED0F0600E2B133 /* CameraDictateViewController.m */; };
+		5281155320ED0F0600E2B133 /* CameraDictateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281155120ED0F0600E2B133 /* CameraDictateViewController.m */; };
+		5281155420ED373300E2B133 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E01ED7248C009E4705 /* Main.storyboard */; };
 		52C4BF9620CC0770002FC393 /* NSString+OpenGLES.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
@@ -251,6 +253,8 @@
 		5281154920ECBEE900E2B133 /* WXApiResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiResponseHandler.h; sourceTree = "<group>"; };
 		5281154A20ECBEEA00E2B133 /* WXApiResponseHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiResponseHandler.m; sourceTree = "<group>"; };
 		5281154B20ECBEEA00E2B133 /* WXApiRequestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiRequestHandler.m; sourceTree = "<group>"; };
+		5281155020ED0F0600E2B133 /* CameraDictateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraDictateViewController.h; sourceTree = "<group>"; };
+		5281155120ED0F0600E2B133 /* CameraDictateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraDictateViewController.m; sourceTree = "<group>"; };
 		52C4BF9420CC0770002FC393 /* NSString+OpenGLES.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSString+OpenGLES.h"; path = "Utils/NSString+OpenGLES.h"; sourceTree = "<group>"; };
 		52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+OpenGLES.m"; path = "Utils/NSString+OpenGLES.m"; sourceTree = "<group>"; };
 		52CAA9D31F66D3D000351014 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -390,6 +394,8 @@
 				52CED8C020BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m */,
 				527C39BF20EA5EC400CC64AE /* SnapshotEditorViewController.h */,
 				527C39C020EA5EC400CC64AE /* SnapshotEditorViewController.m */,
+				5281155020ED0F0600E2B133 /* CameraDictateViewController.h */,
+				5281155120ED0F0600E2B133 /* CameraDictateViewController.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -670,9 +676,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5281155420ED373300E2B133 /* Main.storyboard in Resources */,
 				520DA6E71ED7248C009E4705 /* LaunchScreen.storyboard in Resources */,
 				520DA6E41ED7248C009E4705 /* Assets.xcassets in Resources */,
-				520DA6E21ED7248C009E4705 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -719,6 +725,7 @@
 				5281154E20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */,
 				5281154620ECBEB700E2B133 /* WXMediaMessage+messageConstruct.m in Sources */,
 				52E2A74720E7307000BB445A /* UIImage+Share.m in Sources */,
+				5281155220ED0F0600E2B133 /* CameraDictateViewController.m in Sources */,
 				52E2A74220E6284800BB445A /* IFlyFaceDetectResultParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -756,6 +763,7 @@
 				5281154F20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */,
 				5281154720ECBEB700E2B133 /* WXMediaMessage+messageConstruct.m in Sources */,
 				5281151520ECBADF00E2B133 /* UIImage+Share.m in Sources */,
+				5281155320ED0F0600E2B133 /* CameraDictateViewController.m in Sources */,
 				5281151620ECBADF00E2B133 /* IFlyFaceDetectResultParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

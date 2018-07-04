@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="joo-Sg-RWn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -148,7 +148,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="VZU-jj-5QN">
             <objects>
-                <tabBarController id="joo-Sg-RWn" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="RootTab" id="joo-Sg-RWn" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="VIG-HV-mzZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -297,6 +297,62 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-41" y="-539"/>
+        </scene>
+        <!--Camera Dictate-->
+        <scene sceneID="kwT-Rx-QcP">
+            <objects>
+                <viewController storyboardIdentifier="CameraDictate" id="cpI-S5-Wge" userLabel="Camera Dictate" customClass="CameraDictateViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="D2b-Qd-kP6"/>
+                        <viewControllerLayoutGuide type="bottom" id="hQu-1Q-dx0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="GaI-qX-OUy" userLabel="GPUImage View" customClass="GPUImageView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcL-JH-VOk">
+                                <rect key="frame" x="16" y="646" width="343" height="21"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rOo-sG-ZQC">
+                                <rect key="frame" x="167" y="508" width="41" height="30"/>
+                                <state key="normal" title="Shoot"/>
+                                <connections>
+                                    <action selector="onShootButtonPressed:" destination="cpI-S5-Wge" eventType="touchUpInside" id="aj2-YS-Z2B"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGw-VB-9AS">
+                                <rect key="frame" x="16" y="594" width="45" height="30"/>
+                                <state key="normal" title="Rotate"/>
+                                <connections>
+                                    <action selector="onRotateCameraButtonPressed:" destination="cpI-S5-Wge" eventType="touchUpInside" id="kOY-o3-WGo"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="vcL-JH-VOk" firstAttribute="top" secondItem="MGw-VB-9AS" secondAttribute="bottom" constant="22" id="RO1-tb-euv"/>
+                            <constraint firstItem="rOo-sG-ZQC" firstAttribute="centerX" secondItem="GaI-qX-OUy" secondAttribute="centerX" id="SlW-YP-sAb"/>
+                            <constraint firstItem="MGw-VB-9AS" firstAttribute="leading" secondItem="GaI-qX-OUy" secondAttribute="leadingMargin" id="T5D-th-Ktq"/>
+                            <constraint firstItem="vcL-JH-VOk" firstAttribute="top" secondItem="rOo-sG-ZQC" secondAttribute="bottom" constant="108" id="VlQ-7h-Z8c"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="vcL-JH-VOk" secondAttribute="trailing" id="lqw-Dk-tVl"/>
+                            <constraint firstItem="vcL-JH-VOk" firstAttribute="leading" secondItem="GaI-qX-OUy" secondAttribute="leadingMargin" id="pDA-Fw-CEE"/>
+                            <constraint firstItem="hQu-1Q-dx0" firstAttribute="top" secondItem="vcL-JH-VOk" secondAttribute="bottom" id="sYv-dp-7s9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="dictateLabel" destination="vcL-JH-VOk" id="JW3-UG-0kV"/>
+                        <outlet property="rotateCameraButton" destination="MGw-VB-9AS" id="ZpE-vj-QTi"/>
+                        <outlet property="shootButton" destination="rOo-sG-ZQC" id="Yk3-ze-ZRb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xQt-5V-lUo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="727" y="143"/>
         </scene>
     </scenes>
     <resources>
