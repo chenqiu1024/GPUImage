@@ -10,6 +10,29 @@
 
 @implementation UIImage (Share)
 
+-(UIImage*) imageScaledToFitMaxSize:(CGSize)maxSize orientation:(UIImageOrientation)orientation {
+    float scale = 1.0f;
+    if (self.size.width > maxSize.width)
+        scale = maxSize.width / self.size.width;
+    if (self.size.height * scale > maxSize.height)
+        scale = maxSize.height / self.size.height;
+    if (scale != 1.0f)
+    {
+        int w = (int)(self.size.width * scale);
+        int h = (int)(self.size.height * scale);
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+        CGContextDrawImage(context, CGRectMake(0, 0, w, h), self.CGImage);
+        CGImageRef cgImage = CGBitmapContextCreateImage(context);
+        UIImage* ret = [UIImage imageWithCGImage:cgImage scale:1.0f orientation:orientation];
+        CGContextRelease(context);
+        CGColorSpaceRelease(colorSpace);
+        return ret;
+    }
+    else
+        return [UIImage imageWithCGImage:self.CGImage scale:1.0f orientation:orientation];
+}
+
 +(UIImage*) longImageWithImages:(NSArray<UIImage* >*)images {
     CGSize longImageSize = CGSizeZero;
     for (UIImage* img in images)

@@ -13,6 +13,7 @@
 #import "IFlyFaceDetectResultParser.h"
 #import "WXApiRequestHandler.h"
 #import "WeiXinConstant.h"
+#import "UIImage+Share.h"
 #import <GPUImage.h>
 
 #pragma mark    UIElementsView
@@ -242,23 +243,27 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
             [self.uiElementsView.layer renderInContext:imageContext];
             
             UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationDownMirrored];
-            NSData* data = UIImageJPEGRepresentation(snapshot, 1.f);
+            snapshot = [snapshot imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationDownMirrored];
+            NSData* data = UIImageJPEGRepresentation(snapshot, 1.0f);
             NSString* fileName = [NSString stringWithFormat:@"snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
             NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
             [data writeToFile:path atomically:YES];
             
-            UIImage* thumbImage = [UIImage imageWithCGImage:snapshot.CGImage scale:0.5f orientation:UIImageOrientationUp];
-            [WXApiRequestHandler sendImageData:data
-                                       TagName:kImageTagName
-                                    MessageExt:kMessageExt
-                                        Action:kMessageAction
-                                    ThumbImage:thumbImage
-                                       InScene:WXSceneTimeline];//WXSceneSession
-            /*
-             NSArray *activityItems = @[data0, data1];
-             UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
-             [self presentViewController:activityVC animated:TRUE completion:nil];
-            //*/
+            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                BOOL succ = [WXApiRequestHandler sendImageData:data
+                                                       TagName:kImageTagName
+                                                    MessageExt:kMessageExt
+                                                        Action:kMessageAction
+                                                    ThumbImage:thumbImage
+                                                       InScene:WXSceneTimeline];//WXSceneSession
+                NSLog(@"#WX# Send message succ = %d", succ);
+                /*
+                 NSArray *activityItems = @[data0, data1];
+                 UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
+                 [self presentViewController:activityVC animated:TRUE completion:nil];
+                 //*/
+            });
             
             CGContextRelease(imageContext);
             CGColorSpaceRelease(genericRGBColorspace);

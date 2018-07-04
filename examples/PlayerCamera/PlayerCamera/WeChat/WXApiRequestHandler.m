@@ -33,15 +33,15 @@
     WXImageObject *ext = [WXImageObject object];
     ext.imageData = imageData;
     
-    WXMediaMessage *message = [WXMediaMessage messageWithTitle:nil
-                                                   Description:nil
+    WXMediaMessage *message = [WXMediaMessage messageWithTitle:@"title nil"
+                                                   Description:@"desc nil"
                                                         Object:ext
                                                     MessageExt:messageExt
                                                  MessageAction:action
                                                     ThumbImage:thumbImage
                                                       MediaTag:tagName];
     
-    SendMessageToWXReq* req = [SendMessageToWXReq requestWithText:nil
+    SendMessageToWXReq* req = [SendMessageToWXReq requestWithText:@"text nil"
                                                    OrMediaMessage:message
                                                             bText:NO
                                                           InScene:scene];

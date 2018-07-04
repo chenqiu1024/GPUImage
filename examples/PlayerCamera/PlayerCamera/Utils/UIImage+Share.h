@@ -10,6 +10,8 @@
 
 @interface UIImage (Share)
 
+-(UIImage*) imageScaledToFitMaxSize:(CGSize)maxSize orientation:(UIImageOrientation)orientation;
+
 +(UIImage*) longImageWithImages:(NSArray<UIImage* >*)images;
 
 @end

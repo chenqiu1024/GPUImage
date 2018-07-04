@@ -11,6 +11,7 @@
 #import "WXApi.h"
 #import "WXApiManager.h"
 
+//#define WX_APP_ID @"wxd930ea5d5a258f4f"
 #define WX_APP_ID @"wxdf2a54deef888d98"
 
 @interface AppDelegate () <WXApiDelegate>
@@ -64,7 +65,15 @@
     //Configure and initialize iflytek services.(This interface must been invoked in application:didFinishLaunchingWithOptions:)
     [IFlySpeechUtility createUtility:initString];
     
-    [WXApi registerApp:WX_APP_ID];
+    [WXApi startLogByLevel:WXLogLevelNormal logBlock:^(NSString *log) {
+        NSLog(@"log : %@", log);
+    }];
+    //向微信注册
+    [WXApi registerApp:WX_APP_ID enableMTA:YES];
+//    [WXApi registerApp:@"wxd930ea5d5a258f4f" enableMTA:YES];
+    //向微信注册支持的文件类型
+    UInt64 typeFlag = MMAPP_SUPPORT_TEXT | MMAPP_SUPPORT_PICTURE | MMAPP_SUPPORT_LOCATION | MMAPP_SUPPORT_VIDEO |MMAPP_SUPPORT_AUDIO | MMAPP_SUPPORT_WEBPAGE | MMAPP_SUPPORT_DOC | MMAPP_SUPPORT_DOCX | MMAPP_SUPPORT_PPT | MMAPP_SUPPORT_PPTX | MMAPP_SUPPORT_XLS | MMAPP_SUPPORT_XLSX | MMAPP_SUPPORT_PDF;
+    [WXApi registerAppSupportContentFlag:typeFlag];
     
     return YES;
 }
