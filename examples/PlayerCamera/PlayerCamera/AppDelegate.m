@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "iflyMSC/IFlyMSC.h"
 #import "WXApi.h"
+#import "WXApiManager.h"
 
 #define WX_APP_ID @"wxdf2a54deef888d98"
 
@@ -100,15 +101,15 @@
 }
 
 -(BOOL) application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [WXApi handleOpenURL:url delegate:self];
+    return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
--(BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-    return [WXApi handleOpenURL:url delegate:self];
-}
+//-(BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+//    return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+//}
 
 -(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [WXApi handleOpenURL:url delegate:self];
+    return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
 @end
