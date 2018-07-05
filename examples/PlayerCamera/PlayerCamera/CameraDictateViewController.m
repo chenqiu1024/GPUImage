@@ -9,12 +9,15 @@
 #import "CameraDictateViewController.h"
 #import <GPUImage.h>
 #import <iflyMSC/IFlyMSC.h>
+#import "ISRDataHelper.h"
 
-@interface CameraDictateViewController ()
+@interface CameraDictateViewController () <IFlySpeechRecognizerDelegate>
 
 @property (nonatomic, strong) GPUImageVideoCamera* videoCamera;
 @property (nonatomic, strong) GPUImageMovieWriter* movieWriter;
+
 @property (nonatomic, strong) IFlySpeechRecognizer* speechRecognizer;
+@property (nonatomic, copy) NSString* speechRecognizerResultString;
 
 -(IBAction)onShootButtonPressed:(id)sender;
 
@@ -23,6 +26,10 @@
 @property (nonatomic, strong) IBOutlet UIButton* shootButton;
 @property (nonatomic, strong) IBOutlet UIButton* rotateCameraButton;
 @property (nonatomic, strong) IBOutlet UILabel* dictateLabel;
+
+-(void) initSpeechRecognizer;
+-(BOOL) startSpeechRecognizer;
+-(void) stopSpeechRecognizer;
 
 @end
 
@@ -119,6 +126,10 @@
     _movieWriter.paused = YES;
     [_movieWriter startRecording];
     [_videoCamera startCameraCapture];
+    
+    self.speechRecognizerResultString = @"";
+    [self initSpeechRecognizer];
+    [self startSpeechRecognizer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -135,5 +146,105 @@
     // Pass the selected object to the new view controller.
 }
 */
+#pragma mark    IFLY
+-(void) initSpeechRecognizer
+{
+    //recognition singleton without view
+    //recognition singleton without view
+    if (_speechRecognizer == nil) {
+        _speechRecognizer = [IFlySpeechRecognizer sharedInstance];
+    }
+    
+    [_speechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
+    
+    //set recognition domain
+    [_speechRecognizer setParameter:@"iat" forKey:[IFlySpeechConstant IFLY_DOMAIN]];
+    
+    _speechRecognizer.delegate = self;
+    
+    if (_speechRecognizer != nil) {
+        //set timeout of recording
+        [_speechRecognizer setParameter:@"30000" forKey:[IFlySpeechConstant SPEECH_TIMEOUT]];
+        //set VAD timeout of end of speech(EOS)
+        [_speechRecognizer setParameter:@"3000" forKey:[IFlySpeechConstant VAD_EOS]];
+        //set VAD timeout of beginning of speech(BOS)
+        [_speechRecognizer setParameter:@"3000" forKey:[IFlySpeechConstant VAD_BOS]];
+        //set network timeout
+        [_speechRecognizer setParameter:@"20000" forKey:[IFlySpeechConstant NET_TIMEOUT]];
+        
+        //set sample rate, 16K as a recommended option
+        [_speechRecognizer setParameter:@"16000" forKey:[IFlySpeechConstant SAMPLE_RATE]];
+        
+        //set language
+        [_speechRecognizer setParameter:@"zh_cn" forKey:[IFlySpeechConstant LANGUAGE]];
+        //set accent
+        [_speechRecognizer setParameter:@"mandarin" forKey:[IFlySpeechConstant ACCENT]];
+        
+        //set whether or not to show punctuation in recognition results
+        [_speechRecognizer setParameter:@"1" forKey:[IFlySpeechConstant ASR_PTT]];
+        
+    }
+}
+
+-(BOOL) startSpeechRecognizer {
+    if(_speechRecognizer == nil)
+    {
+        [self initSpeechRecognizer];
+    }
+    
+    [_speechRecognizer cancel];
+    
+    //Set microphone as audio source
+    [_speechRecognizer setParameter:IFLY_AUDIO_SOURCE_MIC forKey:@"audio_source"];
+    
+    //Set result type
+    [_speechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
+    
+    //Set the audio name of saved recording file while is generated in the local storage path of SDK,by default in library/cache.
+    ///[_speechRecognizer setParameter:@"asr.pcm" forKey:[IFlySpeechConstant ASR_AUDIO_PATH]];
+    
+    [_speechRecognizer setDelegate:self];
+    
+    BOOL ret = [_speechRecognizer startListening];
+    return ret;
+}
+
+-(void) stopSpeechRecognizer {
+    [_speechRecognizer stopListening];
+}
+
+/**
+ recognition session completion, which will be invoked no matter whether it exits error.
+ error.errorCode =
+ 0     success
+ other fail
+ **/
+- (void) onCompleted:(IFlySpeechError *) error
+{
+    NSString* text = [NSString stringWithFormat:@"Error：%d %@", error.errorCode,error.errorDesc];
+    NSLog(@"#IFLY# onCompleted :%@",text);
+}
+
+/**
+ result callback of recognition without view
+ results：recognition results
+ isLast：whether or not this is the last result
+ **/
+- (void) onResults:(NSArray *) results isLast:(BOOL)isLast
+{
+    NSMutableString* resultString = [[NSMutableString alloc] init];
+    NSDictionary* dic = results[0];
+    
+    for(NSString* key in dic)
+    {
+        [resultString appendFormat:@"%@",key];
+    }
+    
+    NSString* resultFromJson = [ISRDataHelper stringFromJson:resultString];
+    
+    self.speechRecognizerResultString = [NSString stringWithFormat:@"%@%@", self.speechRecognizerResultString, resultFromJson];
+    //    NSLog(@"#IFLY# resultFromJson=%@",resultFromJson);
+    NSLog(@"#IFLY# isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
+}
 
 @end

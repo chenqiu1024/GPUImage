@@ -250,7 +250,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
             [data writeToFile:path atomically:YES];
             
             UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
-            dispatch_async(dispatch_get_main_queue(), ^{
+            ///dispatch_async(dispatch_get_main_queue(), ^{
                 BOOL succ = [WXApiRequestHandler sendImageData:data
                                                        TagName:kImageTagName
                                                     MessageExt:kMessageExt
@@ -263,7 +263,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
                  UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
                  [self presentViewController:activityVC animated:TRUE completion:nil];
                  //*/
-            });
+            ///});
             
             CGContextRelease(imageContext);
             CGColorSpaceRelease(genericRGBColorspace);
