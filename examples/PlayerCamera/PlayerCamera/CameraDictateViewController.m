@@ -114,17 +114,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.shootButton.tag = 0;
-/*
-    [self setupMovieWriter];
-    _movieWriter.paused = YES;
-    [_movieWriter startRecording];
-
+//*
     _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
     _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
     _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     GPUImageView* gpuimageView = (GPUImageView*)self.view;
     [_videoCamera addTarget:gpuimageView];
+    [self setupMovieWriter];
+    _movieWriter.paused = YES;
+    [_movieWriter startRecording];
+    
     [_videoCamera startCameraCapture];
 //*/
     self.speechRecognizerResultString = @"";

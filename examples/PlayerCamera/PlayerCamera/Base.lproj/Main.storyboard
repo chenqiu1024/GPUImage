@@ -361,8 +361,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcL-JH-VOk">
-                                <rect key="frame" x="16" y="667" width="343" height="0.0"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="etewt" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcL-JH-VOk">
+                                <rect key="frame" x="16" y="0.0" width="343" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -386,13 +386,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="vcL-JH-VOk" firstAttribute="top" secondItem="MGw-VB-9AS" secondAttribute="bottom" constant="22" id="RO1-tb-euv"/>
+                            <constraint firstItem="hQu-1Q-dx0" firstAttribute="top" secondItem="MGw-VB-9AS" secondAttribute="bottom" constant="22" id="4on-V6-1mX"/>
+                            <constraint firstItem="hQu-1Q-dx0" firstAttribute="top" secondItem="rOo-sG-ZQC" secondAttribute="bottom" constant="108" id="JX5-1z-KID"/>
                             <constraint firstItem="rOo-sG-ZQC" firstAttribute="centerX" secondItem="GaI-qX-OUy" secondAttribute="centerX" id="SlW-YP-sAb"/>
                             <constraint firstItem="MGw-VB-9AS" firstAttribute="leading" secondItem="GaI-qX-OUy" secondAttribute="leadingMargin" id="T5D-th-Ktq"/>
-                            <constraint firstItem="vcL-JH-VOk" firstAttribute="top" secondItem="rOo-sG-ZQC" secondAttribute="bottom" constant="108" id="VlQ-7h-Z8c"/>
                             <constraint firstAttribute="trailingMargin" secondItem="vcL-JH-VOk" secondAttribute="trailing" id="lqw-Dk-tVl"/>
                             <constraint firstItem="vcL-JH-VOk" firstAttribute="leading" secondItem="GaI-qX-OUy" secondAttribute="leadingMargin" id="pDA-Fw-CEE"/>
                             <constraint firstItem="hQu-1Q-dx0" firstAttribute="top" secondItem="vcL-JH-VOk" secondAttribute="bottom" id="sYv-dp-7s9"/>
+                            <constraint firstItem="vcL-JH-VOk" firstAttribute="top" secondItem="GaI-qX-OUy" secondAttribute="top" id="wQ1-uo-WGb"/>
                         </constraints>
                     </view>
                     <connections>
