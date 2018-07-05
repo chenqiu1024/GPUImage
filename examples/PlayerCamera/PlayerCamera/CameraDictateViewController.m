@@ -106,35 +106,72 @@
 }
 
 -(IBAction)onRotateCameraButtonPressed:(id)sender {
-    [_videoCamera rotateCamera];
+    ///!!![_videoCamera rotateCamera];
+    [self startSpeechRecognizer];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.shootButton.tag = 0;
-    
+/*
+    [self setupMovieWriter];
+    _movieWriter.paused = YES;
+    [_movieWriter startRecording];
+
     _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
     _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
     _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
-    
     GPUImageView* gpuimageView = (GPUImageView*)self.view;
     [_videoCamera addTarget:gpuimageView];
-    
-    [self setupMovieWriter];
-    _movieWriter.paused = YES;
-    [_movieWriter startRecording];
     [_videoCamera startCameraCapture];
-    
+//*/
     self.speechRecognizerResultString = @"";
     [self initSpeechRecognizer];
-    [self startSpeechRecognizer];
+    //[self startSpeechRecognizer];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //*
+    ///[self initSpeechRecognizer];
+    ///[self startSpeechRecognizer];
+    /*/
+    NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    //*/
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    /*
+    [self stopSpeechRecognizer];
+    
+    [_speechRecognizer cancel];
+    [_speechRecognizer setDelegate:nil];
+    [_speechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
+    //*/
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) applicationDidBecomeActive:(id)sender {
+    [self initSpeechRecognizer];
+    ///[self startSpeechRecognizer];
+}
+
+-(void) applicationWillResignActive:(id)sender {
+    [self stopSpeechRecognizer];
+    
+    [self releaseSpeechRecognizer];
 }
 
 /*
@@ -150,10 +187,7 @@
 -(void) initSpeechRecognizer
 {
     //recognition singleton without view
-    //recognition singleton without view
-    if (_speechRecognizer == nil) {
-        _speechRecognizer = [IFlySpeechRecognizer sharedInstance];
-    }
+    _speechRecognizer = [IFlySpeechRecognizer sharedInstance];
     
     [_speechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
     
@@ -186,6 +220,13 @@
     }
 }
 
+-(void) releaseSpeechRecognizer {
+    [_speechRecognizer cancel];
+    [_speechRecognizer setDelegate:nil];
+    [_speechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
+    _speechRecognizer = nil;
+}
+
 -(BOOL) startSpeechRecognizer {
     if(_speechRecognizer == nil)
     {
@@ -201,7 +242,7 @@
     [_speechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
     
     //Set the audio name of saved recording file while is generated in the local storage path of SDK,by default in library/cache.
-    ///[_speechRecognizer setParameter:@"asr.pcm" forKey:[IFlySpeechConstant ASR_AUDIO_PATH]];
+    [_speechRecognizer setParameter:@"asr.pcm" forKey:[IFlySpeechConstant ASR_AUDIO_PATH]];
     
     [_speechRecognizer setDelegate:self];
     
@@ -223,6 +264,9 @@
 {
     NSString* text = [NSString stringWithFormat:@"Error：%d %@", error.errorCode,error.errorDesc];
     NSLog(@"#IFLY# onCompleted :%@",text);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self startSpeechRecognizer];
+    });
 }
 
 /**
@@ -244,7 +288,34 @@
     
     self.speechRecognizerResultString = [NSString stringWithFormat:@"%@%@", self.speechRecognizerResultString, resultFromJson];
     //    NSLog(@"#IFLY# resultFromJson=%@",resultFromJson);
-    NSLog(@"#IFLY# isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
+    NSLog(@"#IFLY# onResults isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.dictateLabel.text = self.speechRecognizerResultString;
+    });
+}
+
+-(void) onError:(IFlySpeechError*)errorCode {
+    NSLog(@"#IFLY# onError %@", errorCode.errorDesc);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self startSpeechRecognizer];
+    });
+    
+}
+
+-(void) onVolumeChanged:(int)volume {
+    //NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
+}
+
+-(void) onBeginOfSpeech {
+    NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
+}
+
+-(void) onEndOfSpeech {
+    NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
+}
+
+-(void) onCancel {
+    NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
 }
 
 @end
