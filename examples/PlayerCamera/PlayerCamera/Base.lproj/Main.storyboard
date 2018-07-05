@@ -57,22 +57,72 @@
                                     <navigationItem title="Title" id="v8L-Ye-XMe" userLabel="Back"/>
                                 </items>
                             </navigationBar>
+                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-je-dYO" userLabel="Filters Collection View">
+                                <rect key="frame" x="16" y="607" width="343" height="60"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="p7Z-z1-VpV"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="uy6-iE-YeZ">
+                                    <size key="itemSize" width="60" height="60"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FilterCell" id="ACO-k0-Ffk" customClass="FilterCollectionViewCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v8S-BV-tqa">
+                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="v8S-BV-tqa" firstAttribute="top" secondItem="ACO-k0-Ffk" secondAttribute="top" id="ND0-pw-Vel"/>
+                                            <constraint firstItem="v8S-BV-tqa" firstAttribute="leading" secondItem="ACO-k0-Ffk" secondAttribute="leading" id="izi-Jy-fF7"/>
+                                            <constraint firstAttribute="trailing" secondItem="v8S-BV-tqa" secondAttribute="trailing" id="k36-TZ-G9J"/>
+                                            <constraint firstAttribute="bottom" secondItem="v8S-BV-tqa" secondAttribute="bottom" id="rKm-b5-hmp"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="v8S-BV-tqa" id="ieO-EG-fJR"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mf3-PY-Je3">
+                                <rect key="frame" x="301" y="625" width="42" height="30"/>
+                                <state key="normal" title="Filters"/>
+                                <connections>
+                                    <action selector="onFilterButtonPressed:" destination="N3u-MN-3g6" eventType="touchUpInside" id="S8b-0q-jBM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="Mf3-PY-Je3" secondAttribute="trailing" constant="16" id="1kd-R9-Igb"/>
                             <constraint firstAttribute="trailing" secondItem="wx9-T4-wyg" secondAttribute="trailing" id="3cN-QD-NS2"/>
+                            <constraint firstItem="cGB-bO-tY0" firstAttribute="top" secondItem="Mf3-PY-Je3" secondAttribute="bottom" constant="12" id="8Qt-YO-bdb"/>
                             <constraint firstItem="wx9-T4-wyg" firstAttribute="top" secondItem="IIz-mf-euQ" secondAttribute="bottom" id="B2k-E2-zfT"/>
+                            <constraint firstItem="tzm-je-dYO" firstAttribute="leading" secondItem="yy1-wn-jNH" secondAttribute="leadingMargin" id="DZs-1q-beY"/>
                             <constraint firstItem="wx9-T4-wyg" firstAttribute="leading" secondItem="yy1-wn-jNH" secondAttribute="leading" id="GVm-9g-RcI"/>
+                            <constraint firstItem="cGB-bO-tY0" firstAttribute="top" secondItem="tzm-je-dYO" secondAttribute="bottom" id="e5r-pD-ZJN"/>
+                            <constraint firstItem="tzm-je-dYO" firstAttribute="trailing" secondItem="yy1-wn-jNH" secondAttribute="trailingMargin" id="qYb-NJ-oaJ"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="filterCollectionView" destination="tzm-je-dYO" id="rKK-Xo-h4c"/>
                         <outlet property="navBar" destination="wx9-T4-wyg" id="NRK-Kz-Dbn"/>
                         <outlet property="navItem" destination="v8L-Ye-XMe" id="Jag-iL-DF3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DCy-eh-7xa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-42" y="143"/>
+            <point key="canvasLocation" x="-42.399999999999999" y="142.57871064467767"/>
         </scene>
         <!--Videos-->
         <scene sceneID="tBN-WD-HHF">

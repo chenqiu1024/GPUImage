@@ -211,13 +211,31 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 
 @end
 
-@interface SnapshotEditorViewController ()
+#pragma mark    Filter Collection View
+
+static NSString* FilterCellIdentifier = @"FilterCell";
+
+@interface FilterCollectionViewCell : UICollectionViewCell
+
+@property (nonatomic, strong) IBOutlet UIImageView* imageView;
+
+@end
+
+@implementation FilterCollectionViewCell
+
+@end
+
+@interface SnapshotEditorViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, strong) UIElementsView* uiElementsView;
 @property (nonatomic, strong) GPUImagePicture* picture;
 
+@property (nonatomic, strong) IBOutlet UICollectionView* filterCollectionView;
+
 @property (nonatomic, strong) IBOutlet UINavigationBar* navBar;
 @property (nonatomic, strong) IBOutlet UINavigationItem* navItem;
+
+-(IBAction)onFilterButtonPressed:(id)sender;
 
 @end
 
@@ -301,6 +319,10 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     //https://www.jianshu.com/p/fa27ab9fb172
      //*/
     
+    self.filterCollectionView.dataSource = self;
+    self.filterCollectionView.delegate = self;
+    self.filterCollectionView.hidden = YES;
+
     // Do any additional setup after loading the view.
     if (!self.image)
         return;
@@ -356,5 +378,26 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark    Filters
+
+-(IBAction)onFilterButtonPressed:(id)sender {
+    self.filterCollectionView.hidden = NO;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 12;
+}
+
+-(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+-(__kindof UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    FilterCollectionViewCell* cell = (FilterCollectionViewCell*) [collectionView dequeueReusableCellWithReuseIdentifier:FilterCellIdentifier forIndexPath:indexPath];
+    cell.imageView.image = [UIImage imageNamed:@"AppIcon"];
+    return cell;
+}
+
 
 @end
