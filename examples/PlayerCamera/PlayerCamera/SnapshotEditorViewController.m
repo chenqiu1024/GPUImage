@@ -275,6 +275,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 @property (nonatomic, strong) GPUImagePicture* picture;
 
 @property (nonatomic, strong) IBOutlet UICollectionView* filterCollectionView;
+@property (nonatomic, strong) IBOutlet UIButton* filterButton;
 
 @property (nonatomic, strong) IBOutlet UINavigationBar* navBar;
 @property (nonatomic, strong) IBOutlet UINavigationItem* navItem;
@@ -384,7 +385,13 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     GPUImageView* gpuImageView = (GPUImageView*)self.view;
     gpuImageView.backgroundColor = [UIColor clearColor];
     self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
+    /*
+    GPUImageSketchFilter* filter = [[GPUImageSketchFilter alloc] init];
+    [self.picture addTarget:filter];
+    [filter addTarget:gpuImageView];
+    /*/
     [self.picture addTarget:gpuImageView];
+    //*/
     [self.picture processImage];
     
     self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
@@ -430,6 +437,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 
 -(IBAction)onFilterButtonPressed:(id)sender {
     self.filterCollectionView.hidden = NO;
+    self.filterButton.hidden = YES;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -466,16 +474,20 @@ static NSString* FilterCellIdentifier = @"FilterCell";
         [self.picture removeTarget:_filter];
     }
     
-    [self.picture processImage];
+    self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
     if (nextFilter)
     {
-        [nextFilter addTarget:gpuimageView];
         [self.picture addTarget:nextFilter];
+        [nextFilter addTarget:gpuimageView];
     }
     else
     {
         [self.picture addTarget:gpuimageView];
     }
+    [self.picture processImage];
+    
+    self.filterButton.hidden = NO;
+    self.filterCollectionView.hidden = YES;
 }
 
 @end

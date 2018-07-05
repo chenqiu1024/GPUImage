@@ -59,7 +59,7 @@
                             </navigationBar>
                             <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-je-dYO" userLabel="Filters Collection View">
                                 <rect key="frame" x="16" y="607" width="343" height="60"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="p7Z-z1-VpV"/>
                                 </constraints>
@@ -115,6 +115,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="filterButton" destination="Mf3-PY-Je3" id="Mwl-6S-b96"/>
                         <outlet property="filterCollectionView" destination="tzm-je-dYO" id="rKK-Xo-h4c"/>
                         <outlet property="navBar" destination="wx9-T4-wyg" id="NRK-Kz-Dbn"/>
                         <outlet property="navItem" destination="v8L-Ye-XMe" id="Jag-iL-DF3"/>
