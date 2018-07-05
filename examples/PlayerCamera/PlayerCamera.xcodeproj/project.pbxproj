@@ -966,7 +966,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = QBAB3CS86A;
+				DEVELOPMENT_TEAM = XNCE899229;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -997,8 +997,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.gijkplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "46867615-3767-4223-82c1-907c5edf325d";
-				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development";
+				PROVISIONING_PROFILE = "7539b2d0-48e3-46f1-8ba7-65cb077f526a";
+				PROVISIONING_PROFILE_SPECIFIER = "Domqiu Wildcard iOS Development ProvisioninProfile";
 				STRIP_STYLE = "non-global";
 				VALID_ARCHS = arm64;
 			};
