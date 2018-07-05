@@ -16,6 +16,46 @@
 #import "UIImage+Share.h"
 #import <GPUImage.h>
 
+typedef enum : int {
+    NoFilter = 0,
+    ToonFilter = 1,
+    SketchFilter = 2,
+    SepiaFilter = 3,
+    ComplementFilter = 4,
+} FilterID;
+
+const char* filterLogos[] = {"AppIcon", "AppIcon", "AppIcon", "AppIcon", "AppIcon"};
+
+GPUImageFilter* createFilterByID(int filterID) {
+    switch (filterID)
+    {
+        case ToonFilter:
+        {
+            GPUImageToonFilter* toonFilter = [[GPUImageToonFilter alloc] init];
+            toonFilter.threshold = 0.2f;
+            toonFilter.quantizationLevels = 10.f;
+            return toonFilter;
+        }
+        case SketchFilter:
+        {
+            GPUImageSketchFilter* sketchFilter = [[GPUImageSketchFilter alloc] init];
+            return sketchFilter;
+        }
+        case SepiaFilter:
+        {
+            GPUImageSepiaFilter* filter = [[GPUImageSepiaFilter alloc] init];
+            return filter;
+        }
+        case ComplementFilter:
+        {
+            GPUImageColorInvertFilter* filter = [[GPUImageColorInvertFilter alloc] init];
+            return filter;
+        }
+        default:
+            return nil;
+    }
+}
+
 #pragma mark    UIElementsView
 
 CGSize scaleFactor(CGSize sourceSize, CGSize destSize, GPUImageFillModeType fillMode) {
@@ -226,6 +266,10 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 @end
 
 @interface SnapshotEditorViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
+{
+    NSMutableDictionary<NSNumber*, GPUImageFilter* >* _filtersCache;
+    GPUImageFilter* _filter;
+}
 
 @property (nonatomic, strong) UIElementsView* uiElementsView;
 @property (nonatomic, strong) GPUImagePicture* picture;
@@ -319,6 +363,9 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     //https://www.jianshu.com/p/fa27ab9fb172
      //*/
     
+    _filtersCache = [[NSMutableDictionary alloc] init];
+    _filter = nil;
+    
     self.filterCollectionView.dataSource = self;
     self.filterCollectionView.delegate = self;
     self.filterCollectionView.hidden = YES;
@@ -386,7 +433,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 12;
+    return sizeof(filterLogos) / sizeof(filterLogos[0]);
 }
 
 -(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -395,9 +442,40 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 
 -(__kindof UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     FilterCollectionViewCell* cell = (FilterCollectionViewCell*) [collectionView dequeueReusableCellWithReuseIdentifier:FilterCellIdentifier forIndexPath:indexPath];
-    cell.imageView.image = [UIImage imageNamed:@"AppIcon"];
+    cell.imageView.image = [UIImage imageNamed:[NSString stringWithUTF8String:filterLogos[indexPath.row]]];
     return cell;
 }
 
+-(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    GPUImageFilter* nextFilter = [_filtersCache objectForKey:@(indexPath.row)];
+    if (!nextFilter)
+    {
+        nextFilter = createFilterByID((int)indexPath.row);
+        if (nextFilter)
+            [_filtersCache setObject:nextFilter forKey:@(indexPath.row)];
+    }
+    
+    GPUImageView* gpuimageView = (GPUImageView*)self.view;
+    if (!_filter)
+    {
+        [self.picture removeTarget:gpuimageView];
+    }
+    else
+    {
+        [_filter removeTarget:gpuimageView];
+        [self.picture removeTarget:_filter];
+    }
+    
+    [self.picture processImage];
+    if (nextFilter)
+    {
+        [nextFilter addTarget:gpuimageView];
+        [self.picture addTarget:nextFilter];
+    }
+    else
+    {
+        [self.picture addTarget:gpuimageView];
+    }
+}
 
 @end
