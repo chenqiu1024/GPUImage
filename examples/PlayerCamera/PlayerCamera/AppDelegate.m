@@ -14,9 +14,9 @@
 //#define WX_APP_ID @"wxd930ea5d5a258f4f"
 #define WX_APP_ID @"wxdf2a54deef888d98"
 
-#if PRODUCT_NAME == 1
+#if PRODUCT_ID == PRODUCT_ID_GijkPlayer
 #define ROOT_VC_ID @"RootTab"
-#elif PRODUCT_NAME == 2
+#elif PRODUCT_ID == PRODUCT_ID_GridShow
 #define ROOT_VC_ID @"CameraDictate"
 #endif
 
