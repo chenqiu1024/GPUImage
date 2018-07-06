@@ -7,6 +7,9 @@
 //
 
 #import "CameraDictateViewController.h"
+#import "PhotoLibraryViewController.h"
+#import "CameraPlayerViewController.h"
+#import "SnapshotEditorViewController.h"
 #import <GPUImage.h>
 #import <iflyMSC/IFlyMSC.h>
 #import "ISRDataHelper.h"
@@ -115,7 +118,23 @@
 }
 
 -(void) importMedias {
-    UIViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
+    PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
+    photoLibraryVC.selectCompletion = ^(id resultObject, PHAssetMediaType mediaType) {
+        if (mediaType == PHAssetMediaTypeVideo)
+        {
+            CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+            playerVC.sourceVideoFile = (NSString*)resultObject;
+            [self presentViewController:playerVC animated:YES completion:nil];
+        }
+        else if (mediaType == PHAssetMediaTypeImage)
+        {
+            NSData* imageData = (NSData*)resultObject;
+            UIImage* image = [UIImage imageWithData:imageData];
+            SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
+            editorVC.image = image;
+            [self presentViewController:editorVC animated:YES completion:nil];
+        }
+    };
     [self presentViewController:photoLibraryVC animated:YES completion:nil];
 }
 

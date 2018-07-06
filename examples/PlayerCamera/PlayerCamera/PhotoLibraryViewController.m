@@ -9,7 +9,6 @@
 #import "PhotoLibraryViewController.h"
 #import "UINavigationBar+Translucent.h"
 #import "CameraPlayerViewController.h"
-#import <Photos/Photos.h>
 
 static NSString* MediaCellIdentifier = @"MediaCell";
 
@@ -55,7 +54,17 @@ NSString* durationString(NSTimeInterval duration) {
     PHAsset* phAsset = [self.dataSource objectAtIndex:indexPath.row];
     if (phAsset.mediaType == PHAssetMediaTypeImage)
     {
-        
+        PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+        requestOptions.networkAccessAllowed = YES;
+        [[PHCachingImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self dismissSelf];
+                if (self.selectCompletion)
+                {
+                    self.selectCompletion(imageData, PHAssetMediaTypeImage);
+                }
+            });
+        }];
     }
     else if (phAsset.mediaType == PHAssetMediaTypeVideo)
     {
@@ -66,9 +75,11 @@ NSString* durationString(NSTimeInterval duration) {
             NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
             NSString* videoPath = [components.lastObject substringFromIndex:9];
             dispatch_async(dispatch_get_main_queue(), ^{
-                CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
-                playerVC.sourceVideoFile = videoPath;
-                [self presentViewController:playerVC animated:YES completion:nil];
+                [self dismissSelf];
+                if (self.selectCompletion)
+                {
+                    self.selectCompletion(videoPath, PHAssetMediaTypeVideo);
+                }
             });
         }];
     }

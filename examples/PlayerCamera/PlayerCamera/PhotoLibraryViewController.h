@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
+
+typedef void(^PhotoLibrarySelectCompletion)(id resultObject, PHAssetMediaType mediaType);
 
 @interface PhotoLibraryViewController : UIViewController
+
+@property (nonatomic, copy) PhotoLibrarySelectCompletion selectCompletion;
 
 @end
