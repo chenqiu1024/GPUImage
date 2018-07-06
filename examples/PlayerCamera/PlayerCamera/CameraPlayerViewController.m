@@ -880,7 +880,6 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     {
         case IJKMPMoviePlaybackStateStopped: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped#0", (int)_ijkMovie.playbackState);
-            [_ijkMovie shutdownClose:_ijkMovie];
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped#1", (int)_ijkMovie.playbackState);
             break;
         }
