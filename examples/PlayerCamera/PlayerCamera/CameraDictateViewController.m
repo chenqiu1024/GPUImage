@@ -119,9 +119,15 @@
 
 -(void) importMedias {
     PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
-    __weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
-    photoLibraryVC.selectCompletion = ^(id resultObject, PHAssetMediaType mediaType) {
-        __strong PhotoLibraryViewController* sPLVC = wPLVC;
+    //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
+    photoLibraryVC.selectCompletion = ^(NSArray<PhotoLibrarySelectionItem* >* selectedItems) {
+        //__strong PhotoLibraryViewController* sPLVC = wPLVC;
+        if (!selectedItems || selectedItems.count <= 0)
+            return;
+        
+        PhotoLibrarySelectionItem* item = selectedItems[0];
+        PHAssetMediaType mediaType = item.mediaType;
+        id resultObject = item.resultOject;
         if (mediaType == PHAssetMediaTypeVideo)
         {
             CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];

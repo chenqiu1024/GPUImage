@@ -24,10 +24,14 @@ NSString* durationString(NSTimeInterval duration) {
         return [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
 }
 
+@implementation PhotoLibrarySelectionItem
+@end
+
 @interface MediaCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, weak) IBOutlet UIImageView* imageView;
 @property (nonatomic, weak) IBOutlet UILabel* durationLabel;
+@property (nonatomic, weak) IBOutlet UILabel* indexLabel;
 
 @end
 
@@ -36,6 +40,10 @@ NSString* durationString(NSTimeInterval duration) {
 @end
 
 @interface PhotoLibraryViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+{
+    NSMutableArray<NSIndexPath* >* _selectedIndexPaths;
+    NSMutableDictionary<NSIndexPath*, NSNumber* >* _indexPath2SelectionIndex;
+}
 
 @property (nonatomic, strong) NSMutableArray<PHAsset* >* dataSource;
 
@@ -43,6 +51,7 @@ NSString* durationString(NSTimeInterval duration) {
 
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
+@property (nonatomic, strong) UIBarButtonItem* okButtonItem;
 
 @property (nonatomic, strong) UIActivityIndicatorView* loadingView;
 
@@ -53,47 +62,34 @@ NSString* durationString(NSTimeInterval duration) {
 #pragma mark  UICollectionView Delegate&DataSource
 
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PHAsset* phAsset = [self.dataSource objectAtIndex:indexPath.row];
-    if (phAsset.mediaType == PHAssetMediaTypeImage)
+    NSMutableArray<NSIndexPath* >* indexPathsToUpdate = [[NSMutableArray alloc] init];
+    NSInteger selectionIndex = [_selectedIndexPaths indexOfObject:indexPath];
+    if (NSNotFound == selectionIndex)
     {
-        PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
-        requestOptions.networkAccessAllowed = YES;
-        [[PHCachingImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.collectionView.userInteractionEnabled = YES;
-                [self dismissSelf];
-                if (self.selectCompletion)
-                {
-                    self.selectCompletion(imageData, PHAssetMediaTypeImage);
-                }
-            });
-        }];
-        self.collectionView.userInteractionEnabled = NO;
-        [self.loadingView startAnimating];
+        if (self.maxSelectionCount <= 0 || _selectedIndexPaths.count < self.maxSelectionCount)
+        {
+            [_selectedIndexPaths addObject:indexPath];
+            [indexPathsToUpdate addObject:indexPath];
+            [_indexPath2SelectionIndex setObject:@(_selectedIndexPaths.count) forKey:indexPath];
+        }
     }
-    else if (phAsset.mediaType == PHAssetMediaTypeVideo)
+    else
     {
-        PHVideoRequestOptions* requestOptions = [[PHVideoRequestOptions alloc] init];
-        requestOptions.networkAccessAllowed = YES;
-        [[PHCachingImageManager defaultManager] requestAVAssetForVideo:phAsset options:requestOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-            NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
-            NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
-            NSString* videoPath = [components.lastObject substringFromIndex:9];
-//            NSString* videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:sourceVideoPath.lastPathComponent];
-//            NSError* error = nil;
-//            [[NSFileManager defaultManager] copyItemAtPath:sourceVideoPath toPath:videoPath error:&error];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.collectionView.userInteractionEnabled = YES;
-                [self dismissSelf];
-                if (self.selectCompletion)
-                {
-                    self.selectCompletion(videoPath, PHAssetMediaTypeVideo);
-                }
-            });
-        }];
-        self.collectionView.userInteractionEnabled = NO;
-        [self.loadingView startAnimating];
+        for (NSUInteger i = selectionIndex; i < _selectedIndexPaths.count; ++i)
+        {
+            [indexPathsToUpdate addObject:_selectedIndexPaths[i]];
+        }
+        [_selectedIndexPaths removeObjectAtIndex:selectionIndex];
+        
+        [_indexPath2SelectionIndex removeAllObjects];
+        for (NSUInteger i = 0; i < _selectedIndexPaths.count; ++i)
+        {
+            [_indexPath2SelectionIndex setObject:@(i + 1) forKey:_selectedIndexPaths[i]];
+        }
     }
+    [collectionView reloadItemsAtIndexPaths:indexPathsToUpdate];
+    
+    self.okButtonItem.enabled = (_selectedIndexPaths.count > 0);
 }
 
 -(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -122,6 +118,18 @@ NSString* durationString(NSTimeInterval duration) {
         }
         cell.imageView.image = result;
     }];
+    
+    NSNumber* selectionIndex = _indexPath2SelectionIndex[indexPath];
+    if (!selectionIndex)
+    {
+        cell.indexLabel.hidden = YES;
+    }
+    else
+    {
+        cell.indexLabel.hidden = NO;
+        cell.indexLabel.text = [selectionIndex stringValue];
+        //[cell.indexLabel sizeToFit];
+    }
     return cell;
 }
 
@@ -135,6 +143,60 @@ NSString* durationString(NSTimeInterval duration) {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void) confirm {
+    self.collectionView.userInteractionEnabled = NO;
+    [self.loadingView startAnimating];
+    
+    NSMutableArray<PhotoLibrarySelectionItem* >* results = [[NSMutableArray alloc] init];
+    void(^completion)() = ^() {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.collectionView.userInteractionEnabled = YES;
+            [self dismissSelf];
+            if (self.selectCompletion)
+            {
+                self.selectCompletion([NSArray arrayWithArray:results]);
+            }
+        });
+    };
+    for (NSIndexPath* indexPath in _selectedIndexPaths)
+    {
+        PHAsset* phAsset = [self.dataSource objectAtIndex:indexPath.row];
+        if (phAsset.mediaType == PHAssetMediaTypeImage)
+        {
+            PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+            requestOptions.networkAccessAllowed = YES;
+            [[PHCachingImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
+                item.mediaType = PHAssetMediaTypeImage;
+                item.resultOject = imageData;
+                [results addObject:item];
+                if (results.count == _selectedIndexPaths.count)
+                {
+                    completion();
+                }
+            }];
+        }
+        else if (phAsset.mediaType == PHAssetMediaTypeVideo)
+        {
+            PHVideoRequestOptions* requestOptions = [[PHVideoRequestOptions alloc] init];
+            requestOptions.networkAccessAllowed = YES;
+            [[PHCachingImageManager defaultManager] requestAVAssetForVideo:phAsset options:requestOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
+                NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
+                NSString* videoPath = [components.lastObject substringFromIndex:9];
+                PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
+                item.mediaType = PHAssetMediaTypeVideo;
+                item.resultOject = videoPath;
+                [results addObject:item];
+                if (results.count == _selectedIndexPaths.count)
+                {
+                    completion();
+                }
+            }];
+        }
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -143,15 +205,26 @@ NSString* durationString(NSTimeInterval duration) {
                                                                          target:self
                                                                          action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
+    
+    self.okButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(confirm)];
+    self.okButtonItem.enabled = NO;
+    self.navItem.rightBarButtonItem = self.okButtonItem;
+    
     self.navItem.title = @"Select Photo/Video";
     
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
-    
+
     self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     self.loadingView.center = self.view.center;
     [self.view addSubview:self.loadingView];
 //    self.loadingView.translatesAutoresizingMaskIntoConstraints = YES;
+    
+    _selectedIndexPaths = [[NSMutableArray alloc] init];
+    _indexPath2SelectionIndex = [[NSMutableDictionary alloc] init];
     
     self.dataSource = [[NSMutableArray alloc] init];
     PHFetchOptions* fetchOptions = [[PHFetchOptions alloc] init];
@@ -160,7 +233,10 @@ NSString* durationString(NSTimeInterval duration) {
     PHFetchResult* fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
     [fetchResult enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         PHAsset* phAsset = (PHAsset*)obj;
-        [self.dataSource addObject:phAsset];
+        if (!self.allowedMediaTypes || [self.allowedMediaTypes containsObject:@(phAsset.mediaType)])
+        {
+            [self.dataSource addObject:phAsset];
+        }
     }];
     [self.collectionView reloadData];
 }

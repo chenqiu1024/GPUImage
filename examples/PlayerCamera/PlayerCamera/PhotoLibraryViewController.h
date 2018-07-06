@@ -9,11 +9,22 @@
 #import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
 
-typedef void(^PhotoLibrarySelectCompletion)(id resultObject, PHAssetMediaType mediaType);
+@interface PhotoLibrarySelectionItem : NSObject
+
+@property (nonatomic, assign) PHAssetMediaType mediaType;
+@property (nonatomic, strong) id resultOject;
+
+@end
+
+typedef void(^PhotoLibrarySelectCompletion)(NSArray<PhotoLibrarySelectionItem* >* selectedItems);
 
 @interface PhotoLibraryViewController : UIViewController
 
 @property (nonatomic, copy) PhotoLibrarySelectCompletion selectCompletion;
+
+@property (nonatomic, assign) NSArray<NSNumber* >* allowedMediaTypes;
+
+@property (nonatomic, assign) NSUInteger maxSelectionCount;
 
 -(void) dismissSelf;
 
