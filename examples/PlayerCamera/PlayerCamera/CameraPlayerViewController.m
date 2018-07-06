@@ -10,6 +10,7 @@
 #import "IJKGPUImageMovie.h"
 #import "IFlyFaceDetectResultParser.h"
 #import "SnapshotEditorViewController.h"
+#import "UINavigationBar+Translucent.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
@@ -593,18 +594,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     self.navItem.leftBarButtonItem = dismissButtonItem;
     self.navItem.title = [self.sourceVideoFile lastPathComponent];
     
-    self.navBar.translucent = YES;
-    UIColor* translucentColor = [UIColor clearColor];
-    CGRect rect = CGRectMake(0, 0, self.view.bounds.size.width, 64);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [translucentColor CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    [self.navBar setShadowImage:image];
-    [self.navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
-    // https://www.jianshu.com/p/fa27ab9fb172
+    [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
 
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];

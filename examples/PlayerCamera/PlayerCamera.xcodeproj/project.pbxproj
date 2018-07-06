@@ -86,6 +86,10 @@
 		5281155220ED0F0600E2B133 /* CameraDictateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281155120ED0F0600E2B133 /* CameraDictateViewController.m */; };
 		5281155320ED0F0600E2B133 /* CameraDictateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281155120ED0F0600E2B133 /* CameraDictateViewController.m */; };
 		5281155420ED373300E2B133 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E01ED7248C009E4705 /* Main.storyboard */; };
+		529DA58720EF511F0051E248 /* PhotoLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */; };
+		529DA58820EF511F0051E248 /* PhotoLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */; };
+		529DA58F20EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */; };
+		529DA59020EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */; };
 		52C4BF9620CC0770002FC393 /* NSString+OpenGLES.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
@@ -255,6 +259,10 @@
 		5281154B20ECBEEA00E2B133 /* WXApiRequestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiRequestHandler.m; sourceTree = "<group>"; };
 		5281155020ED0F0600E2B133 /* CameraDictateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraDictateViewController.h; sourceTree = "<group>"; };
 		5281155120ED0F0600E2B133 /* CameraDictateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraDictateViewController.m; sourceTree = "<group>"; };
+		529DA58520EF511F0051E248 /* PhotoLibraryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoLibraryViewController.h; sourceTree = "<group>"; };
+		529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryViewController.m; sourceTree = "<group>"; };
+		529DA58D20EF542E0051E248 /* UINavigationBar+Translucent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UINavigationBar+Translucent.h"; path = "Utils/UINavigationBar+Translucent.h"; sourceTree = "<group>"; };
+		529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UINavigationBar+Translucent.m"; path = "Utils/UINavigationBar+Translucent.m"; sourceTree = "<group>"; };
 		52C4BF9420CC0770002FC393 /* NSString+OpenGLES.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSString+OpenGLES.h"; path = "Utils/NSString+OpenGLES.h"; sourceTree = "<group>"; };
 		52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+OpenGLES.m"; path = "Utils/NSString+OpenGLES.m"; sourceTree = "<group>"; };
 		52CAA9D31F66D3D000351014 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -396,6 +404,8 @@
 				527C39C020EA5EC400CC64AE /* SnapshotEditorViewController.m */,
 				5281155020ED0F0600E2B133 /* CameraDictateViewController.h */,
 				5281155120ED0F0600E2B133 /* CameraDictateViewController.m */,
+				529DA58520EF511F0051E248 /* PhotoLibraryViewController.h */,
+				529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -461,6 +471,8 @@
 				52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */,
 				52E2A74520E7307000BB445A /* UIImage+Share.h */,
 				52E2A74620E7307000BB445A /* UIImage+Share.m */,
+				529DA58D20EF542E0051E248 /* UINavigationBar+Translucent.h */,
+				529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -713,6 +725,8 @@
 				524F116720B1B6E40045795F /* UIImage+Blur.m in Sources */,
 				5281153920ECBD3D00E2B133 /* WXApiManager.m in Sources */,
 				520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */,
+				529DA58F20EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */,
+				529DA58720EF511F0051E248 /* PhotoLibraryViewController.m in Sources */,
 				5281154420ECBEB700E2B133 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */,
 				52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,
 				52D32C3920E3F8EE00E93331 /* ISRDataHelper.m in Sources */,
@@ -751,6 +765,8 @@
 				5281150B20ECBADF00E2B133 /* UIImage+Blur.m in Sources */,
 				5281153A20ECBD3D00E2B133 /* WXApiManager.m in Sources */,
 				5281150C20ECBADF00E2B133 /* AppDelegate.m in Sources */,
+				529DA59020EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */,
+				529DA58820EF511F0051E248 /* PhotoLibraryViewController.m in Sources */,
 				5281154520ECBEB700E2B133 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */,
 				5281150D20ECBADF00E2B133 /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,
 				5281150E20ECBADF00E2B133 /* ISRDataHelper.m in Sources */,

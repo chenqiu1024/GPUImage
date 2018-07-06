@@ -10,6 +10,7 @@
 #import <GPUImage.h>
 #import <iflyMSC/IFlyMSC.h>
 #import "ISRDataHelper.h"
+#import "UINavigationBar+Translucent.h"
 
 @interface CameraDictateViewController () <IFlySpeechRecognizerDelegate>
 
@@ -22,6 +23,9 @@
 -(IBAction)onShootButtonPressed:(id)sender;
 
 -(IBAction)onRotateCameraButtonPressed:(id)sender;
+
+@property (nonatomic, strong) IBOutlet UINavigationBar* navBar;
+@property (nonatomic, strong) IBOutlet UINavigationItem* navItem;
 
 @property (nonatomic, strong) IBOutlet UIButton* shootButton;
 @property (nonatomic, strong) IBOutlet UIButton* rotateCameraButton;
@@ -110,9 +114,25 @@
     [self startSpeechRecognizer];
 }
 
+-(void) importMedias {
+    UIViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
+    [self presentViewController:photoLibraryVC animated:YES completion:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    UIBarButtonItem* importButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self
+                                                                         action:@selector(importMedias)];
+    self.navItem.rightBarButtonItem = importButtonItem;
+    self.navItem.title = @"";
+    //*
+    [self.navBar makeTranslucent];
+    [self setNeedsStatusBarAppearanceUpdate];
+    //https://www.jianshu.com/p/fa27ab9fb172
+    
     self.shootButton.tag = 0;
 //*
     _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
@@ -174,6 +194,9 @@
     [self releaseSpeechRecognizer];
 }
 
+-(UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 /*
 #pragma mark - Navigation
 

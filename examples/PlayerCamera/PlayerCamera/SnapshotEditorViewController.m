@@ -14,6 +14,7 @@
 #import "WXApiRequestHandler.h"
 #import "WeiXinConstant.h"
 #import "UIImage+Share.h"
+#import "UINavigationBar+Translucent.h"
 #import <GPUImage.h>
 
 typedef enum : int {
@@ -349,17 +350,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     self.navItem.leftBarButtonItem = dismissButtonItem;
     self.navItem.title = @"Picture Edit";
     //*
-    self.navBar.translucent = YES;
-    UIColor* translucentColor = [UIColor clearColor];
-    CGRect rect = CGRectMake(0, 0, self.view.bounds.size.width, 64);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [translucentColor CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    [self.navBar setShadowImage:image];
-    [self.navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+    [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
     //https://www.jianshu.com/p/fa27ab9fb172
      //*/
