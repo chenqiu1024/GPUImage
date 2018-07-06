@@ -588,7 +588,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    NSLog(@"sPLVC Next VC begin to load");
     //UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(dismissSelf)];
     UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
@@ -672,6 +672,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     [self startMovieWriteRecording];
     [_videoCamera startCameraCapture];
     [_videoCamera resumeCameraCapture];
+    NSLog(@"sPLVC Next VC finished load");
 }
 
 - (void)viewDidUnload

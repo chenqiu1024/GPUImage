@@ -367,17 +367,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     if (!self.image)
         return;
     
-    GPUImageView* gpuImageView = (GPUImageView*)self.view;
-    gpuImageView.backgroundColor = [UIColor clearColor];
-    self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
-    /*
-    GPUImageSketchFilter* filter = [[GPUImageSketchFilter alloc] init];
-    [self.picture addTarget:filter];
-    [filter addTarget:gpuImageView];
-    /*/
-    [self.picture addTarget:gpuImageView];
-    //*/
-    [self.picture processImage];
+    self.view.backgroundColor = [UIColor clearColor];
     
     self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
     self.uiElementsView.backgroundColor = [UIColor clearColor];
@@ -386,6 +376,12 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
     tapRecognizer.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:tapRecognizer];
+    
+    GPUImageView* gpuImageView = (GPUImageView*)self.view;
+    gpuImageView.backgroundColor = [UIColor clearColor];
+    self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
+    [self.picture addTarget:gpuImageView];
+    [self.picture processImage];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];

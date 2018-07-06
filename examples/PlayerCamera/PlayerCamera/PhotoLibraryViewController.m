@@ -60,6 +60,7 @@ NSString* durationString(NSTimeInterval duration) {
         requestOptions.networkAccessAllowed = YES;
         [[PHCachingImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                self.collectionView.userInteractionEnabled = YES;
                 [self dismissSelf];
                 if (self.selectCompletion)
                 {
@@ -67,6 +68,7 @@ NSString* durationString(NSTimeInterval duration) {
                 }
             });
         }];
+        self.collectionView.userInteractionEnabled = NO;
         [self.loadingView startAnimating];
     }
     else if (phAsset.mediaType == PHAssetMediaTypeVideo)
@@ -77,7 +79,11 @@ NSString* durationString(NSTimeInterval duration) {
             NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
             NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
             NSString* videoPath = [components.lastObject substringFromIndex:9];
+//            NSString* videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:sourceVideoPath.lastPathComponent];
+//            NSError* error = nil;
+//            [[NSFileManager defaultManager] copyItemAtPath:sourceVideoPath toPath:videoPath error:&error];
             dispatch_async(dispatch_get_main_queue(), ^{
+                self.collectionView.userInteractionEnabled = YES;
                 [self dismissSelf];
                 if (self.selectCompletion)
                 {
@@ -85,6 +91,7 @@ NSString* durationString(NSTimeInterval duration) {
                 }
             });
         }];
+        self.collectionView.userInteractionEnabled = NO;
         [self.loadingView startAnimating];
     }
 }
