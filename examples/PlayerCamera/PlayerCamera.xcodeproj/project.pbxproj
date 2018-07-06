@@ -90,6 +90,8 @@
 		529DA58820EF511F0051E248 /* PhotoLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */; };
 		529DA58F20EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */; };
 		529DA59020EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */; };
+		529DA59320EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA59220EF7BF40051E248 /* PhotoLibraryHelper.m */; };
+		529DA59420EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA59220EF7BF40051E248 /* PhotoLibraryHelper.m */; };
 		52C4BF9620CC0770002FC393 /* NSString+OpenGLES.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
@@ -263,6 +265,8 @@
 		529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryViewController.m; sourceTree = "<group>"; };
 		529DA58D20EF542E0051E248 /* UINavigationBar+Translucent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UINavigationBar+Translucent.h"; path = "Utils/UINavigationBar+Translucent.h"; sourceTree = "<group>"; };
 		529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UINavigationBar+Translucent.m"; path = "Utils/UINavigationBar+Translucent.m"; sourceTree = "<group>"; };
+		529DA59120EF7BF40051E248 /* PhotoLibraryHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PhotoLibraryHelper.h; path = Utils/PhotoLibraryHelper.h; sourceTree = "<group>"; };
+		529DA59220EF7BF40051E248 /* PhotoLibraryHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PhotoLibraryHelper.m; path = Utils/PhotoLibraryHelper.m; sourceTree = "<group>"; };
 		52C4BF9420CC0770002FC393 /* NSString+OpenGLES.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSString+OpenGLES.h"; path = "Utils/NSString+OpenGLES.h"; sourceTree = "<group>"; };
 		52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+OpenGLES.m"; path = "Utils/NSString+OpenGLES.m"; sourceTree = "<group>"; };
 		52CAA9D31F66D3D000351014 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -473,6 +477,8 @@
 				52E2A74620E7307000BB445A /* UIImage+Share.m */,
 				529DA58D20EF542E0051E248 /* UINavigationBar+Translucent.h */,
 				529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */,
+				529DA59120EF7BF40051E248 /* PhotoLibraryHelper.h */,
+				529DA59220EF7BF40051E248 /* PhotoLibraryHelper.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -732,6 +738,7 @@
 				52D32C3920E3F8EE00E93331 /* ISRDataHelper.m in Sources */,
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
 				527C39C120EA5EC400CC64AE /* SnapshotEditorViewController.m in Sources */,
+				529DA59320EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */,
 				524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,
 				52CED8C120BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m in Sources */,
@@ -772,6 +779,7 @@
 				5281150E20ECBADF00E2B133 /* ISRDataHelper.m in Sources */,
 				5281150F20ECBADF00E2B133 /* IJKGPUImageMovie.m in Sources */,
 				5281151020ECBADF00E2B133 /* SnapshotEditorViewController.m in Sources */,
+				529DA59420EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */,
 				5281151120ECBADF00E2B133 /* VideoCollectionViewController.m in Sources */,
 				5281151220ECBADF00E2B133 /* main.m in Sources */,
 				5281151320ECBADF00E2B133 /* IJKGPUImage_GLES2_Renderer.m in Sources */,
