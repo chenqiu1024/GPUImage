@@ -120,8 +120,8 @@
 -(void) importMedias {
     PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
     //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
-    photoLibraryVC.maxSelectionCount = 9;
-    photoLibraryVC.allowedMediaTypes = @[@(PHAssetMediaTypeImage)];
+    photoLibraryVC.maxSelectionCount = 0;
+    photoLibraryVC.allowedMediaTypes = @[@(PHAssetMediaTypeVideo)];
     photoLibraryVC.selectCompletion = ^(NSArray<PhotoLibrarySelectionItem* >* selectedItems) {
         //__strong PhotoLibraryViewController* sPLVC = wPLVC;
         if (!selectedItems || selectedItems.count <= 0)

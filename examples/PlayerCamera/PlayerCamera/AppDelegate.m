@@ -17,7 +17,7 @@
 #if PRODUCT_ID == PRODUCT_ID_GijkPlayer
 #define ROOT_VC_ID @"RootTab"
 #elif PRODUCT_ID == PRODUCT_ID_GridShow
-#define ROOT_VC_ID @"CameraDictate"
+#define ROOT_VC_ID @"StartingGrid" ///@"CameraDictate"
 #endif
 
 @interface AppDelegate () <WXApiDelegate>
