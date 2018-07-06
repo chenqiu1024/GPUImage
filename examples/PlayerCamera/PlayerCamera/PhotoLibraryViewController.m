@@ -44,6 +44,8 @@ NSString* durationString(NSTimeInterval duration) {
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 
+@property (nonatomic, strong) UIActivityIndicatorView* loadingView;
+
 @end
 
 @implementation PhotoLibraryViewController
@@ -65,6 +67,7 @@ NSString* durationString(NSTimeInterval duration) {
                 }
             });
         }];
+        [self.loadingView startAnimating];
     }
     else if (phAsset.mediaType == PHAssetMediaTypeVideo)
     {
@@ -82,6 +85,7 @@ NSString* durationString(NSTimeInterval duration) {
                 }
             });
         }];
+        [self.loadingView startAnimating];
     }
 }
 
@@ -120,6 +124,7 @@ NSString* durationString(NSTimeInterval duration) {
 }
 
 -(void) dismissSelf {
+    [self.loadingView stopAnimating];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -135,6 +140,11 @@ NSString* durationString(NSTimeInterval duration) {
     
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    self.loadingView.center = self.view.center;
+    [self.view addSubview:self.loadingView];
+//    self.loadingView.translatesAutoresizingMaskIntoConstraints = YES;
     
     self.dataSource = [[NSMutableArray alloc] init];
     PHFetchOptions* fetchOptions = [[PHFetchOptions alloc] init];

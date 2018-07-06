@@ -119,12 +119,17 @@
 
 -(void) importMedias {
     PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
+    __weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
     photoLibraryVC.selectCompletion = ^(id resultObject, PHAssetMediaType mediaType) {
+        __strong PhotoLibraryViewController* sPLVC = wPLVC;
         if (mediaType == PHAssetMediaTypeVideo)
         {
             CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
             playerVC.sourceVideoFile = (NSString*)resultObject;
-            [self presentViewController:playerVC animated:YES completion:nil];
+            NSLog(@"sPLVC present next OK");
+            [self presentViewController:playerVC animated:YES completion:^(){
+                NSLog(@"[sPLVC dismissSelf] OK");
+            }];
         }
         else if (mediaType == PHAssetMediaTypeImage)
         {
@@ -132,7 +137,10 @@
             UIImage* image = [UIImage imageWithData:imageData];
             SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
             editorVC.image = image;
-            [self presentViewController:editorVC animated:YES completion:nil];
+            NSLog(@"sPLVC present next OK");
+            [self presentViewController:editorVC animated:YES completion:^(){
+                NSLog(@"[sPLVC dismissSelf] OK");
+            }];
         }
     };
     [self presentViewController:photoLibraryVC animated:YES completion:nil];

@@ -341,6 +341,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 }
 
 - (void)viewDidLoad {
+    NSLog(@"sPLVC Next VC begin to load");
     [super viewDidLoad];
     
     UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -366,13 +367,6 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     if (!self.image)
         return;
     
-    IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];
-    [faceDetector setParameter:@"1" forKey:@"align"];
-    [faceDetector setParameter:@"1" forKey:@"detect"];
-    NSString* detectResultString = [faceDetector detectARGB:self.image];
-    NSArray* faceDetectResult = [IFlyFaceDetectResultParser parseFaceDetectResult:detectResultString];
-    NSLog(@"FaceDetect in (%f, %f) result = '%@', array=%@", self.image.size.width, self.image.size.height, detectResultString, faceDetectResult);
-    
     GPUImageView* gpuImageView = (GPUImageView*)self.view;
     gpuImageView.backgroundColor = [UIColor clearColor];
     self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
@@ -387,26 +381,27 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     
     self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
     self.uiElementsView.backgroundColor = [UIColor clearColor];
-    //self.uiElementsView.layer.backgroundColor = [UIColor clearColor].CGColor;
     [self.view insertSubview:self.uiElementsView belowSubview:self.navBar];
-    /*
-    self.uiElementsView.sourceImageSize = self.image.size;
-    /*
-    CGSize scale = scaleFactor(self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
-    CGAffineTransform t0 = CGAffineTransformMakeTranslation(-self.image.size.width / 2, -self.image.size.height / 2);
-    CGAffineTransform s1 = CGAffineTransformMakeScale(scale.width, scale.height);
-    CGAffineTransform t2 = CGAffineTransformMakeTranslation(self.uiElementsView.frame.size.width / 2, self.uiElementsView.frame.size.height / 2);
-    self.uiElementsView.transform = CGAffineTransformConcat(CGAffineTransformConcat(t2, s1), t0);
-    //*/
-    //self.uiElementsView.sourceImageSize = self.uiElementsView.frame.size;
-    //self.uiElementsView.fillMode = gpuImageView.fillMode;
-    faceDetectResult = transformFaceDetectResults(faceDetectResult, self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
-    self.uiElementsView.personFaces = faceDetectResult;
-    [self.uiElementsView setNeedsDisplay];
     
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
     tapRecognizer.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:tapRecognizer];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];
+        [faceDetector setParameter:@"1" forKey:@"align"];
+        [faceDetector setParameter:@"1" forKey:@"detect"];
+        NSString* detectResultString = [faceDetector detectARGB:self.image];
+        NSArray* faceDetectResult = [IFlyFaceDetectResultParser parseFaceDetectResult:detectResultString];
+        NSLog(@"FaceDetect in (%f, %f) result = '%@', array=%@", self.image.size.width, self.image.size.height, detectResultString, faceDetectResult);
+        faceDetectResult = transformFaceDetectResults(faceDetectResult, self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
+        self.uiElementsView.personFaces = faceDetectResult;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.uiElementsView setNeedsDisplay];
+        });
+        
+    });
+    NSLog(@"sPLVC Next VC finished load");
 }
 
 - (void)didReceiveMemoryWarning {

@@ -15,4 +15,6 @@ typedef void(^PhotoLibrarySelectCompletion)(id resultObject, PHAssetMediaType me
 
 @property (nonatomic, copy) PhotoLibrarySelectCompletion selectCompletion;
 
+-(void) dismissSelf;
+
 @end
