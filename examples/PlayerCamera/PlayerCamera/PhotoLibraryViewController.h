@@ -22,7 +22,7 @@ typedef void(^PhotoLibrarySelectCompletion)(NSArray<PhotoLibrarySelectionItem* >
 
 @property (nonatomic, copy) PhotoLibrarySelectCompletion selectCompletion;
 
-@property (nonatomic, assign) NSArray<NSNumber* >* allowedMediaTypes;
+@property (nonatomic, strong) NSArray<NSNumber* >* allowedMediaTypes;
 
 @property (nonatomic, assign) NSUInteger maxSelectionCount;
 
