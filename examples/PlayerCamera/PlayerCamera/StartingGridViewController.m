@@ -26,10 +26,26 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 @property (nonatomic, weak) IBOutlet UIImageView* imageView;
 @property (nonatomic, weak) IBOutlet UILabel* numberLabel;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView* loadingView;
+@property (nonatomic, weak) IBOutlet UIButton* deleteButton;
+
+@property (nonatomic, copy) void(^deleteButtonHandler)();
 
 @end
 
 @implementation StartingGridCell
+
+-(void) onDeleteButtonPressed:(id)sender {
+    if (self.deleteButtonHandler)
+    {
+        self.deleteButtonHandler();
+    }
+}
+
+-(void) awakeFromNib {
+    [super awakeFromNib];
+    [self.deleteButton addTarget:self action:@selector(onDeleteButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+}
+
 @end
 
 @interface StartingGridViewController () <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
@@ -56,6 +72,13 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     return self.imageAssets.count == MaxCells ? MaxCells : self.imageAssets.count + 1;
 }
 
+-(void) deleteItemAt:(NSIndexPath*)indexPath {
+    BlankImagePlaceHolder* placeHolder = [[BlankImagePlaceHolder alloc] init];
+    [self.imageAssets replaceObjectAtIndex:indexPath.row withObject:placeHolder];
+    [self.thumbnails removeObjectForKey:indexPath];
+    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+}
+
 -(__kindof UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     StartingGridCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:StartingGridCellIdentifier forIndexPath:indexPath];
     [cell.loadingView stopAnimating];
@@ -65,6 +88,8 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         cell.numberLabel.hidden = NO;
         cell.numberLabel.text = [@(indexPath.row + 1) stringValue];
         cell.imageView.image = nil;
+        cell.deleteButton.hidden = YES;
+        cell.deleteButtonHandler = nil;
     }
     else
     {
@@ -74,17 +99,23 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             cell.numberLabel.hidden = NO;
             cell.numberLabel.text = [@(indexPath.row + 1) stringValue];
             cell.imageView.image = nil;
+            cell.deleteButton.hidden = YES;
+            cell.deleteButtonHandler = nil;
         }
         else
         {
             cell.numberLabel.hidden = YES;
             UIImage* thumbnail = [self.thumbnails objectForKey:indexPath];
-             cell.imageView.image = thumbnail;
+            cell.imageView.image = thumbnail;
             if (!thumbnail)
             {
                 cell.loadingView.hidden = NO;
                 [cell.loadingView startAnimating];
             }
+            cell.deleteButton.hidden = NO;
+            cell.deleteButtonHandler = ^{
+                [self deleteItemAt:indexPath];
+            };
         }
     }
     
@@ -145,7 +176,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     }
     else if ([self.thumbnails objectForKey:indexPath])
     {
-        
+        [self deleteItemAt:indexPath];///!!!
     }
 }
 
