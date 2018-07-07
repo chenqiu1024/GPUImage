@@ -102,6 +102,8 @@
 		52D32C3920E3F8EE00E93331 /* ISRDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D32C3720E3F8EE00E93331 /* ISRDataHelper.m */; };
 		52D6723720EFCB27001A5564 /* StartingGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6723620EFCB27001A5564 /* StartingGridViewController.m */; };
 		52D6723820EFCB27001A5564 /* StartingGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6723620EFCB27001A5564 /* StartingGridViewController.m */; };
+		52D6724320F11948001A5564 /* UIViewController+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724220F11947001A5564 /* UIViewController+Extensions.m */; };
+		52D6724420F11948001A5564 /* UIViewController+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724220F11947001A5564 /* UIViewController+Extensions.m */; };
 		52E2A73E20E5306A00BB445A /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E2A73D20E5306A00BB445A /* iflyMSC.framework */; };
 		52E2A74220E6284800BB445A /* IFlyFaceDetectResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */; };
 		52E2A74720E7307000BB445A /* UIImage+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74620E7307000BB445A /* UIImage+Share.m */; };
@@ -284,6 +286,8 @@
 		52D32C3820E3F8EE00E93331 /* ISRDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISRDataHelper.h; path = SpeechRecognizer/ISRDataHelper.h; sourceTree = "<group>"; };
 		52D6723520EFCB27001A5564 /* StartingGridViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartingGridViewController.h; sourceTree = "<group>"; };
 		52D6723620EFCB27001A5564 /* StartingGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StartingGridViewController.m; sourceTree = "<group>"; };
+		52D6724120F11947001A5564 /* UIViewController+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Extensions.h"; path = "Utils/UIViewController+Extensions.h"; sourceTree = "<group>"; };
+		52D6724220F11947001A5564 /* UIViewController+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Extensions.m"; path = "Utils/UIViewController+Extensions.m"; sourceTree = "<group>"; };
 		52E2A73D20E5306A00BB445A /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
 		52E2A74020E6284700BB445A /* IFlyFaceDetectResultParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IFlyFaceDetectResultParser.h; sourceTree = "<group>"; };
 		52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IFlyFaceDetectResultParser.m; sourceTree = "<group>"; };
@@ -475,6 +479,8 @@
 		524F116520B1B67B0045795F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				52D6724120F11947001A5564 /* UIViewController+Extensions.h */,
+				52D6724220F11947001A5564 /* UIViewController+Extensions.m */,
 				524F116920B1B6EC0045795F /* UIImage+Blur.h */,
 				524F116620B1B6E40045795F /* UIImage+Blur.m */,
 				52C4BF9420CC0770002FC393 /* NSString+OpenGLES.h */,
@@ -739,6 +745,7 @@
 				520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */,
 				529DA58F20EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */,
 				52D6723720EFCB27001A5564 /* StartingGridViewController.m in Sources */,
+				52D6724320F11948001A5564 /* UIViewController+Extensions.m in Sources */,
 				529DA58720EF511F0051E248 /* PhotoLibraryViewController.m in Sources */,
 				5281154420ECBEB700E2B133 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */,
 				52FAF1C72067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,
@@ -781,6 +788,7 @@
 				5281150C20ECBADF00E2B133 /* AppDelegate.m in Sources */,
 				529DA59020EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */,
 				52D6723820EFCB27001A5564 /* StartingGridViewController.m in Sources */,
+				52D6724420F11948001A5564 /* UIViewController+Extensions.m in Sources */,
 				529DA58820EF511F0051E248 /* PhotoLibraryViewController.m in Sources */,
 				5281154520ECBEB700E2B133 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */,
 				5281150D20ECBADF00E2B133 /* IJKGPUImage_Vout_iOS_OpenGLES2.m in Sources */,

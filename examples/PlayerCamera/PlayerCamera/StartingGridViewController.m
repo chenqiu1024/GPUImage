@@ -8,12 +8,24 @@
 
 #import "StartingGridViewController.h"
 #import "UINavigationBar+Translucent.h"
+#import "PhotoLibraryViewController.h"
+#import "UIViewController+Extensions.h"
+#import <Photos/Photos.h>
 
+const int MaxCells = 9;
 static NSString* StartingGridCellIdentifier = @"StartingGrid";
+
+@interface BlankImagePlaceHolder : NSObject
+@end
+
+@implementation BlankImagePlaceHolder
+@end
 
 @interface StartingGridCell : UICollectionViewCell
 
 @property (nonatomic, weak) IBOutlet UIImageView* imageView;
+@property (nonatomic, weak) IBOutlet UILabel* numberLabel;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView* loadingView;
 
 @end
 
@@ -28,6 +40,10 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, strong) UIBarButtonItem* okButtonItem;
 
+@property (nonatomic, strong) NSMutableArray<NSObject* >* imageAssets;
+@property (nonatomic, strong) NSMutableDictionary<NSIndexPath*, UIImage* >* thumbnails;
+//@property (nonatomic, strong) NSMutableSet<NSIndexPath* >* loadingCells;
+
 @end
 
 @implementation StartingGridViewController
@@ -37,18 +53,100 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 }
 
 -(NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 8;
+    return self.imageAssets.count == MaxCells ? MaxCells : self.imageAssets.count + 1;
 }
 
 -(__kindof UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     StartingGridCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:StartingGridCellIdentifier forIndexPath:indexPath];
-    cell.imageView.image = [UIImage imageNamed:@"AppIcon"];
+    [cell.loadingView stopAnimating];
+    cell.loadingView.hidden = YES;
+    if (indexPath.row == self.imageAssets.count)
+    {
+        cell.numberLabel.hidden = NO;
+        cell.numberLabel.text = [@(indexPath.row + 1) stringValue];
+        cell.imageView.image = nil;
+    }
+    else
+    {
+        NSObject* item = self.imageAssets[indexPath.row];
+        if ([item isKindOfClass:BlankImagePlaceHolder.class])
+        {
+            cell.numberLabel.hidden = NO;
+            cell.numberLabel.text = [@(indexPath.row + 1) stringValue];
+            cell.imageView.image = nil;
+        }
+        else
+        {
+            cell.numberLabel.hidden = YES;
+            UIImage* thumbnail = [self.thumbnails objectForKey:indexPath];
+             cell.imageView.image = thumbnail;
+            if (!thumbnail)
+            {
+                cell.loadingView.hidden = NO;
+                [cell.loadingView startAnimating];
+            }
+        }
+    }
+    
     return cell;
 }
 
 -(CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat size = (self.collectionView.bounds.size.width - 6) / 3;
     return CGSizeMake(size, size);
+}
+
+-(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == self.imageAssets.count || [self.imageAssets[indexPath.row] isKindOfClass:BlankImagePlaceHolder.class])
+    {
+        PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
+        //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
+        photoLibraryVC.maxSelectionCount = MaxCells - indexPath.row;
+        photoLibraryVC.allowedMediaTypes = @[@(PHAssetMediaTypeImage)];
+        photoLibraryVC.returnRawPHAssets = YES;
+        photoLibraryVC.selectCompletion = ^(NSArray<PhotoLibrarySelectionItem* >* selectedItems) {
+            for (NSUInteger offset = 0; offset < selectedItems.count; ++offset)
+            {
+                PhotoLibrarySelectionItem* item = selectedItems[offset];
+                NSUInteger index = offset + indexPath.row;
+                if (index < self.imageAssets.count)
+                {
+                    [self.imageAssets replaceObjectAtIndex:index withObject:item.resultOject];
+                }
+                else
+                {
+                    [self.imageAssets addObject:item.resultOject];
+                }
+                [self.thumbnails removeObjectForKey:[NSIndexPath indexPathForRow:index inSection:0]];
+            }
+            [self.collectionView reloadData];
+//            [self showActivityIndicatorViewInView:nil];
+            
+            CGSize cellSize = [self collectionView:collectionView layout:collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
+            cellSize = CGSizeMake(cellSize.width * [UIScreen mainScreen].scale, cellSize.height * [UIScreen mainScreen].scale);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                NSInteger index = indexPath.row;
+                for (PhotoLibrarySelectionItem* item in selectedItems)
+                {
+                    PHAsset* phAsset = (PHAsset*)item.resultOject;
+                    [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                        NSIndexPath* indexPathDone = [NSIndexPath indexPathForRow:index inSection:0];
+                        [self.thumbnails setObject:result forKey:indexPathDone];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.collectionView reloadItemsAtIndexPaths:@[indexPathDone]];
+                            //[self.collectionView reloadData];
+                        });
+                    }];
+                    index++;
+                }
+            });
+        };
+        [self presentViewController:photoLibraryVC animated:YES completion:nil];
+    }
+    else if ([self.thumbnails objectForKey:indexPath])
+    {
+        
+    }
 }
 
 -(void) confirm {
@@ -69,6 +167,10 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    self.imageAssets = [[NSMutableArray alloc] init];
+    self.thumbnails = [[NSMutableDictionary alloc] init];
+//    self.loadingCells = [[NSMutableSet alloc] init];
 }
 
 @end

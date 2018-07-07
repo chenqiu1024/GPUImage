@@ -9,6 +9,7 @@
 #import "PhotoLibraryViewController.h"
 #import "UINavigationBar+Translucent.h"
 #import "CameraPlayerViewController.h"
+#import "UIViewController+Extensions.h"
 
 static NSString* MediaCellIdentifier = @"MediaCell";
 
@@ -53,7 +54,7 @@ NSString* durationString(NSTimeInterval duration) {
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, strong) UIBarButtonItem* okButtonItem;
 
-@property (nonatomic, strong) UIActivityIndicatorView* loadingView;
+//@property (nonatomic, strong) UIActivityIndicatorView* loadingView;
 
 @end
 
@@ -139,13 +140,13 @@ NSString* durationString(NSTimeInterval duration) {
 }
 
 -(void) dismissSelf {
-    [self.loadingView stopAnimating];
+    [self dismissActivityIndicatorView];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) confirm {
     self.collectionView.userInteractionEnabled = NO;
-    [self.loadingView startAnimating];
+    [self showActivityIndicatorViewInView:nil];
     
     NSMutableArray<PhotoLibrarySelectionItem* >* results = [[NSMutableArray alloc] init];
     void(^completion)() = ^() {
@@ -161,39 +162,53 @@ NSString* durationString(NSTimeInterval duration) {
     for (NSIndexPath* indexPath in _selectedIndexPaths)
     {
         PHAsset* phAsset = [self.dataSource objectAtIndex:indexPath.row];
-        if (phAsset.mediaType == PHAssetMediaTypeImage)
+        if (self.returnRawPHAssets)
         {
-            PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
-            requestOptions.networkAccessAllowed = YES;
-            [[PHCachingImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
-                item.mediaType = PHAssetMediaTypeImage;
-                item.resultOject = imageData;
-                [results addObject:item];
-                if (results.count == _selectedIndexPaths.count)
-                {
-                    completion();
-                }
-            }];
+            PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
+            item.mediaType = phAsset.mediaType;
+            item.resultOject = phAsset;
+            [results addObject:item];
         }
-        else if (phAsset.mediaType == PHAssetMediaTypeVideo)
+        else
         {
-            PHVideoRequestOptions* requestOptions = [[PHVideoRequestOptions alloc] init];
-            requestOptions.networkAccessAllowed = YES;
-            [[PHCachingImageManager defaultManager] requestAVAssetForVideo:phAsset options:requestOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
-                NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
-                NSString* videoPath = [components.lastObject substringFromIndex:9];
-                PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
-                item.mediaType = PHAssetMediaTypeVideo;
-                item.resultOject = videoPath;
-                [results addObject:item];
-                if (results.count == _selectedIndexPaths.count)
-                {
-                    completion();
-                }
-            }];
+            if (phAsset.mediaType == PHAssetMediaTypeImage)
+            {
+                PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+                requestOptions.networkAccessAllowed = YES;
+                [[PHCachingImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                    PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
+                    item.mediaType = PHAssetMediaTypeImage;
+                    item.resultOject = imageData;
+                    [results addObject:item];
+                    if (results.count == _selectedIndexPaths.count)
+                    {
+                        completion();
+                    }
+                }];
+            }
+            else if (phAsset.mediaType == PHAssetMediaTypeVideo)
+            {
+                PHVideoRequestOptions* requestOptions = [[PHVideoRequestOptions alloc] init];
+                requestOptions.networkAccessAllowed = YES;
+                [[PHCachingImageManager defaultManager] requestAVAssetForVideo:phAsset options:requestOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                    NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
+                    NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
+                    NSString* videoPath = [components.lastObject substringFromIndex:9];
+                    PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
+                    item.mediaType = PHAssetMediaTypeVideo;
+                    item.resultOject = videoPath;
+                    [results addObject:item];
+                    if (results.count == _selectedIndexPaths.count)
+                    {
+                        completion();
+                    }
+                }];
+            }
         }
+    }
+    if (self.returnRawPHAssets)
+    {
+        completion();
     }
 }
 
@@ -218,9 +233,9 @@ NSString* durationString(NSTimeInterval duration) {
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
 
-    self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    self.loadingView.center = self.view.center;
-    [self.view addSubview:self.loadingView];
+//    self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    self.loadingView.center = self.view.center;
+//    [self.view addSubview:self.loadingView];
 //    self.loadingView.translatesAutoresizingMaskIntoConstraints = YES;
     
     _selectedIndexPaths = [[NSMutableArray alloc] init];

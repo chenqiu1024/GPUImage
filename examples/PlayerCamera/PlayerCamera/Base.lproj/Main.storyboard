@@ -94,9 +94,11 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mf3-PY-Je3">
-                                <rect key="frame" x="301" y="625" width="42" height="30"/>
-                                <state key="normal" title="Filters"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mf3-PY-Je3">
+                                <rect key="frame" x="318" y="570" width="25" height="25"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" backgroundImage="btn_more"/>
                                 <connections>
                                     <action selector="onFilterButtonPressed:" destination="N3u-MN-3g6" eventType="touchUpInside" id="S8b-0q-jBM"/>
                                 </connections>
@@ -106,10 +108,10 @@
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="Mf3-PY-Je3" secondAttribute="trailing" constant="16" id="1kd-R9-Igb"/>
                             <constraint firstAttribute="trailing" secondItem="wx9-T4-wyg" secondAttribute="trailing" id="3cN-QD-NS2"/>
-                            <constraint firstItem="cGB-bO-tY0" firstAttribute="top" secondItem="Mf3-PY-Je3" secondAttribute="bottom" constant="12" id="8Qt-YO-bdb"/>
                             <constraint firstItem="wx9-T4-wyg" firstAttribute="top" secondItem="IIz-mf-euQ" secondAttribute="bottom" id="B2k-E2-zfT"/>
                             <constraint firstItem="tzm-je-dYO" firstAttribute="leading" secondItem="yy1-wn-jNH" secondAttribute="leadingMargin" id="DZs-1q-beY"/>
                             <constraint firstItem="wx9-T4-wyg" firstAttribute="leading" secondItem="yy1-wn-jNH" secondAttribute="leading" id="GVm-9g-RcI"/>
+                            <constraint firstItem="cGB-bO-tY0" firstAttribute="top" secondItem="Mf3-PY-Je3" secondAttribute="bottom" constant="72" id="bcQ-Ec-iA2"/>
                             <constraint firstItem="cGB-bO-tY0" firstAttribute="top" secondItem="tzm-je-dYO" secondAttribute="bottom" id="e5r-pD-ZJN"/>
                             <constraint firstItem="tzm-je-dYO" firstAttribute="trailing" secondItem="yy1-wn-jNH" secondAttribute="trailingMargin" id="qYb-NJ-oaJ"/>
                         </constraints>
@@ -581,16 +583,35 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="I6o-SD-PUI">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Lk-Xd-5jI">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                    <fontDescription key="fontDescription" name="PingFangSC-Semibold" family="PingFang SC" pointSize="45"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="6JP-1g-3Gq">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="6JP-1g-3Gq" firstAttribute="top" secondItem="u84-C0-fvY" secondAttribute="top" id="86v-eS-uox"/>
+                                            <constraint firstItem="3Lk-Xd-5jI" firstAttribute="leading" secondItem="u84-C0-fvY" secondAttribute="leading" id="Ca6-Ge-R6k"/>
+                                            <constraint firstAttribute="trailing" secondItem="6JP-1g-3Gq" secondAttribute="trailing" id="Fa0-1G-WTH"/>
                                             <constraint firstAttribute="trailing" secondItem="I6o-SD-PUI" secondAttribute="trailing" id="H5S-tl-rpa"/>
+                                            <constraint firstItem="3Lk-Xd-5jI" firstAttribute="top" secondItem="u84-C0-fvY" secondAttribute="top" id="ISk-nk-cSQ"/>
                                             <constraint firstAttribute="bottom" secondItem="I6o-SD-PUI" secondAttribute="bottom" id="IdQ-P4-PZi"/>
+                                            <constraint firstAttribute="trailing" secondItem="3Lk-Xd-5jI" secondAttribute="trailing" id="OK7-Xu-Cyf"/>
                                             <constraint firstItem="I6o-SD-PUI" firstAttribute="top" secondItem="u84-C0-fvY" secondAttribute="top" id="SZB-sY-AWd"/>
+                                            <constraint firstItem="6JP-1g-3Gq" firstAttribute="leading" secondItem="u84-C0-fvY" secondAttribute="leading" id="YMD-Ns-Zhb"/>
+                                            <constraint firstAttribute="bottom" secondItem="6JP-1g-3Gq" secondAttribute="bottom" id="joQ-Ko-dar"/>
+                                            <constraint firstAttribute="bottom" secondItem="3Lk-Xd-5jI" secondAttribute="bottom" id="qei-a3-d1A"/>
                                             <constraint firstItem="I6o-SD-PUI" firstAttribute="leading" secondItem="u84-C0-fvY" secondAttribute="leading" id="u4c-gu-eei"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="imageView" destination="I6o-SD-PUI" id="AyN-yJ-BnX"/>
+                                            <outlet property="loadingView" destination="6JP-1g-3Gq" id="QR5-DP-DMN"/>
+                                            <outlet property="numberLabel" destination="3Lk-Xd-5jI" id="6Ud-VK-ir2"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -621,8 +642,39 @@
             </objects>
             <point key="canvasLocation" x="720.79999999999995" y="-1236.4317841079462"/>
         </scene>
+        <!--Video Snapshot-->
+        <scene sceneID="ffk-ke-ck1">
+            <objects>
+                <viewController storyboardIdentifier="VideoSnapshot" id="Wh9-jX-zwp" userLabel="Video Snapshot" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6vs-vc-NdQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="9f7-hm-v1f"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="C52-3m-nRZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rgz-oR-gqr">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <items>
+                                    <navigationItem title="Title" id="hh1-AP-Wh8"/>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Rgz-oR-gqr" firstAttribute="leading" secondItem="C52-3m-nRZ" secondAttribute="leading" id="8ge-Af-vT0"/>
+                            <constraint firstAttribute="trailing" secondItem="Rgz-oR-gqr" secondAttribute="trailing" id="Oa3-t3-VhR"/>
+                            <constraint firstItem="Rgz-oR-gqr" firstAttribute="top" secondItem="6vs-vc-NdQ" secondAttribute="bottom" id="XHh-dJ-vwR"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iQX-TT-RzA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
     </scenes>
     <resources>
+        <image name="btn_more" width="25" height="25"/>
         <image name="btn_player_pause.png" width="16" height="16"/>
         <image name="player_bottom_control_bg.png" width="16" height="16"/>
     </resources>

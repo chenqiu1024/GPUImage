@@ -26,6 +26,8 @@ typedef void(^PhotoLibrarySelectCompletion)(NSArray<PhotoLibrarySelectionItem* >
 
 @property (nonatomic, assign) NSUInteger maxSelectionCount;
 
+@property (nonatomic, assign) BOOL returnRawPHAssets;
+
 -(void) dismissSelf;
 
 @end

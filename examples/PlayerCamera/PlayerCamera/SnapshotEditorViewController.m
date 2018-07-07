@@ -418,8 +418,16 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 #pragma mark    Filters
 
 -(IBAction)onFilterButtonPressed:(id)sender {
-    self.filterCollectionView.hidden = NO;
-    self.filterButton.hidden = YES;
+    if (self.filterCollectionView.hidden)
+    {
+        self.filterCollectionView.hidden = NO;
+        self.filterButton.tintColor = [UIColor blueColor];
+    }
+    else
+    {
+        self.filterCollectionView.hidden = YES;
+        self.filterButton.tintColor = [UIColor whiteColor];
+    }
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -468,8 +476,8 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     }
     [self.picture processImage];
     
-    self.filterButton.hidden = NO;
-    self.filterCollectionView.hidden = YES;
+//    self.filterButton.hidden = NO;
+//    self.filterCollectionView.hidden = YES;
 }
 
 @end
