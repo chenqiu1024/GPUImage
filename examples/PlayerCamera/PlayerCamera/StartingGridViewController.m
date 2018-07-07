@@ -84,7 +84,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     StartingGridCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:StartingGridCellIdentifier forIndexPath:indexPath];
     [cell.loadingView stopAnimating];
     cell.loadingView.hidden = YES;
-    if (indexPath.row == self.imageAssets.count)
+    if (indexPath.row >= self.imageAssets.count)
     {
         cell.numberLabel.hidden = NO;
         cell.numberLabel.text = [@(indexPath.row + 1) stringValue];
@@ -131,52 +131,69 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == self.imageAssets.count || [self.imageAssets[indexPath.row] isKindOfClass:BlankImagePlaceHolder.class])
     {
-        PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
-        //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
-        photoLibraryVC.maxSelectionCount = MaxCells - indexPath.row;
-        photoLibraryVC.allowedMediaTypes = @[@(PHAssetMediaTypeImage)];
-        photoLibraryVC.returnRawPHAssets = YES;
-        photoLibraryVC.selectCompletion = ^(NSArray<PhotoLibrarySelectionItem* >* selectedItems) {
-            for (NSUInteger offset = 0; offset < selectedItems.count; ++offset)
-            {
-                PhotoLibrarySelectionItem* item = selectedItems[offset];
-                NSUInteger index = offset + indexPath.row;
-                if (index < self.imageAssets.count)
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        // Set the sourceView.
+        alert.popoverPresentationController.sourceView = collectionView;
+        // Set the sourceRect.
+        NSInteger rows = indexPath.row / 3;
+        NSInteger cols = indexPath.row % 3;
+        CGSize cellSize = [self collectionView:collectionView layout:collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
+        alert.popoverPresentationController.sourceRect = CGRectMake((0.5f + cols) * cellSize.width, (0.5f + rows) * cellSize.height, 10, 10);
+        // Create and add an Action.
+        UIAlertAction* action0 = [UIAlertAction actionWithTitle:@"Select Multi Images" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
+            //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
+            photoLibraryVC.maxSelectionCount = MaxCells - indexPath.row;
+            photoLibraryVC.allowedMediaTypes = @[@(PHAssetMediaTypeImage)];
+            photoLibraryVC.returnRawPHAssets = YES;
+            photoLibraryVC.selectCompletion = ^(NSArray<PhotoLibrarySelectionItem* >* selectedItems) {
+                for (NSUInteger offset = 0; offset < selectedItems.count; ++offset)
                 {
-                    [self.imageAssets replaceObjectAtIndex:index withObject:item.resultOject];
+                    PhotoLibrarySelectionItem* item = selectedItems[offset];
+                    NSUInteger index = offset + indexPath.row;
+                    if (index < self.imageAssets.count)
+                    {
+                        [self.imageAssets replaceObjectAtIndex:index withObject:item.resultOject];
+                    }
+                    else
+                    {
+                        [self.imageAssets addObject:item.resultOject];
+                    }
+                    [self.thumbnails removeObjectForKey:[NSIndexPath indexPathForRow:index inSection:0]];
                 }
-                else
-                {
-                    [self.imageAssets addObject:item.resultOject];
-                }
-                [self.thumbnails removeObjectForKey:[NSIndexPath indexPathForRow:index inSection:0]];
-            }
-            [self.collectionView reloadData];
-//            [self showActivityIndicatorViewInView:nil];
-            
-            CGSize cellSize = [self collectionView:collectionView layout:collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
-            cellSize = CGSizeMake(cellSize.width * [UIScreen mainScreen].scale, cellSize.height * [UIScreen mainScreen].scale);
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
-                requestOptions.networkAccessAllowed = YES;
+                [self.collectionView reloadData];
+                //            [self showActivityIndicatorViewInView:nil];
                 
-                NSInteger index = indexPath.row;
-                for (PhotoLibrarySelectionItem* item in selectedItems)
-                {
-                    PHAsset* phAsset = (PHAsset*)item.resultOject;
-                    [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                        NSIndexPath* indexPathDone = [NSIndexPath indexPathForRow:index inSection:0];
-                        [self.thumbnails setObject:result forKey:indexPathDone];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.collectionView reloadItemsAtIndexPaths:@[indexPathDone]];
-                            //[self.collectionView reloadData];
-                        });
-                    }];
-                    index++;
-                }
-            });
-        };
-        [self presentViewController:photoLibraryVC animated:YES completion:nil];
+                CGSize cellSize = [self collectionView:collectionView layout:collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
+                cellSize = CGSizeMake(cellSize.width * [UIScreen mainScreen].scale, cellSize.height * [UIScreen mainScreen].scale);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+                    requestOptions.networkAccessAllowed = YES;
+                    
+                    NSInteger index = indexPath.row;
+                    for (PhotoLibrarySelectionItem* item in selectedItems)
+                    {
+                        PHAsset* phAsset = (PHAsset*)item.resultOject;
+                        [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                            NSIndexPath* indexPathDone = [NSIndexPath indexPathForRow:index inSection:0];
+                            [self.thumbnails setObject:result forKey:indexPathDone];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self.collectionView reloadItemsAtIndexPaths:@[indexPathDone]];
+                                //[self.collectionView reloadData];
+                            });
+                        }];
+                        index++;
+                    }
+                });
+            };
+            [self presentViewController:photoLibraryVC animated:YES completion:nil];
+        }];
+        [alert addAction:action0];
+        
+        UIAlertAction* action4 = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:action4];
+        // Show the Alert.
+        [self presentViewController:alert animated:YES completion:nil];
     }
     else if ([self.thumbnails objectForKey:indexPath])
     {
