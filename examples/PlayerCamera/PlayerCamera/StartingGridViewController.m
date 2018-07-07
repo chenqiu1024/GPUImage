@@ -10,6 +10,7 @@
 #import "UINavigationBar+Translucent.h"
 #import "PhotoLibraryViewController.h"
 #import "UIViewController+Extensions.h"
+#import "SnapshotEditorViewController.h"
 #import <Photos/Photos.h>
 
 const int MaxCells = 9;
@@ -156,11 +157,14 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             CGSize cellSize = [self collectionView:collectionView layout:collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
             cellSize = CGSizeMake(cellSize.width * [UIScreen mainScreen].scale, cellSize.height * [UIScreen mainScreen].scale);
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+                requestOptions.networkAccessAllowed = YES;
+                
                 NSInteger index = indexPath.row;
                 for (PhotoLibrarySelectionItem* item in selectedItems)
                 {
                     PHAsset* phAsset = (PHAsset*)item.resultOject;
-                    [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                    [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                         NSIndexPath* indexPathDone = [NSIndexPath indexPathForRow:index inSection:0];
                         [self.thumbnails setObject:result forKey:indexPathDone];
                         dispatch_async(dispatch_get_main_queue(), ^{
@@ -176,7 +180,20 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     }
     else if ([self.thumbnails objectForKey:indexPath])
     {
-        [self deleteItemAt:indexPath];///!!!
+        [self showActivityIndicatorViewInView:nil];
+        PHAsset* phAsset = (PHAsset*)self.imageAssets[indexPath.row];
+        PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+        requestOptions.networkAccessAllowed = YES;
+        [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            UIImage* image = [UIImage imageWithData:imageData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self dismissActivityIndicatorView];
+                SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
+                editorVC.image = image;
+                [self presentViewController:editorVC animated:YES completion:^(){
+                }];
+            });
+        }];
     }
 }
 
