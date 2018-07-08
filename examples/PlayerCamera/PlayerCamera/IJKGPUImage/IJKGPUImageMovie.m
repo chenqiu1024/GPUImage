@@ -524,6 +524,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
 @synthesize withFaceDetect;
 @synthesize withSpeechRecognition;
 
+@synthesize inputVideoSize = _inputVideoSize;
+
 +(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler {
     IJKGPUImageMovie* ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:videoURL muted:YES];
 //    ijkMovie.isUsedForSnapshot = YES;

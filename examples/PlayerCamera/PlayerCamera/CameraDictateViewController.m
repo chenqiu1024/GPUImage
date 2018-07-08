@@ -39,6 +39,7 @@
 -(void) initSpeechRecognizer;
 -(BOOL) startSpeechRecognizer;
 -(void) stopSpeechRecognizer;
+-(void) releaseSpeechRecognizer;
 
 @end
 

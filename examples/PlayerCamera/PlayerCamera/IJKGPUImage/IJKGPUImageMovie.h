@@ -85,6 +85,7 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 @property (nonatomic, assign) BOOL withFaceDetect;
 @property (nonatomic, assign) float faceDetectFPS;
 
+@property (nonatomic, assign, readonly) CGSize inputVideoSize;
 
 +(IJKGPUImageMovie*) takeImageOfVideo:(NSString*)videoURL atTime:(CMTime)videoTime completionHandler:(SnapshotCompletionHandler)completionHandler;
 
