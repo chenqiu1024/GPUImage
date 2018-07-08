@@ -104,6 +104,10 @@
 		52D6723820EFCB27001A5564 /* StartingGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6723620EFCB27001A5564 /* StartingGridViewController.m */; };
 		52D6724320F11948001A5564 /* UIViewController+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724220F11947001A5564 /* UIViewController+Extensions.m */; };
 		52D6724420F11948001A5564 /* UIViewController+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724220F11947001A5564 /* UIViewController+Extensions.m */; };
+		52D6724720F1AB99001A5564 /* VideoSnapshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724520F1AB98001A5564 /* VideoSnapshotViewController.m */; };
+		52D6724820F1AB99001A5564 /* VideoSnapshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724520F1AB98001A5564 /* VideoSnapshotViewController.m */; };
+		52D6724B20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */; };
+		52D6724C20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */; };
 		52E2A73E20E5306A00BB445A /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E2A73D20E5306A00BB445A /* iflyMSC.framework */; };
 		52E2A74220E6284800BB445A /* IFlyFaceDetectResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */; };
 		52E2A74720E7307000BB445A /* UIImage+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74620E7307000BB445A /* UIImage+Share.m */; };
@@ -288,6 +292,10 @@
 		52D6723620EFCB27001A5564 /* StartingGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StartingGridViewController.m; sourceTree = "<group>"; };
 		52D6724120F11947001A5564 /* UIViewController+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Extensions.h"; path = "Utils/UIViewController+Extensions.h"; sourceTree = "<group>"; };
 		52D6724220F11947001A5564 /* UIViewController+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Extensions.m"; path = "Utils/UIViewController+Extensions.m"; sourceTree = "<group>"; };
+		52D6724520F1AB98001A5564 /* VideoSnapshotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoSnapshotViewController.m; sourceTree = "<group>"; };
+		52D6724620F1AB98001A5564 /* VideoSnapshotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoSnapshotViewController.h; sourceTree = "<group>"; };
+		52D6724920F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubtitleAndAudioSelectionViewController.h; sourceTree = "<group>"; };
+		52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SubtitleAndAudioSelectionViewController.m; sourceTree = "<group>"; };
 		52E2A73D20E5306A00BB445A /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
 		52E2A74020E6284700BB445A /* IFlyFaceDetectResultParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IFlyFaceDetectResultParser.h; sourceTree = "<group>"; };
 		52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IFlyFaceDetectResultParser.m; sourceTree = "<group>"; };
@@ -389,6 +397,8 @@
 		520DA6D61ED7248C009E4705 /* PlayerCamera */ = {
 			isa = PBXGroup;
 			children = (
+				52D6724620F1AB98001A5564 /* VideoSnapshotViewController.h */,
+				52D6724520F1AB98001A5564 /* VideoSnapshotViewController.m */,
 				527C39C620ECB0CB00CC64AE /* WeChat */,
 				52E2A73F20E6277600BB445A /* FaceDetect */,
 				52D32C3320E3F88D00E93331 /* SpeechRecognizer */,
@@ -420,6 +430,8 @@
 				529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */,
 				52D6723520EFCB27001A5564 /* StartingGridViewController.h */,
 				52D6723620EFCB27001A5564 /* StartingGridViewController.m */,
+				52D6724920F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.h */,
+				52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -754,9 +766,11 @@
 				527C39C120EA5EC400CC64AE /* SnapshotEditorViewController.m in Sources */,
 				529DA59320EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */,
 				524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */,
+				52D6724720F1AB99001A5564 /* VideoSnapshotViewController.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,
 				52CED8C120BD0A2200841B29 /* IJKGPUImage_GLES2_Renderer.m in Sources */,
 				524FB92D20B7F5ED006F5FED /* VideoThumbnailCache.m in Sources */,
+				52D6724B20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m in Sources */,
 				5281154E20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */,
 				5281154620ECBEB700E2B133 /* WXMediaMessage+messageConstruct.m in Sources */,
 				52E2A74720E7307000BB445A /* UIImage+Share.m in Sources */,
@@ -797,9 +811,11 @@
 				5281151020ECBADF00E2B133 /* SnapshotEditorViewController.m in Sources */,
 				529DA59420EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */,
 				5281151120ECBADF00E2B133 /* VideoCollectionViewController.m in Sources */,
+				52D6724820F1AB99001A5564 /* VideoSnapshotViewController.m in Sources */,
 				5281151220ECBADF00E2B133 /* main.m in Sources */,
 				5281151320ECBADF00E2B133 /* IJKGPUImage_GLES2_Renderer.m in Sources */,
 				5281151420ECBADF00E2B133 /* VideoThumbnailCache.m in Sources */,
+				52D6724C20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m in Sources */,
 				5281154F20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */,
 				5281154720ECBEB700E2B133 /* WXMediaMessage+messageConstruct.m in Sources */,
 				5281151520ECBADF00E2B133 /* UIImage+Share.m in Sources */,
