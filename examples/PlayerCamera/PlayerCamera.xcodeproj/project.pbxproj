@@ -108,6 +108,8 @@
 		52D6724820F1AB99001A5564 /* VideoSnapshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724520F1AB98001A5564 /* VideoSnapshotViewController.m */; };
 		52D6724B20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */; };
 		52D6724C20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */; };
+		52D6724F20F1EFFA001A5564 /* FilterCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */; };
+		52D6725020F1EFFA001A5564 /* FilterCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */; };
 		52E2A73E20E5306A00BB445A /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E2A73D20E5306A00BB445A /* iflyMSC.framework */; };
 		52E2A74220E6284800BB445A /* IFlyFaceDetectResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */; };
 		52E2A74720E7307000BB445A /* UIImage+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74620E7307000BB445A /* UIImage+Share.m */; };
@@ -296,6 +298,8 @@
 		52D6724620F1AB98001A5564 /* VideoSnapshotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoSnapshotViewController.h; sourceTree = "<group>"; };
 		52D6724920F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubtitleAndAudioSelectionViewController.h; sourceTree = "<group>"; };
 		52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SubtitleAndAudioSelectionViewController.m; sourceTree = "<group>"; };
+		52D6724D20F1EFFA001A5564 /* FilterCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterCollectionView.h; sourceTree = "<group>"; };
+		52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterCollectionView.m; sourceTree = "<group>"; };
 		52E2A73D20E5306A00BB445A /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
 		52E2A74020E6284700BB445A /* IFlyFaceDetectResultParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IFlyFaceDetectResultParser.h; sourceTree = "<group>"; };
 		52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IFlyFaceDetectResultParser.m; sourceTree = "<group>"; };
@@ -432,6 +436,8 @@
 				52D6723620EFCB27001A5564 /* StartingGridViewController.m */,
 				52D6724920F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.h */,
 				52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */,
+				52D6724D20F1EFFA001A5564 /* FilterCollectionView.h */,
+				52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -774,6 +780,7 @@
 				5281154E20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */,
 				5281154620ECBEB700E2B133 /* WXMediaMessage+messageConstruct.m in Sources */,
 				52E2A74720E7307000BB445A /* UIImage+Share.m in Sources */,
+				52D6724F20F1EFFA001A5564 /* FilterCollectionView.m in Sources */,
 				5281155220ED0F0600E2B133 /* CameraDictateViewController.m in Sources */,
 				52E2A74220E6284800BB445A /* IFlyFaceDetectResultParser.m in Sources */,
 			);
@@ -819,6 +826,7 @@
 				5281154F20ECBEEA00E2B133 /* WXApiRequestHandler.m in Sources */,
 				5281154720ECBEB700E2B133 /* WXMediaMessage+messageConstruct.m in Sources */,
 				5281151520ECBADF00E2B133 /* UIImage+Share.m in Sources */,
+				52D6725020F1EFFA001A5564 /* FilterCollectionView.m in Sources */,
 				5281155320ED0F0600E2B133 /* CameraDictateViewController.m in Sources */,
 				5281151620ECBADF00E2B133 /* IFlyFaceDetectResultParser.m in Sources */,
 			);

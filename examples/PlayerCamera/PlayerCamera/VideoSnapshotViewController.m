@@ -18,8 +18,48 @@
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
+typedef enum : int {
+    NoFilter = 0,
+    ToonFilter = 1,
+    SketchFilter = 2,
+    SepiaFilter = 3,
+    ComplementFilter = 4,
+} FilterID;
+
+static const char* filterLogos[] = {"AppIcon", "AppIcon", "AppIcon", "AppIcon", "AppIcon"};
+
+static GPUImageFilter* createFilterByID(int filterID) {
+    switch (filterID)
+    {
+        case ToonFilter:
+        {
+            GPUImageToonFilter* toonFilter = [[GPUImageToonFilter alloc] init];
+            toonFilter.threshold = 0.2f;
+            toonFilter.quantizationLevels = 10.f;
+            return toonFilter;
+        }
+        case SketchFilter:
+        {
+            GPUImageSketchFilter* sketchFilter = [[GPUImageSketchFilter alloc] init];
+            return sketchFilter;
+        }
+        case SepiaFilter:
+        {
+            GPUImageSepiaFilter* filter = [[GPUImageSepiaFilter alloc] init];
+            return filter;
+        }
+        case ComplementFilter:
+        {
+            GPUImageColorInvertFilter* filter = [[GPUImageColorInvertFilter alloc] init];
+            return filter;
+        }
+        default:
+            return nil;
+    }
+}
+
 #pragma mark    VideoSnapshotViewController
-@interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate>
+@interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 {
     GPUImageOutput<GPUImageInput>* _filter;
     GPUImageView* _filterView;
@@ -40,6 +80,11 @@
 @property (nonatomic, weak) IBOutlet UILabel* currentTimeLabel;
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
+
+@property (nonatomic, weak) IBOutlet UICollectionView* filterCollectionView;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem* filterButtonItem;
+
+-(IBAction)onFilterButtonPressed:(id)sender;
 
 -(IBAction)onClickOverlay:(id)sender;
 

@@ -57,7 +57,7 @@
                                     <navigationItem title="Title" id="v8L-Ye-XMe" userLabel="Back"/>
                                 </items>
                             </navigationBar>
-                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-je-dYO" userLabel="Filters Collection View">
+                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-je-dYO" userLabel="Filters Collection View" customClass="FilterCollectionView">
                                 <rect key="frame" x="16" y="607" width="343" height="60"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -425,17 +425,73 @@
                                             <action selector="onClickPlayOrPause:" destination="DcQ-ww-QZR" eventType="touchUpInside" id="YRd-9T-l32"/>
                                         </connections>
                                     </button>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp">
+                                        <rect key="frame" x="0.0" y="543" width="375" height="44"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <items>
+                                            <barButtonItem title="Filters" image="btn_more" id="512-fh-QdK">
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="onFilterButtonPressed:" destination="DcQ-ww-QZR" id="0bA-Jg-u8a"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </items>
+                                        <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </toolbar>
+                                    <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rCv-os-ebu" userLabel="Filters Collection View">
+                                        <rect key="frame" x="0.0" y="587" width="375" height="60"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="rLR-Ci-ffE"/>
+                                        </constraints>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="yc2-PW-ohD">
+                                            <size key="itemSize" width="60" height="60"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FilterCell" id="eI7-ur-JpI" customClass="FilterCollectionViewCell">
+                                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dwj-YB-cd5">
+                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                </view>
+                                                <constraints>
+                                                    <constraint firstItem="dwj-YB-cd5" firstAttribute="leading" secondItem="eI7-ur-JpI" secondAttribute="leading" id="HvZ-Kx-Axh"/>
+                                                    <constraint firstAttribute="bottom" secondItem="dwj-YB-cd5" secondAttribute="bottom" id="LtP-dM-0XJ"/>
+                                                    <constraint firstAttribute="trailing" secondItem="dwj-YB-cd5" secondAttribute="trailing" id="bcG-oz-iuR"/>
+                                                    <constraint firstItem="dwj-YB-cd5" firstAttribute="top" secondItem="eI7-ur-JpI" secondAttribute="top" id="tAw-Wa-Tjb"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="imageView" destination="dwj-YB-cd5" id="382-TF-pyW"/>
+                                                </connections>
+                                            </collectionViewCell>
+                                        </cells>
+                                    </collectionView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="top" secondItem="z94-0R-eao" secondAttribute="top" id="1Cp-lf-2sN"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="top" secondItem="bgN-UR-vTv" secondAttribute="bottom" id="CRQ-8c-OKH"/>
+                                    <constraint firstItem="rCv-os-ebu" firstAttribute="top" secondItem="PO5-2p-MOp" secondAttribute="bottom" id="HLA-K3-j1F"/>
+                                    <constraint firstAttribute="trailing" secondItem="PO5-2p-MOp" secondAttribute="trailing" id="Kif-Vk-6Jf"/>
+                                    <constraint firstItem="rCv-os-ebu" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="UBD-ZJ-IvX"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" constant="20" id="cwI-Wx-KmC"/>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="eqn-7a-kus"/>
+                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="f4N-zW-0uC"/>
+                                    <constraint firstAttribute="bottom" secondItem="rCv-os-ebu" secondAttribute="bottom" id="f9o-bB-Rvo"/>
                                     <constraint firstAttribute="trailing" secondItem="4m1-MU-j7H" secondAttribute="trailing" constant="20" id="goO-Jn-aQw"/>
                                     <constraint firstItem="p3c-jd-HfD" firstAttribute="centerY" secondItem="z94-0R-eao" secondAttribute="centerY" id="iC9-AH-JCW"/>
                                     <constraint firstAttribute="trailing" secondItem="bgN-UR-vTv" secondAttribute="trailing" id="iEX-iK-gxy"/>
                                     <constraint firstItem="p3c-jd-HfD" firstAttribute="centerX" secondItem="z94-0R-eao" secondAttribute="centerX" id="p7Z-87-PW8"/>
+                                    <constraint firstAttribute="trailing" secondItem="rCv-os-ebu" secondAttribute="trailing" id="yzT-X7-uzV"/>
                                 </constraints>
                                 <connections>
                                     <action selector="onClickOverlay:" destination="DcQ-ww-QZR" eventType="touchDown" id="36h-xx-Gue"/>
@@ -454,6 +510,8 @@
                         <outlet property="controlPanelView" destination="4m1-MU-j7H" id="Gls-kl-Qtb"/>
                         <outlet property="currentTimeLabel" destination="l2z-5q-ugj" id="Apm-uu-lgx"/>
                         <outlet property="durationLabel" destination="dY7-Eh-nMH" id="bcm-Ha-nOV"/>
+                        <outlet property="filterButtonItem" destination="512-fh-QdK" id="Gbz-Fn-4EF"/>
+                        <outlet property="filterCollectionView" destination="rCv-os-ebu" id="a1a-pl-f25"/>
                         <outlet property="navBar" destination="bgN-UR-vTv" id="DqB-zu-fHN"/>
                         <outlet property="navItem" destination="cOD-gP-AEt" id="6Dg-Ef-ZGL"/>
                         <outlet property="overlayView" destination="z94-0R-eao" id="cxp-rV-hve"/>
