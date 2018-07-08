@@ -16,6 +16,7 @@
 #import "WeiXinConstant.h"
 #import "UIImage+Share.h"
 #import "WXApiRequestHandler.h"
+#import <AudioToolbox/AudioToolbox.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
@@ -208,6 +209,8 @@
     self.filterView.snapshotCompletion = ^(UIImage* image) {
         if (!image)
             return;
+        
+        AudioServicesPlaySystemSound(1108);
         
         __strong typeof(self) pSelf = wSelf;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
