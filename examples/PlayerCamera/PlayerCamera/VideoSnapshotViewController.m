@@ -12,60 +12,16 @@
 #import "SnapshotEditorViewController.h"
 #import "UINavigationBar+Translucent.h"
 #import "SubtitleAndAudioSelectionViewController.h"
+#import "FilterCollectionView.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
-typedef enum : int {
-    NoFilter = 0,
-    ToonFilter = 1,
-    SketchFilter = 2,
-    SepiaFilter = 3,
-    ComplementFilter = 4,
-} FilterID;
-
-static const char* filterLogos[] = {"AppIcon", "AppIcon", "AppIcon", "AppIcon", "AppIcon"};
-
-static GPUImageFilter* createFilterByID(int filterID) {
-    switch (filterID)
-    {
-        case ToonFilter:
-        {
-            GPUImageToonFilter* toonFilter = [[GPUImageToonFilter alloc] init];
-            toonFilter.threshold = 0.2f;
-            toonFilter.quantizationLevels = 10.f;
-            return toonFilter;
-        }
-        case SketchFilter:
-        {
-            GPUImageSketchFilter* sketchFilter = [[GPUImageSketchFilter alloc] init];
-            return sketchFilter;
-        }
-        case SepiaFilter:
-        {
-            GPUImageSepiaFilter* filter = [[GPUImageSepiaFilter alloc] init];
-            return filter;
-        }
-        case ComplementFilter:
-        {
-            GPUImageColorInvertFilter* filter = [[GPUImageColorInvertFilter alloc] init];
-            return filter;
-        }
-        default:
-            return nil;
-    }
-}
-
 #pragma mark    VideoSnapshotViewController
-@interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate>
 {
-    GPUImageOutput<GPUImageInput>* _filter;
-    GPUImageView* _filterView;
-    
-    IJKGPUImageMovie* _ijkMovie;
-    
     BOOL _isProgressSliderBeingDragged;
 }
 
@@ -81,8 +37,12 @@ static GPUImageFilter* createFilterByID(int filterID) {
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 
-@property (nonatomic, weak) IBOutlet UICollectionView* filterCollectionView;
+@property (nonatomic, weak) IBOutlet FilterCollectionView* filterCollectionView;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem* filterButtonItem;
+
+@property (nonatomic, strong) GPUImageFilter* filter;
+@property (nonatomic, strong) GPUImageView* filterView;
+@property (nonatomic, strong) IJKGPUImageMovie* ijkMovie;
 
 -(IBAction)onFilterButtonPressed:(id)sender;
 
@@ -283,10 +243,6 @@ static GPUImageFilter* createFilterByID(int filterID) {
     _isProgressSliderBeingDragged = NO;
     self.playOrPauseButton.tag = 100;
     
-    _filter = [[GPUImageSepiaFilter alloc] init];
-    [(GPUImageSepiaFilter*)_filter setIntensity:0.7f];
-    [_filter addTarget:_filterView];
-    
     [self installMovieNotificationObservers];
 #ifdef SourceVideoFileName
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:SourceVideoFileName]];
@@ -297,9 +253,35 @@ static GPUImageFilter* createFilterByID(int filterID) {
 #endif
     _ijkMovie.delegate = self;
     [_ijkMovie setPauseInBackground:YES];
-    [_ijkMovie addTarget:_filter];
+    [_ijkMovie addTarget:_filterView];
     [_ijkMovie prepareToPlay];
     [self refreshMediaControl];
+    
+    _filter = nil;
+    __weak typeof(self) wSelf = self;
+    self.filterCollectionView.filterSelectedHandler = ^(GPUImageFilter* filter) {
+        __strong typeof(self) pSelf = wSelf;
+        if (!pSelf.filter)
+        {
+            [pSelf.ijkMovie removeTarget:pSelf.filterView];
+        }
+        else
+        {
+            [pSelf.filter removeTarget:pSelf.filterView];
+            [pSelf.ijkMovie removeTarget:pSelf.filter];
+        }
+        
+        if (filter)
+        {
+            [pSelf.ijkMovie addTarget:filter];
+            [filter addTarget:pSelf.filterView];
+        }
+        else
+        {
+            [pSelf.ijkMovie addTarget:pSelf.filterView];
+        }
+        pSelf.filter = filter;
+    };
     
     NSLog(@"sPLVC Next VC finished load");
 }
@@ -548,6 +530,21 @@ static GPUImageFilter* createFilterByID(int filterID) {
 
 -(void) ijkGIMovieDidDetectFaces:(IJKGPUImageMovie *)ijkgpuMovie result:(NSArray *)result {
     if (!result || result.count == 0) return;
+}
+
+#pragma mark    Filters
+
+-(IBAction)onFilterButtonPressed:(id)sender {
+    if (self.filterCollectionView.hidden)
+    {
+        self.filterCollectionView.hidden = NO;
+        self.filterButtonItem.tintColor = [UIColor blueColor];
+    }
+    else
+    {
+        self.filterCollectionView.hidden = YES;
+        self.filterButtonItem.tintColor = [UIColor whiteColor];
+    }
 }
 
 @end
