@@ -60,6 +60,8 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
     CGSize _framebufferSize;
     float _FPS;
     
+    BOOL _refreshWhenPausedOrStopped;
+    
     NSUInteger _currentFrame;
     
     double _prevAbsoluteTime;
@@ -737,6 +739,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     
     self = [super init];
     if (self) {
+        _refreshWhenPausedOrStopped = YES;
+        
         _subtitle = @"";
         _subtitleTextureInvalidated = YES;
         _subtitleTexture = 0;
@@ -927,11 +931,15 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     ijkmp_start(_mediaPlayer);
 }
 
-- (void)pause
+- (void)pause {
+    [self pause:YES];
+}
+
+- (void)pause:(BOOL)forceRefresh
 {
     if (!_mediaPlayer)
         return;
-    
+    _refreshWhenPausedOrStopped = forceRefresh;
     //    [self stopHudTimer];
     ijkmp_pause(_mediaPlayer);
 }
@@ -1159,14 +1167,20 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
         case MP_STATE_ERROR:
         case MP_STATE_END:
             mpState = IJKMPMoviePlaybackStateStopped;
-            _mediaPlayer->ffplayer->is->force_refresh = 1;
+            if (_refreshWhenPausedOrStopped)
+            {
+                _mediaPlayer->ffplayer->is->force_refresh = 1;
+            }
             break;
         case MP_STATE_IDLE:
         case MP_STATE_INITIALIZED:
         case MP_STATE_ASYNC_PREPARING:
         case MP_STATE_PAUSED:
             mpState = IJKMPMoviePlaybackStatePaused;
-            _mediaPlayer->ffplayer->is->force_refresh = 1;
+            if (_refreshWhenPausedOrStopped)
+            {
+                _mediaPlayer->ffplayer->is->force_refresh = 1;
+            }
             break;
         case MP_STATE_PREPARED:
         case MP_STATE_STARTED: {
@@ -2026,6 +2040,8 @@ int media_player_msg_loop(void* arg)
 - (void)applicationWillEnterForeground
 {
     NSLog(@"IJKFFMoviePlayerController:applicationWillEnterForeground: %d", (int)[UIApplication sharedApplication].applicationState);
+    _refreshWhenPausedOrStopped = YES;
+    _mediaPlayer->ffplayer->is->force_refresh = 1;
 }
 
 - (void)applicationDidBecomeActive
@@ -2038,7 +2054,7 @@ int media_player_msg_loop(void* arg)
     NSLog(@"IJKFFMoviePlayerController:applicationWillResignActive: %d", (int)[UIApplication sharedApplication].applicationState);
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_pauseInBackground) {
-            [self pause];
+            [self pause:NO];
         }
     });
 }
@@ -2048,7 +2064,7 @@ int media_player_msg_loop(void* arg)
     NSLog(@"IJKFFMoviePlayerController:applicationDidEnterBackground: %d", (int)[UIApplication sharedApplication].applicationState);
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_pauseInBackground) {
-            [self pause];
+            [self pause:NO];
         }
     });
 }
@@ -2058,7 +2074,7 @@ int media_player_msg_loop(void* arg)
     NSLog(@"IJKFFMoviePlayerController:applicationWillTerminate: %d", (int)[UIApplication sharedApplication].applicationState);
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_pauseInBackground) {
-            [self pause];
+            [self pause:NO];
         }
     });
 }
@@ -2313,7 +2329,7 @@ int media_player_msg_loop(void* arg)
         //*/
         //NSLog(@"#Thubmnail# IJKGPUImageMovie$render");
         IJKMPMoviePlaybackState state = self.playbackState;
-        if (state == IJKMPMoviePlaybackStateStopped || state == IJKMPMoviePlaybackStatePaused)
+        if (_refreshWhenPausedOrStopped && (state == IJKMPMoviePlaybackStateStopped || state == IJKMPMoviePlaybackStatePaused))
         {
             _mediaPlayer->ffplayer->is->force_refresh = 1;
         }

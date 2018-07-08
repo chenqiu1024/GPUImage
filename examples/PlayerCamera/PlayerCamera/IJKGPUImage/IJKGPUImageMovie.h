@@ -126,6 +126,7 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 - (void)prepareToPlay;
 - (void)play;
 - (void)pause;
+- (void)pause:(BOOL)forceRefresh;
 - (void)stop;
 - (BOOL)isPlaying;
 - (int64_t)trafficStatistic;

@@ -13,6 +13,9 @@
 #import "UINavigationBar+Translucent.h"
 #import "SubtitleAndAudioSelectionViewController.h"
 #import "FilterCollectionView.h"
+#import "WeiXinConstant.h"
+#import "UIImage+Share.h"
+#import "WXApiRequestHandler.h"
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
@@ -200,6 +203,54 @@
     _ijkMovie = nil;
 }
 
+-(void) takeSnapshot {
+    __weak typeof(self) wSelf = self;
+    self.filterView.snapshotCompletion = ^(UIImage* image) {
+        if (!image)
+            return;
+        
+        __strong typeof(self) pSelf = wSelf;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            CGFloat contentScale = pSelf.overlayView.layer.contentsScale;
+            CGSize layerSize = CGSizeMake(contentScale * pSelf.overlayView.bounds.size.width,
+                                          contentScale * pSelf.overlayView.bounds.size.height);
+            CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
+            CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+            
+            CGContextDrawImage(imageContext, CGRectMake(0, 0, layerSize.width, layerSize.height), image.CGImage);
+            
+            CGContextScaleCTM(imageContext, contentScale, contentScale);
+            [pSelf.overlayView.layer renderInContext:imageContext];
+            
+            UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationDownMirrored];
+            snapshot = [snapshot imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationDownMirrored];
+            NSData* data = UIImageJPEGRepresentation(snapshot, 1.0f);
+            NSString* fileName = [NSString stringWithFormat:@"snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
+            NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
+            [data writeToFile:path atomically:YES];
+            
+            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
+            ///dispatch_async(dispatch_get_main_queue(), ^{
+            BOOL succ = [WXApiRequestHandler sendImageData:data
+                                                   TagName:kImageTagName
+                                                MessageExt:kMessageExt
+                                                    Action:kMessageAction
+                                                ThumbImage:thumbImage
+                                                   InScene:WXSceneTimeline];//WXSceneSession
+            NSLog(@"#WX# Send message succ = %d", succ);
+            /*
+             NSArray *activityItems = @[data0, data1];
+             UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
+             [self presentViewController:activityVC animated:TRUE completion:nil];
+             //*/
+            ///});
+            
+            CGContextRelease(imageContext);
+            CGColorSpaceRelease(genericRGBColorspace);
+        });
+    };
+}
+
 -(void) showSubtitleAndAudioSelector {
     SubtitleAndAudioSelectionViewController* vc = [[SubtitleAndAudioSelectionViewController alloc] initWithStyle:UITableViewStyleGrouped dataSource:_ijkMovie.monitor.mediaMeta selectedAudioStream:_ijkMovie.currentAudioStream selectedSubtitleStream:_ijkMovie.currentSubtitleStream selectedHandler:^(NSInteger selectedStream) {
         NSLog(@"SubtitleAndAudioSelectionViewController selectedStream=%ld", selectedStream);
@@ -220,6 +271,8 @@
     //UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(dismissSelf)];
     UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
+    UIBarButtonItem* snapshotButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(takeSnapshot)];
+    self.navItem.rightBarButtonItem = snapshotButtonItem;
     self.navItem.title = [self.sourceVideoFile lastPathComponent];
     
     [self.navBar makeTranslucent];
@@ -423,7 +476,7 @@
         }
         streamIndex++;
     }
-    
+    /*
     if (hasAnythingToSelect)
     {
         UIBarButtonItem* moreButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(showSubtitleAndAudioSelector)];
@@ -432,7 +485,7 @@
     else
     {
         self.navItem.rightBarButtonItem = nil;
-    }
+    }//*/
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
