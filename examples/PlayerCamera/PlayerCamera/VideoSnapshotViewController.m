@@ -30,8 +30,6 @@
 @interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate, IFlySpeechRecognizerDelegate>
 {
     BOOL _isProgressSliderBeingDragged;
-    
-    CGSize _snapshotScreenSize;
 }
 
 -(void)removeMovieNotificationObservers;
@@ -51,6 +49,8 @@
 @property (nonatomic, weak) IBOutlet UIBarButtonItem* filterButtonItem;
 
 @property (nonatomic, weak) IBOutlet UILabel* dictateLabel;
+
+@property (nonatomic, assign) CGSize snapshotScreenSize;
 
 @property (nonatomic, strong) GPUImageFilter* filter;
 @property (nonatomic, strong) GPUImageView* filterView;
@@ -241,12 +241,13 @@
             CGFloat contentScale = pSelf.overlayView.layer.contentsScale;
             CGSize layerSize = CGSizeMake(contentScale * pSelf.overlayView.bounds.size.width,
                                           contentScale * pSelf.overlayView.bounds.size.height);
+//            CGSize layerSize = CGSizeMake(contentScale * pSelf.snapshotScreenSize.width,
+//                                          contentScale * pSelf.snapshotScreenSize.height);
             CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
             CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
             
-            CGContextDrawImage(imageContext, CGRectMake(0, 0, layerSize.width, layerSize.height), image.CGImage);
-            
             CGContextScaleCTM(imageContext, contentScale, contentScale);
+            CGContextDrawImage(imageContext, CGRectMake(0, 0, pSelf.overlayView.bounds.size.width, pSelf.overlayView.bounds.size.height), image.CGImage);
             [pSelf.overlayView.layer renderInContext:imageContext];
             
             UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationDownMirrored];
