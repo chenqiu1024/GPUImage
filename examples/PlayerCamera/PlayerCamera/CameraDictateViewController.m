@@ -7,11 +7,17 @@
 //
 
 #import "CameraDictateViewController.h"
+#import "PhotoLibraryViewController.h"
+#import "CameraPlayerViewController.h"
+#import "SnapshotEditorViewController.h"
 #import <GPUImage.h>
 #import <iflyMSC/IFlyMSC.h>
 #import "ISRDataHelper.h"
+#import "UINavigationBar+Translucent.h"
 
 @interface CameraDictateViewController () <IFlySpeechRecognizerDelegate>
+
+@property (nonatomic, copy) NSString* movieSavePath;
 
 @property (nonatomic, strong) GPUImageVideoCamera* videoCamera;
 @property (nonatomic, strong) GPUImageMovieWriter* movieWriter;
@@ -22,6 +28,9 @@
 -(IBAction)onShootButtonPressed:(id)sender;
 
 -(IBAction)onRotateCameraButtonPressed:(id)sender;
+
+@property (nonatomic, strong) IBOutlet UINavigationBar* navBar;
+@property (nonatomic, strong) IBOutlet UINavigationItem* navItem;
 
 @property (nonatomic, strong) IBOutlet UIButton* shootButton;
 @property (nonatomic, strong) IBOutlet UIButton* rotateCameraButton;
@@ -75,10 +84,10 @@
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyyMMdd_hhmmss";
     NSString* fileName = [NSString stringWithFormat:@"MOV_%@.mp4", [formatter stringFromDate:dateTime]];
-    NSString* pathToMovie = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:VideoDirectory] stringByAppendingPathComponent:fileName];
+    self.movieSavePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:VideoDirectory] stringByAppendingPathComponent:fileName];
     //NSString* pathToMovie = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
-    unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
-    NSURL* movieURL = [NSURL fileURLWithPath:pathToMovie];
+    unlink([self.movieSavePath UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
+    NSURL* movieURL = [NSURL fileURLWithPath:self.movieSavePath];
     _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:size];
     _movieWriter.encodingLiveVideo = YES;
 }
@@ -106,13 +115,69 @@
 }
 
 -(IBAction)onRotateCameraButtonPressed:(id)sender {
-    ///!!![_videoCamera rotateCamera];
-    [self startSpeechRecognizer];
+    [_videoCamera rotateCamera];
+}
+
+-(void) dismissSelf {
+    _movieWriter.paused = YES;
+    [self stopSpeechRecognizer];
+    
+    UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:@"Abort video capturing?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self releaseSpeechRecognizer];
+        [self stopAndReleaseMovieWriter];
+        [_videoCamera stopCameraCapture];
+        [[NSFileManager defaultManager] removeItemAtPath:self.movieSavePath error:nil];
+        self.movieSavePath = nil;
+        [self dismissViewControllerAnimated:YES completion:nil];
+        if (self.completeHandler)
+        {
+            self.completeHandler(nil);
+        }
+    }];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        if (self.shootButton.tag == 1)
+        {
+            _movieWriter.paused = NO;
+        }
+        [self startSpeechRecognizer];
+    }];
+    [alertCtrl addAction:confirmAction];
+    [alertCtrl addAction:cancelAction];
+    [self showViewController:alertCtrl sender:self];
+}
+
+-(void) finishCapturing {
+    [self stopSpeechRecognizer];
+    [self releaseSpeechRecognizer];
+    [self stopAndReleaseMovieWriter];
+    [_videoCamera stopCameraCapture];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.completeHandler)
+    {
+        self.completeHandler(self.movieSavePath);
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    UIBarButtonItem* backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self
+                                                                         action:@selector(dismissSelf)];
+    UIBarButtonItem* doneButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"]
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(finishCapturing)];
+    self.navItem.leftBarButtonItem = backButtonItem;
+    self.navItem.rightBarButtonItem = doneButtonItem;
+    self.navItem.title = @"";
+    //*
+    [self.navBar makeTranslucent];
+    [self setNeedsStatusBarAppearanceUpdate];
+    //https://www.jianshu.com/p/fa27ab9fb172
+    
     self.shootButton.tag = 0;
 //*
     _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
@@ -130,7 +195,7 @@
 //*/
     self.speechRecognizerResultString = @"";
     [self initSpeechRecognizer];
-    //[self startSpeechRecognizer];
+    [self startSpeechRecognizer];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -171,10 +236,14 @@
 
 -(void) applicationWillResignActive:(id)sender {
     [self stopSpeechRecognizer];
-    
     [self releaseSpeechRecognizer];
+    
+    _movieWriter.paused = YES;
 }
 
+-(UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 /*
 #pragma mark - Navigation
 

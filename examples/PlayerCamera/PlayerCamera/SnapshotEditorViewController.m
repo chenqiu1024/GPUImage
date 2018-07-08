@@ -14,7 +14,48 @@
 #import "WXApiRequestHandler.h"
 #import "WeiXinConstant.h"
 #import "UIImage+Share.h"
+#import "UINavigationBar+Translucent.h"
 #import <GPUImage.h>
+
+typedef enum : int {
+    NoFilter = 0,
+    ToonFilter = 1,
+    SketchFilter = 2,
+    SepiaFilter = 3,
+    ComplementFilter = 4,
+} FilterID;
+
+const char* filterLogos[] = {"AppIcon", "AppIcon", "AppIcon", "AppIcon", "AppIcon"};
+
+GPUImageFilter* createFilterByID(int filterID) {
+    switch (filterID)
+    {
+        case ToonFilter:
+        {
+            GPUImageToonFilter* toonFilter = [[GPUImageToonFilter alloc] init];
+            toonFilter.threshold = 0.2f;
+            toonFilter.quantizationLevels = 10.f;
+            return toonFilter;
+        }
+        case SketchFilter:
+        {
+            GPUImageSketchFilter* sketchFilter = [[GPUImageSketchFilter alloc] init];
+            return sketchFilter;
+        }
+        case SepiaFilter:
+        {
+            GPUImageSepiaFilter* filter = [[GPUImageSepiaFilter alloc] init];
+            return filter;
+        }
+        case ComplementFilter:
+        {
+            GPUImageColorInvertFilter* filter = [[GPUImageColorInvertFilter alloc] init];
+            return filter;
+        }
+        default:
+            return nil;
+    }
+}
 
 #pragma mark    UIElementsView
 
@@ -211,13 +252,36 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 
 @end
 
-@interface SnapshotEditorViewController ()
+#pragma mark    Filter Collection View
+
+static NSString* FilterCellIdentifier = @"FilterCell";
+
+@interface FilterCollectionViewCell : UICollectionViewCell
+
+@property (nonatomic, strong) IBOutlet UIImageView* imageView;
+
+@end
+
+@implementation FilterCollectionViewCell
+
+@end
+
+@interface SnapshotEditorViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
+{
+    NSMutableDictionary<NSNumber*, GPUImageFilter* >* _filtersCache;
+    GPUImageFilter* _filter;
+}
 
 @property (nonatomic, strong) UIElementsView* uiElementsView;
 @property (nonatomic, strong) GPUImagePicture* picture;
 
+@property (nonatomic, strong) IBOutlet UICollectionView* filterCollectionView;
+@property (nonatomic, strong) IBOutlet UIButton* filterButton;
+
 @property (nonatomic, strong) IBOutlet UINavigationBar* navBar;
 @property (nonatomic, strong) IBOutlet UINavigationItem* navItem;
+
+-(IBAction)onFilterButtonPressed:(id)sender;
 
 @end
 
@@ -277,6 +341,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 }
 
 - (void)viewDidLoad {
+    NSLog(@"sPLVC Next VC begin to load");
     [super viewDidLoad];
     
     UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -286,31 +351,31 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     self.navItem.leftBarButtonItem = dismissButtonItem;
     self.navItem.title = @"Picture Edit";
     //*
-    self.navBar.translucent = YES;
-    UIColor* translucentColor = [UIColor clearColor];
-    CGRect rect = CGRectMake(0, 0, self.view.bounds.size.width, 64);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [translucentColor CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    [self.navBar setShadowImage:image];
-    [self.navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+    [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
     //https://www.jianshu.com/p/fa27ab9fb172
      //*/
     
+    _filtersCache = [[NSMutableDictionary alloc] init];
+    _filter = nil;
+    
+    self.filterCollectionView.dataSource = self;
+    self.filterCollectionView.delegate = self;
+    self.filterCollectionView.hidden = YES;
+
     // Do any additional setup after loading the view.
     if (!self.image)
         return;
     
-    IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];
-    [faceDetector setParameter:@"1" forKey:@"align"];
-    [faceDetector setParameter:@"1" forKey:@"detect"];
-    NSString* detectResultString = [faceDetector detectARGB:self.image];
-    NSArray* faceDetectResult = [IFlyFaceDetectResultParser parseFaceDetectResult:detectResultString];
-    NSLog(@"FaceDetect in (%f, %f) result = '%@', array=%@", self.image.size.width, self.image.size.height, detectResultString, faceDetectResult);
+    self.view.backgroundColor = [UIColor clearColor];
+    
+    self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
+    self.uiElementsView.backgroundColor = [UIColor clearColor];
+    [self.view insertSubview:self.uiElementsView belowSubview:self.navBar];
+    
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
+    tapRecognizer.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:tapRecognizer];
     
     GPUImageView* gpuImageView = (GPUImageView*)self.view;
     gpuImageView.backgroundColor = [UIColor clearColor];
@@ -318,28 +383,21 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     [self.picture addTarget:gpuImageView];
     [self.picture processImage];
     
-    self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
-    self.uiElementsView.backgroundColor = [UIColor clearColor];
-    //self.uiElementsView.layer.backgroundColor = [UIColor clearColor].CGColor;
-    [self.view insertSubview:self.uiElementsView belowSubview:self.navBar];
-    /*
-    self.uiElementsView.sourceImageSize = self.image.size;
-    /*
-    CGSize scale = scaleFactor(self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
-    CGAffineTransform t0 = CGAffineTransformMakeTranslation(-self.image.size.width / 2, -self.image.size.height / 2);
-    CGAffineTransform s1 = CGAffineTransformMakeScale(scale.width, scale.height);
-    CGAffineTransform t2 = CGAffineTransformMakeTranslation(self.uiElementsView.frame.size.width / 2, self.uiElementsView.frame.size.height / 2);
-    self.uiElementsView.transform = CGAffineTransformConcat(CGAffineTransformConcat(t2, s1), t0);
-    //*/
-    //self.uiElementsView.sourceImageSize = self.uiElementsView.frame.size;
-    //self.uiElementsView.fillMode = gpuImageView.fillMode;
-    faceDetectResult = transformFaceDetectResults(faceDetectResult, self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
-    self.uiElementsView.personFaces = faceDetectResult;
-    [self.uiElementsView setNeedsDisplay];
-    
-    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
-    tapRecognizer.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:tapRecognizer];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];
+        [faceDetector setParameter:@"1" forKey:@"align"];
+        [faceDetector setParameter:@"1" forKey:@"detect"];
+        NSString* detectResultString = [faceDetector detectARGB:self.image];
+        NSArray* faceDetectResult = [IFlyFaceDetectResultParser parseFaceDetectResult:detectResultString];
+        NSLog(@"FaceDetect in (%f, %f) result = '%@', array=%@", self.image.size.width, self.image.size.height, detectResultString, faceDetectResult);
+        faceDetectResult = transformFaceDetectResults(faceDetectResult, self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
+        self.uiElementsView.personFaces = faceDetectResult;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.uiElementsView setNeedsDisplay];
+        });
+        
+    });
+    NSLog(@"sPLVC Next VC finished load");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -356,5 +414,70 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark    Filters
+
+-(IBAction)onFilterButtonPressed:(id)sender {
+    if (self.filterCollectionView.hidden)
+    {
+        self.filterCollectionView.hidden = NO;
+        self.filterButton.tintColor = [UIColor blueColor];
+    }
+    else
+    {
+        self.filterCollectionView.hidden = YES;
+        self.filterButton.tintColor = [UIColor whiteColor];
+    }
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return sizeof(filterLogos) / sizeof(filterLogos[0]);
+}
+
+-(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+-(__kindof UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    FilterCollectionViewCell* cell = (FilterCollectionViewCell*) [collectionView dequeueReusableCellWithReuseIdentifier:FilterCellIdentifier forIndexPath:indexPath];
+    cell.imageView.image = [UIImage imageNamed:[NSString stringWithUTF8String:filterLogos[indexPath.row]]];
+    return cell;
+}
+
+-(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    GPUImageFilter* nextFilter = [_filtersCache objectForKey:@(indexPath.row)];
+    if (!nextFilter)
+    {
+        nextFilter = createFilterByID((int)indexPath.row);
+        if (nextFilter)
+            [_filtersCache setObject:nextFilter forKey:@(indexPath.row)];
+    }
+    
+    GPUImageView* gpuimageView = (GPUImageView*)self.view;
+    if (!_filter)
+    {
+        [self.picture removeTarget:gpuimageView];
+    }
+    else
+    {
+        [_filter removeTarget:gpuimageView];
+        [self.picture removeTarget:_filter];
+    }
+    
+    self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
+    if (nextFilter)
+    {
+        [self.picture addTarget:nextFilter];
+        [nextFilter addTarget:gpuimageView];
+    }
+    else
+    {
+        [self.picture addTarget:gpuimageView];
+    }
+    [self.picture processImage];
+    
+//    self.filterButton.hidden = NO;
+//    self.filterCollectionView.hidden = YES;
+}
 
 @end

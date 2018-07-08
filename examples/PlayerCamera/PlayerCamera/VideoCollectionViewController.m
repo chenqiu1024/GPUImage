@@ -10,6 +10,7 @@
 #import "CameraPlayerViewController.h"
 #import "IJKGPUImageMovie.h"
 #import "UIImage+Blur.h"
+#import <Photos/Photos.h>
 
 NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 
@@ -57,7 +58,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 @end
 
 
-@interface VideoCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NSCacheDelegate>
+@interface VideoCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NSCacheDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     NSString* _docDirectoryPath;
     
@@ -143,10 +144,30 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 
 #pragma mark UICollectionViewDelegate
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    /*/!!!For Test:
+    UIImagePickerController* pickerVC = [[UIImagePickerController alloc] init];
+    pickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    pickerVC.mediaTypes = @[@"public.image", @"public.movie"];
+    pickerVC.delegate = self;
+    [self presentViewController:pickerVC animated:YES completion:nil];
+    /*/
     NSString* fileURL = [_files objectAtIndex:indexPath.row];
     CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
     playerVC.sourceVideoFile = fileURL;
     [self presentViewController:playerVC animated:YES completion:nil];
+    //*/
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    NSURL* videoURL = info[@"UIImagePickerControllerReferenceURL"];
+    if (videoURL)
+    {
+        NSLog(@"videoURL = %@", videoURL);
+        CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+        playerVC.sourceVideoFile = [videoURL absoluteString];
+        [self presentViewController:playerVC animated:YES completion:nil];
+    }
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark UICollectionViewDataSource

@@ -1,12 +1,12 @@
 //
-//  CameraPlayerViewController.m
+//  VideoSnapshotViewController.m
 //  PlayerCamera
 //
 //  Created by DOM QIU on 2017/5/25.
 //  Copyright © 2017年 DOM QIU. All rights reserved.
 //
 
-#import "CameraPlayerViewController.h"
+#import "VideoSnapshotViewController.h"
 #import "IJKGPUImageMovie.h"
 #import "IFlyFaceDetectResultParser.h"
 #import "SnapshotEditorViewController.h"
@@ -18,109 +18,15 @@
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
 
-#pragma mark    AccessoriesView
-
-@interface AccessoriesView : UIView
+#pragma mark    VideoSnapshotViewController
+@interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate>
 {
-    CGContextRef context;
-}
-
-@property (nonatomic, strong) NSArray* arrPersons;
-
-@end
-
-@implementation AccessoriesView
-
--(instancetype) initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame])
-    {
-    }
-    return self;
-}
-
--(void) drawPointWithPoints:(NSArray*)arrPersons{
-    context = UIGraphicsGetCurrentContext();
-    if (context)
-    {
-        CGContextSetRGBFillColor(context, 0.f, 0.75f, 0.25f, 1.f);
-        CGContextClearRect(context, self.bounds);
-    }
-    for (NSDictionary* dicPerson in self.arrPersons)
-    {
-        if ([dicPerson objectForKey:KCIFlyFaceResultPointsKey])
-        {
-            for (NSString* strPoints in [dicPerson objectForKey:KCIFlyFaceResultPointsKey])
-            {
-                CGPoint p = CGPointFromString(strPoints) ;
-                CGContextAddEllipseInRect(context, CGRectMake(p.x - 1 , p.y - 1 , 2 , 2));
-            }
-        }
-
-        BOOL isOriRect = NO;
-        if ([dicPerson objectForKey:KCIFlyFaceResultRectOri])
-        {
-            isOriRect=[[dicPerson objectForKey:KCIFlyFaceResultRectOri] boolValue];
-        }
-
-        if ([dicPerson objectForKey:KCIFlyFaceResultRectKey])
-        {
-            CGRect rect = CGRectFromString([dicPerson objectForKey:KCIFlyFaceResultRectKey]);
-            if (isOriRect)
-            {//完整矩形
-                CGContextAddRect(context,rect);
-            }
-            else
-            { //只画四角
-                // 左上
-                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height/8);
-                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
-                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y);
-
-                //右上
-                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y);
-                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y);
-                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height/8);
-
-                //左下
-                CGContextMoveToPoint(context, rect.origin.x, rect.origin.y+rect.size.height*7/8);
-                CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y+rect.size.height);
-                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width/8, rect.origin.y+rect.size.height);
-
-
-                //右下
-                CGContextMoveToPoint(context, rect.origin.x+rect.size.width*7/8, rect.origin.y+rect.size.height);
-                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height);
-                CGContextAddLineToPoint(context, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height*7/8);
-            }
-        }
-    }
-    [[UIColor greenColor] set];
-    CGContextSetLineWidth(context, 2);
-    CGContextStrokePath(context);
-}
-
-- (void)drawRect:(CGRect)rect {
-    [self drawPointWithPoints:self.arrPersons] ;
-}
-
-@end
-
-#pragma mark    CameraPlayerViewController
-@interface CameraPlayerViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate>
-{
-    GPUImageVideoCamera* _videoCamera;
     GPUImageOutput<GPUImageInput>* _filter;
-    //    GPUImageMovieWriter *movieWriter;
+    GPUImageView* _filterView;
     
     IJKGPUImageMovie* _ijkMovie;
-//    UIImageView* _imageView;
-    
-    GPUImageView* _filterView;
-    GPUImageMovieWriter* _movieWriter;
     
     BOOL _isProgressSliderBeingDragged;
-    
-    NSTimeInterval _fastSeekStartTime;
 }
 
 -(void)removeMovieNotificationObservers;
@@ -134,12 +40,8 @@
 @property (nonatomic, weak) IBOutlet UILabel* currentTimeLabel;
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
-@property (nonatomic, weak) IBOutlet UILabel* fastSeekLabel;
-
-@property (nonatomic, strong) AccessoriesView* accessoriesView;
 
 -(IBAction)onClickOverlay:(id)sender;
--(IBAction)onClickControlPanel:(id)sender;
 
 -(IBAction)didSliderTouchDown:(id)sender;
 -(IBAction)didSliderTouchUpInside:(id)sender;
@@ -151,12 +53,7 @@
 
 @end
 
-@implementation CameraPlayerViewController
-
-//#define SourceVideoFileName @"玩命直播BD1280高清中英双字.MP4"
-//#define SourceVideoFileName @"https://tzn8.com/bunnies.mp4"
-//#define SourceVideoFileName @"VID_20170220_182639AA.MP4"
-//#define SourceVideoFileName @"testin.mp4"
+@implementation VideoSnapshotViewController
 
 -(void) setPlayOrPauseButtonState:(BOOL)isPlaying {
     NSUInteger newTag = isPlaying ? 1 : 0;
@@ -184,8 +81,6 @@
     NSTimeInterval position;
     if (_isProgressSliderBeingDragged)
         position = self.progressSlider.value;
-    else if (_fastSeekStartTime != 0.f)
-        position = _fastSeekStartTime;
     else
         position = _ijkMovie.currentPlaybackTime;
     minutes = floorf(position / 60.f);
@@ -205,6 +100,7 @@
 -(void) setControlsHidden:(BOOL)hidden {
     self.controlPanelView.hidden = hidden;
     self.navBar.hidden = hidden;
+    self.playOrPauseButton.hidden = hidden;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -224,10 +120,6 @@
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControls) object:nil];
         [self hideControls];
     }
-}
-
--(IBAction)onClickControlPanel:(id)sender {
-    
 }
 
 -(IBAction)didSliderTouchDown:(id)sender {
@@ -275,82 +167,12 @@
     }
 }
 
--(void) stopAndReleaseMovieWriter {
-    if (!_movieWriter)
-        return;
-    
-    [_movieWriter finishRecording];
-    _movieWriter = nil;
-    /*
-     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-     if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:movieURL])
-     {
-     [library writeVideoAtPathToSavedPhotosAlbum:movieURL completionBlock:^(NSURL *assetURL, NSError *error)
-     {
-     dispatch_async(dispatch_get_main_queue(), ^{
-     
-     if (error) {
-     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed"
-     delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-     [alert show];
-     } else {
-     //                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album"
-     //                                                                            delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-     //                             [alert show];
-     }
-     remove(pathToMovie.UTF8String);
-     });
-     [self startRecordingVideoSegment];
-     }];
-     }
-     //*/
-}
-
--(void) disassembleMovieWriter {
-    [_videoCamera removeTarget:_movieWriter];
-    ///!!!_videoCamera.audioEncodingTarget = nil;
-    [self stopAndReleaseMovieWriter];
-}
-
--(void) initMovieWriterWithDateTime:(NSDate*)dateTime size:(CGSize)size {
-    if (_movieWriter)
-    {
-        [self stopAndReleaseMovieWriter];
-    }
-    
-    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyyMMdd_hhmmss";
-    NSString* fileName = [NSString stringWithFormat:@"MOV_%@.mp4", [formatter stringFromDate:dateTime]];
-    NSString* pathToMovie = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:VideoDirectory] stringByAppendingPathComponent:fileName];
-    //NSString* pathToMovie = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
-    unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
-    NSURL* movieURL = [NSURL fileURLWithPath:pathToMovie];
-    _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:size];
-    _movieWriter.encodingLiveVideo = YES;
-}
-
--(void) setupMovieWriter {
-    [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
-    [_videoCamera addTarget:_movieWriter];
-    _videoCamera.audioEncodingTarget = _movieWriter;
-    ///[_ijkMovie addTarget:_movieWriter];
-}
-
--(void) startMovieWriteRecording {
-    [_movieWriter startRecording];
-}
-
 #pragma mark - View lifecycle
 
 -(void) applicationDidBecomeActive:(id)sender {
-    [self setupMovieWriter];
-    [self startMovieWriteRecording];
-    [_videoCamera resumeCameraCapture];
 }
 
 -(void) applicationWillResignActive:(id)sender {
-    [self disassembleMovieWriter];
-    [_videoCamera pauseCameraCapture];
 }
 
 -(void) dealloc {
@@ -368,8 +190,6 @@
 
 -(void) dismissSelf {
     [_ijkMovie shutdown];
-    [self disassembleMovieWriter];
-    [_videoCamera stopCameraCapture];
     [self removeMovieNotificationObservers];
     [self dismissViewControllerAnimated:YES completion:nil];
     _ijkMovie = nil;
@@ -405,11 +225,6 @@
     [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
 //    self.navigationController.navigationBarHidden = YES;
-
-    _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
-    _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
-    _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
-    _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     
     _filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
     _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -420,42 +235,12 @@
     [self.view bringSubviewToFront:self.overlayView];
     [self.view bringSubviewToFront:self.controlPanelView];
     
-    UITapGestureRecognizer* tapRecognizer= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapRecognized:)];
-    tapRecognizer.numberOfTapsRequired = 2;
-    [self.overlayView addGestureRecognizer:tapRecognizer];
-    
-    UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanRecognized:)];
-    panRecognizer.minimumNumberOfTouches = 1;
-    panRecognizer.delegate = self;
-    [self.overlayView addGestureRecognizer:panRecognizer];
-    _fastSeekStartTime = 0.f;
-    
     _isProgressSliderBeingDragged = NO;
     self.playOrPauseButton.tag = 100;
     
     _filter = [[GPUImageSepiaFilter alloc] init];
-    [(GPUImageSepiaFilter*)_filter setIntensity:0.f];
-//*
-    _accessoriesView = [[AccessoriesView alloc] initWithFrame:_filterView.bounds];
-    _accessoriesView.backgroundColor = [UIColor clearColor];
-    _accessoriesView.layer.backgroundColor = [UIColor clearColor].CGColor;
-    
-    GPUImageUIElement* uiElement = [[GPUImageUIElement alloc] initWithView:_accessoriesView];
-    GPUImageAlphaBlendFilter* blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
-    blendFilter.mix = 1.0f;
-    [_filter addTarget:blendFilter];
-    [uiElement addTarget:blendFilter];
-    [blendFilter addTarget:_filterView];
-    
-    __weak typeof(self) wSelf = self;
-    [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
-        __strong typeof(self) sSelf = wSelf;
-        [sSelf.accessoriesView setNeedsDisplay];
-        [uiElement update];
-    }];
- /*/
+    [(GPUImageSepiaFilter*)_filter setIntensity:0.7f];
     [_filter addTarget:_filterView];
-//*/
     
     [self installMovieNotificationObservers];
 #ifdef SourceVideoFileName
@@ -471,10 +256,6 @@
     [_ijkMovie prepareToPlay];
     [self refreshMediaControl];
     
-    [self setupMovieWriter];
-    [self startMovieWriteRecording];
-    [_videoCamera startCameraCapture];
-    [_videoCamera resumeCameraCapture];
     NSLog(@"sPLVC Next VC finished load");
 }
 
@@ -520,7 +301,6 @@
             orient = fromInterfaceOrientation;
             break;
     }
-    _videoCamera.outputImageOrientation = orient;
     
 }
 
@@ -544,44 +324,6 @@
         [self presentViewController:editorVC animated:YES completion:nil];
         //*/
     }
-}
-
--(void) onPanRecognized:(UIPanGestureRecognizer*)pan {
-    CGPoint translation = [pan translationInView:pan.view];
-    float offsetSeconds = 300.f * translation.x / pan.view.frame.size.width;
-    
-    if (UIGestureRecognizerStateBegan == pan.state)
-    {
-        _fastSeekStartTime = _ijkMovie.currentPlaybackTime;
-    }
-    float destTime = _fastSeekStartTime + offsetSeconds;
-    int hours = roundf(destTime);
-    int seconds = hours % 60;
-    hours /= 60;
-    int minutes = hours % 60;
-    hours /= 60;
-    
-    switch (pan.state)
-    {
-        case UIGestureRecognizerStateBegan:
-            self.fastSeekLabel.hidden = NO;
-            break;
-        case UIGestureRecognizerStateChanged:
-            [self setControlsHidden:NO];
-            [self refreshMediaControl];
-            break;
-        case UIGestureRecognizerStateEnded:
-        case UIGestureRecognizerStateCancelled:
-            self.fastSeekLabel.hidden = YES;
-            _ijkMovie.currentPlaybackTime = destTime;
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControls) object:nil];
-            [self performSelector:@selector(hideControls) withObject:nil afterDelay:5.0f];
-            _fastSeekStartTime = 0.f;
-            break;
-        default:
-            break;
-    }
-    self.fastSeekLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
 }
 
 #pragma mark    Immitated from IJKMoviePlayerViewController
@@ -761,10 +503,6 @@
 
 -(void) ijkGIMovieDidDetectFaces:(IJKGPUImageMovie *)ijkgpuMovie result:(NSArray *)result {
     if (!result || result.count == 0) return;
-    _accessoriesView.arrPersons = result;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [_accessoriesView setNeedsDisplay];
-//    });
 }
 
 @end
