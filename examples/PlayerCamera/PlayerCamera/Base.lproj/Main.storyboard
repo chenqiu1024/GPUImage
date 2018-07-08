@@ -475,8 +475,9 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZs-Hy-O8w" userLabel="Dictate Label">
-                                        <rect key="frame" x="0.0" y="543" width="375" height="0.0"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZs-Hy-O8w" userLabel="Dictate Label">
+                                        <rect key="frame" x="375" y="543" width="0.0" height="0.0"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -487,12 +488,10 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="top" secondItem="z94-0R-eao" secondAttribute="top" id="1Cp-lf-2sN"/>
-                                    <constraint firstAttribute="trailing" secondItem="kZs-Hy-O8w" secondAttribute="trailing" id="8q9-EE-RMY"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="top" secondItem="bgN-UR-vTv" secondAttribute="bottom" id="CRQ-8c-OKH"/>
                                     <constraint firstItem="rCv-os-ebu" firstAttribute="top" secondItem="PO5-2p-MOp" secondAttribute="bottom" id="HLA-K3-j1F"/>
                                     <constraint firstAttribute="trailing" secondItem="PO5-2p-MOp" secondAttribute="trailing" id="Kif-Vk-6Jf"/>
                                     <constraint firstItem="rCv-os-ebu" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="UBD-ZJ-IvX"/>
-                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="top" secondItem="kZs-Hy-O8w" secondAttribute="bottom" id="YZI-xu-k58"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" constant="20" id="cwI-Wx-KmC"/>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="eqn-7a-kus"/>
                                     <constraint firstItem="PO5-2p-MOp" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="f4N-zW-0uC"/>
@@ -500,7 +499,6 @@
                                     <constraint firstAttribute="trailing" secondItem="4m1-MU-j7H" secondAttribute="trailing" constant="20" id="goO-Jn-aQw"/>
                                     <constraint firstItem="p3c-jd-HfD" firstAttribute="centerY" secondItem="z94-0R-eao" secondAttribute="centerY" id="iC9-AH-JCW"/>
                                     <constraint firstAttribute="trailing" secondItem="bgN-UR-vTv" secondAttribute="trailing" id="iEX-iK-gxy"/>
-                                    <constraint firstItem="kZs-Hy-O8w" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="opD-T2-uZ4"/>
                                     <constraint firstItem="p3c-jd-HfD" firstAttribute="centerX" secondItem="z94-0R-eao" secondAttribute="centerX" id="p7Z-87-PW8"/>
                                     <constraint firstAttribute="trailing" secondItem="rCv-os-ebu" secondAttribute="trailing" id="yzT-X7-uzV"/>
                                 </constraints>
@@ -529,6 +527,7 @@
                         <outlet property="overlayView" destination="z94-0R-eao" id="cxp-rV-hve"/>
                         <outlet property="playOrPauseButton" destination="p3c-jd-HfD" id="UEz-mz-5w6"/>
                         <outlet property="progressSlider" destination="t0a-N8-Hh5" id="3dq-70-FM9"/>
+                        <outlet property="toolbar" destination="PO5-2p-MOp" id="9ur-m8-d3C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YtK-yA-pZz" sceneMemberID="firstResponder"/>

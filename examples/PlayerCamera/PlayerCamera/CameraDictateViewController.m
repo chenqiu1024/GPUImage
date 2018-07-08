@@ -106,6 +106,7 @@
         self.shootButton.tag = 1;
         [self.shootButton setTitle:@"Shooting..." forState:UIControlStateNormal];
         _movieWriter.paused = NO;
+        self.navItem.rightBarButtonItem.enabled = YES;
     }
     else
     {
@@ -172,6 +173,7 @@
                                                                       target:self
                                                                       action:@selector(finishCapturing)];
     self.navItem.leftBarButtonItem = backButtonItem;
+    doneButtonItem.enabled = NO;
     self.navItem.rightBarButtonItem = doneButtonItem;
     self.navItem.title = @"";
     //*

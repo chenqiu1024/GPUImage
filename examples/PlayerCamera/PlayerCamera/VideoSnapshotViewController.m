@@ -18,6 +18,7 @@
 #import "WXApiRequestHandler.h"
 #import <iflyMSC/IFlyMSC.h>
 #import "ISRDataHelper.h"
+#import "UINavigationBar+Translucent.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
@@ -29,6 +30,8 @@
 @interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate, IFlySpeechRecognizerDelegate>
 {
     BOOL _isProgressSliderBeingDragged;
+    
+    CGSize _snapshotScreenSize;
 }
 
 -(void)removeMovieNotificationObservers;
@@ -43,6 +46,7 @@
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 
+@property (nonatomic, weak) IBOutlet UIToolbar* toolbar;
 @property (nonatomic, weak) IBOutlet FilterCollectionView* filterCollectionView;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem* filterButtonItem;
 
@@ -291,6 +295,7 @@
 {
     [super viewDidLoad];
     NSLog(@"sPLVC Next VC begin to load");
+    _snapshotScreenSize = CGSizeZero;
     //UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(dismissSelf)];
     UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
@@ -301,6 +306,8 @@
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
 
+    [self.toolbar makeTranslucent];
+    
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -363,6 +370,8 @@
     self.speechRecognizerResultString = @"";
     [self initSpeechRecognizer];
     [self startSpeechRecognizer];
+    
+    self.dictateLabel.translatesAutoresizingMaskIntoConstraints = NO;
     
     NSLog(@"sPLVC Next VC finished load");
 }
@@ -598,11 +607,26 @@
 
 #pragma mark IJKGPUImageMovieDelegate
 -(void) ijkGIMovieRenderedOneFrame:(id)ijkgpuMovie {
-//    UIImage* image = [ijkgpuMovie snapshotImage];
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        _imageView.image = image;
-//        NSLog(@"#ImageView# image.size=(%f,%f)", image.size.width, image.size.height);
-//    });
+    if (_snapshotScreenSize.width == 0.f && _snapshotScreenSize.height == 0.f)
+    {
+        CGSize videoSize = _ijkMovie.inputVideoSize;
+        if (kGPUImageFillModeStretch == _filterView.fillMode || kGPUImageFillModePreserveAspectRatioAndFill == _filterView.fillMode)
+        {
+            _snapshotScreenSize = _filterView.bounds.size;
+        }
+        else if (kGPUImageFillModePreserveAspectRatio == _filterView.fillMode)
+        {
+            if (videoSize.height * _filterView.bounds.size.width / videoSize.width <= _filterView.bounds.size.height)
+            {
+                _snapshotScreenSize = CGSizeMake(_filterView.bounds.size.width, videoSize.height * _filterView.bounds.size.width / videoSize.width);
+            }
+            else
+            {
+                _snapshotScreenSize = CGSizeMake(videoSize.width * _filterView.bounds.size.height / videoSize.height, _filterView.bounds.size.height);
+            }
+        }
+        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - 0, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
+    }
 }
 
 -(void) ijkGIMovieDidRecognizeSpeech:(IJKGPUImageMovie *)ijkgpuMovie result:(NSString *)result {
@@ -736,6 +760,8 @@
     NSLog(@"#IFLY# onResults isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
     dispatch_async(dispatch_get_main_queue(), ^{
         self.dictateLabel.text = self.speechRecognizerResultString;
+        [self.dictateLabel sizeToFit];
+        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - 0, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
     });
 }
 

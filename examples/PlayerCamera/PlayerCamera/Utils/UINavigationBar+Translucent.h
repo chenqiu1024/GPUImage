@@ -13,3 +13,9 @@
 -(void) makeTranslucent;
 
 @end
+
+@interface UIToolbar (Translucent)
+
+-(void) makeTranslucent;
+
+@end
