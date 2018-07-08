@@ -247,20 +247,20 @@
             CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
             CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
             
-            CGContextScaleCTM(imageContext, contentScale, contentScale);
+            CGContextScaleCTM(imageContext, contentScale, -contentScale);
             if (pSelf.snapshotScreenSize.width < pSelf.overlayView.bounds.size.width)
             {
-                CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, 0.f);
+                CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, pSelf.overlayView.bounds.size.height * contentScale);
             }
             else
             {
-                CGContextTranslateCTM(imageContext, 0.f, (pSelf.snapshotScreenSize.height - pSelf.overlayView.bounds.size.height) * contentScale / 2);
+                CGContextTranslateCTM(imageContext, 0.f, -(pSelf.snapshotScreenSize.height + pSelf.overlayView.bounds.size.height) * contentScale / 2);
             }
             CGContextDrawImage(imageContext, CGRectMake(0, 0, pSelf.overlayView.bounds.size.width, pSelf.overlayView.bounds.size.height), image.CGImage);
             [pSelf.overlayView.layer renderInContext:imageContext];
             
-            UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationDownMirrored];
-            snapshot = [snapshot imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationDownMirrored];
+            UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationUp];
+            snapshot = [snapshot imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationUp];
             NSData* data = UIImageJPEGRepresentation(snapshot, 1.0f);
             NSString* fileName = [NSString stringWithFormat:@"snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
             NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
