@@ -11,6 +11,7 @@
 #import "PhotoLibraryViewController.h"
 #import "UIViewController+Extensions.h"
 #import "SnapshotEditorViewController.h"
+#import "CameraDictateViewController.h"
 #import <Photos/Photos.h>
 
 const int MaxCells = 9;
@@ -87,7 +88,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     if (indexPath.row >= self.imageAssets.count)
     {
         cell.numberLabel.hidden = NO;
-        cell.numberLabel.text = [@(indexPath.row + 1) stringValue];
+        cell.numberLabel.text = @"+";///[@(indexPath.row + 1) stringValue];
         cell.imageView.image = nil;
         cell.deleteButton.hidden = YES;
         cell.deleteButtonHandler = nil;
@@ -98,7 +99,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         if ([item isKindOfClass:BlankImagePlaceHolder.class])
         {
             cell.numberLabel.hidden = NO;
-            cell.numberLabel.text = [@(indexPath.row + 1) stringValue];
+            cell.numberLabel.text = @"+";///[@(indexPath.row + 1) stringValue];
             cell.imageView.image = nil;
             cell.deleteButton.hidden = YES;
             cell.deleteButtonHandler = nil;
@@ -140,7 +141,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         CGSize cellSize = [self collectionView:collectionView layout:collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
         alert.popoverPresentationController.sourceRect = CGRectMake((0.5f + cols) * cellSize.width, (0.5f + rows) * cellSize.height, 10, 10);
         // Create and add an Action.
-        UIAlertAction* action0 = [UIAlertAction actionWithTitle:@"Select Multi Images" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction* actionMultiImages = [UIAlertAction actionWithTitle:@"Select Multi Images" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
             //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
             photoLibraryVC.maxSelectionCount = MaxCells - indexPath.row;
@@ -188,10 +189,15 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             };
             [self presentViewController:photoLibraryVC animated:YES completion:nil];
         }];
-        [alert addAction:action0];
+        UIAlertAction* actionCaptureSnapshot = [UIAlertAction actionWithTitle:@"Capture Video and Take Snapshot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            CameraDictateViewController* captureVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraDictate"];
+            [self presentViewController:captureVC animated:YES completion:nil];
+        }];
         
-        UIAlertAction* action4 = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-        [alert addAction:action4];
+        UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:actionCaptureSnapshot];
+        [alert addAction:actionMultiImages];
+        [alert addAction:actionCancel];
         // Show the Alert.
         [self presentViewController:alert animated:YES completion:nil];
     }

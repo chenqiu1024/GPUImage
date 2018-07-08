@@ -17,6 +17,8 @@
 
 @interface CameraDictateViewController () <IFlySpeechRecognizerDelegate>
 
+@property (nonatomic, copy) NSString* movieSavePath;
+
 @property (nonatomic, strong) GPUImageVideoCamera* videoCamera;
 @property (nonatomic, strong) GPUImageMovieWriter* movieWriter;
 
@@ -82,10 +84,10 @@
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyyMMdd_hhmmss";
     NSString* fileName = [NSString stringWithFormat:@"MOV_%@.mp4", [formatter stringFromDate:dateTime]];
-    NSString* pathToMovie = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:VideoDirectory] stringByAppendingPathComponent:fileName];
+    self.movieSavePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:VideoDirectory] stringByAppendingPathComponent:fileName];
     //NSString* pathToMovie = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
-    unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
-    NSURL* movieURL = [NSURL fileURLWithPath:pathToMovie];
+    unlink([self.movieSavePath UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
+    NSURL* movieURL = [NSURL fileURLWithPath:self.movieSavePath];
     _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:size];
     _movieWriter.encodingLiveVideo = YES;
 }
@@ -117,51 +119,34 @@
     [self startSpeechRecognizer];
 }
 
--(void) importMedias {
-    PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
-    //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
-    photoLibraryVC.maxSelectionCount = 0;
-    photoLibraryVC.allowedMediaTypes = @[@(PHAssetMediaTypeVideo)];
-    photoLibraryVC.selectCompletion = ^(NSArray<PhotoLibrarySelectionItem* >* selectedItems) {
-        //__strong PhotoLibraryViewController* sPLVC = wPLVC;
-        if (!selectedItems || selectedItems.count <= 0)
-            return;
-        
-        PhotoLibrarySelectionItem* item = selectedItems[0];
-        PHAssetMediaType mediaType = item.mediaType;
-        id resultObject = item.resultOject;
-        if (mediaType == PHAssetMediaTypeVideo)
+-(void) dismissSelf {
+    _movieWriter.paused = YES;
+    UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:@"Abort video capturing?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self stopAndReleaseMovieWriter];
+        [_videoCamera stopCameraCapture];
+        [[NSFileManager defaultManager] removeItemAtPath:self.movieSavePath error:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        if (self.shootButton.tag == 1)
         {
-            CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
-            playerVC.sourceVideoFile = (NSString*)resultObject;
-            NSLog(@"sPLVC present next OK");
-            [self presentViewController:playerVC animated:YES completion:^(){
-                NSLog(@"[sPLVC dismissSelf] OK");
-            }];
+            _movieWriter.paused = NO;
         }
-        else if (mediaType == PHAssetMediaTypeImage)
-        {
-            NSData* imageData = (NSData*)resultObject;
-            UIImage* image = [UIImage imageWithData:imageData];
-            SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
-            editorVC.image = image;
-            NSLog(@"sPLVC present next OK");
-            [self presentViewController:editorVC animated:YES completion:^(){
-                NSLog(@"[sPLVC dismissSelf] OK");
-            }];
-        }
-    };
-    [self presentViewController:photoLibraryVC animated:YES completion:nil];
+    }];
+    [alertCtrl addAction:confirmAction];
+    [alertCtrl addAction:cancelAction];
+    [self showViewController:alertCtrl sender:self];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    UIBarButtonItem* importButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+    UIBarButtonItem* backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self
-                                                                         action:@selector(importMedias)];
-    self.navItem.rightBarButtonItem = importButtonItem;
+                                                                         action:@selector(dismissSelf)];
+    self.navItem.leftBarButtonItem = backButtonItem;
     self.navItem.title = @"";
     //*
     [self.navBar makeTranslucent];
@@ -227,6 +212,8 @@
     [self stopSpeechRecognizer];
     
     [self releaseSpeechRecognizer];
+    
+    _movieWriter.paused = YES;
 }
 
 -(UIStatusBarStyle) preferredStatusBarStyle {
