@@ -280,6 +280,7 @@
         {
             [pSelf.ijkMovie addTarget:pSelf.filterView];
         }
+        ///[pSelf.ijkMovie render];
         pSelf.filter = filter;
     };
     
@@ -338,7 +339,7 @@
 
 -(void) onDoubleTapRecognized:(UITapGestureRecognizer*)pan {
     [_filter useNextFrameForImageCapture];
-    [_ijkMovie render];
+    ///[_ijkMovie render];
     UIImage* image = [_filter imageFromCurrentFramebuffer];
     if (image)
     {

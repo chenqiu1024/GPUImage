@@ -1159,12 +1159,14 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
         case MP_STATE_ERROR:
         case MP_STATE_END:
             mpState = IJKMPMoviePlaybackStateStopped;
+            _mediaPlayer->ffplayer->is->force_refresh = 1;
             break;
         case MP_STATE_IDLE:
         case MP_STATE_INITIALIZED:
         case MP_STATE_ASYNC_PREPARING:
         case MP_STATE_PAUSED:
             mpState = IJKMPMoviePlaybackStatePaused;
+            _mediaPlayer->ffplayer->is->force_refresh = 1;
             break;
         case MP_STATE_PREPARED:
         case MP_STATE_STARTED: {
@@ -2310,110 +2312,10 @@ int media_player_msg_loop(void* arg)
         }
         //*/
         //NSLog(@"#Thubmnail# IJKGPUImageMovie$render");
-    });
-}
-
--(void) render {
-    runSynchronouslyOnVideoProcessingQueue(^{
-        [GPUImageContext useImageProcessingContext];
-        
-        outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_inputVideoSize onlyTexture:NO];
-        [outputFramebuffer activateFramebuffer];
-        if (!_textRenderingProgram)
+        IJKMPMoviePlaybackState state = self.playbackState;
+        if (state == IJKMPMoviePlaybackStateStopped || state == IJKMPMoviePlaybackStatePaused)
         {
-            _textRenderingProgram = [[GLProgram alloc] initWithVertexShaderString:kGPUImageVertexShaderString fragmentShaderString:kGPUImagePassthroughFragmentShaderString];
-        }
-        if (!_textRenderingProgram.initialized)
-        {
-            [_textRenderingProgram addAttribute:@"position"];
-            [_textRenderingProgram addAttribute:@"inputTextureCoordinate"];
-            
-            [_textRenderingProgram link];
-            _positionSlot = [_textRenderingProgram attributeIndex:@"position"];
-            _texcoordSlot = [_textRenderingProgram attributeIndex:@"inputTextureCoordinate"];
-            _textureSlot = [_textRenderingProgram uniformIndex:@"inputImageTexture"];
-        }
-        [_textRenderingProgram use];
-        
-        //
-        UIFont* font = [UIFont fontWithName:@"PingFangTC-Regular" size:24.f];
-        if (_subtitleTextureInvalidated)
-        {
-            if (_subtitleTexture) glDeleteTextures(1, &_subtitleTexture);
-            _subtitleTexture = [_subtitle createTextureWithFont:font color:[UIColor whiteColor] outSize:&_subtitleSize];
-            _subtitleTextureInvalidated = NO;
-            NSLog(@"Create text texture with '%@'", _subtitle);
-        }
-        glActiveTexture(GL_TEXTURE5);
-        glBindTexture(GL_TEXTURE_2D, _subtitleTexture);
-        glUniform1i(_textureSlot, 5);
-        
-        GLfloat vertexData[] = {
-            -1.f, -1.f, 0.f, 1.f,
-            0.f, 0.f, 0.f, 0.f,
-            
-            -1.f, 1.f, 0.f, 1.f,
-            0.f, 1.f, 0.f, 0.f,
-            
-            1.f, -1.f, 0.f, 1.f,
-            1.f, 0.f, 0.f, 0.f,
-            
-            1.f, 1.f, 0.f, 1.f,
-            1.f, 1.f, 0.f, 0.f,
-        };
-        const GLfloat BottomMargin = 10.f;
-        GLint viewport[4];
-        glGetIntegerv(GL_VIEWPORT, viewport);
-        GLfloat x1 = _subtitleSize.width / _inputVideoSize.width;
-        GLfloat y0 = 2.f * BottomMargin / _inputVideoSize.height - 1.f;
-        GLfloat y1 = 2.f * (BottomMargin + _subtitleSize.height) / _inputVideoSize.height - 1.f;
-        vertexData[0] = vertexData[8] = -x1;
-        vertexData[1] = vertexData[17] = -y1;
-        vertexData[16] = vertexData[24] = x1;
-        vertexData[9] = vertexData[25] = -y0;
-        
-        glEnableVertexAttribArray(_positionSlot);
-        glEnableVertexAttribArray(_texcoordSlot);
-        glVertexAttribPointer(_positionSlot, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (const GLvoid*)vertexData);
-        glVertexAttribPointer(_texcoordSlot, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 8, (const GLvoid*)(vertexData + 4));
-        
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        
-        if (self.snapshotCompletionHandler)
-        {
-            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) <= 1.0f || self.snapshotDestTime > self.duration)
-            {
-                UIImage* snapshot = [self snapshotImage];
-                self.snapshotCompletionHandler(snapshot);
-            }
-            else
-            {
-                //self.currentPlaybackTime = (self.snapshotDestTime > self.duration) ? self.duration : self.snapshotDestTime;
-                self.currentPlaybackTime = self.snapshotDestTime;
-            }//*/
-        }
-        
-        for (id<GPUImageInput> currentTarget in targets)
-        {
-            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-            [currentTarget setInputSize:_inputVideoSize atIndex:targetTextureIndex];
-            [currentTarget setInputFramebuffer:outputFramebuffer atIndex:targetTextureIndex];
-        }
-        
-        [outputFramebuffer unlock];
-        
-        _prevAbsoluteTime = CFAbsoluteTimeGetCurrent();
-        int64_t nanoSeconds = (_prevAbsoluteTime - _absoluteTimeBase) * NSEC_PER_SEC;
-        CMTime currentSampleTime = CMTimeMake(nanoSeconds, NSEC_PER_SEC);
-        
-        for (id<GPUImageInput> currentTarget in targets)
-        {
-            NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-            NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-            [currentTarget newFrameReadyAtTime:currentSampleTime atIndex:targetTextureIndex];
+            _mediaPlayer->ffplayer->is->force_refresh = 1;
         }
     });
 }

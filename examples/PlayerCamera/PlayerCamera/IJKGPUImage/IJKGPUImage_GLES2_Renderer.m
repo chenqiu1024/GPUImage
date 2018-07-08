@@ -387,6 +387,8 @@ GLboolean IJKGPUImage_GLES2_Renderer_renderOverlay(IJK_GLES2_Renderer *renderer,
             return GL_FALSE;
     } else {
         // NULL overlay means force reload vertice
+        ///if (!renderer->func_uploadTexture(renderer, overlay)) ///!!!
+           /// return GL_FALSE;
         renderer->vertices_changed = 1;
     }
     
