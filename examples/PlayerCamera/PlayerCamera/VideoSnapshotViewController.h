@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "GPUImage.h"
 #import "GPUImageView.h"
+#import <Photos/Photos.h>
 
 @interface VideoSnapshotViewController : UIViewController
+
+@property (nonatomic, copy) void(^completionHandler)(PHAsset*);
 
 @property (nonatomic, copy) NSString* sourceVideoFile;
 

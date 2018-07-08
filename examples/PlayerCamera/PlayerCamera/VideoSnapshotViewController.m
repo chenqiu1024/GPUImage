@@ -19,6 +19,7 @@
 #import <iflyMSC/IFlyMSC.h>
 #import "ISRDataHelper.h"
 #import "UINavigationBar+Translucent.h"
+#import "PhotoLibraryHelper.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
@@ -265,24 +266,33 @@
             NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
             [data writeToFile:path atomically:YES];
             
-            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
-            ///dispatch_async(dispatch_get_main_queue(), ^{
-            BOOL succ = [WXApiRequestHandler sendImageData:data
-                                                   TagName:kImageTagName
-                                                MessageExt:kMessageExt
-                                                    Action:kMessageAction
-                                                ThumbImage:thumbImage
-                                                   InScene:WXSceneTimeline];//WXSceneSession
-            NSLog(@"#WX# Send message succ = %d", succ);
+            CGContextRelease(imageContext);
+            CGColorSpaceRelease(genericRGBColorspace);
+            
+            [PhotoLibraryHelper saveImageWithUrl:[NSURL fileURLWithPath:path] collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError* error, NSString* assetId) {
+                [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+                PHAsset* asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [pSelf dismissSelf];
+                    if (pSelf.completionHandler)
+                    {
+                        pSelf.completionHandler(asset);
+                    }
+                });
+            }];
+//            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
+//            BOOL succ = [WXApiRequestHandler sendImageData:data
+//                                                   TagName:kImageTagName
+//                                                MessageExt:kMessageExt
+//                                                    Action:kMessageAction
+//                                                ThumbImage:thumbImage
+//                                                   InScene:WXSceneTimeline];//WXSceneSession
+//            NSLog(@"#WX# Send message succ = %d", succ);
             /*
              NSArray *activityItems = @[data0, data1];
              UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
              [self presentViewController:activityVC animated:TRUE completion:nil];
              //*/
-            ///});
-            
-            CGContextRelease(imageContext);
-            CGColorSpaceRelease(genericRGBColorspace);
         });
     };
 }

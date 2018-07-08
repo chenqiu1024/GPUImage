@@ -201,6 +201,25 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                     [PhotoLibraryHelper saveVideoWithUrl:videoURL collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError *error, NSString *assetId) {
                         VideoSnapshotViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"VideoSnapshot"];
                         videoVC.sourceVideoFile = filePath;
+                        videoVC.completionHandler = ^(PHAsset* phAsset) {
+                            [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+                            
+                            if (indexPath.row >= self.imageAssets.count)
+                                [self.imageAssets addObject:phAsset];
+                            else
+                                [self.imageAssets replaceObjectAtIndex:indexPath.row withObject:phAsset];
+                            [self.thumbnails removeObjectForKey:indexPath];
+                            [self.collectionView reloadData];
+                            
+                            PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+                            requestOptions.networkAccessAllowed = YES;
+                            [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                                [self.thumbnails setObject:result forKey:indexPath];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+                                });
+                            }];
+                        };
                         [self dismissActivityIndicatorView];
                         [self presentViewController:videoVC animated:YES completion:nil];
                     }];
