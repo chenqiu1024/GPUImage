@@ -100,6 +100,7 @@
 -(void) setControlsHidden:(BOOL)hidden {
     self.controlPanelView.hidden = hidden;
     self.navBar.hidden = hidden;
+    self.playOrPauseButton.hidden = hidden;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 

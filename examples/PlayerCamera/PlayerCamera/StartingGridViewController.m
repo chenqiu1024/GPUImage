@@ -12,7 +12,7 @@
 #import "UIViewController+Extensions.h"
 #import "SnapshotEditorViewController.h"
 #import "CameraDictateViewController.h"
-#import "CameraPlayerViewController.h"
+#import "VideoSnapshotViewController.h"
 #import "PhotoLibraryHelper.h"
 #import <Photos/Photos.h>
 
@@ -199,10 +199,10 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                     [self showActivityIndicatorViewInView:nil];
                     NSURL* videoURL = [NSURL fileURLWithPath:filePath];
                     [PhotoLibraryHelper saveVideoWithUrl:videoURL collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError *error, NSString *assetId) {
-                        CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
-                        playerVC.sourceVideoFile = filePath;
+                        VideoSnapshotViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"VideoSnapshot"];
+                        videoVC.sourceVideoFile = filePath;
                         [self dismissActivityIndicatorView];
-                        [self presentViewController:playerVC animated:YES completion:nil];
+                        [self presentViewController:videoVC animated:YES completion:nil];
                     }];
                 }
             };
