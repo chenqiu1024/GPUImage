@@ -12,6 +12,8 @@
 #import "UIViewController+Extensions.h"
 #import "SnapshotEditorViewController.h"
 #import "CameraDictateViewController.h"
+#import "CameraPlayerViewController.h"
+#import "PhotoLibraryHelper.h"
 #import <Photos/Photos.h>
 
 const int MaxCells = 9;
@@ -191,6 +193,19 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         }];
         UIAlertAction* actionCaptureSnapshot = [UIAlertAction actionWithTitle:@"Capture Video and Take Snapshot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             CameraDictateViewController* captureVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraDictate"];
+            captureVC.completeHandler = ^(NSString* filePath) {
+                if (filePath && [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:NULL])
+                {
+                    [self showActivityIndicatorViewInView:nil];
+                    NSURL* videoURL = [NSURL fileURLWithPath:filePath];
+                    [PhotoLibraryHelper saveVideoWithUrl:videoURL collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError *error, NSString *assetId) {
+                        CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+                        playerVC.sourceVideoFile = filePath;
+                        [self dismissActivityIndicatorView];
+                        [self presentViewController:playerVC animated:YES completion:nil];
+                    }];
+                }
+            };
             [self presentViewController:captureVC animated:YES completion:nil];
         }];
         

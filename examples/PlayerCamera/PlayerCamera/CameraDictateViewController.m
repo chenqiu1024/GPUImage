@@ -115,28 +115,48 @@
 }
 
 -(IBAction)onRotateCameraButtonPressed:(id)sender {
-    ///!!![_videoCamera rotateCamera];
-    [self startSpeechRecognizer];
+    [_videoCamera rotateCamera];
 }
 
 -(void) dismissSelf {
     _movieWriter.paused = YES;
+    [self stopSpeechRecognizer];
+    
     UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:@"Abort video capturing?" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self releaseSpeechRecognizer];
         [self stopAndReleaseMovieWriter];
         [_videoCamera stopCameraCapture];
         [[NSFileManager defaultManager] removeItemAtPath:self.movieSavePath error:nil];
+        self.movieSavePath = nil;
         [self dismissViewControllerAnimated:YES completion:nil];
+        if (self.completeHandler)
+        {
+            self.completeHandler(nil);
+        }
     }];
     UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         if (self.shootButton.tag == 1)
         {
             _movieWriter.paused = NO;
         }
+        [self startSpeechRecognizer];
     }];
     [alertCtrl addAction:confirmAction];
     [alertCtrl addAction:cancelAction];
     [self showViewController:alertCtrl sender:self];
+}
+
+-(void) finishCapturing {
+    [self stopSpeechRecognizer];
+    [self releaseSpeechRecognizer];
+    [self stopAndReleaseMovieWriter];
+    [_videoCamera stopCameraCapture];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.completeHandler)
+    {
+        self.completeHandler(self.movieSavePath);
+    }
 }
 
 - (void)viewDidLoad {
@@ -146,7 +166,12 @@
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self
                                                                          action:@selector(dismissSelf)];
+    UIBarButtonItem* doneButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"]
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(finishCapturing)];
     self.navItem.leftBarButtonItem = backButtonItem;
+    self.navItem.rightBarButtonItem = doneButtonItem;
     self.navItem.title = @"";
     //*
     [self.navBar makeTranslucent];
@@ -169,7 +194,7 @@
 //*/
     self.speechRecognizerResultString = @"";
     [self initSpeechRecognizer];
-    //[self startSpeechRecognizer];
+    [self startSpeechRecognizer];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -210,7 +235,6 @@
 
 -(void) applicationWillResignActive:(id)sender {
     [self stopSpeechRecognizer];
-    
     [self releaseSpeechRecognizer];
     
     _movieWriter.paused = YES;

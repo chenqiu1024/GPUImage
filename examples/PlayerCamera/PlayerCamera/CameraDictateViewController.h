@@ -10,4 +10,6 @@
 
 @interface CameraDictateViewController : UIViewController
 
+@property (nonatomic, copy) void(^completeHandler)(NSString* filePath);
+
 @end
