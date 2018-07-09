@@ -14,6 +14,9 @@
 #import "CameraDictateViewController.h"
 #import "VideoSnapshotViewController.h"
 #import "CameraPlayerViewController.h"
+#import "UIImage+Share.h"
+#import "WXApiRequestHandler.h"
+#import "WeiXinConstant.h""
 #import "PhotoLibraryHelper.h"
 #import <Photos/Photos.h>
 
@@ -69,6 +72,18 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 
 @implementation StartingGridViewController
 
+-(void) checkIfAnyImage {
+    for (NSObject* obj in self.imageAssets)
+    {
+        if (![obj isKindOfClass:BlankImagePlaceHolder.class])
+        {
+            self.navItem.rightBarButtonItem.enabled = YES;
+            return;
+        }
+    }
+    self.navItem.rightBarButtonItem.enabled = NO;
+}
+
 -(NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
@@ -80,6 +95,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 -(void) deleteItemAt:(NSIndexPath*)indexPath {
     BlankImagePlaceHolder* placeHolder = [[BlankImagePlaceHolder alloc] init];
     [self.imageAssets replaceObjectAtIndex:indexPath.row withObject:placeHolder];
+    [self checkIfAnyImage];
     [self.thumbnails removeObjectForKey:indexPath];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
@@ -143,6 +159,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         [self.imageAssets addObject:phAsset];
     else
         [self.imageAssets replaceObjectAtIndex:indexPath.row withObject:phAsset];
+    self.navItem.rightBarButtonItem.enabled = YES;
     [self.thumbnails removeObjectForKey:indexPath];
     [self.collectionView reloadData];
     
@@ -189,6 +206,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                     }
                     [self.thumbnails removeObjectForKey:[NSIndexPath indexPathForRow:index inSection:0]];
                 }
+                self.navItem.rightBarButtonItem.enabled = YES;
                 [self.collectionView reloadData];
                 //            [self showActivityIndicatorViewInView:nil];
                 
@@ -302,7 +320,52 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 }
 
 -(void) confirm {
-    
+    UIAlertController* actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction* longImageAction = [UIAlertAction actionWithTitle:@"Long Image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self showActivityIndicatorViewInView:nil];
+        
+        NSMutableArray<PHAsset* >* phAssets = [[NSMutableArray alloc] init];
+        for (id obj in self.imageAssets)
+        {
+            if (![obj isKindOfClass:PHAsset.class])
+                continue;
+            
+            [phAssets addObject:(PHAsset*)obj];
+        }
+        
+        PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+        requestOptions.networkAccessAllowed = YES;
+        NSMutableArray<UIImage* >* images = [[NSMutableArray alloc] init];
+        for (PHAsset* phAsset in phAssets)
+        {
+            [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                [images addObject:[UIImage imageWithData:imageData]];
+                if (images.count == phAssets.count)
+                {
+                    UIImage* longImage = [UIImage longImageWithImages:images];
+                    NSData* longImageData = UIImageJPEGRepresentation(longImage, 1.0f);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIImage* thumbImage = [images[0] imageScaledToFitMaxSize:CGSizeMake(100, 100) orientation:UIImageOrientationUp];
+                        ///dispatch_async(dispatch_get_main_queue(), ^{
+                        BOOL succ = [WXApiRequestHandler sendImageData:longImageData
+                                                               TagName:kImageTagName
+                                                            MessageExt:kMessageExt
+                                                                Action:kMessageAction
+                                                            ThumbImage:thumbImage
+                                                               InScene:WXSceneTimeline];//WXSceneSession
+                        [self dismissActivityIndicatorView];
+                    });
+                }
+            }];
+        }
+        
+    }];
+    UIAlertAction* multiImageAction = [UIAlertAction actionWithTitle:@"Multi Image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [actionSheet addAction:longImageAction];
+    [actionSheet addAction:multiImageAction];
+    [self showViewController:actionSheet sender:self];
 }
 
 -(void) viewDidLoad {
