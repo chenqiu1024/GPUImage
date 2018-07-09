@@ -411,14 +411,14 @@
     _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     
-    _filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
+    _filterView = [[GPUImageView alloc] initWithFrame:self.overlayView.bounds];
     _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     //_filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
-    [self.view addSubview:_filterView];
+    [self.overlayView addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
     [self.view bringSubviewToFront:self.overlayView];
-    [self.view bringSubviewToFront:self.controlPanelView];
+    [self.overlayView sendSubviewToBack:_filterView];
     
     UITapGestureRecognizer* tapRecognizer= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapRecognized:)];
     tapRecognizer.numberOfTapsRequired = 2;

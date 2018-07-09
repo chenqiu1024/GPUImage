@@ -203,6 +203,8 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                         videoVC.sourceVideoFile = filePath;
                         videoVC.completionHandler = ^(PHAsset* phAsset) {
                             [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+                            if (!phAsset)
+                                return;
                             
                             if (indexPath.row >= self.imageAssets.count)
                                 [self.imageAssets addObject:phAsset];

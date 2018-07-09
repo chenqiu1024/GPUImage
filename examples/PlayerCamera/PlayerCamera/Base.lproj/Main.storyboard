@@ -779,19 +779,13 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </activityIndicatorView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kvm-J7-jug" userLabel="Delete Button">
-                                                    <rect key="frame" x="79" y="3" width="18" height="18"/>
-                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <rect key="frame" x="65" y="3" width="32" height="32"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="18" id="Uxm-j5-VcX"/>
-                                                        <constraint firstAttribute="width" constant="18" id="web-wL-u8W"/>
+                                                        <constraint firstAttribute="height" constant="32" id="Uxm-j5-VcX"/>
+                                                        <constraint firstAttribute="width" constant="32" id="web-wL-u8W"/>
                                                     </constraints>
-                                                    <state key="normal" backgroundImage="btn_more"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                            <integer key="value" value="9"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
-                                                    </userDefinedRuntimeAttributes>
+                                                    <state key="normal" backgroundImage="delete_cross"/>
                                                 </button>
                                             </subviews>
                                         </view>
@@ -851,6 +845,7 @@
     <resources>
         <image name="btn_more" width="25" height="25"/>
         <image name="btn_player_pause.png" width="16" height="16"/>
+        <image name="delete_cross" width="32" height="32"/>
         <image name="player_bottom_control_bg.png" width="16" height="16"/>
     </resources>
 </document>

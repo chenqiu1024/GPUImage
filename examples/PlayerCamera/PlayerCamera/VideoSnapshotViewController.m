@@ -217,13 +217,21 @@
     return UIStatusBarStyleLightContent;
 }
 
--(void) dismissSelf {
+-(void) dismissSelf:(PHAsset*)phAsset {
     [self stopSpeechRecognizer];
     [self releaseSpeechRecognizer];
     [_ijkMovie shutdown];
     [self removeMovieNotificationObservers];
     [self dismissViewControllerAnimated:YES completion:nil];
     _ijkMovie = nil;
+    if (self.completionHandler)
+    {
+        self.completionHandler(phAsset);
+    }
+}
+
+-(void) dismissSelf {
+    [self dismissSelf:nil];
 }
 
 -(void) takeSnapshot {
@@ -250,7 +258,7 @@
             CGContextScaleCTM(imageContext, contentScale, -contentScale);
             if (pSelf.snapshotScreenSize.width < pSelf.overlayView.bounds.size.width)
             {
-                CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, pSelf.overlayView.bounds.size.height * contentScale);
+                CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, -pSelf.overlayView.bounds.size.height * contentScale);
             }
             else
             {
@@ -273,11 +281,7 @@
                 [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
                 PHAsset* asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [pSelf dismissSelf];
-                    if (pSelf.completionHandler)
-                    {
-                        pSelf.completionHandler(asset);
-                    }
+                    [pSelf dismissSelf:asset];
                 });
             }];
 //            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
@@ -333,14 +337,14 @@
     
 //    self.navigationController.navigationBarHidden = YES;
     
-    _filterView = [[GPUImageView alloc] initWithFrame:self.view.bounds];
+    _filterView = [[GPUImageView alloc] initWithFrame:self.overlayView.bounds];
     _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     //_filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
-    [self.view addSubview:_filterView];
+    [self.overlayView addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
     [self.view bringSubviewToFront:self.overlayView];
-    [self.view bringSubviewToFront:self.controlPanelView];
+    [self.overlayView sendSubviewToBack:_filterView];
     
     _isProgressSliderBeingDragged = NO;
     self.playOrPauseButton.tag = 100;
@@ -390,7 +394,8 @@
     [self initSpeechRecognizer];
     [self startSpeechRecognizer];
     
-    self.dictateLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.dictateLabel.translatesAutoresizingMaskIntoConstraints = YES;
+    self.dictateLabel.text = @"Dictate Text Label";///!!!For Debug
     
     NSLog(@"sPLVC Next VC finished load");
 }
@@ -644,7 +649,10 @@
                 _snapshotScreenSize = CGSizeMake(videoSize.width * _filterView.bounds.size.height / videoSize.height, _filterView.bounds.size.height);
             }
         }
-        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - 0, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.dictateLabel sizeToFit];
+            self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - 0, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
+        });
     }
 }
 
@@ -778,9 +786,9 @@
     //    NSLog(@"#IFLY# resultFromJson=%@",resultFromJson);
     NSLog(@"#IFLY# onResults isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.dictateLabel.text = self.speechRecognizerResultString;
-        [self.dictateLabel sizeToFit];
-        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - 0, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
+//        self.dictateLabel.text = self.speechRecognizerResultString;
+//        [self.dictateLabel sizeToFit];
+//        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - 0, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
     });
 }
 
