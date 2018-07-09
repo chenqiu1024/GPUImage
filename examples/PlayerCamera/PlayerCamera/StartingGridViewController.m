@@ -362,6 +362,34 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     }];
     UIAlertAction* multiImageAction = [UIAlertAction actionWithTitle:@"Multi Image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
+        [self showActivityIndicatorViewInView:nil];
+        
+        NSMutableArray<PHAsset* >* phAssets = [[NSMutableArray alloc] init];
+        for (id obj in self.imageAssets)
+        {
+            if (![obj isKindOfClass:PHAsset.class])
+                continue;
+            
+            [phAssets addObject:(PHAsset*)obj];
+        }
+        
+        PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+        requestOptions.networkAccessAllowed = YES;
+        NSMutableArray<NSData* >* imageDatas = [[NSMutableArray alloc] init];
+        for (PHAsset* phAsset in phAssets)
+        {
+            [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                [imageDatas addObject:imageData];
+                if (imageDatas.count == phAssets.count)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self dismissActivityIndicatorView];
+                        UIActivityViewController* activityVC = [[UIActivityViewController alloc] initWithActivityItems:imageDatas applicationActivities:nil];
+                        [self presentViewController:activityVC animated:YES completion:nil];
+                    });
+                }
+            }];
+        }
     }];
     [actionSheet addAction:longImageAction];
     [actionSheet addAction:multiImageAction];
