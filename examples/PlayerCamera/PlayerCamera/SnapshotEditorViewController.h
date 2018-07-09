@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
 
 @interface SnapshotEditorViewController : UIViewController
+
+@property (nonatomic, copy) void(^completionHandler)(PHAsset*);
 
 @property (nonatomic, strong) UIImage* image;
 

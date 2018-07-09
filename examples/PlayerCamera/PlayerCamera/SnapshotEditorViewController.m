@@ -16,7 +16,11 @@
 #import "WeiXinConstant.h"
 #import "UIImage+Share.h"
 #import "UINavigationBar+Translucent.h"
+#import "PhotoLibraryHelper.h"
 #import <GPUImage.h>
+#import <AssetsLibrary/ALAssetsLibrary.h>
+
+#define DictateLabelBottomMargin 6.0f
 
 #pragma mark    UIElementsView
 
@@ -221,15 +225,35 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 
 @property (nonatomic, strong) UIElementsView* uiElementsView;
 @property (nonatomic, strong) GPUImagePicture* picture;
+
+@property (nonatomic, weak) IBOutlet UIView* overlayView;
+@property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
+@property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
+
+@property (nonatomic, weak) IBOutlet UIToolbar* toolbar;
+@property (nonatomic, weak) IBOutlet FilterCollectionView* filterCollectionView;
+
+@property (nonatomic, weak) IBOutlet UILabel* dictateLabel;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem* dictateButtonItem;
+
+@property (nonatomic, assign) CGSize snapshotScreenSize;
+
 @property (nonatomic, strong) GPUImageFilter* filter;
+@property (nonatomic, weak) IBOutlet GPUImageView* filterView;
 
-@property (nonatomic, strong) IBOutlet FilterCollectionView* filterCollectionView;
-@property (nonatomic, strong) IBOutlet UIButton* filterButton;
+@property (nonatomic, strong) IFlySpeechRecognizer* speechRecognizer;
+@property (nonatomic, copy) NSString* speechRecognizerResultString;
 
-@property (nonatomic, strong) IBOutlet UINavigationBar* navBar;
-@property (nonatomic, strong) IBOutlet UINavigationItem* navItem;
+-(IBAction)onDictateButtonPressed:(id)sender;
 
--(IBAction)onFilterButtonPressed:(id)sender;
+-(IBAction)onTypeButtonPressed:(id)sender;
+
+-(IBAction)onClickOverlay:(id)sender;
+
+-(void) initSpeechRecognizer;
+-(BOOL) startSpeechRecognizer;
+-(void) stopSpeechRecognizer;
+-(void) releaseSpeechRecognizer;
 
 @end
 
@@ -237,9 +261,30 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 
 @synthesize uiElementsView;
 
+-(void) setControlsHidden:(BOOL)hidden {
+    self.navBar.hidden = hidden;
+    self.toolbar.hidden = hidden;
+    self.filterCollectionView.hidden = hidden;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+-(void) hideControls {
+    [self setControlsHidden:YES];
+}
+
+-(IBAction)onClickOverlay:(id)sender {
+    if (self.navBar.isHidden)
+    {
+        [self setControlsHidden:NO];
+    }
+    else
+    {
+        [self setControlsHidden:YES];
+    }
+}
+
 -(void) onDoubleTapped:(UITapGestureRecognizer*)recognizer {
-    GPUImageView* gpuImageView = (GPUImageView*)self.view;
-    gpuImageView.snapshotCompletion = ^(UIImage* image) {
+    self.filterView.snapshotCompletion = ^(UIImage* image) {
         if (!image)
             return;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -284,60 +329,183 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     [self.picture processImage];
 }
 
--(void) dismissSelf {
+#pragma mark - View lifecycle
+
+-(void) applicationDidBecomeActive:(id)sender {
+    if (self.dictateButtonItem.tag == 1)
+    {
+        [self initSpeechRecognizer];
+        [self startSpeechRecognizer];
+    }
+}
+
+-(void) applicationWillResignActive:(id)sender {
+    if (self.dictateButtonItem.tag == 1)
+    {
+        [self stopSpeechRecognizer];
+        [self releaseSpeechRecognizer];
+    }
+}
+
+-(void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (BOOL) prefersStatusBarHidden {
+    return NO;///!!!self.navBar.hidden;
+}
+
+-(UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
+-(void) dismissSelf:(PHAsset*)phAsset {
+    [self stopSpeechRecognizer];
+    [self releaseSpeechRecognizer];
     [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.completionHandler)
+    {
+        self.completionHandler(phAsset);
+    }
+}
+
+-(void) dismissSelf {
+    [self dismissSelf:nil];
+}
+
+-(void) takeSnapshot {
+    [self stopSpeechRecognizer];
+    [self releaseSpeechRecognizer];
+    
+    __weak typeof(self) wSelf = self;
+    self.filterView.snapshotCompletion = ^(UIImage* image) {
+        if (!image)
+            return;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong typeof(self) pSelf = wSelf;
+            [pSelf hideControls];
+            AudioServicesPlaySystemSound(1108);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                CGFloat contentScale = pSelf.overlayView.layer.contentsScale;
+                //            CGSize layerSize = CGSizeMake(contentScale * pSelf.overlayView.bounds.size.width,
+                //                                          contentScale * pSelf.overlayView.bounds.size.height);
+                CGSize layerSize = CGSizeMake(contentScale * pSelf.snapshotScreenSize.width,
+                                              contentScale * pSelf.snapshotScreenSize.height);
+                CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
+                CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+                
+                CGContextScaleCTM(imageContext, contentScale, -contentScale);
+                if (pSelf.snapshotScreenSize.width < pSelf.overlayView.bounds.size.width)
+                {
+                    CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, -pSelf.overlayView.bounds.size.height * contentScale);
+                }
+                else
+                {
+                    CGContextTranslateCTM(imageContext, 0.f, -(pSelf.snapshotScreenSize.height + pSelf.overlayView.bounds.size.height) * contentScale / 2);
+                }
+                CGContextDrawImage(imageContext, CGRectMake(0, 0, pSelf.overlayView.bounds.size.width, pSelf.overlayView.bounds.size.height), image.CGImage);
+                [pSelf.overlayView.layer renderInContext:imageContext];
+                
+                UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationUp];
+                snapshot = [snapshot imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationUp];
+                NSData* data = UIImageJPEGRepresentation(snapshot, 1.0f);
+                NSString* fileName = [NSString stringWithFormat:@"snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
+                NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
+                [data writeToFile:path atomically:YES];
+                
+                CGContextRelease(imageContext);
+                CGColorSpaceRelease(genericRGBColorspace);
+                
+                [PhotoLibraryHelper saveImageWithUrl:[NSURL fileURLWithPath:path] collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError* error, NSString* assetId) {
+                    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+                    PHAsset* asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [pSelf dismissSelf:asset];
+                    });
+                }];
+                //            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
+                //            BOOL succ = [WXApiRequestHandler sendImageData:data
+                //                                                   TagName:kImageTagName
+                //                                                MessageExt:kMessageExt
+                //                                                    Action:kMessageAction
+                //                                                ThumbImage:thumbImage
+                //                                                   InScene:WXSceneTimeline];//WXSceneSession
+                //            NSLog(@"#WX# Send message succ = %d", succ);
+                /*
+                 NSArray *activityItems = @[data0, data1];
+                 UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
+                 [self presentViewController:activityVC animated:TRUE completion:nil];
+                 //*/
+            });
+        });
+    };
+    [self.picture processImage];
 }
 
 - (void)viewDidLoad {
-    NSLog(@"sPLVC Next VC begin to load");
     [super viewDidLoad];
-    
-    UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
-                                                                          style:UIBarButtonItemStylePlain
-                                                                         target:self
-                                                                         action:@selector(dismissSelf)];
+    NSLog(@"sPLVC Next VC begin to load");
+    //UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(dismissSelf)];
+    UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
-    self.navItem.title = @"Picture Edit";
-    //*
+    UIBarButtonItem* snapshotButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(takeSnapshot)];
+    self.navItem.rightBarButtonItem = snapshotButtonItem;
+    self.navItem.title = @"Take Video Snapshot";
+    
     [self.navBar makeTranslucent];
+    //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
+    //[self.navBar setBackgroundColor:[UIColor blackColor]];
+    //[self.navBar setBarTintColor:[UIColor blackColor]];
+    //self.navBar.opaque = YES;
+    //[self.navBar setTintColor:[UIColor blackColor]];
     [self setNeedsStatusBarAppearanceUpdate];
-    //https://www.jianshu.com/p/fa27ab9fb172
-     //*/
     
-    _filter = nil;
+    [self.toolbar makeTranslucent];
+    //[self.toolbar setBackgroundAndShadowColor:[UIColor blackColor]];
     
-    self.filterCollectionView.hidden = YES;
-
-    // Do any additional setup after loading the view.
-    if (!self.image)
-        return;
+    NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    //    self.navigationController.navigationBarHidden = YES;
+    
+    //_filterView = [[GPUImageView alloc] initWithFrame:self.overlayView.bounds];
+    //_filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    //_filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
+    //[self.overlayView addSubview:_filterView];
+    _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
+    
+    [self.view bringSubviewToFront:self.overlayView];
+    //_filterView.userInteractionEnabled = YES;
+    //[self.overlayView sendSubviewToBack:_filterView];
     
     self.view.backgroundColor = [UIColor clearColor];
     
     self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
     self.uiElementsView.backgroundColor = [UIColor clearColor];
-    [self.view insertSubview:self.uiElementsView belowSubview:self.navBar];
+    [self.view insertSubview:self.uiElementsView belowSubview:self.overlayView];
     
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
     tapRecognizer.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:tapRecognizer];
-    
-    GPUImageView* gpuImageView = (GPUImageView*)self.view;
-    gpuImageView.backgroundColor = [UIColor clearColor];
+    ///////////////////
+    _filterView.backgroundColor = [UIColor clearColor];
     self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
-    [self.picture addTarget:gpuImageView];
+    [self.picture addTarget:_filterView];
     [self.picture processImage];
+    self.filter = nil;
     
     __weak typeof(self) wSelf = self;
     self.filterCollectionView.filterSelectedHandler = ^(GPUImageFilter* filter) {
         __strong typeof(self) pSelf = wSelf;
         if (!pSelf.filter)
         {
-            [pSelf.picture removeTarget:gpuImageView];
+            [pSelf.picture removeTarget:pSelf.filterView];
         }
         else
         {
-            [pSelf.filter removeTarget:gpuImageView];
+            [pSelf.filter removeTarget:pSelf.filterView];
             [pSelf.picture removeTarget:pSelf.filter];
         }
         
@@ -345,17 +513,14 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         if (filter)
         {
             [pSelf.picture addTarget:filter];
-            [filter addTarget:gpuImageView];
+            [filter addTarget:pSelf.filterView];
         }
         else
         {
-            [pSelf.picture addTarget:gpuImageView];
+            [pSelf.picture addTarget:pSelf.filterView];
         }
         pSelf.filter = filter;
         [pSelf.picture processImage];
-        
-        //    self.filterButton.hidden = NO;
-        //    self.filterCollectionView.hidden = YES;
     };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -365,13 +530,39 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         NSString* detectResultString = [faceDetector detectARGB:self.image];
         NSArray* faceDetectResult = [IFlyFaceDetectResultParser parseFaceDetectResult:detectResultString];
         NSLog(@"FaceDetect in (%f, %f) result = '%@', array=%@", self.image.size.width, self.image.size.height, detectResultString, faceDetectResult);
-        faceDetectResult = transformFaceDetectResults(faceDetectResult, self.image.size, self.uiElementsView.frame.size, gpuImageView.fillMode);
+        faceDetectResult = transformFaceDetectResults(faceDetectResult, self.image.size, self.uiElementsView.frame.size, self.filterView.fillMode);
         self.uiElementsView.personFaces = faceDetectResult;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.uiElementsView setNeedsDisplay];
         });
         
     });
+    
+    self.speechRecognizerResultString = @"";
+    [self initSpeechRecognizer];
+    [self startSpeechRecognizer];
+    
+    self.dictateLabel.translatesAutoresizingMaskIntoConstraints = YES;
+    
+    CGSize imageSize = self.image.size;
+    if (kGPUImageFillModeStretch == _filterView.fillMode || kGPUImageFillModePreserveAspectRatioAndFill == _filterView.fillMode)
+    {
+        _snapshotScreenSize = _filterView.bounds.size;
+    }
+    else if (kGPUImageFillModePreserveAspectRatio == _filterView.fillMode)
+    {
+        if (imageSize.height * _filterView.bounds.size.width / imageSize.width <= _filterView.bounds.size.height)
+        {
+            _snapshotScreenSize = CGSizeMake(_filterView.bounds.size.width, imageSize.height * _filterView.bounds.size.width / imageSize.width);
+        }
+        else
+        {
+            _snapshotScreenSize = CGSizeMake(imageSize.width * _filterView.bounds.size.height / imageSize.height, _filterView.bounds.size.height);
+        }
+    }
+    [self.dictateLabel sizeToFit];
+    self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
+    
     NSLog(@"sPLVC Next VC finished load");
 }
 
@@ -380,29 +571,192 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark    IFLY
+-(void) updateDictateLabelText {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.dictateLabel.text = self.speechRecognizerResultString;
+        //        self.dictateLabel.text = @"Dictate Text Label Test";
+        [self.dictateLabel sizeToFit];
+        self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
+    });
 }
-*/
 
-#pragma mark    Filters
-
--(IBAction)onFilterButtonPressed:(id)sender {
-    if (self.filterCollectionView.hidden)
+-(IBAction)onDictateButtonPressed:(id)sender {
+    if (self.dictateButtonItem.tag == 1)
     {
-        self.filterCollectionView.hidden = NO;
-        self.filterButton.tintColor = [UIColor blueColor];
+        [self stopSpeechRecognizer];
+        [self releaseSpeechRecognizer];
+        
+        self.dictateButtonItem.tintColor = [UIColor whiteColor];
+        self.dictateButtonItem.tag = 0;
     }
     else
     {
-        self.filterCollectionView.hidden = YES;
-        self.filterButton.tintColor = [UIColor whiteColor];
+        [self initSpeechRecognizer];
+        [self startSpeechRecognizer];
+        
+        self.dictateButtonItem.tintColor = [UIColor blueColor];
+        self.dictateButtonItem.tag = 1;
     }
+}
+
+-(void)onTypeButtonPressed:(id)sender {
+    self.dictateButtonItem.tag = 1;
+    [self onDictateButtonPressed:self.dictateButtonItem];
+    //*
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Edit Text" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
+        textField.placeholder = @"Enter text:";
+        textField.text = self.speechRecognizerResultString;
+        textField.secureTextEntry = NO;
+        textField.frame = CGRectMake(0, 0, 600, 400);
+    }];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+        self.speechRecognizerResultString = alert.textFields[0].text;
+        [self updateDictateLabelText];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+    /*/
+     TextEditViewController* vc = [[TextEditViewController alloc] initWithText:self.speechRecognizerResultString];
+     vc.completionHandler = ^(NSString* text) {
+     self.speechRecognizerResultString = text;
+     self.dictateLabel.text = text;
+     };
+     [self setPresentationStyle:vc];
+     [self presentViewController:vc animated:YES completion:nil];
+     //*/
+}
+
+-(void) initSpeechRecognizer
+{
+    //recognition singleton without view
+    _speechRecognizer = [IFlySpeechRecognizer sharedInstance];
+    
+    [_speechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
+    
+    //set recognition domain
+    [_speechRecognizer setParameter:@"iat" forKey:[IFlySpeechConstant IFLY_DOMAIN]];
+    
+    _speechRecognizer.delegate = self;
+    
+    if (_speechRecognizer != nil) {
+        //set timeout of recording
+        [_speechRecognizer setParameter:@"30000" forKey:[IFlySpeechConstant SPEECH_TIMEOUT]];
+        //set VAD timeout of end of speech(EOS)
+        [_speechRecognizer setParameter:@"3000" forKey:[IFlySpeechConstant VAD_EOS]];
+        //set VAD timeout of beginning of speech(BOS)
+        [_speechRecognizer setParameter:@"3000" forKey:[IFlySpeechConstant VAD_BOS]];
+        //set network timeout
+        [_speechRecognizer setParameter:@"20000" forKey:[IFlySpeechConstant NET_TIMEOUT]];
+        
+        //set sample rate, 16K as a recommended option
+        [_speechRecognizer setParameter:@"16000" forKey:[IFlySpeechConstant SAMPLE_RATE]];
+        
+        //set language
+        [_speechRecognizer setParameter:@"zh_cn" forKey:[IFlySpeechConstant LANGUAGE]];
+        //set accent
+        [_speechRecognizer setParameter:@"mandarin" forKey:[IFlySpeechConstant ACCENT]];
+        
+        //set whether or not to show punctuation in recognition results
+        [_speechRecognizer setParameter:@"1" forKey:[IFlySpeechConstant ASR_PTT]];
+        
+    }
+}
+
+-(void) releaseSpeechRecognizer {
+    [_speechRecognizer cancel];
+    [_speechRecognizer setDelegate:nil];
+    [_speechRecognizer setParameter:@"" forKey:[IFlySpeechConstant PARAMS]];
+    _speechRecognizer = nil;
+}
+
+-(BOOL) startSpeechRecognizer {
+    if(_speechRecognizer == nil)
+    {
+        [self initSpeechRecognizer];
+    }
+    
+    [_speechRecognizer cancel];
+    
+    //Set microphone as audio source
+    [_speechRecognizer setParameter:IFLY_AUDIO_SOURCE_MIC forKey:@"audio_source"];
+    
+    //Set result type
+    [_speechRecognizer setParameter:@"json" forKey:[IFlySpeechConstant RESULT_TYPE]];
+    
+    //Set the audio name of saved recording file while is generated in the local storage path of SDK,by default in library/cache.
+    [_speechRecognizer setParameter:@"asr.pcm" forKey:[IFlySpeechConstant ASR_AUDIO_PATH]];
+    
+    [_speechRecognizer setDelegate:self];
+    
+    BOOL ret = [_speechRecognizer startListening];
+    return ret;
+}
+
+-(void) stopSpeechRecognizer {
+    [_speechRecognizer stopListening];
+}
+
+/**
+ recognition session completion, which will be invoked no matter whether it exits error.
+ error.errorCode =
+ 0     success
+ other fail
+ **/
+- (void) onCompleted:(IFlySpeechError *) error
+{
+    NSString* text = [NSString stringWithFormat:@"Error：%d %@", error.errorCode,error.errorDesc];
+    NSLog(@"#IFLY# onCompleted :%@",text);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self startSpeechRecognizer];
+    });
+}
+
+/**
+ result callback of recognition without view
+ results：recognition results
+ isLast：whether or not this is the last result
+ **/
+- (void) onResults:(NSArray *) results isLast:(BOOL)isLast
+{
+    NSMutableString* resultString = [[NSMutableString alloc] init];
+    NSDictionary* dic = results[0];
+    
+    for(NSString* key in dic)
+    {
+        [resultString appendFormat:@"%@",key];
+    }
+    
+    NSString* resultFromJson = [ISRDataHelper stringFromJson:resultString];
+    
+    self.speechRecognizerResultString = [NSString stringWithFormat:@"%@%@", self.speechRecognizerResultString, resultFromJson];
+    //    NSLog(@"#IFLY# resultFromJson=%@",resultFromJson);
+    NSLog(@"#IFLY# onResults isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
+    [self updateDictateLabelText];
+}
+
+-(void) onError:(IFlySpeechError*)errorCode {
+    NSLog(@"#IFLY# onError %@", errorCode.errorDesc);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self startSpeechRecognizer];
+    });
+    
+}
+
+-(void) onVolumeChanged:(int)volume {
+    //NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
+}
+
+-(void) onBeginOfSpeech {
+    NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
+}
+
+-(void) onEndOfSpeech {
+    NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
+}
+
+-(void) onCancel {
+    NSLog(@"#IFLY# in %@ $ %s %d", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __FUNCTION__, __LINE__);
 }
 
 @end

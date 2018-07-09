@@ -337,7 +337,7 @@
     self.navItem.leftBarButtonItem = dismissButtonItem;
     UIBarButtonItem* snapshotButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(takeSnapshot)];
     self.navItem.rightBarButtonItem = snapshotButtonItem;
-    self.navItem.title = [self.sourceVideoFile lastPathComponent];
+    self.navItem.title = @"Take Video Snapshot";
     
     [self.navBar makeTranslucent];
     //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
