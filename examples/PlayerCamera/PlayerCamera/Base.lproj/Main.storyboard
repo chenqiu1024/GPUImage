@@ -362,6 +362,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Li-B2-qAe" userLabel="GPUImageView" customClass="GPUImageView">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z94-0R-eao" userLabel="OverlayView" customClass="UIControl">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
@@ -514,9 +518,13 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="nC2-tc-u4N" firstAttribute="top" secondItem="1Li-B2-qAe" secondAttribute="bottom" id="FqR-GF-bxo"/>
+                            <constraint firstItem="1Li-B2-qAe" firstAttribute="top" secondItem="TGK-75-juE" secondAttribute="bottom" id="IiS-Az-enR"/>
                             <constraint firstAttribute="trailing" secondItem="z94-0R-eao" secondAttribute="trailing" id="Ux2-60-qdL"/>
                             <constraint firstItem="nC2-tc-u4N" firstAttribute="top" secondItem="z94-0R-eao" secondAttribute="bottom" id="mct-AF-Ani"/>
                             <constraint firstItem="z94-0R-eao" firstAttribute="top" secondItem="TGK-75-juE" secondAttribute="bottom" id="srr-kD-Ufi"/>
+                            <constraint firstAttribute="trailing" secondItem="1Li-B2-qAe" secondAttribute="trailing" id="uEr-Qc-seE"/>
+                            <constraint firstItem="1Li-B2-qAe" firstAttribute="leading" secondItem="FNT-ai-hi5" secondAttribute="leading" id="ugk-p5-wiH"/>
                             <constraint firstItem="z94-0R-eao" firstAttribute="leading" secondItem="FNT-ai-hi5" secondAttribute="leading" id="vYV-YO-uuF"/>
                         </constraints>
                     </view>
@@ -529,6 +537,7 @@
                         <outlet property="filterButtonItem" destination="512-fh-QdK" id="Gbz-Fn-4EF"/>
                         <outlet property="filterCollectionView" destination="rCv-os-ebu" id="a1a-pl-f25"/>
                         <outlet property="filterToolbar" destination="PO5-2p-MOp" id="q81-TN-mFs"/>
+                        <outlet property="filterView" destination="1Li-B2-qAe" id="ySJ-8h-KrA"/>
                         <outlet property="navBar" destination="bgN-UR-vTv" id="DqB-zu-fHN"/>
                         <outlet property="navItem" destination="cOD-gP-AEt" id="6Dg-Ef-ZGL"/>
                         <outlet property="overlayView" destination="z94-0R-eao" id="cxp-rV-hve"/>

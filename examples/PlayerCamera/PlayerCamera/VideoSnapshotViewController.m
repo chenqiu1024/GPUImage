@@ -55,7 +55,7 @@
 @property (nonatomic, assign) CGSize snapshotScreenSize;
 
 @property (nonatomic, strong) GPUImageFilter* filter;
-@property (nonatomic, strong) GPUImageView* filterView;
+@property (nonatomic, weak) IBOutlet GPUImageView* filterView;
 @property (nonatomic, strong) IJKGPUImageMovie* ijkMovie;
 
 @property (nonatomic, strong) IFlySpeechRecognizer* speechRecognizer;
@@ -132,6 +132,8 @@
     self.controlPanelView.hidden = hidden;
     self.navBar.hidden = hidden;
     self.playOrPauseButton.hidden = hidden;
+    self.filterToolbar.hidden = hidden;
+    //self.filterCollectionView.hidden = hidden;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -349,14 +351,15 @@
     
 //    self.navigationController.navigationBarHidden = YES;
     
-    _filterView = [[GPUImageView alloc] initWithFrame:self.overlayView.bounds];
-    _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    //_filterView = [[GPUImageView alloc] initWithFrame:self.overlayView.bounds];
+    //_filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     //_filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
-    [self.overlayView addSubview:_filterView];
+    //[self.overlayView addSubview:_filterView];
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
     [self.view bringSubviewToFront:self.overlayView];
-    [self.overlayView sendSubviewToBack:_filterView];
+    //_filterView.userInteractionEnabled = YES;
+    //[self.overlayView sendSubviewToBack:_filterView];
     
     _isProgressSliderBeingDragged = NO;
     self.playOrPauseButton.tag = 100;
@@ -711,8 +714,8 @@
 }
 
 -(void)onDictateLabelTouched:(id)sender {
-    /*
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    //*
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Edit Text" message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
         textField.placeholder = @"Enter text:";
         textField.text = self.speechRecognizerResultString;
@@ -842,7 +845,7 @@
         self.dictateLabel.text = self.speechRecognizerResultString;
         //self.dictateLabel.text = @"Dictate Text Label Test";
         [self.dictateLabel sizeToFit];
-        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - DictateLabelBottomMargin, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
+        self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
     });
 }
 
