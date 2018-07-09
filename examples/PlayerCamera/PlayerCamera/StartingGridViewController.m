@@ -13,6 +13,7 @@
 #import "SnapshotEditorViewController.h"
 #import "CameraDictateViewController.h"
 #import "VideoSnapshotViewController.h"
+#import "CameraPlayerViewController.h"
 #import "PhotoLibraryHelper.h"
 #import <Photos/Photos.h>
 
@@ -237,8 +238,42 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             [self presentViewController:captureVC animated:YES completion:nil];
         }];
         
+        UIAlertAction* actionVideoSnapshot = [UIAlertAction actionWithTitle:@"Pick Video and Take Snapshot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
+            //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
+            photoLibraryVC.maxSelectionCount = 1;
+            photoLibraryVC.allowedMediaTypes = @[@(PHAssetMediaTypeVideo)];
+            photoLibraryVC.returnRawPHAssets = NO;
+            photoLibraryVC.selectCompletion = ^(NSArray<PhotoLibrarySelectionItem* >* selectedItems) {
+                if (!selectedItems || selectedItems.count <= 0)
+                    return;
+                
+                NSString* filePath = (NSString*)selectedItems[0].resultOject;
+                /*
+                [self showActivityIndicatorViewInView:nil];
+                VideoSnapshotViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"VideoSnapshot"];
+                videoVC.sourceVideoFile = filePath;
+                videoVC.completionHandler = ^(PHAsset* phAsset) {
+                    [self replaceOrAddPHAsset:phAsset atIndexPath:indexPath];
+                    [self dismissActivityIndicatorView];
+                };
+                /*/
+                CameraPlayerViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+                filePath = [NSString stringWithFormat:@"%@", filePath];
+                NSString* destPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:filePath.lastPathComponent];
+                [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destPath error:nil];
+                BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath:destPath];
+                videoVC.sourceVideoFile = destPath;
+                //*/
+                [self presentViewController:videoVC animated:YES completion:^() {
+                }];
+            };
+            [self presentViewController:photoLibraryVC animated:YES completion:nil];
+        }];
+        
         UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
         [alert addAction:actionCaptureSnapshot];
+        [alert addAction:actionVideoSnapshot];
         [alert addAction:actionMultiImages];
         [alert addAction:actionCancel];
         // Show the Alert.
