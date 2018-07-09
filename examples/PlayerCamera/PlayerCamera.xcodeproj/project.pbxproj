@@ -27,6 +27,8 @@
 		524F116720B1B6E40045795F /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F116620B1B6E40045795F /* UIImage+Blur.m */; };
 		524F116820B1B6E40045795F /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 524F116620B1B6E40045795F /* UIImage+Blur.m */; };
 		524FB92D20B7F5ED006F5FED /* VideoThumbnailCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 524FB92C20B7F5ED006F5FED /* VideoThumbnailCache.m */; };
+		5279F99E20F3B583000920CE /* dotletterstiles.png in Resources */ = {isa = PBXBuildFile; fileRef = 5279F99920F3B582000920CE /* dotletterstiles.png */; };
+		5279F99F20F3B583000920CE /* dotletterstiles.png in Resources */ = {isa = PBXBuildFile; fileRef = 5279F99920F3B582000920CE /* dotletterstiles.png */; };
 		527C39C120EA5EC400CC64AE /* SnapshotEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527C39C020EA5EC400CC64AE /* SnapshotEditorViewController.m */; };
 		527C39CB20ECB10200CC64AE /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 527C39C920ECB10100CC64AE /* libWeChatSDK.a */; };
 		528114FC20ECB1CC00E2B133 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 528114FB20ECB1CC00E2B133 /* libsqlite3.tbd */; };
@@ -246,6 +248,7 @@
 		524F116B20B1DA4C0045795F /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		524FB92B20B7F5ED006F5FED /* VideoThumbnailCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoThumbnailCache.h; sourceTree = "<group>"; };
 		524FB92C20B7F5ED006F5FED /* VideoThumbnailCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoThumbnailCache.m; sourceTree = "<group>"; };
+		5279F99920F3B582000920CE /* dotletterstiles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dotletterstiles.png; path = ../../iOS/FilterShowcase/FilterShowcase/dotletterstiles.png; sourceTree = "<group>"; };
 		527C39BF20EA5EC400CC64AE /* SnapshotEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SnapshotEditorViewController.h; sourceTree = "<group>"; };
 		527C39C020EA5EC400CC64AE /* SnapshotEditorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SnapshotEditorViewController.m; sourceTree = "<group>"; };
 		527C39C720ECB10000CC64AE /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
@@ -451,6 +454,7 @@
 		520DA6D71ED7248C009E4705 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5279F99920F3B582000920CE /* dotletterstiles.png */,
 				520DA6D81ED7248C009E4705 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -731,6 +735,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5281155420ED373300E2B133 /* Main.storyboard in Resources */,
+				5279F99E20F3B583000920CE /* dotletterstiles.png in Resources */,
 				520DA6E71ED7248C009E4705 /* LaunchScreen.storyboard in Resources */,
 				520DA6E41ED7248C009E4705 /* Assets.xcassets in Resources */,
 			);
@@ -748,6 +753,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5281152D20ECBADF00E2B133 /* LaunchScreen.storyboard in Resources */,
+				5279F99F20F3B583000920CE /* dotletterstiles.png in Resources */,
 				5281152E20ECBADF00E2B133 /* Assets.xcassets in Resources */,
 				5281152F20ECBADF00E2B133 /* Main.storyboard in Resources */,
 			);

@@ -8,19 +8,74 @@
 
 #import "FilterCollectionView.h"
 
+#define LogoWidth 50.f
+#define LogoHeight 50.f
+
 typedef enum : int {
     NoFilter = 0,
-    ToonFilter = 1,
-    SketchFilter = 2,
-    SepiaFilter = 3,
-    ComplementFilter = 4,
+    ToonFilter,
+    SketchFilter,
+    Laplacian,
+    SepiaFilter,
+//    Mosaic,
+    Grayscale,
+    ComplementFilter,
+    Halftone,
+    SobelEdgeDetection,
+    SmoothToon,
+    Emboss,
+    Dilation,
+//    Amatorka,
+//    MissEtikate,
 } FilterID;
 
-static const char* filterLogos[] = {"AppIcon", "AppIcon", "AppIcon", "AppIcon", "AppIcon"};
+static const char* filterLogos[] = {"origin", "toon", "sketch", "laplacian", "sepia", "grayscale", "complement", "halftone", "sobeledge", "smoothtoon", "emboss", "dilation"};
 
 static GPUImageFilter* createFilterByID(int filterID) {
     switch (filterID)
     {
+        case Dilation:
+        {
+            GPUImageDilationFilter* filter = [[GPUImageDilationFilter alloc] init];
+            return filter;
+        }
+        case Emboss:
+        {
+            GPUImageEmbossFilter* filter = [[GPUImageEmbossFilter alloc] init];
+            return filter;
+        }
+        case SmoothToon:
+        {
+            GPUImageSmoothToonFilter* filter = [[GPUImageSmoothToonFilter alloc] init];
+            return filter;
+        }
+        case SobelEdgeDetection:
+        {
+            GPUImageSobelEdgeDetectionFilter* filter = [[GPUImageSobelEdgeDetectionFilter alloc] init];
+            return filter;
+        }
+        case Halftone:
+        {
+            GPUImageHalftoneFilter* filter = [[GPUImageHalftoneFilter alloc] init];
+            return filter;
+        }
+        case Laplacian:
+        {
+            GPUImageLaplacianFilter* filter = [[GPUImageLaplacianFilter alloc] init];
+            return filter;
+        }
+//        case Mosaic:
+//        {
+//            GPUImageMosaicFilter* filter = [[GPUImageMosaicFilter alloc] init];
+//            [filter setTileSet:@"dotletterstiles.png"];
+//            [filter setColorOn:NO];
+//            return filter;
+//        }
+        case Grayscale:
+        {
+            GPUImageGrayscaleFilter* filter = [[GPUImageGrayscaleFilter alloc] init];
+            return filter;
+        }
         case ToonFilter:
         {
             GPUImageToonFilter* toonFilter = [[GPUImageToonFilter alloc] init];
@@ -108,7 +163,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 }
 
 -(CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(self.bounds.size.width * sizeof(filterLogos[0]) / sizeof(filterLogos), self.bounds.size.height);
+    return CGSizeMake(self.bounds.size.height * LogoWidth / LogoHeight, self.bounds.size.height);
 }
 
 @end
