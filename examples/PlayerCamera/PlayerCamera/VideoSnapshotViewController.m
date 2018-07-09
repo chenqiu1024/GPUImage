@@ -79,6 +79,8 @@
 -(void) stopSpeechRecognizer;
 -(void) releaseSpeechRecognizer;
 
+-(void) updateDictateLabelText;
+
 @end
 
 @implementation VideoSnapshotViewController
@@ -665,10 +667,7 @@
                 _snapshotScreenSize = CGSizeMake(videoSize.width * _filterView.bounds.size.height / videoSize.height, _filterView.bounds.size.height);
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.dictateLabel sizeToFit];
-            self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
-        });
+        [self updateDictateLabelText];
     }
 }
 
@@ -679,8 +678,6 @@
 -(void) ijkGIMovieDidDetectFaces:(IJKGPUImageMovie *)ijkgpuMovie result:(NSArray *)result {
     if (!result || result.count == 0) return;
 }
-
-#pragma mark    Filters
 
 #pragma mark    IFLY
 -(void) updateDictateLabelText {

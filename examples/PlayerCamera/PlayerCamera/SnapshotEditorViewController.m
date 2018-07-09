@@ -223,7 +223,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     
 }
 
-@property (nonatomic, strong) UIElementsView* uiElementsView;
+//@property (nonatomic, strong) UIElementsView* uiElementsView;
 @property (nonatomic, strong) GPUImagePicture* picture;
 
 @property (nonatomic, weak) IBOutlet UIView* overlayView;
@@ -255,11 +255,13 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 -(void) stopSpeechRecognizer;
 -(void) releaseSpeechRecognizer;
 
+-(void) updateDictateLabelText;
+
 @end
 
 @implementation SnapshotEditorViewController
 
-@synthesize uiElementsView;
+//@synthesize uiElementsView;
 
 -(void) setControlsHidden:(BOOL)hidden {
     self.navBar.hidden = hidden;
@@ -282,7 +284,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         [self setControlsHidden:YES];
     }
 }
-
+/*
 -(void) onDoubleTapped:(UITapGestureRecognizer*)recognizer {
     self.filterView.snapshotCompletion = ^(UIImage* image) {
         if (!image)
@@ -315,12 +317,10 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
                                                     ThumbImage:thumbImage
                                                        InScene:WXSceneTimeline];//WXSceneSession
                 NSLog(@"#WX# Send message succ = %d", succ);
-                /*
+///////////
                  NSArray *activityItems = @[data0, data1];
                  UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
                  [self presentViewController:activityVC animated:TRUE completion:nil];
-                 //*/
-            ///});
             
             CGContextRelease(imageContext);
             CGColorSpaceRelease(genericRGBColorspace);
@@ -328,7 +328,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     };
     [self.picture processImage];
 }
-
+//*/
 #pragma mark - View lifecycle
 
 -(void) applicationDidBecomeActive:(id)sender {
@@ -481,15 +481,15 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     //[self.overlayView sendSubviewToBack:_filterView];
     
     self.view.backgroundColor = [UIColor clearColor];
-    
+/*
     self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
     self.uiElementsView.backgroundColor = [UIColor clearColor];
     [self.view insertSubview:self.uiElementsView belowSubview:self.overlayView];
-    
+
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
     tapRecognizer.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:tapRecognizer];
-    ///////////////////
+//*/
     _filterView.backgroundColor = [UIColor clearColor];
     self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
     [self.picture addTarget:_filterView];
@@ -522,7 +522,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         pSelf.filter = filter;
         [pSelf.picture processImage];
     };
-    
+/*
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];
         [faceDetector setParameter:@"1" forKey:@"align"];
@@ -535,14 +535,19 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.uiElementsView setNeedsDisplay];
         });
-        
     });
-    
+//*/
     self.speechRecognizerResultString = @"";
     [self initSpeechRecognizer];
     [self startSpeechRecognizer];
     
     self.dictateLabel.translatesAutoresizingMaskIntoConstraints = YES;
+    
+    NSLog(@"sPLVC Next VC finished load");
+}
+
+-(void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     
     CGSize imageSize = self.image.size;
     if (kGPUImageFillModeStretch == _filterView.fillMode || kGPUImageFillModePreserveAspectRatioAndFill == _filterView.fillMode)
@@ -560,10 +565,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
             _snapshotScreenSize = CGSizeMake(imageSize.width * _filterView.bounds.size.height / imageSize.height, _filterView.bounds.size.height);
         }
     }
-    [self.dictateLabel sizeToFit];
-    self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
-    
-    NSLog(@"sPLVC Next VC finished load");
+    [self updateDictateLabelText];
 }
 
 - (void)didReceiveMemoryWarning {

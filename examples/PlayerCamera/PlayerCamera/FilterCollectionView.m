@@ -24,7 +24,7 @@ static GPUImageFilter* createFilterByID(int filterID) {
         case ToonFilter:
         {
             GPUImageToonFilter* toonFilter = [[GPUImageToonFilter alloc] init];
-            toonFilter.threshold = 0.2f;
+            toonFilter.threshold = 0.5f;
             toonFilter.quantizationLevels = 10.f;
             return toonFilter;
         }
