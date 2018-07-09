@@ -236,13 +236,17 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         }];
         UIAlertAction* actionCaptureSnapshot = [UIAlertAction actionWithTitle:@"Capture Video and Take Snapshot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             CameraDictateViewController* captureVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraDictate"];
-            captureVC.completeHandler = ^(NSString* filePath) {
+            captureVC.completeHandler = ^(NSString* filePath, NSString* dictateText) {
                 if (filePath && [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:NULL])
                 {
                     [self showActivityIndicatorViewInView:nil];
                     NSURL* videoURL = [NSURL fileURLWithPath:filePath];
                     [PhotoLibraryHelper saveVideoWithUrl:videoURL collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError *error, NSString *assetId) {
                         VideoSnapshotViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"VideoSnapshot"];
+                        if (dictateText)
+                        {
+                            [videoVC setDictateInitText:dictateText];
+                        }
                         videoVC.sourceVideoFile = filePath;
                         videoVC.completionHandler = ^(PHAsset* phAsset) {
                             [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];

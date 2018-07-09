@@ -17,5 +17,7 @@
 
 @property (nonatomic, copy) NSString* sourceVideoFile;
 
+-(void) setDictateInitText:(NSString*)text;
+
 @end
 

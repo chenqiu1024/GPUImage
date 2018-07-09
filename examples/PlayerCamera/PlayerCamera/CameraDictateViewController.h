@@ -10,6 +10,6 @@
 
 @interface CameraDictateViewController : UIViewController
 
-@property (nonatomic, copy) void(^completeHandler)(NSString* filePath);
+@property (nonatomic, copy) void(^completeHandler)(NSString* filePath, NSString* dictateText);
 
 @end

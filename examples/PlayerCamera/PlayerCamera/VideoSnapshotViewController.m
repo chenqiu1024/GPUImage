@@ -85,6 +85,11 @@
 
 @implementation VideoSnapshotViewController
 
+-(void) setDictateInitText:(NSString*)text {
+    self.speechRecognizerResultString = text;
+    [self updateDictateLabelText];
+}
+
 -(void) setPlayOrPauseButtonState:(BOOL)isPlaying {
     NSUInteger newTag = isPlaying ? 1 : 0;
     if (newTag == self.playOrPauseButton.tag)
@@ -412,7 +417,10 @@
         pSelf.filter = filter;
     };
     
-    self.speechRecognizerResultString = @"";
+    if (!self.speechRecognizerResultString)
+    {
+        self.speechRecognizerResultString = @"";
+    }
     [self initSpeechRecognizer];
     [self startSpeechRecognizer];
     
