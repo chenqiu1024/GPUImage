@@ -131,6 +131,30 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     return CGSizeMake(size, size);
 }
 
+-(void) replaceOrAddPHAsset:(PHAsset*)phAsset atIndexPath:(NSIndexPath*)indexPath {
+    if (!phAsset)
+        return;
+    
+    CGSize cellSize = [self collectionView:self.collectionView layout:self.collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
+    cellSize = CGSizeMake(cellSize.width * [UIScreen mainScreen].scale, cellSize.height * [UIScreen mainScreen].scale);
+    
+    if (indexPath.row >= self.imageAssets.count)
+        [self.imageAssets addObject:phAsset];
+    else
+        [self.imageAssets replaceObjectAtIndex:indexPath.row withObject:phAsset];
+    [self.thumbnails removeObjectForKey:indexPath];
+    [self.collectionView reloadData];
+    
+    PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+    requestOptions.networkAccessAllowed = YES;
+    [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        [self.thumbnails setObject:result forKey:indexPath];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+        });
+    }];
+}
+
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == self.imageAssets.count || [self.imageAssets[indexPath.row] isKindOfClass:BlankImagePlaceHolder.class])
     {
@@ -203,24 +227,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                         videoVC.sourceVideoFile = filePath;
                         videoVC.completionHandler = ^(PHAsset* phAsset) {
                             [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-                            if (!phAsset)
-                                return;
-                            
-                            if (indexPath.row >= self.imageAssets.count)
-                                [self.imageAssets addObject:phAsset];
-                            else
-                                [self.imageAssets replaceObjectAtIndex:indexPath.row withObject:phAsset];
-                            [self.thumbnails removeObjectForKey:indexPath];
-                            [self.collectionView reloadData];
-                            
-                            PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
-                            requestOptions.networkAccessAllowed = YES;
-                            [[PHCachingImageManager defaultManager] requestImageForAsset:phAsset targetSize:cellSize contentMode:PHImageContentModeAspectFill options:requestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                                [self.thumbnails setObject:result forKey:indexPath];
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-                                });
-                            }];
+                            [self replaceOrAddPHAsset:phAsset atIndexPath:indexPath];
                         };
                         [self dismissActivityIndicatorView];
                         [self presentViewController:videoVC animated:YES completion:nil];
@@ -249,6 +256,9 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                 [self dismissActivityIndicatorView];
                 SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
                 editorVC.image = image;
+                editorVC.completionHandler = ^(PHAsset* phAsset) {
+                    [self replaceOrAddPHAsset:phAsset atIndexPath:indexPath];
+                };
                 [self presentViewController:editorVC animated:YES completion:^(){
                 }];
             });
