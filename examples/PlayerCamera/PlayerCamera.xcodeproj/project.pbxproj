@@ -110,6 +110,8 @@
 		52D6724C20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */; };
 		52D6724F20F1EFFA001A5564 /* FilterCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */; };
 		52D6725020F1EFFA001A5564 /* FilterCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */; };
+		52D6725320F3186A001A5564 /* TextEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6725220F3186A001A5564 /* TextEditViewController.m */; };
+		52D6725420F3186A001A5564 /* TextEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D6725220F3186A001A5564 /* TextEditViewController.m */; };
 		52E2A73E20E5306A00BB445A /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E2A73D20E5306A00BB445A /* iflyMSC.framework */; };
 		52E2A74220E6284800BB445A /* IFlyFaceDetectResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */; };
 		52E2A74720E7307000BB445A /* UIImage+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E2A74620E7307000BB445A /* UIImage+Share.m */; };
@@ -300,6 +302,8 @@
 		52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SubtitleAndAudioSelectionViewController.m; sourceTree = "<group>"; };
 		52D6724D20F1EFFA001A5564 /* FilterCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterCollectionView.h; sourceTree = "<group>"; };
 		52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterCollectionView.m; sourceTree = "<group>"; };
+		52D6725120F3186A001A5564 /* TextEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextEditViewController.h; sourceTree = "<group>"; };
+		52D6725220F3186A001A5564 /* TextEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextEditViewController.m; sourceTree = "<group>"; };
 		52E2A73D20E5306A00BB445A /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
 		52E2A74020E6284700BB445A /* IFlyFaceDetectResultParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IFlyFaceDetectResultParser.h; sourceTree = "<group>"; };
 		52E2A74120E6284700BB445A /* IFlyFaceDetectResultParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IFlyFaceDetectResultParser.m; sourceTree = "<group>"; };
@@ -438,6 +442,8 @@
 				52D6724A20F1AF6D001A5564 /* SubtitleAndAudioSelectionViewController.m */,
 				52D6724D20F1EFFA001A5564 /* FilterCollectionView.h */,
 				52D6724E20F1EFFA001A5564 /* FilterCollectionView.m */,
+				52D6725120F3186A001A5564 /* TextEditViewController.h */,
+				52D6725220F3186A001A5564 /* TextEditViewController.m */,
 			);
 			path = PlayerCamera;
 			sourceTree = "<group>";
@@ -771,6 +777,7 @@
 				52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */,
 				527C39C120EA5EC400CC64AE /* SnapshotEditorViewController.m in Sources */,
 				529DA59320EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */,
+				52D6725320F3186A001A5564 /* TextEditViewController.m in Sources */,
 				524F115F20B1B5390045795F /* VideoCollectionViewController.m in Sources */,
 				52D6724720F1AB99001A5564 /* VideoSnapshotViewController.m in Sources */,
 				520DA6D91ED7248C009E4705 /* main.m in Sources */,
@@ -817,6 +824,7 @@
 				5281150F20ECBADF00E2B133 /* IJKGPUImageMovie.m in Sources */,
 				5281151020ECBADF00E2B133 /* SnapshotEditorViewController.m in Sources */,
 				529DA59420EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */,
+				52D6725420F3186A001A5564 /* TextEditViewController.m in Sources */,
 				5281151120ECBADF00E2B133 /* VideoCollectionViewController.m in Sources */,
 				52D6724820F1AB99001A5564 /* VideoSnapshotViewController.m in Sources */,
 				5281151220ECBADF00E2B133 /* main.m in Sources */,

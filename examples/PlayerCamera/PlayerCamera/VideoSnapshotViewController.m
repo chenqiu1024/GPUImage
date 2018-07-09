@@ -20,6 +20,8 @@
 #import "ISRDataHelper.h"
 #import "UINavigationBar+Translucent.h"
 #import "PhotoLibraryHelper.h"
+#import "TextEditViewController.h"
+#import "UIViewController+Extensions.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
@@ -709,14 +711,26 @@
 }
 
 -(void)onDictateLabelTouched:(id)sender {
+    /*
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Click" style:UIAlertActionStyleDefault handler:nil]];
     [alert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
         textField.placeholder = @"Enter text:";
         textField.text = self.speechRecognizerResultString;
         textField.secureTextEntry = NO;
     }];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+        
+    }]];
     [self presentViewController:alert animated:YES completion:nil];
+    /*/
+    TextEditViewController* vc = [[TextEditViewController alloc] initWithText:self.speechRecognizerResultString];
+    vc.completionHandler = ^(NSString* text) {
+        self.speechRecognizerResultString = text;
+        self.dictateLabel.text = text;
+    };
+    [self setPresentationStyle:vc];
+    [self presentViewController:vc animated:YES completion:nil];
+    //*/
 }
 
 -(void) initSpeechRecognizer
