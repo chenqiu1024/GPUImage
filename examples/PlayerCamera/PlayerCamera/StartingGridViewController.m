@@ -249,7 +249,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                     return;
                 
                 NSString* filePath = (NSString*)selectedItems[0].resultOject;
-                /*
+                //*
                 [self showActivityIndicatorViewInView:nil];
                 VideoSnapshotViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"VideoSnapshot"];
                 videoVC.sourceVideoFile = filePath;

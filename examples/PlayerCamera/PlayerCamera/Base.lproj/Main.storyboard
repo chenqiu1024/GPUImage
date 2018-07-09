@@ -479,14 +479,6 @@
                                     <navigationItem title="Title" id="6Ld-S6-U1c" userLabel="Back"/>
                                 </items>
                             </navigationBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcL-JH-VOk">
-                                <rect key="frame" x="16" y="667" width="343" height="0.0"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                                <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rOo-sG-ZQC">
                                 <rect key="frame" x="167" y="529" width="41" height="30"/>
                                 <state key="normal" title="Shoot"/>
@@ -510,14 +502,10 @@
                             <constraint firstItem="rOo-sG-ZQC" firstAttribute="centerX" secondItem="GaI-qX-OUy" secondAttribute="centerX" id="SlW-YP-sAb"/>
                             <constraint firstItem="MGw-VB-9AS" firstAttribute="leading" secondItem="GaI-qX-OUy" secondAttribute="leadingMargin" id="T5D-th-Ktq"/>
                             <constraint firstItem="OVx-rk-Pae" firstAttribute="leading" secondItem="GaI-qX-OUy" secondAttribute="leading" id="YrH-rr-SzQ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="vcL-JH-VOk" secondAttribute="trailing" id="lqw-Dk-tVl"/>
-                            <constraint firstItem="vcL-JH-VOk" firstAttribute="leading" secondItem="GaI-qX-OUy" secondAttribute="leadingMargin" id="pDA-Fw-CEE"/>
-                            <constraint firstItem="hQu-1Q-dx0" firstAttribute="top" secondItem="vcL-JH-VOk" secondAttribute="bottom" id="sYv-dp-7s9"/>
                             <constraint firstItem="OVx-rk-Pae" firstAttribute="top" secondItem="D2b-Qd-kP6" secondAttribute="bottom" id="vcZ-IF-5lj"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="dictateLabel" destination="vcL-JH-VOk" id="JW3-UG-0kV"/>
                         <outlet property="navBar" destination="OVx-rk-Pae" id="7tX-z6-fS7"/>
                         <outlet property="navItem" destination="6Ld-S6-U1c" id="5jD-ax-lzC"/>
                         <outlet property="rotateCameraButton" destination="MGw-VB-9AS" id="ZpE-vj-QTi"/>
