@@ -23,9 +23,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
-#define VideoSource_IJKGPUImageMovie_VideoPlay 2
-
-#define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
+#define DictateLabelBottomMargin 6.0f
 
 #pragma mark    VideoSnapshotViewController
 @interface VideoSnapshotViewController () <IJKGPUImageMovieDelegate, UIGestureRecognizerDelegate, IFlySpeechRecognizerDelegate>
@@ -45,11 +43,12 @@
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 
-@property (nonatomic, weak) IBOutlet UIToolbar* toolbar;
+@property (nonatomic, weak) IBOutlet UIToolbar* filterToolbar;
 @property (nonatomic, weak) IBOutlet FilterCollectionView* filterCollectionView;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem* filterButtonItem;
 
 @property (nonatomic, weak) IBOutlet UILabel* dictateLabel;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem* dictateButtonItem;
 
 @property (nonatomic, assign) CGSize snapshotScreenSize;
 
@@ -61,6 +60,10 @@
 @property (nonatomic, copy) NSString* speechRecognizerResultString;
 
 -(IBAction)onFilterButtonPressed:(id)sender;
+
+-(IBAction)onDictateButtonPressed:(id)sender;
+
+-(void)onDictateLabelTouched:(id)sender;
 
 -(IBAction)onClickOverlay:(id)sender;
 
@@ -196,12 +199,19 @@
 #pragma mark - View lifecycle
 
 -(void) applicationDidBecomeActive:(id)sender {
-    [self initSpeechRecognizer];
+    if (self.dictateButtonItem.tag == 1)
+    {
+        [self initSpeechRecognizer];
+        [self startSpeechRecognizer];
+    }
 }
 
 -(void) applicationWillResignActive:(id)sender {
-    [self stopSpeechRecognizer];
-    [self releaseSpeechRecognizer];
+    if (self.dictateButtonItem.tag == 1)
+    {
+        [self stopSpeechRecognizer];
+        [self releaseSpeechRecognizer];
+    }
 }
 
 -(void) dealloc {
@@ -329,7 +339,7 @@
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];
 
-    [self.toolbar makeTranslucent];
+    [self.filterToolbar makeTranslucent];
     
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -395,7 +405,9 @@
     [self startSpeechRecognizer];
     
     self.dictateLabel.translatesAutoresizingMaskIntoConstraints = YES;
-    self.dictateLabel.text = @"Dictate Text Label";///!!!For Debug
+    UITapGestureRecognizer* touchRecognizer = [[UITapGestureRecognizer alloc] init];
+    [touchRecognizer addTarget:self action:@selector(onDictateLabelTouched:)];
+    [self.dictateLabel addGestureRecognizer:touchRecognizer];
     
     NSLog(@"sPLVC Next VC finished load");
 }
@@ -570,9 +582,6 @@
         }
         case IJKMPMoviePlaybackStatePaused: {
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_ijkMovie.playbackState);
-#if VideoSource == VideoSource_IJKGPUImageMovie_VideoPlay
-            ///!!![_ijkMovie play];
-#endif
             break;
         }
         case IJKMPMoviePlaybackStateInterrupted: {
@@ -651,7 +660,7 @@
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.dictateLabel sizeToFit];
-            self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - 0, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
+            self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
         });
     }
 }
@@ -680,6 +689,36 @@
 }
 
 #pragma mark    IFLY
+-(IBAction)onDictateButtonPressed:(id)sender {
+    if (self.dictateButtonItem.tag == 1)
+    {
+        [self stopSpeechRecognizer];
+        [self releaseSpeechRecognizer];
+        
+        self.dictateButtonItem.tintColor = [UIColor whiteColor];
+        self.dictateButtonItem.tag = 0;
+    }
+    else
+    {
+        [self initSpeechRecognizer];
+        [self startSpeechRecognizer];
+        
+        self.dictateButtonItem.tintColor = [UIColor blueColor];
+        self.dictateButtonItem.tag = 1;
+    }
+}
+
+-(void)onDictateLabelTouched:(id)sender {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Click" style:UIAlertActionStyleDefault handler:nil]];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
+        textField.placeholder = @"Enter text:";
+        textField.text = self.speechRecognizerResultString;
+        textField.secureTextEntry = NO;
+    }];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 -(void) initSpeechRecognizer
 {
     //recognition singleton without view
@@ -786,9 +825,10 @@
     //    NSLog(@"#IFLY# resultFromJson=%@",resultFromJson);
     NSLog(@"#IFLY# onResults isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
     dispatch_async(dispatch_get_main_queue(), ^{
-//        self.dictateLabel.text = self.speechRecognizerResultString;
-//        [self.dictateLabel sizeToFit];
-//        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - 0, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
+        self.dictateLabel.text = self.speechRecognizerResultString;
+        //self.dictateLabel.text = @"Dictate Text Label Test";
+        [self.dictateLabel sizeToFit];
+        self.dictateLabel.frame = CGRectMake(0, (_filterView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.bounds.size.height - DictateLabelBottomMargin, _filterView.bounds.size.width, self.dictateLabel.bounds.size.height);
     });
 }
 

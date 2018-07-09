@@ -425,7 +425,7 @@
                                             <action selector="onClickPlayOrPause:" destination="DcQ-ww-QZR" eventType="touchUpInside" id="YRd-9T-l32"/>
                                         </connections>
                                     </button>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp">
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp" userLabel="Filter Toolbar">
                                         <rect key="frame" x="0.0" y="543" width="375" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <items>
@@ -433,6 +433,11 @@
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <action selector="onFilterButtonPressed:" destination="DcQ-ww-QZR" id="0bA-Jg-u8a"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem tag="1" title="Dictate" image="btn_back" id="taK-YM-ZOe" userLabel="Dictate Button Item">
+                                                <connections>
+                                                    <action selector="onDictateButtonPressed:" destination="DcQ-ww-QZR" id="EKR-dJ-M3d"/>
                                                 </connections>
                                             </barButtonItem>
                                         </items>
@@ -475,7 +480,7 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZs-Hy-O8w" userLabel="Dictate Label">
+                                    <label opaque="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZs-Hy-O8w" userLabel="Dictate Label">
                                         <rect key="frame" x="375" y="543" width="0.0" height="0.0"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -490,7 +495,7 @@
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="top" secondItem="z94-0R-eao" secondAttribute="top" id="1Cp-lf-2sN"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="top" secondItem="bgN-UR-vTv" secondAttribute="bottom" id="CRQ-8c-OKH"/>
                                     <constraint firstItem="rCv-os-ebu" firstAttribute="top" secondItem="PO5-2p-MOp" secondAttribute="bottom" id="HLA-K3-j1F"/>
-                                    <constraint firstAttribute="trailing" secondItem="PO5-2p-MOp" secondAttribute="trailing" id="Kif-Vk-6Jf"/>
+                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="centerX" secondItem="z94-0R-eao" secondAttribute="centerX" id="SpR-ib-La3"/>
                                     <constraint firstItem="rCv-os-ebu" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="UBD-ZJ-IvX"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" constant="20" id="cwI-Wx-KmC"/>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="eqn-7a-kus"/>
@@ -518,16 +523,17 @@
                     <connections>
                         <outlet property="controlPanelView" destination="4m1-MU-j7H" id="Gls-kl-Qtb"/>
                         <outlet property="currentTimeLabel" destination="l2z-5q-ugj" id="Apm-uu-lgx"/>
+                        <outlet property="dictateButtonItem" destination="taK-YM-ZOe" id="Bdv-pB-7Km"/>
                         <outlet property="dictateLabel" destination="kZs-Hy-O8w" id="lxc-XL-UXx"/>
                         <outlet property="durationLabel" destination="dY7-Eh-nMH" id="bcm-Ha-nOV"/>
                         <outlet property="filterButtonItem" destination="512-fh-QdK" id="Gbz-Fn-4EF"/>
                         <outlet property="filterCollectionView" destination="rCv-os-ebu" id="a1a-pl-f25"/>
+                        <outlet property="filterToolbar" destination="PO5-2p-MOp" id="q81-TN-mFs"/>
                         <outlet property="navBar" destination="bgN-UR-vTv" id="DqB-zu-fHN"/>
                         <outlet property="navItem" destination="cOD-gP-AEt" id="6Dg-Ef-ZGL"/>
                         <outlet property="overlayView" destination="z94-0R-eao" id="cxp-rV-hve"/>
                         <outlet property="playOrPauseButton" destination="p3c-jd-HfD" id="UEz-mz-5w6"/>
                         <outlet property="progressSlider" destination="t0a-N8-Hh5" id="3dq-70-FM9"/>
-                        <outlet property="toolbar" destination="PO5-2p-MOp" id="9ur-m8-d3C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YtK-yA-pZz" sceneMemberID="firstResponder"/>
@@ -843,6 +849,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="btn_back" width="25" height="25"/>
         <image name="btn_more" width="25" height="25"/>
         <image name="btn_player_pause.png" width="16" height="16"/>
         <image name="delete_cross" width="32" height="32"/>
