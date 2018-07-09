@@ -224,7 +224,7 @@
 }
 
 - (BOOL) prefersStatusBarHidden {
-    return self.navBar.hidden;
+    return NO;///!!!self.navBar.hidden;
 }
 
 -(UIStatusBarStyle) preferredStatusBarStyle {
@@ -340,10 +340,16 @@
     self.navItem.rightBarButtonItem = snapshotButtonItem;
     self.navItem.title = [self.sourceVideoFile lastPathComponent];
     
-    [self.navBar makeTranslucent];
+    //[self.navBar makeTranslucent];
+    //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
+    [self.navBar setBackgroundColor:[UIColor blackColor]];
+    [self.navBar setBarTintColor:[UIColor blackColor]];
+    self.navBar.opaque = YES;
+    //[self.navBar setTintColor:[UIColor blackColor]];
     [self setNeedsStatusBarAppearanceUpdate];
 
-    [self.filterToolbar makeTranslucent];
+    //[self.filterToolbar makeTranslucent];
+    //[self.filterToolbar setBackgroundAndShadowColor:[UIColor blackColor]];
     
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];

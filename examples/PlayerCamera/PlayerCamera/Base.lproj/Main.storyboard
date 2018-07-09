@@ -370,7 +370,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4m1-MU-j7H" userLabel="Panel" customClass="UIControl">
-                                        <rect key="frame" x="20" y="44" width="335" height="45"/>
+                                        <rect key="frame" x="0.0" y="44" width="375" height="45"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2z-5q-ugj" userLabel="CurrentPosition">
                                                 <rect key="frame" x="0.0" y="12" width="36" height="21"/>
@@ -379,13 +379,13 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dY7-Eh-nMH" userLabel="TotalDuration">
-                                                <rect key="frame" x="299.5" y="12" width="35.5" height="21"/>
+                                                <rect key="frame" x="339.5" y="12" width="35.5" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="t0a-N8-Hh5" userLabel="ProgressSlider">
-                                                <rect key="frame" x="37" y="7.5" width="261.5" height="31"/>
+                                                <rect key="frame" x="37" y="7.5" width="301.5" height="31"/>
                                                 <connections>
                                                     <action selector="didSliderTouchCancel:" destination="DcQ-ww-QZR" eventType="touchCancel" id="wDk-95-snY"/>
                                                     <action selector="didSliderTouchDown:" destination="DcQ-ww-QZR" eventType="touchDown" id="1t9-Tu-NF3"/>
@@ -395,7 +395,7 @@
                                                 </connections>
                                             </slider>
                                         </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="l2z-5q-ugj" firstAttribute="centerY" secondItem="4m1-MU-j7H" secondAttribute="centerY" id="3iG-bE-VJg"/>
                                             <constraint firstItem="t0a-N8-Hh5" firstAttribute="left" secondItem="l2z-5q-ugj" secondAttribute="right" constant="3" id="Ajh-zO-uBi"/>
@@ -409,9 +409,8 @@
                                     </view>
                                     <navigationBar opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgN-UR-vTv">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="barTintColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                         <textAttributes key="titleTextAttributes">
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </textAttributes>
@@ -431,7 +430,7 @@
                                     </button>
                                     <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp" userLabel="Filter Toolbar">
                                         <rect key="frame" x="0.0" y="543" width="375" height="44"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <items>
                                             <barButtonItem title="Filters" image="btn_more" id="512-fh-QdK">
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -445,7 +444,7 @@
                                                 </connections>
                                             </barButtonItem>
                                         </items>
-                                        <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </toolbar>
                                     <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rCv-os-ebu" userLabel="Filters Collection View" customClass="FilterCollectionView">
                                         <rect key="frame" x="0.0" y="587" width="375" height="60"/>
@@ -501,11 +500,11 @@
                                     <constraint firstItem="rCv-os-ebu" firstAttribute="top" secondItem="PO5-2p-MOp" secondAttribute="bottom" id="HLA-K3-j1F"/>
                                     <constraint firstItem="PO5-2p-MOp" firstAttribute="centerX" secondItem="z94-0R-eao" secondAttribute="centerX" id="SpR-ib-La3"/>
                                     <constraint firstItem="rCv-os-ebu" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="UBD-ZJ-IvX"/>
-                                    <constraint firstItem="4m1-MU-j7H" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" constant="20" id="cwI-Wx-KmC"/>
+                                    <constraint firstItem="4m1-MU-j7H" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="cwI-Wx-KmC"/>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="eqn-7a-kus"/>
                                     <constraint firstItem="PO5-2p-MOp" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="f4N-zW-0uC"/>
                                     <constraint firstAttribute="bottom" secondItem="rCv-os-ebu" secondAttribute="bottom" id="f9o-bB-Rvo"/>
-                                    <constraint firstAttribute="trailing" secondItem="4m1-MU-j7H" secondAttribute="trailing" constant="20" id="goO-Jn-aQw"/>
+                                    <constraint firstAttribute="trailing" secondItem="4m1-MU-j7H" secondAttribute="trailing" id="goO-Jn-aQw"/>
                                     <constraint firstItem="p3c-jd-HfD" firstAttribute="centerY" secondItem="z94-0R-eao" secondAttribute="centerY" id="iC9-AH-JCW"/>
                                     <constraint firstAttribute="trailing" secondItem="bgN-UR-vTv" secondAttribute="trailing" id="iEX-iK-gxy"/>
                                     <constraint firstItem="p3c-jd-HfD" firstAttribute="centerX" secondItem="z94-0R-eao" secondAttribute="centerX" id="p7Z-87-PW8"/>
@@ -518,10 +517,10 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="nC2-tc-u4N" firstAttribute="top" secondItem="1Li-B2-qAe" secondAttribute="bottom" id="FqR-GF-bxo"/>
+                            <constraint firstAttribute="bottom" secondItem="1Li-B2-qAe" secondAttribute="bottom" id="FqR-GF-bxo"/>
                             <constraint firstItem="1Li-B2-qAe" firstAttribute="top" secondItem="TGK-75-juE" secondAttribute="bottom" id="IiS-Az-enR"/>
                             <constraint firstAttribute="trailing" secondItem="z94-0R-eao" secondAttribute="trailing" id="Ux2-60-qdL"/>
-                            <constraint firstItem="nC2-tc-u4N" firstAttribute="top" secondItem="z94-0R-eao" secondAttribute="bottom" id="mct-AF-Ani"/>
+                            <constraint firstAttribute="bottom" secondItem="z94-0R-eao" secondAttribute="bottom" id="mct-AF-Ani"/>
                             <constraint firstItem="z94-0R-eao" firstAttribute="top" secondItem="TGK-75-juE" secondAttribute="bottom" id="srr-kD-Ufi"/>
                             <constraint firstAttribute="trailing" secondItem="1Li-B2-qAe" secondAttribute="trailing" id="uEr-Qc-seE"/>
                             <constraint firstItem="1Li-B2-qAe" firstAttribute="leading" secondItem="FNT-ai-hi5" secondAttribute="leading" id="ugk-p5-wiH"/>

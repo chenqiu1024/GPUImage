@@ -12,10 +12,14 @@
 
 -(void) makeTranslucent;
 
+-(void) setBackgroundAndShadowColor:(UIColor*)color;
+
 @end
 
 @interface UIToolbar (Translucent)
 
 -(void) makeTranslucent;
+
+-(void) setBackgroundAndShadowColor:(UIColor*)color;
 
 @end

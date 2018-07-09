@@ -26,6 +26,21 @@
     [self setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
 }
 
+-(void) setBackgroundAndShadowColor:(UIColor*)color {
+    self.backgroundColor = [UIColor clearColor];
+    self.barTintColor = [UIColor clearColor];
+    self.translucent = YES;
+    CGRect rect = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self setShadowImage:image];
+    [self setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+}
+
 @end
 
 @implementation UIToolbar (Translucent)
@@ -39,6 +54,21 @@
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [translucentColor CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self setShadowImage:image forToolbarPosition:UIBarPositionAny];
+    [self setBackgroundImage:image forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+}
+
+-(void) setBackgroundAndShadowColor:(UIColor*)color {
+    self.backgroundColor = [UIColor clearColor];
+    self.barTintColor = [UIColor clearColor];
+    self.translucent = YES;
+    CGRect rect = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
     CGContextFillRect(context, rect);
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
