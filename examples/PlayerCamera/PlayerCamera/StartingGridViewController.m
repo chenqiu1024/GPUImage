@@ -330,18 +330,29 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             if (![obj isKindOfClass:PHAsset.class])
                 continue;
             
-            [phAssets addObject:(PHAsset*)obj];
+            [phAssets insertObject:(PHAsset*)obj atIndex:0];
         }
         
+        NSMutableDictionary<NSNumber*, UIImage* >* index2Image = [[NSMutableDictionary alloc] init];
         PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
         requestOptions.networkAccessAllowed = YES;
-        NSMutableArray<UIImage* >* images = [[NSMutableArray alloc] init];
-        for (PHAsset* phAsset in phAssets)
+        for (NSUInteger i=0; i<phAssets.count; ++i)
         {
+            PHAsset* phAsset = phAssets[i];
             [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                [images addObject:[UIImage imageWithData:imageData]];
-                if (images.count == phAssets.count)
+                UIImage* img = [UIImage imageWithData:imageData];
+                [index2Image setObject:img forKey:@(i)];
+                if (index2Image.count == phAssets.count)
                 {
+                    NSMutableArray<UIImage* >* images = [[NSMutableArray alloc] init];
+                    for (NSUInteger j=0; j<phAssets.count; ++j)
+                    {
+                        UIImage* image = index2Image[@(j)];
+                        if (image)
+                        {
+                            [images addObject:image];
+                        }
+                    }
                     UIImage* longImage = [UIImage longImageWithImages:images];
                     NSData* longImageData = UIImageJPEGRepresentation(longImage, 1.0f);
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -373,15 +384,25 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             [phAssets addObject:(PHAsset*)obj];
         }
         
+        NSMutableDictionary<NSNumber*, NSData* >* index2Data = [[NSMutableDictionary alloc] init];
         PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
         requestOptions.networkAccessAllowed = YES;
-        NSMutableArray<NSData* >* imageDatas = [[NSMutableArray alloc] init];
-        for (PHAsset* phAsset in phAssets)
+        for (NSUInteger i=0; i<phAssets.count; ++i)
         {
+            PHAsset* phAsset = phAssets[i];
             [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                [imageDatas addObject:imageData];
-                if (imageDatas.count == phAssets.count)
+                [index2Data setObject:imageData forKey:@(i)];
+                if (index2Data.count == phAssets.count)
                 {
+                    NSMutableArray<NSData* >* imageDatas = [[NSMutableArray alloc] init];
+                    for (NSUInteger j=0; j<phAssets.count; ++j)
+                    {
+                        NSData* data = index2Data[@(j)];
+                        if (data)
+                        {
+                            [imageDatas addObject:data];
+                        }
+                    }
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self dismissActivityIndicatorView];
                         UIActivityViewController* activityVC = [[UIActivityViewController alloc] initWithActivityItems:imageDatas applicationActivities:nil];
