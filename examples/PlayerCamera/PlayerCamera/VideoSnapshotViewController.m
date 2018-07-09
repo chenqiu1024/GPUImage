@@ -45,9 +45,8 @@
 @property (nonatomic, weak) IBOutlet UINavigationItem* navItem;
 @property (nonatomic, weak) IBOutlet UINavigationBar* navBar;
 
-@property (nonatomic, weak) IBOutlet UIToolbar* filterToolbar;
+@property (nonatomic, weak) IBOutlet UIToolbar* toolbar;
 @property (nonatomic, weak) IBOutlet FilterCollectionView* filterCollectionView;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem* filterButtonItem;
 
 @property (nonatomic, weak) IBOutlet UILabel* dictateLabel;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem* dictateButtonItem;
@@ -61,11 +60,9 @@
 @property (nonatomic, strong) IFlySpeechRecognizer* speechRecognizer;
 @property (nonatomic, copy) NSString* speechRecognizerResultString;
 
--(IBAction)onFilterButtonPressed:(id)sender;
-
 -(IBAction)onDictateButtonPressed:(id)sender;
 
--(void)onDictateLabelTouched:(id)sender;
+-(IBAction)onTypeButtonPressed:(id)sender;
 
 -(IBAction)onClickOverlay:(id)sender;
 
@@ -132,8 +129,8 @@
     self.controlPanelView.hidden = hidden;
     self.navBar.hidden = hidden;
     self.playOrPauseButton.hidden = hidden;
-    self.filterToolbar.hidden = hidden;
-    //self.filterCollectionView.hidden = hidden;
+    self.toolbar.hidden = hidden;
+    self.filterCollectionView.hidden = hidden;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -257,60 +254,62 @@
         if (!image)
             return;
         
-        AudioServicesPlaySystemSound(1108);
-        
-        __strong typeof(self) pSelf = wSelf;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            CGFloat contentScale = pSelf.overlayView.layer.contentsScale;
-//            CGSize layerSize = CGSizeMake(contentScale * pSelf.overlayView.bounds.size.width,
-//                                          contentScale * pSelf.overlayView.bounds.size.height);
-            CGSize layerSize = CGSizeMake(contentScale * pSelf.snapshotScreenSize.width,
-                                          contentScale * pSelf.snapshotScreenSize.height);
-            CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
-            CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
-            
-            CGContextScaleCTM(imageContext, contentScale, -contentScale);
-            if (pSelf.snapshotScreenSize.width < pSelf.overlayView.bounds.size.width)
-            {
-                CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, -pSelf.overlayView.bounds.size.height * contentScale);
-            }
-            else
-            {
-                CGContextTranslateCTM(imageContext, 0.f, -(pSelf.snapshotScreenSize.height + pSelf.overlayView.bounds.size.height) * contentScale / 2);
-            }
-            CGContextDrawImage(imageContext, CGRectMake(0, 0, pSelf.overlayView.bounds.size.width, pSelf.overlayView.bounds.size.height), image.CGImage);
-            [pSelf.overlayView.layer renderInContext:imageContext];
-            
-            UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationUp];
-            snapshot = [snapshot imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationUp];
-            NSData* data = UIImageJPEGRepresentation(snapshot, 1.0f);
-            NSString* fileName = [NSString stringWithFormat:@"snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
-            NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
-            [data writeToFile:path atomically:YES];
-            
-            CGContextRelease(imageContext);
-            CGColorSpaceRelease(genericRGBColorspace);
-            
-            [PhotoLibraryHelper saveImageWithUrl:[NSURL fileURLWithPath:path] collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError* error, NSString* assetId) {
-                [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
-                PHAsset* asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [pSelf dismissSelf:asset];
-                });
-            }];
-//            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
-//            BOOL succ = [WXApiRequestHandler sendImageData:data
-//                                                   TagName:kImageTagName
-//                                                MessageExt:kMessageExt
-//                                                    Action:kMessageAction
-//                                                ThumbImage:thumbImage
-//                                                   InScene:WXSceneTimeline];//WXSceneSession
-//            NSLog(@"#WX# Send message succ = %d", succ);
-            /*
-             NSArray *activityItems = @[data0, data1];
-             UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
-             [self presentViewController:activityVC animated:TRUE completion:nil];
-             //*/
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong typeof(self) pSelf = wSelf;
+            [pSelf hideControls];
+            AudioServicesPlaySystemSound(1108);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                CGFloat contentScale = pSelf.overlayView.layer.contentsScale;
+                //            CGSize layerSize = CGSizeMake(contentScale * pSelf.overlayView.bounds.size.width,
+                //                                          contentScale * pSelf.overlayView.bounds.size.height);
+                CGSize layerSize = CGSizeMake(contentScale * pSelf.snapshotScreenSize.width,
+                                              contentScale * pSelf.snapshotScreenSize.height);
+                CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
+                CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+                
+                CGContextScaleCTM(imageContext, contentScale, -contentScale);
+                if (pSelf.snapshotScreenSize.width < pSelf.overlayView.bounds.size.width)
+                {
+                    CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, -pSelf.overlayView.bounds.size.height * contentScale);
+                }
+                else
+                {
+                    CGContextTranslateCTM(imageContext, 0.f, -(pSelf.snapshotScreenSize.height + pSelf.overlayView.bounds.size.height) * contentScale / 2);
+                }
+                CGContextDrawImage(imageContext, CGRectMake(0, 0, pSelf.overlayView.bounds.size.width, pSelf.overlayView.bounds.size.height), image.CGImage);
+                [pSelf.overlayView.layer renderInContext:imageContext];
+                
+                UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationUp];
+                snapshot = [snapshot imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationUp];
+                NSData* data = UIImageJPEGRepresentation(snapshot, 1.0f);
+                NSString* fileName = [NSString stringWithFormat:@"snapshot_%f.jpg", [[NSDate date] timeIntervalSince1970]];
+                NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
+                [data writeToFile:path atomically:YES];
+                
+                CGContextRelease(imageContext);
+                CGColorSpaceRelease(genericRGBColorspace);
+                
+                [PhotoLibraryHelper saveImageWithUrl:[NSURL fileURLWithPath:path] collectionTitle:@"CartoonShow" completionHandler:^(BOOL success, NSError* error, NSString* assetId) {
+                    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+                    PHAsset* asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [pSelf dismissSelf:asset];
+                    });
+                }];
+                //            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
+                //            BOOL succ = [WXApiRequestHandler sendImageData:data
+                //                                                   TagName:kImageTagName
+                //                                                MessageExt:kMessageExt
+                //                                                    Action:kMessageAction
+                //                                                ThumbImage:thumbImage
+                //                                                   InScene:WXSceneTimeline];//WXSceneSession
+                //            NSLog(@"#WX# Send message succ = %d", succ);
+                /*
+                 NSArray *activityItems = @[data0, data1];
+                 UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
+                 [self presentViewController:activityVC animated:TRUE completion:nil];
+                 //*/
+            });
         });
     };
 }
@@ -340,16 +339,16 @@
     self.navItem.rightBarButtonItem = snapshotButtonItem;
     self.navItem.title = [self.sourceVideoFile lastPathComponent];
     
-    //[self.navBar makeTranslucent];
+    [self.navBar makeTranslucent];
     //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
-    [self.navBar setBackgroundColor:[UIColor blackColor]];
-    [self.navBar setBarTintColor:[UIColor blackColor]];
-    self.navBar.opaque = YES;
+    //[self.navBar setBackgroundColor:[UIColor blackColor]];
+    //[self.navBar setBarTintColor:[UIColor blackColor]];
+    //self.navBar.opaque = YES;
     //[self.navBar setTintColor:[UIColor blackColor]];
     [self setNeedsStatusBarAppearanceUpdate];
 
-    //[self.filterToolbar makeTranslucent];
-    //[self.filterToolbar setBackgroundAndShadowColor:[UIColor blackColor]];
+    [self.toolbar makeTranslucent];
+    //[self.toolbar setBackgroundAndShadowColor:[UIColor blackColor]];
     
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -416,9 +415,6 @@
     [self startSpeechRecognizer];
     
     self.dictateLabel.translatesAutoresizingMaskIntoConstraints = YES;
-    UITapGestureRecognizer* touchRecognizer = [[UITapGestureRecognizer alloc] init];
-    [touchRecognizer addTarget:self action:@selector(onDictateLabelTouched:)];
-    [self.dictateLabel addGestureRecognizer:touchRecognizer];
     
     NSLog(@"sPLVC Next VC finished load");
 }
@@ -686,20 +682,16 @@
 
 #pragma mark    Filters
 
--(IBAction)onFilterButtonPressed:(id)sender {
-    if (self.filterCollectionView.hidden)
-    {
-        self.filterCollectionView.hidden = NO;
-        self.filterButtonItem.tintColor = [UIColor blueColor];
-    }
-    else
-    {
-        self.filterCollectionView.hidden = YES;
-        self.filterButtonItem.tintColor = [UIColor whiteColor];
-    }
+#pragma mark    IFLY
+-(void) updateDictateLabelText {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.dictateLabel.text = self.speechRecognizerResultString;
+        //        self.dictateLabel.text = @"Dictate Text Label Test";
+        [self.dictateLabel sizeToFit];
+        self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
+    });
 }
 
-#pragma mark    IFLY
 -(IBAction)onDictateButtonPressed:(id)sender {
     if (self.dictateButtonItem.tag == 1)
     {
@@ -719,16 +711,20 @@
     }
 }
 
--(void)onDictateLabelTouched:(id)sender {
+-(void)onTypeButtonPressed:(id)sender {
+    self.dictateButtonItem.tag = 1;
+    [self onDictateButtonPressed:self.dictateButtonItem];
     //*
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Edit Text" message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
         textField.placeholder = @"Enter text:";
         textField.text = self.speechRecognizerResultString;
         textField.secureTextEntry = NO;
+        textField.frame = CGRectMake(0, 0, 600, 400);
     }];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
-        
+        self.speechRecognizerResultString = alert.textFields[0].text;
+        [self updateDictateLabelText];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
     /*/
@@ -847,12 +843,7 @@
     self.speechRecognizerResultString = [NSString stringWithFormat:@"%@%@", self.speechRecognizerResultString, resultFromJson];
     //    NSLog(@"#IFLY# resultFromJson=%@",resultFromJson);
     NSLog(@"#IFLY# onResults isLast=%d,_textView.text=%@",isLast, self.speechRecognizerResultString);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.dictateLabel.text = self.speechRecognizerResultString;
-        //self.dictateLabel.text = @"Dictate Text Label Test";
-        [self.dictateLabel sizeToFit];
-        self.dictateLabel.frame = CGRectMake(0, (self.overlayView.bounds.size.height + _snapshotScreenSize.height) / 2 - self.dictateLabel.frame.size.height - DictateLabelBottomMargin, self.overlayView.bounds.size.width, self.dictateLabel.frame.size.height);
-    });
+    [self updateDictateLabelText];
 }
 
 -(void) onError:(IFlySpeechError*)errorCode {

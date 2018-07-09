@@ -60,7 +60,7 @@ static NSString* FilterCellIdentifier = @"FilterCell";
 
 @end
 
-@interface FilterCollectionView () <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface FilterCollectionView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
     NSMutableDictionary<NSNumber*, GPUImageFilter* >* _filtersCache;
 }
@@ -105,6 +105,10 @@ static NSString* FilterCellIdentifier = @"FilterCell";
     {
         self.filterSelectedHandler(nextFilter);
     }
+}
+
+-(CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(self.bounds.size.width * sizeof(filterLogos[0]) / sizeof(filterLogos), self.bounds.size.height);
 }
 
 @end

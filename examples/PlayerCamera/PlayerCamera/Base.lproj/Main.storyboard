@@ -395,7 +395,7 @@
                                                 </connections>
                                             </slider>
                                         </subviews>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="l2z-5q-ugj" firstAttribute="centerY" secondItem="4m1-MU-j7H" secondAttribute="centerY" id="3iG-bE-VJg"/>
                                             <constraint firstItem="t0a-N8-Hh5" firstAttribute="left" secondItem="l2z-5q-ugj" secondAttribute="right" constant="3" id="Ajh-zO-uBi"/>
@@ -422,35 +422,39 @@
                                         </items>
                                     </navigationBar>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p3c-jd-HfD" userLabel="Pause And Play">
-                                        <rect key="frame" x="179.5" y="312.5" width="16" height="22"/>
+                                        <rect key="frame" x="159.5" y="292.5" width="56" height="62"/>
+                                        <inset key="contentEdgeInsets" minX="20" minY="20" maxX="20" maxY="20"/>
                                         <state key="normal" image="btn_player_pause.png"/>
                                         <connections>
                                             <action selector="onClickPlayOrPause:" destination="DcQ-ww-QZR" eventType="touchUpInside" id="YRd-9T-l32"/>
                                         </connections>
                                     </button>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp" userLabel="Filter Toolbar">
-                                        <rect key="frame" x="0.0" y="543" width="375" height="44"/>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp">
+                                        <rect key="frame" x="285" y="89" width="90" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="90" id="ji7-Im-xVd"/>
+                                        </constraints>
                                         <items>
-                                            <barButtonItem title="Filters" image="btn_more" id="512-fh-QdK">
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <connections>
-                                                    <action selector="onFilterButtonPressed:" destination="DcQ-ww-QZR" id="0bA-Jg-u8a"/>
-                                                </connections>
-                                            </barButtonItem>
                                             <barButtonItem tag="1" title="Dictate" image="btn_back" id="taK-YM-ZOe" userLabel="Dictate Button Item">
                                                 <connections>
                                                     <action selector="onDictateButtonPressed:" destination="DcQ-ww-QZR" id="EKR-dJ-M3d"/>
                                                 </connections>
                                             </barButtonItem>
+                                            <barButtonItem tag="1" title="Dictate" image="btn_more" id="JC7-30-be8" userLabel="Type Button Item">
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="onTypeButtonPressed:" destination="DcQ-ww-QZR" id="WE8-DL-fTe"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </items>
                                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </toolbar>
-                                    <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rCv-os-ebu" userLabel="Filters Collection View" customClass="FilterCollectionView">
-                                        <rect key="frame" x="0.0" y="587" width="375" height="60"/>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rCv-os-ebu" userLabel="Filters Collection View" customClass="FilterCollectionView">
+                                        <rect key="frame" x="0.0" y="602" width="375" height="45"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="rLR-Ci-ffE"/>
+                                            <constraint firstAttribute="height" constant="45" id="rLR-Ci-ffE"/>
                                         </constraints>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="yc2-PW-ohD">
                                             <size key="itemSize" width="60" height="60"/>
@@ -460,7 +464,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FilterCell" id="eI7-ur-JpI" customClass="FilterCollectionViewCell">
-                                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                <rect key="frame" x="0.0" y="-7.5" width="60" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                                     <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
@@ -497,12 +501,11 @@
                                 <constraints>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="top" secondItem="z94-0R-eao" secondAttribute="top" id="1Cp-lf-2sN"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="top" secondItem="bgN-UR-vTv" secondAttribute="bottom" id="CRQ-8c-OKH"/>
-                                    <constraint firstItem="rCv-os-ebu" firstAttribute="top" secondItem="PO5-2p-MOp" secondAttribute="bottom" id="HLA-K3-j1F"/>
-                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="centerX" secondItem="z94-0R-eao" secondAttribute="centerX" id="SpR-ib-La3"/>
+                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="top" secondItem="4m1-MU-j7H" secondAttribute="bottom" id="F90-IO-aYC"/>
+                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="right" secondItem="z94-0R-eao" secondAttribute="right" id="SpR-ib-La3"/>
                                     <constraint firstItem="rCv-os-ebu" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="UBD-ZJ-IvX"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="cwI-Wx-KmC"/>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="eqn-7a-kus"/>
-                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="f4N-zW-0uC"/>
                                     <constraint firstAttribute="bottom" secondItem="rCv-os-ebu" secondAttribute="bottom" id="f9o-bB-Rvo"/>
                                     <constraint firstAttribute="trailing" secondItem="4m1-MU-j7H" secondAttribute="trailing" id="goO-Jn-aQw"/>
                                     <constraint firstItem="p3c-jd-HfD" firstAttribute="centerY" secondItem="z94-0R-eao" secondAttribute="centerY" id="iC9-AH-JCW"/>
@@ -533,15 +536,14 @@
                         <outlet property="dictateButtonItem" destination="taK-YM-ZOe" id="Bdv-pB-7Km"/>
                         <outlet property="dictateLabel" destination="kZs-Hy-O8w" id="lxc-XL-UXx"/>
                         <outlet property="durationLabel" destination="dY7-Eh-nMH" id="bcm-Ha-nOV"/>
-                        <outlet property="filterButtonItem" destination="512-fh-QdK" id="Gbz-Fn-4EF"/>
                         <outlet property="filterCollectionView" destination="rCv-os-ebu" id="a1a-pl-f25"/>
-                        <outlet property="filterToolbar" destination="PO5-2p-MOp" id="q81-TN-mFs"/>
                         <outlet property="filterView" destination="1Li-B2-qAe" id="ySJ-8h-KrA"/>
                         <outlet property="navBar" destination="bgN-UR-vTv" id="DqB-zu-fHN"/>
                         <outlet property="navItem" destination="cOD-gP-AEt" id="6Dg-Ef-ZGL"/>
                         <outlet property="overlayView" destination="z94-0R-eao" id="cxp-rV-hve"/>
                         <outlet property="playOrPauseButton" destination="p3c-jd-HfD" id="UEz-mz-5w6"/>
                         <outlet property="progressSlider" destination="t0a-N8-Hh5" id="3dq-70-FM9"/>
+                        <outlet property="toolbar" destination="PO5-2p-MOp" id="V07-SR-zhW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YtK-yA-pZz" sceneMemberID="firstResponder"/>
