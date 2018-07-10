@@ -76,7 +76,13 @@ NSString* durationString(NSTimeInterval duration) {
         }
         else if (self.maxSelectionCount == 1)
         {
-            //TODO:
+            NSIndexPath* indexPath0= _selectedIndexPaths[0];
+            [indexPathsToUpdate addObject:indexPath0];
+            [indexPathsToUpdate addObject:indexPath];
+            [_selectedIndexPaths removeAllObjects];
+            [_selectedIndexPaths addObject:indexPath];
+            [_indexPath2SelectionIndex removeAllObjects];
+            [_indexPath2SelectionIndex setObject:@(_selectedIndexPaths.count) forKey:indexPath];
         }
         else
         {
@@ -148,9 +154,15 @@ NSString* durationString(NSTimeInterval duration) {
     }
     else
     {
-        cell.indexLabel.hidden = NO;
-        cell.indexLabel.text = [selectionIndex stringValue];
-        //[cell.indexLabel sizeToFit];
+        if (self.maxSelectionCount > 1)
+        {
+            cell.indexLabel.hidden = NO;
+            cell.indexLabel.text = [selectionIndex stringValue];
+        }
+        else
+        {
+            cell.indexLabel.hidden = YES;
+        }
         cell.badgeImage.hidden = NO;
         cell.badgeImage.image = [UIImage imageNamed:@"cell_selected"];
     }
