@@ -324,57 +324,63 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     }
 }
 
+-(void) shareLongImageToWeChatScene:(enum WXScene)wxScene {
+    [self showActivityIndicatorViewInView:nil];
+    
+    NSMutableArray<PHAsset* >* phAssets = [[NSMutableArray alloc] init];
+    for (id obj in self.imageAssets)
+    {
+        if (![obj isKindOfClass:PHAsset.class])
+            continue;
+        
+        [phAssets insertObject:(PHAsset*)obj atIndex:0];
+    }
+    
+    NSMutableDictionary<NSNumber*, UIImage* >* index2Image = [[NSMutableDictionary alloc] init];
+    PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
+    requestOptions.networkAccessAllowed = YES;
+    for (NSUInteger i=0; i<phAssets.count; ++i)
+    {
+        PHAsset* phAsset = phAssets[i];
+        [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            UIImage* img = [UIImage imageWithData:imageData];
+            [index2Image setObject:img forKey:@(i)];
+            if (index2Image.count == phAssets.count)
+            {
+                NSMutableArray<UIImage* >* images = [[NSMutableArray alloc] init];
+                for (NSUInteger j=0; j<phAssets.count; ++j)
+                {
+                    UIImage* image = index2Image[@(j)];
+                    if (image)
+                    {
+                        [images addObject:image];
+                    }
+                }
+                UIImage* longImage = [UIImage longImageWithImages:images];
+                NSData* longImageData = UIImageJPEGRepresentation(longImage, 1.0f);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIImage* thumbImage = [images[0] imageScaledToFitMaxSize:CGSizeMake(100, 100) orientation:UIImageOrientationUp];
+                    ///dispatch_async(dispatch_get_main_queue(), ^{
+                    BOOL succ = [WXApiRequestHandler sendImageData:longImageData
+                                                           TagName:kImageTagName
+                                                        MessageExt:kMessageExt
+                                                            Action:kMessageAction
+                                                        ThumbImage:thumbImage
+                                                           InScene:wxScene];//WXSceneSession
+                    [self dismissActivityIndicatorView];
+                });
+            }
+        }];
+    }
+}
+
 -(void) confirm {
     UIAlertController* actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction* longImageAction = [UIAlertAction actionWithTitle:@"Long Image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self showActivityIndicatorViewInView:nil];
-        
-        NSMutableArray<PHAsset* >* phAssets = [[NSMutableArray alloc] init];
-        for (id obj in self.imageAssets)
-        {
-            if (![obj isKindOfClass:PHAsset.class])
-                continue;
-            
-            [phAssets insertObject:(PHAsset*)obj atIndex:0];
-        }
-        
-        NSMutableDictionary<NSNumber*, UIImage* >* index2Image = [[NSMutableDictionary alloc] init];
-        PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
-        requestOptions.networkAccessAllowed = YES;
-        for (NSUInteger i=0; i<phAssets.count; ++i)
-        {
-            PHAsset* phAsset = phAssets[i];
-            [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                UIImage* img = [UIImage imageWithData:imageData];
-                [index2Image setObject:img forKey:@(i)];
-                if (index2Image.count == phAssets.count)
-                {
-                    NSMutableArray<UIImage* >* images = [[NSMutableArray alloc] init];
-                    for (NSUInteger j=0; j<phAssets.count; ++j)
-                    {
-                        UIImage* image = index2Image[@(j)];
-                        if (image)
-                        {
-                            [images addObject:image];
-                        }
-                    }
-                    UIImage* longImage = [UIImage longImageWithImages:images];
-                    NSData* longImageData = UIImageJPEGRepresentation(longImage, 1.0f);
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        UIImage* thumbImage = [images[0] imageScaledToFitMaxSize:CGSizeMake(100, 100) orientation:UIImageOrientationUp];
-                        ///dispatch_async(dispatch_get_main_queue(), ^{
-                        BOOL succ = [WXApiRequestHandler sendImageData:longImageData
-                                                               TagName:kImageTagName
-                                                            MessageExt:kMessageExt
-                                                                Action:kMessageAction
-                                                            ThumbImage:thumbImage
-                                                               InScene:WXSceneTimeline];//WXSceneSession
-                        [self dismissActivityIndicatorView];
-                    });
-                }
-            }];
-        }
-        
+    UIAlertAction* longImageTimelineAction = [UIAlertAction actionWithTitle:@"Long Image To Timeline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self shareLongImageToWeChatScene:WXSceneTimeline];
+    }];
+    UIAlertAction* longImageSessionAction = [UIAlertAction actionWithTitle:@"Long Image To Session" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self shareLongImageToWeChatScene:WXSceneSession];
     }];
     UIAlertAction* multiImageAction = [UIAlertAction actionWithTitle:@"Multi Image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
@@ -417,7 +423,8 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             }];
         }
     }];
-    [actionSheet addAction:longImageAction];
+    [actionSheet addAction:longImageTimelineAction];
+    [actionSheet addAction:longImageSessionAction];
     [actionSheet addAction:multiImageAction];
     [self showViewController:actionSheet sender:self];
 }
