@@ -88,6 +88,7 @@
 		5281155220ED0F0600E2B133 /* CameraDictateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281155120ED0F0600E2B133 /* CameraDictateViewController.m */; };
 		5281155320ED0F0600E2B133 /* CameraDictateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5281155120ED0F0600E2B133 /* CameraDictateViewController.m */; };
 		5281155420ED373300E2B133 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E01ED7248C009E4705 /* Main.storyboard */; };
+		529BEC6120F4F84E00072B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 529BEC6320F4F84E00072B45 /* InfoPlist.strings */; };
 		529DA58720EF511F0051E248 /* PhotoLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */; };
 		529DA58820EF511F0051E248 /* PhotoLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */; };
 		529DA58F20EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */; };
@@ -278,6 +279,8 @@
 		5281154B20ECBEEA00E2B133 /* WXApiRequestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiRequestHandler.m; sourceTree = "<group>"; };
 		5281155020ED0F0600E2B133 /* CameraDictateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraDictateViewController.h; sourceTree = "<group>"; };
 		5281155120ED0F0600E2B133 /* CameraDictateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraDictateViewController.m; sourceTree = "<group>"; };
+		529BEC6220F4F84E00072B45 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		529BEC6420F4F85100072B45 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		529DA58520EF511F0051E248 /* PhotoLibraryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoLibraryViewController.h; sourceTree = "<group>"; };
 		529DA58620EF511F0051E248 /* PhotoLibraryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryViewController.m; sourceTree = "<group>"; };
 		529DA58D20EF542E0051E248 /* UINavigationBar+Translucent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UINavigationBar+Translucent.h"; path = "Utils/UINavigationBar+Translucent.h"; sourceTree = "<group>"; };
@@ -462,6 +465,7 @@
 				5279F99920F3B582000920CE /* dotletterstiles.png */,
 				520DA6D81ED7248C009E4705 /* main.m */,
 				BB21A15320F4A9A800908D91 /* Localizable.strings */,
+				529BEC6320F4F84E00072B45 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -762,6 +766,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB21A15120F4A9A800908D91 /* Localizable.strings in Resources */,
+				529BEC6120F4F84E00072B45 /* InfoPlist.strings in Resources */,
 				5281152D20ECBADF00E2B133 /* LaunchScreen.storyboard in Resources */,
 				5279F99F20F3B583000920CE /* dotletterstiles.png in Resources */,
 				5281152E20ECBADF00E2B133 /* Assets.xcassets in Resources */,
@@ -901,6 +906,15 @@
 				520DA6E61ED7248C009E4705 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		529BEC6320F4F84E00072B45 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				529BEC6220F4F84E00072B45 /* zh-Hans */,
+				529BEC6420F4F85100072B45 /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		BB21A15320F4A9A800908D91 /* Localizable.strings */ = {
@@ -1129,7 +1143,8 @@
 		5281153320ECBADF00E2B133 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = CartoonShow_Icon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -1178,7 +1193,8 @@
 		5281153420ECBADF00E2B133 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = CartoonShow_Icon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
