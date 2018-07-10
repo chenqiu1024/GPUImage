@@ -344,7 +344,7 @@
     self.navItem.leftBarButtonItem = dismissButtonItem;
     UIBarButtonItem* snapshotButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"snapshot"] style:UIBarButtonItemStylePlain target:self action:@selector(takeSnapshot)];
     self.navItem.rightBarButtonItem = snapshotButtonItem;
-    self.navItem.title = @"Take Video Snapshot";
+    self.navItem.title = NSLocalizedString(@"TakeVideoSnapshot", @"Take Video Snapshot");
     
     [self.navBar makeTranslucent];
     //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
@@ -720,14 +720,14 @@
     self.dictateButtonItem.tag = 1;
     [self onDictateButtonPressed:self.dictateButtonItem];
     //*
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Edit Text" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"EditText", @"Edit Text") message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
-        textField.placeholder = @"Enter text:";
+        textField.placeholder = NSLocalizedString(@"EnterText", @"Enter text:");
         textField.text = self.speechRecognizerResultString;
         textField.secureTextEntry = NO;
         textField.frame = CGRectMake(0, 0, 600, 400);
     }];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
         self.speechRecognizerResultString = alert.textFields[0].text;
         [self updateDictateLabelText];
     }]];

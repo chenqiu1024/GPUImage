@@ -14,6 +14,17 @@
 "ShareLongImageToSession" = "分享长图到微信会话";
 "ShareGridImages" = "分享多图";
 
+"SelectMedias" = "选择媒体文件";
+
+"TakeVideoSnapshot" = "视频截图编辑";
+"EditText" = "编辑字幕";
+"EnterText" = "输入文字";
+
+"AbortVideoCapturing" = "中止当前拍摄？";
+
+"ExceedSelectionLimit" = "选择的数量超出上限";
+
+"OK" = "好";
 "Cancel" = "取消";
 "Confirm" = "确定";
-"Abort" = "丢弃";
+"Abort" = "中止";

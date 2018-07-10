@@ -86,8 +86,8 @@ NSString* durationString(NSTimeInterval duration) {
         }
         else
         {
-            UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:@"Exceed selection limit" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction* action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedString(@"ExceedSelectionLimit", @"Exceed selection limit") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* action = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:nil];
             [alertCtrl addAction:action];
             [self showViewController:alertCtrl sender:self];
         }
@@ -286,7 +286,7 @@ NSString* durationString(NSTimeInterval duration) {
     self.okButtonItem.enabled = NO;
     self.navItem.rightBarButtonItem = self.okButtonItem;
     
-    self.navItem.title = @"Select Photo/Video";
+    self.navItem.title = NSLocalizedString(@"SelectMedias", @"Select Photo/Video");
     
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];

@@ -317,7 +317,7 @@
 		52FAF1C52067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IJKGPUImage_Vout_iOS_OpenGLES2.h; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.h; sourceTree = "<group>"; };
 		52FAF1C62067689000713E1C /* IJKGPUImage_Vout_iOS_OpenGLES2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IJKGPUImage_Vout_iOS_OpenGLES2.m; path = IJKGPUImage/IJKGPUImage_Vout_iOS_OpenGLES2.m; sourceTree = "<group>"; };
 		BB21A15220F4A9A800908D91 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BB21A15420F4AA0700908D91 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		BB21A15420F4AA0700908D91 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BB21A15520F4AA1400908D91 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BBB7962B20B2F6E80059C1DA /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		BBB7963020B2F6EE0059C1DA /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };

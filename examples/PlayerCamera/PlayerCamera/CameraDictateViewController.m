@@ -126,8 +126,8 @@
     _movieWriter.paused = YES;
     [self stopSpeechRecognizer];
     
-    UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:@"Abort video capturing?" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedString(@"AbortVideoCapturing", @"Abort video capturing?") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", @"Confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self releaseSpeechRecognizer];
         [self stopAndReleaseMovieWriter];
         [_videoCamera stopCameraCapture];
@@ -139,7 +139,7 @@
             self.completeHandler(nil, nil);
         }
     }];
-    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         if (self.shootButton.tag == 1)
         {
             _movieWriter.paused = NO;
