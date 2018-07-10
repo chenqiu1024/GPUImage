@@ -14,6 +14,9 @@
 "ShareLongImageToSession" = "分享长图到微信会话";
 "ShareGridImages" = "分享多图";
 
+"ProcessingImages" = "正在处理图片，请稍候……";
+"ShareFailure" = "分享失败，请尝试减少图片数量或减小图片尺寸再试";
+
 "SelectMedias" = "选择媒体文件";
 
 "VideoSnapshotEdit" = "视频截图编辑";
@@ -26,6 +29,7 @@
 
 "ExceedSelectionLimit" = "选择的数量超出上限";
 
+"GotIt" = "知道了";
 "OK" = "好";
 "Cancel" = "取消";
 "Confirm" = "确定";

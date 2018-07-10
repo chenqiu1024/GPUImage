@@ -131,11 +131,16 @@ static char * screencap = "screencap";
 }
 
 - (void) showActivityIndicatorViewInView:(UIView *)view {
+    [self showActivityIndicatorViewInView:view withText:nil];
+}
+
+- (void) showActivityIndicatorViewInView:(UIView *)view withText:(NSString*)text {
     if (view == nil) {
         view = self.view;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         UIActivityIndicatorView* indicatorView = nil;
+        UILabel* label = nil;
         UIView* bgView = objc_getAssociatedObject(self, kKeyIndicatorView);
         NSLog(@"showActivityIndicatorView : %@, bgView = %@", self, bgView);
         if (!bgView)
@@ -146,8 +151,17 @@ static char * screencap = "screencap";
             bgView.userInteractionEnabled = YES;
             
             indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//            indicatorView.translatesAutoresizingMaskIntoConstraints = NO;
             indicatorView.center = CGPointMake(CGRectGetMidX(bgView.bounds), CGRectGetMidY(bgView.bounds));
+            
+            label = [[UILabel alloc] init];
+            label.font = [UIFont systemFontOfSize:12.0f];
+            label.textColor = [UIColor lightTextColor];
+            label.backgroundColor = [UIColor clearColor];
+//            label.translatesAutoresizingMaskIntoConstraints = NO;
+            
             [bgView addSubview:indicatorView];
+            [bgView addSubview:label];
             bgView.translatesAutoresizingMaskIntoConstraints = NO;
             
             [view addSubview:bgView];
@@ -180,9 +194,13 @@ static char * screencap = "screencap";
         else
         {
             indicatorView = [bgView subviews][0];
+            label = [bgView subviews][1];
         }
         [view bringSubviewToFront:bgView];
         [indicatorView startAnimating];
+        label.text = text;
+        [label sizeToFit];
+        label.center = CGPointMake(CGRectGetMidX(bgView.bounds), 6 + CGRectGetMidY(indicatorView.frame) + (indicatorView.frame.size.height + label.frame.size.height) / 2);
     });
 }
 

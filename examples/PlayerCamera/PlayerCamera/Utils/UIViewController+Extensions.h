@@ -29,6 +29,7 @@
 - (void) restoreNaviBarHidden;
 
 - (void) showActivityIndicatorViewInView:(UIView *)view;
+- (void) showActivityIndicatorViewInView:(UIView *)view withText:(NSString*)text;
 
 - (void) dismissActivityIndicatorView;
 

@@ -311,7 +311,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
             if (progress < 1.0f)
             {
-                //[self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
+                [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
             }
         };
         [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
@@ -334,7 +334,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 }
 
 -(void) shareLongImageToWeChatScene:(enum WXScene)wxScene {
-    [self showActivityIndicatorViewInView:nil];
+    [self showActivityIndicatorViewInView:nil withText:NSLocalizedString(@"ProcessingImages", @"ProcessingImages")];
     
     NSMutableArray<PHAsset* >* phAssets = [[NSMutableArray alloc] init];
     for (id obj in self.imageAssets)
@@ -370,6 +370,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                 for (NSUInteger j=0; j<phAssets.count; ++j)
                 {
                     UIImage* image = index2Image[@(j)];
+                    image = [image imageScaledToFitMaxSize:CGSizeMake(MaxWidthOfImageToShare, MaxHeightOfImageToShare) orientation:UIImageOrientationUp];
                     if (image)
                     {
                         [images addObject:image];
@@ -387,6 +388,13 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                                                         ThumbImage:thumbImage
                                                            InScene:wxScene];//WXSceneSession
                     [self dismissActivityIndicatorView];
+                    if (!succ)
+                    {
+                        UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedString(@"ShareFailure", @"ShareFailure") preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction* action = [UIAlertAction actionWithTitle:NSLocalizedString(@"GotIt", @"GotIt") style:UIAlertActionStyleDefault handler:nil];
+                        [alertCtrl addAction:action];
+                        [self showViewController:alertCtrl sender:self];
+                    }
                 });
             }
         }];
@@ -402,8 +410,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         [self shareLongImageToWeChatScene:WXSceneSession];
     }];
     UIAlertAction* multiImageAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"ShareGridImages", @"Multi Image") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-        [self showActivityIndicatorViewInView:nil];
+        [self showActivityIndicatorViewInView:nil withText:NSLocalizedString(@"ProcessingImages", @"ProcessingImages")];
         
         NSMutableArray<PHAsset* >* phAssets = [[NSMutableArray alloc] init];
         for (id obj in self.imageAssets)
@@ -452,9 +459,11 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             }];
         }
     }];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
     [actionSheet addAction:longImageTimelineAction];
     [actionSheet addAction:longImageSessionAction];
     [actionSheet addAction:multiImageAction];
+    [actionSheet addAction:cancelAction];
     [self showViewController:actionSheet sender:self];
 }
 
