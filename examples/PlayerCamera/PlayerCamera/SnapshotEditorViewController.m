@@ -220,7 +220,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 
 @interface SnapshotEditorViewController ()
 {
-    
+    UIColor* WXGreenColor;
 }
 
 //@property (nonatomic, strong) UIElementsView* uiElementsView;
@@ -463,6 +463,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     
     [self.toolbar makeTranslucent];
     //[self.toolbar setBackgroundAndShadowColor:[UIColor blackColor]];
+    WXGreenColor = self.dictateButtonItem.tintColor;
     
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -597,7 +598,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         [self initSpeechRecognizer];
         [self startSpeechRecognizer];
         
-        self.dictateButtonItem.tintColor = [UIColor blueColor];
+        self.dictateButtonItem.tintColor = WXGreenColor;
         self.dictateButtonItem.tag = 1;
     }
 }

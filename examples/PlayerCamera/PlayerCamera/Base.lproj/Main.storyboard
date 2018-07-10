@@ -339,18 +339,19 @@
                                             <constraint firstAttribute="width" constant="90" id="ji7-Im-xVd"/>
                                         </constraints>
                                         <items>
-                                            <barButtonItem tag="1" title="Dictate" image="microphone_open1" id="taK-YM-ZOe" userLabel="Dictate Button Item">
+                                            <barButtonItem tag="1" title="Dictate" image="talk_active" id="taK-YM-ZOe" userLabel="Dictate Button Item">
                                                 <connections>
                                                     <action selector="onDictateButtonPressed:" destination="DcQ-ww-QZR" id="EKR-dJ-M3d"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem tag="1" title="Edit" image="edit" id="JC7-30-be8" userLabel="Type Button Item">
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <barButtonItem tag="1" title="Edit" image="editpen" id="JC7-30-be8" userLabel="Type Button Item">
+                                                <color key="tintColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 <connections>
                                                     <action selector="onTypeButtonPressed:" destination="DcQ-ww-QZR" id="WE8-DL-fTe"/>
                                                 </connections>
                                             </barButtonItem>
                                         </items>
+                                        <color key="tintColor" red="0.12156862745098039" green="0.72549019607843135" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </toolbar>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rCv-os-ebu" userLabel="Filters Collection View" customClass="FilterCollectionView">
@@ -801,18 +802,19 @@
                                             <constraint firstAttribute="width" constant="90" id="CFz-DC-ylk"/>
                                         </constraints>
                                         <items>
-                                            <barButtonItem tag="1" title="Dictate" image="microphone_open1" id="5UZ-t4-rBh" userLabel="Dictate Button Item">
+                                            <barButtonItem tag="1" title="Dictate" image="talk_active" id="5UZ-t4-rBh" userLabel="Dictate Button Item">
                                                 <connections>
                                                     <action selector="onDictateButtonPressed:" destination="l3p-Fi-9pc" id="csM-ZJ-6PL"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem tag="1" title="Edit" image="edit" id="saU-bK-yef" userLabel="Type Button Item">
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <barButtonItem tag="1" title="Edit" image="editpen" id="saU-bK-yef" userLabel="Type Button Item">
+                                                <color key="tintColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 <connections>
                                                     <action selector="onTypeButtonPressed:" destination="l3p-Fi-9pc" id="HnC-Jp-YPG"/>
                                                 </connections>
                                             </barButtonItem>
                                         </items>
+                                        <color key="tintColor" red="0.12156862745098039" green="0.72549019607843135" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </toolbar>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yW0-NL-Noq" userLabel="Filters Collection View" customClass="FilterCollectionView">
@@ -911,9 +913,9 @@
         <image name="button_to_record" width="50" height="50"/>
         <image name="camera_switch" width="40" height="40"/>
         <image name="cell_to_select" width="23" height="23"/>
-        <image name="edit" width="30" height="30"/>
-        <image name="microphone_open1" width="27" height="32"/>
+        <image name="editpen" width="21" height="21"/>
         <image name="player_bottom_control_bg.png" width="16" height="16"/>
         <image name="remove_badge" width="40" height="40"/>
+        <image name="talk_active" width="15" height="15"/>
     </resources>
 </document>
