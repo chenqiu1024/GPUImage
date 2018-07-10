@@ -31,6 +31,7 @@ NSString* durationString(NSTimeInterval duration) {
 @interface MediaCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, weak) IBOutlet UIImageView* imageView;
+@property (nonatomic, weak) IBOutlet UIImageView* badgeImage;
 @property (nonatomic, weak) IBOutlet UILabel* durationLabel;
 @property (nonatomic, weak) IBOutlet UILabel* indexLabel;
 
@@ -124,12 +125,23 @@ NSString* durationString(NSTimeInterval duration) {
     if (!selectionIndex)
     {
         cell.indexLabel.hidden = YES;
+        if (self.maxSelectionCount > 1)
+        {
+            cell.badgeImage.hidden = NO;
+            cell.badgeImage.image = [UIImage imageNamed:@"cell_to_select"];
+        }
+        else
+        {
+            cell.badgeImage.hidden = YES;
+        }
     }
     else
     {
         cell.indexLabel.hidden = NO;
         cell.indexLabel.text = [selectionIndex stringValue];
         //[cell.indexLabel sizeToFit];
+        cell.badgeImage.hidden = NO;
+        cell.badgeImage.image = [UIImage imageNamed:@"cell_selected"];
     }
     return cell;
 }
@@ -244,7 +256,7 @@ NSString* durationString(NSTimeInterval duration) {
                                                                          action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
     
-    self.okButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+    self.okButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"confirm"]
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(confirm)];

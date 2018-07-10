@@ -425,7 +425,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    self.okButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+    self.okButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"confirm"]
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
                                                         action:@selector(confirm)];

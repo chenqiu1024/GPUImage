@@ -338,12 +338,12 @@
                                             <constraint firstAttribute="width" constant="90" id="ji7-Im-xVd"/>
                                         </constraints>
                                         <items>
-                                            <barButtonItem tag="1" title="Dictate" image="btn_back" id="taK-YM-ZOe" userLabel="Dictate Button Item">
+                                            <barButtonItem tag="1" title="Dictate" image="microphone_open1" id="taK-YM-ZOe" userLabel="Dictate Button Item">
                                                 <connections>
                                                     <action selector="onDictateButtonPressed:" destination="DcQ-ww-QZR" id="EKR-dJ-M3d"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem tag="1" title="Dictate" image="btn_more" id="JC7-30-be8" userLabel="Type Button Item">
+                                            <barButtonItem tag="1" title="Edit" image="edit" id="JC7-30-be8" userLabel="Type Button Item">
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <action selector="onTypeButtonPressed:" destination="DcQ-ww-QZR" id="WE8-DL-fTe"/>
@@ -479,9 +479,9 @@
                                     <navigationItem title="Title" id="6Ld-S6-U1c" userLabel="Back"/>
                                 </items>
                             </navigationBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rOo-sG-ZQC">
-                                <rect key="frame" x="167" y="529" width="41" height="30"/>
-                                <state key="normal" title="Shoot"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rOo-sG-ZQC">
+                                <rect key="frame" x="162.5" y="509" width="50" height="50"/>
+                                <state key="normal" image="button_to_record"/>
                                 <connections>
                                     <action selector="onShootButtonPressed:" destination="cpI-S5-Wge" eventType="touchUpInside" id="aj2-YS-Z2B"/>
                                 </connections>
@@ -568,14 +568,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4l-9r-XmB" userLabel="Selection Index Label">
-                                                    <rect key="frame" x="67" y="6" width="27" height="27"/>
-                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="27" id="HO9-np-L2J"/>
-                                                        <constraint firstAttribute="height" constant="27" id="nd9-CG-ltK"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
@@ -584,23 +580,35 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cell_to_select" translatesAutoresizingMaskIntoConstraints="NO" id="muR-4M-wmD" userLabel="Badge Image View">
+                                                    <rect key="frame" x="65" y="3" width="32" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="Aof-m3-LOZ"/>
+                                                        <constraint firstAttribute="width" constant="32" id="OsC-EC-pB7"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="muR-4M-wmD" secondAttribute="trailing" constant="3" id="IFN-8T-sXQ"/>
                                             <constraint firstItem="PVr-fF-d1A" firstAttribute="top" secondItem="PXr-al-mYB" secondAttribute="top" id="J2Y-kr-ffO"/>
-                                            <constraint firstAttribute="trailing" secondItem="m4l-9r-XmB" secondAttribute="trailing" constant="6" id="MbX-fZ-4oM"/>
+                                            <constraint firstAttribute="bottom" secondItem="m4l-9r-XmB" secondAttribute="bottom" id="LUH-J3-azV"/>
+                                            <constraint firstAttribute="trailing" secondItem="m4l-9r-XmB" secondAttribute="trailing" id="MbX-fZ-4oM"/>
                                             <constraint firstItem="PVr-fF-d1A" firstAttribute="leading" secondItem="PXr-al-mYB" secondAttribute="leading" id="Mjf-fa-L4e"/>
+                                            <constraint firstItem="muR-4M-wmD" firstAttribute="top" secondItem="PXr-al-mYB" secondAttribute="top" constant="3" id="NuI-sQ-hd8"/>
                                             <constraint firstAttribute="trailing" secondItem="PVr-fF-d1A" secondAttribute="trailing" id="VdG-AD-Pj2"/>
+                                            <constraint firstItem="m4l-9r-XmB" firstAttribute="leading" secondItem="PXr-al-mYB" secondAttribute="leading" id="VvV-bS-ymw"/>
                                             <constraint firstItem="PVr-fF-d1A" firstAttribute="top" secondItem="PXr-al-mYB" secondAttribute="top" id="Yas-wz-0iB"/>
                                             <constraint firstAttribute="bottom" secondItem="KMA-Lr-JHY" secondAttribute="bottom" constant="3" id="aHa-il-UF1"/>
                                             <constraint firstItem="PVr-fF-d1A" firstAttribute="leading" secondItem="PXr-al-mYB" secondAttribute="leading" id="c2D-hB-0JC"/>
                                             <constraint firstAttribute="bottom" secondItem="PVr-fF-d1A" secondAttribute="bottom" id="dPE-sd-Dzj"/>
                                             <constraint firstAttribute="bottom" secondItem="PVr-fF-d1A" secondAttribute="bottom" id="iZw-M9-lnL"/>
                                             <constraint firstAttribute="trailing" secondItem="KMA-Lr-JHY" secondAttribute="trailing" constant="6" id="obF-BY-Wbk"/>
-                                            <constraint firstItem="m4l-9r-XmB" firstAttribute="top" secondItem="PXr-al-mYB" secondAttribute="top" constant="6" id="psK-rH-oqx"/>
+                                            <constraint firstItem="m4l-9r-XmB" firstAttribute="top" secondItem="PXr-al-mYB" secondAttribute="top" id="psK-rH-oqx"/>
                                             <constraint firstAttribute="trailing" secondItem="PVr-fF-d1A" secondAttribute="trailing" id="rr4-Yj-124"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="badgeImage" destination="muR-4M-wmD" id="kqy-1R-0r0"/>
                                             <outlet property="durationLabel" destination="KMA-Lr-JHY" id="jg0-Lx-idB"/>
                                             <outlet property="imageView" destination="PVr-fF-d1A" id="1EW-18-cuV"/>
                                             <outlet property="indexLabel" destination="m4l-9r-XmB" id="egb-ai-YKp"/>
@@ -691,7 +699,7 @@
                                                         <constraint firstAttribute="height" constant="32" id="Uxm-j5-VcX"/>
                                                         <constraint firstAttribute="width" constant="32" id="web-wL-u8W"/>
                                                     </constraints>
-                                                    <state key="normal" backgroundImage="delete_cross"/>
+                                                    <state key="normal" backgroundImage="remove_cross"/>
                                                 </button>
                                             </subviews>
                                         </view>
@@ -787,12 +795,12 @@
                                             <constraint firstAttribute="width" constant="90" id="CFz-DC-ylk"/>
                                         </constraints>
                                         <items>
-                                            <barButtonItem tag="1" title="Dictate" image="btn_back" id="5UZ-t4-rBh" userLabel="Dictate Button Item">
+                                            <barButtonItem tag="1" title="Dictate" image="microphone_open1" id="5UZ-t4-rBh" userLabel="Dictate Button Item">
                                                 <connections>
                                                     <action selector="onDictateButtonPressed:" destination="l3p-Fi-9pc" id="csM-ZJ-6PL"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem tag="1" title="Dictate" image="btn_more" id="saU-bK-yef" userLabel="Type Button Item">
+                                            <barButtonItem tag="1" title="Edit" image="edit" id="saU-bK-yef" userLabel="Type Button Item">
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <action selector="onTypeButtonPressed:" destination="l3p-Fi-9pc" id="HnC-Jp-YPG"/>
@@ -893,10 +901,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="btn_back" width="25" height="25"/>
-        <image name="btn_more" width="25" height="25"/>
         <image name="btn_player_pause.png" width="16" height="16"/>
-        <image name="delete_cross" width="32" height="32"/>
+        <image name="button_to_record" width="50" height="50"/>
+        <image name="cell_to_select" width="23" height="23"/>
+        <image name="edit" width="30" height="30"/>
+        <image name="microphone_open1" width="27" height="32"/>
         <image name="player_bottom_control_bg.png" width="16" height="16"/>
+        <image name="remove_cross" width="30" height="30"/>
     </resources>
 </document>

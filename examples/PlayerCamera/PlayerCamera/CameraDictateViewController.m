@@ -104,14 +104,16 @@
     if (0 == self.shootButton.tag)
     {
         self.shootButton.tag = 1;
-        [self.shootButton setTitle:@"Shooting..." forState:UIControlStateNormal];
+        //[self.shootButton setTitle:@"Shooting..." forState:UIControlStateNormal];
+        [self.shootButton setImage:[UIImage imageNamed:@"button_recording"] forState:UIControlStateNormal];
         _movieWriter.paused = NO;
         self.navItem.rightBarButtonItem.enabled = YES;
     }
     else
     {
         self.shootButton.tag = 0;
-        [self.shootButton setTitle:@"Shoot" forState:UIControlStateNormal];
+        //[self.shootButton setTitle:@"Shoot" forState:UIControlStateNormal];
+        [self.shootButton setImage:[UIImage imageNamed:@"button_to_record"] forState:UIControlStateNormal];
         _movieWriter.paused = YES;
     }
 }
@@ -168,7 +170,7 @@
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self
                                                                          action:@selector(dismissSelf)];
-    UIBarButtonItem* doneButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"]
+    UIBarButtonItem* doneButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"confirm"]
                                                                        style:UIBarButtonItemStylePlain
                                                                       target:self
                                                                       action:@selector(finishCapturing)];

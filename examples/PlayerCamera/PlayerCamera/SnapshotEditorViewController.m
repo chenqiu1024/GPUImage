@@ -449,7 +449,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     //UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(dismissSelf)];
     UIBarButtonItem* dismissButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissSelf)];
     self.navItem.leftBarButtonItem = dismissButtonItem;
-    UIBarButtonItem* snapshotButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(takeSnapshot)];
+    UIBarButtonItem* snapshotButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"snapshot"] style:UIBarButtonItemStylePlain target:self action:@selector(takeSnapshot)];
     self.navItem.rightBarButtonItem = snapshotButtonItem;
     self.navItem.title = @"Take Video Snapshot";
     
