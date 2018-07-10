@@ -590,7 +590,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         [self stopSpeechRecognizer];
         [self releaseSpeechRecognizer];
         
-        self.dictateButtonItem.tintColor = [UIColor whiteColor];
+        self.dictateButtonItem.tintColor = [UIColor lightTextColor];
         self.dictateButtonItem.tag = 0;
     }
     else
