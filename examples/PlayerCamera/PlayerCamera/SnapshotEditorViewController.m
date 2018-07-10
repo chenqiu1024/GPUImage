@@ -451,7 +451,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     self.navItem.leftBarButtonItem = dismissButtonItem;
     UIBarButtonItem* snapshotButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"snapshot"] style:UIBarButtonItemStylePlain target:self action:@selector(takeSnapshot)];
     self.navItem.rightBarButtonItem = snapshotButtonItem;
-    self.navItem.title = NSLocalizedString(@"TakeVideoSnapshot", @"Take Video Snapshot");
+    self.navItem.title = NSLocalizedString(@"ImageEdit", @"Image Edit");
     
     [self.navBar makeTranslucent];
     //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
@@ -461,7 +461,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     //[self.navBar setTintColor:[UIColor blackColor]];
     [self setNeedsStatusBarAppearanceUpdate];
     
-    [self.toolbar makeTranslucent];
+    ///[self.toolbar makeTranslucent];
     //[self.toolbar setBackgroundAndShadowColor:[UIColor blackColor]];
     WXGreenColor = self.dictateButtonItem.tintColor;
     

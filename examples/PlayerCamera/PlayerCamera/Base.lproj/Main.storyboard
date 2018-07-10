@@ -332,12 +332,9 @@
                                             <action selector="onClickPlayOrPause:" destination="DcQ-ww-QZR" eventType="touchUpInside" id="YRd-9T-l32"/>
                                         </connections>
                                     </button>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp">
-                                        <rect key="frame" x="285" y="89" width="90" height="44"/>
+                                    <toolbar clearsContextBeforeDrawing="NO" contentMode="scaleAspectFit" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PO5-2p-MOp">
+                                        <rect key="frame" x="0.0" y="89" width="375" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="90" id="ji7-Im-xVd"/>
-                                        </constraints>
                                         <items>
                                             <barButtonItem tag="1" title="Dictate" image="talk_active" id="taK-YM-ZOe" userLabel="Dictate Button Item">
                                                 <connections>
@@ -403,6 +400,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="PO5-2p-MOp" firstAttribute="leading" secondItem="z94-0R-eao" secondAttribute="leading" id="0Mz-rN-dcs"/>
                                     <constraint firstItem="bgN-UR-vTv" firstAttribute="top" secondItem="z94-0R-eao" secondAttribute="top" id="1Cp-lf-2sN"/>
                                     <constraint firstItem="4m1-MU-j7H" firstAttribute="top" secondItem="bgN-UR-vTv" secondAttribute="bottom" id="CRQ-8c-OKH"/>
                                     <constraint firstItem="PO5-2p-MOp" firstAttribute="top" secondItem="4m1-MU-j7H" secondAttribute="bottom" id="F90-IO-aYC"/>
@@ -795,12 +793,9 @@
                                             <navigationItem title="Title" id="Cem-h0-c0g"/>
                                         </items>
                                     </navigationBar>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Ia7-ve-9pq">
-                                        <rect key="frame" x="285" y="44" width="90" height="44"/>
+                                    <toolbar clearsContextBeforeDrawing="NO" contentMode="scaleAspectFit" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ia7-ve-9pq">
+                                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="90" id="CFz-DC-ylk"/>
-                                        </constraints>
                                         <items>
                                             <barButtonItem tag="1" title="Dictate" image="talk_active" id="5UZ-t4-rBh" userLabel="Dictate Button Item">
                                                 <connections>
@@ -868,6 +863,7 @@
                                 <constraints>
                                     <constraint firstItem="Ia7-ve-9pq" firstAttribute="top" secondItem="cX2-Xx-Wbw" secondAttribute="bottom" id="6Az-N6-vpc"/>
                                     <constraint firstAttribute="trailing" secondItem="yW0-NL-Noq" secondAttribute="trailing" id="8U8-Xd-eLr"/>
+                                    <constraint firstItem="Ia7-ve-9pq" firstAttribute="leading" secondItem="A6M-jS-pad" secondAttribute="leading" id="DmZ-h5-8Rt"/>
                                     <constraint firstAttribute="trailing" secondItem="cX2-Xx-Wbw" secondAttribute="trailing" id="Vdi-fe-IJf"/>
                                     <constraint firstAttribute="bottom" secondItem="yW0-NL-Noq" secondAttribute="bottom" id="ZwD-c1-enf"/>
                                     <constraint firstItem="cX2-Xx-Wbw" firstAttribute="top" secondItem="A6M-jS-pad" secondAttribute="top" id="mvK-Ni-Rpa"/>

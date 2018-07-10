@@ -16,7 +16,9 @@
 
 "SelectMedias" = "选择媒体文件";
 
-"TakeVideoSnapshot" = "视频截图编辑";
+"VideoSnapshotEdit" = "视频截图编辑";
+"ImageEdit" = "图片编辑";
+
 "EditText" = "编辑字幕";
 "EnterText" = "输入文字";
 
