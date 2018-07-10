@@ -108,7 +108,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     {
         cell.numberLabel.hidden = NO;
         cell.numberLabel.text = @"+";///[@(indexPath.row + 1) stringValue];
-        cell.imageView.image = nil;
+        cell.imageView.image = nil;//[UIImage imageNamed:@"addphoto_43x43_"];
         cell.deleteButton.hidden = YES;
         cell.deleteButtonHandler = nil;
     }
@@ -119,7 +119,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         {
             cell.numberLabel.hidden = NO;
             cell.numberLabel.text = @"+";///[@(indexPath.row + 1) stringValue];
-            cell.imageView.image = nil;
+            cell.imageView.image = nil;//[UIImage imageNamed:@"addphoto_43x43_"];
             cell.deleteButton.hidden = YES;
             cell.deleteButtonHandler = nil;
         }

@@ -487,9 +487,9 @@
                                     <action selector="onShootButtonPressed:" destination="cpI-S5-Wge" eventType="touchUpInside" id="aj2-YS-Z2B"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGw-VB-9AS">
-                                <rect key="frame" x="16" y="615" width="45" height="30"/>
-                                <state key="normal" title="Rotate"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGw-VB-9AS">
+                                <rect key="frame" x="16" y="605" width="40" height="40"/>
+                                <state key="normal" image="camera_switch"/>
                                 <connections>
                                     <action selector="onRotateCameraButtonPressed:" destination="cpI-S5-Wge" eventType="touchUpInside" id="kOY-o3-WGo"/>
                                 </connections>
@@ -704,7 +704,7 @@
                                                         <constraint firstAttribute="height" constant="32" id="Uxm-j5-VcX"/>
                                                         <constraint firstAttribute="width" constant="32" id="web-wL-u8W"/>
                                                     </constraints>
-                                                    <state key="normal" backgroundImage="delete_cross"/>
+                                                    <state key="normal" backgroundImage="remove_badge"/>
                                                 </button>
                                             </subviews>
                                         </view>
@@ -909,10 +909,11 @@
     <resources>
         <image name="btn_player_pause.png" width="16" height="16"/>
         <image name="button_to_record" width="50" height="50"/>
+        <image name="camera_switch" width="40" height="40"/>
         <image name="cell_to_select" width="23" height="23"/>
-        <image name="delete_cross" width="32" height="32"/>
         <image name="edit" width="30" height="30"/>
         <image name="microphone_open1" width="27" height="32"/>
         <image name="player_bottom_control_bg.png" width="16" height="16"/>
+        <image name="remove_badge" width="40" height="40"/>
     </resources>
 </document>
