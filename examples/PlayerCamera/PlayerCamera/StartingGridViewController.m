@@ -185,7 +185,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         CGSize cellSize = [self collectionView:collectionView layout:collectionView.collectionViewLayout sizeForItemAtIndexPath:indexPath];
         alert.popoverPresentationController.sourceRect = CGRectMake((0.5f + cols) * cellSize.width, (0.5f + rows) * cellSize.height, 10, 10);
         // Create and add an Action.
-        UIAlertAction* actionMultiImages = [UIAlertAction actionWithTitle:@"Select Multi Images" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction* actionMultiImages = [UIAlertAction actionWithTitle:NSLocalizedString(@"SelectMultiImages", @"Select Multi Images") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
             //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
             photoLibraryVC.maxSelectionCount = MaxCells - indexPath.row;
@@ -234,7 +234,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             };
             [self presentViewController:photoLibraryVC animated:YES completion:nil];
         }];
-        UIAlertAction* actionCaptureSnapshot = [UIAlertAction actionWithTitle:@"Capture Video and Take Snapshot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction* actionCaptureSnapshot = [UIAlertAction actionWithTitle:NSLocalizedString(@"CaptureVideoAndSnapshot", @"Capture Video and Take Snapshot") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             CameraDictateViewController* captureVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraDictate"];
             captureVC.completeHandler = ^(NSString* filePath, NSString* dictateText) {
                 if (filePath && [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:NULL])
@@ -260,7 +260,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             [self presentViewController:captureVC animated:YES completion:nil];
         }];
         
-        UIAlertAction* actionVideoSnapshot = [UIAlertAction actionWithTitle:@"Pick Video and Take Snapshot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        UIAlertAction* actionVideoSnapshot = [UIAlertAction actionWithTitle:NSLocalizedString(@"PickVideoAndSnapshot", @"Pick Video and Take Snapshot") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             PhotoLibraryViewController* photoLibraryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"PhotoLibrary"];
             //__weak PhotoLibraryViewController* wPLVC = photoLibraryVC;
             photoLibraryVC.maxSelectionCount = 1;
@@ -294,7 +294,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             [self presentViewController:photoLibraryVC animated:YES completion:nil];
         }];
         
-        UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
         [alert addAction:actionCaptureSnapshot];
         [alert addAction:actionVideoSnapshot];
         [alert addAction:actionMultiImages];
@@ -376,13 +376,13 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 
 -(void) confirm {
     UIAlertController* actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction* longImageTimelineAction = [UIAlertAction actionWithTitle:@"Long Image To Timeline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction* longImageTimelineAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"ShareLongImageToMoments", @"Long Image To Timeline") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self shareLongImageToWeChatScene:WXSceneTimeline];
     }];
-    UIAlertAction* longImageSessionAction = [UIAlertAction actionWithTitle:@"Long Image To Session" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction* longImageSessionAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"ShareLongImageToSession", @"Long Image To Session") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self shareLongImageToWeChatScene:WXSceneSession];
     }];
-    UIAlertAction* multiImageAction = [UIAlertAction actionWithTitle:@"Multi Image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction* multiImageAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"ShareGridImages", @"Multi Image") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
         [self showActivityIndicatorViewInView:nil];
         
@@ -439,7 +439,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     self.okButtonItem.enabled = NO;
     self.navItem.rightBarButtonItem = self.okButtonItem;
     
-    self.navItem.title = @"Select Photo/Video";
+    self.navItem.title = NSLocalizedString(@"AddMedias", @"Add Medias");
     
     [self.navBar makeTranslucent];
     [self setNeedsStatusBarAppearanceUpdate];

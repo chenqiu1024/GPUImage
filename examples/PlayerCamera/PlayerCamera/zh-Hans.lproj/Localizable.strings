@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  PlayerCamera
+
+  Created by QiuDong on 2018/7/10.
+  Copyright © 2018年 DOM QIU. All rights reserved.
+*/
+"SelectMultiImages" = "从相册选取图片";
+"CaptureVideoAndSnapshot" = "拍摄视频截成图片";
+"PickVideoAndSnapshot" = "选取视频截成图片";
+"AddMedias" = "添加图片";
+
+"ShareLongImageToMoments" = "分享长图到朋友圈";
+"ShareLongImageToSession" = "分享长图到微信会话";
+"ShareGridImages" = "分享多图";
+
+"Cancel" = "取消";
+"Confirm" = "确定";
+"Abort" = "丢弃";
