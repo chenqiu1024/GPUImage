@@ -309,7 +309,10 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
         requestOptions.networkAccessAllowed = YES;
         requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
-            
+            if (progress < 1.0f)
+            {
+                //[self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
+            }
         };
         [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
             UIImage* image = [UIImage imageWithData:imageData];
@@ -345,13 +348,23 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     NSMutableDictionary<NSNumber*, UIImage* >* index2Image = [[NSMutableDictionary alloc] init];
     PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
     requestOptions.networkAccessAllowed = YES;
+    requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
+        if (progress < 1.0f)
+        {
+            //[self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
+        }
+    };
+    __block int jobFinished = 0;
     for (NSUInteger i=0; i<phAssets.count; ++i)
     {
         PHAsset* phAsset = phAssets[i];
         [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
             UIImage* img = [UIImage imageWithData:imageData];
-            [index2Image setObject:img forKey:@(i)];
-            if (index2Image.count == phAssets.count)
+            if (img)
+            {
+                [index2Image setObject:img forKey:@(i)];
+            }
+            if (++jobFinished == phAssets.count)
             {
                 NSMutableArray<UIImage* >* images = [[NSMutableArray alloc] init];
                 for (NSUInteger j=0; j<phAssets.count; ++j)
@@ -404,12 +417,22 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         NSMutableDictionary<NSNumber*, NSData* >* index2Data = [[NSMutableDictionary alloc] init];
         PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
         requestOptions.networkAccessAllowed = YES;
+        requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
+            if (progress < 1.0f)
+            {
+                //[self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
+            }
+        };
+        __block int jobFinished = 0;
         for (NSUInteger i=0; i<phAssets.count; ++i)
         {
             PHAsset* phAsset = phAssets[i];
             [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                [index2Data setObject:imageData forKey:@(i)];
-                if (index2Data.count == phAssets.count)
+                if (imageData)
+                {
+                    [index2Data setObject:imageData forKey:@(i)];
+                }
+                if (++jobFinished == phAssets.count)
                 {
                     NSMutableArray<NSData* >* imageDatas = [[NSMutableArray alloc] init];
                     for (NSUInteger j=0; j<phAssets.count; ++j)

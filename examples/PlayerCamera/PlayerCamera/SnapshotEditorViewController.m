@@ -385,6 +385,8 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong typeof(self) pSelf = wSelf;
             [pSelf hideControls];
+            pSelf.view.userInteractionEnabled = NO;
+            
             AudioServicesPlaySystemSound(1108);
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 CGFloat contentScale = pSelf.filterView.layer.contentsScale;
