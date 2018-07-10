@@ -260,7 +260,7 @@
 		528114FF20ECB1E600E2B133 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		5281150120ECB1FC00E2B133 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		5281153520ECBADF00E2B133 /* GridShow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GridShow.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5281153620ECBAE000E2B133 /* GridShow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GridShow-Info.plist"; path = "/Users/domqiu/Projects/GPUImage/examples/PlayerCamera/GridShow-Info.plist"; sourceTree = "<absolute>"; };
+		5281153620ECBAE000E2B133 /* GridShow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GridShow-Info.plist"; sourceTree = SOURCE_ROOT; };
 		5281153720ECBD3C00E2B133 /* WXApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiManager.h; sourceTree = "<group>"; };
 		5281153820ECBD3D00E2B133 /* WXApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiManager.m; sourceTree = "<group>"; };
 		5281153B20ECBEB500E2B133 /* WeiXinConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiXinConstant.h; sourceTree = "<group>"; };
