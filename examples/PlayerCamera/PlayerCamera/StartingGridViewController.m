@@ -276,6 +276,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                 VideoSnapshotViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"VideoSnapshot"];
                 videoVC.sourceVideoFile = filePath;
                 videoVC.completionHandler = ^(PHAsset* phAsset) {
+                    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
                     [self replaceOrAddPHAsset:phAsset atIndexPath:indexPath];
                     [self dismissActivityIndicatorView];
                 };

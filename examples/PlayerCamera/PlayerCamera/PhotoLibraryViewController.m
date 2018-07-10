@@ -190,18 +190,41 @@ NSString* durationString(NSTimeInterval duration) {
             {
                 PHVideoRequestOptions* requestOptions = [[PHVideoRequestOptions alloc] init];
                 requestOptions.networkAccessAllowed = YES;
-                [[PHCachingImageManager defaultManager] requestAVAssetForVideo:phAsset options:requestOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                    NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
-                    NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
-                    NSString* videoPath = [components.lastObject substringFromIndex:9];
-                    PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
-                    item.mediaType = PHAssetMediaTypeVideo;
-                    item.resultOject = videoPath;
-                    [results addObject:item];
-                    if (results.count == _selectedIndexPaths.count)
-                    {
-                        completion();
-                    }
+                [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:requestOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                    AVURLAsset* urlAsset = (AVURLAsset*)asset;
+                    if (!urlAsset)
+                        return;
+//                    NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
+//                    NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
+//                    NSString* videoPath = [components.lastObject substringFromIndex:9];
+//                    PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
+//                    item.mediaType = PHAssetMediaTypeVideo;
+//                    item.resultOject = urlAsset.URL.absoluteString;
+//                    [results addObject:item];
+//                    if (results.count == _selectedIndexPaths.count)
+//                    {
+//                        completion();
+//                    }
+                    NSString* tmpFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:urlAsset.URL.absoluteString.lastPathComponent];
+                    AVAssetExportSession* exporter = [[AVAssetExportSession alloc] initWithAsset:urlAsset presetName:AVAssetExportPresetHighestQuality];
+                    exporter.outputURL = [NSURL fileURLWithPath:tmpFilePath];
+                    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+                    exporter.shouldOptimizeForNetworkUse = YES;
+                    [exporter exportAsynchronouslyWithCompletionHandler:^{
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (exporter.status == AVAssetExportSessionStatusCompleted)
+                            {
+                                PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
+                                item.mediaType = PHAssetMediaTypeVideo;
+                                item.resultOject = exporter.outputURL.absoluteString;
+                                [results addObject:item];
+                                if (results.count == _selectedIndexPaths.count)
+                                {
+                                    completion();
+                                }
+                            }
+                        });
+                    }];
                 }];
             }
         }
