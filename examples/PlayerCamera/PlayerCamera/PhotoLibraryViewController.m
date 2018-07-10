@@ -74,6 +74,17 @@ NSString* durationString(NSTimeInterval duration) {
             [indexPathsToUpdate addObject:indexPath];
             [_indexPath2SelectionIndex setObject:@(_selectedIndexPaths.count) forKey:indexPath];
         }
+        else if (self.maxSelectionCount == 1)
+        {
+            //TODO:
+        }
+        else
+        {
+            UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:nil message:@"Exceed selection limit" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alertCtrl addAction:action];
+            [self showViewController:alertCtrl sender:self];
+        }
     }
     else
     {
