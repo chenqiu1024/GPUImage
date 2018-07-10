@@ -268,24 +268,36 @@
             [pSelf hideControls];
             AudioServicesPlaySystemSound(1108);
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                CGFloat contentScale = pSelf.overlayView.layer.contentsScale;
+                CGFloat contentScale = pSelf.filterView.layer.contentsScale;
                 //            CGSize layerSize = CGSizeMake(contentScale * pSelf.overlayView.bounds.size.width,
                 //                                          contentScale * pSelf.overlayView.bounds.size.height);
-                CGSize layerSize = CGSizeMake(contentScale * pSelf.snapshotScreenSize.width,
-                                              contentScale * pSelf.snapshotScreenSize.height);
+                CGSize snapshotSize = CGSizeMake(contentScale * pSelf.snapshotScreenSize.width,
+                                                 contentScale * pSelf.snapshotScreenSize.height);
                 CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
-                CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)layerSize.width, (int)layerSize.height, 8, (int)layerSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+                CGContextRef imageContext = CGBitmapContextCreate(NULL, (int)snapshotSize.width, (int)snapshotSize.height, 8, (int)snapshotSize.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
                 
-                CGContextScaleCTM(imageContext, contentScale, -contentScale);
+                CGContextSaveGState(imageContext);
+                CGContextScaleCTM(imageContext, 1.0, -1.0);
                 if (pSelf.snapshotScreenSize.width < pSelf.overlayView.bounds.size.width)
                 {
-                    CGContextTranslateCTM(imageContext, (pSelf.snapshotScreenSize.width - pSelf.overlayView.bounds.size.width) * contentScale / 2, -pSelf.overlayView.bounds.size.height * contentScale);
+                    CGContextTranslateCTM(imageContext, -(pSelf.snapshotScreenSize.width + pSelf.overlayView.bounds.size.width) * contentScale / 2, 0.f);
                 }
                 else
                 {
                     CGContextTranslateCTM(imageContext, 0.f, -(pSelf.snapshotScreenSize.height + pSelf.overlayView.bounds.size.height) * contentScale / 2);
                 }
-                CGContextDrawImage(imageContext, CGRectMake(0, 0, pSelf.overlayView.bounds.size.width, pSelf.overlayView.bounds.size.height), image.CGImage);
+                CGContextDrawImage(imageContext, CGRectMake(0, 0, pSelf.overlayView.bounds.size.width * contentScale, pSelf.overlayView.bounds.size.height * contentScale), image.CGImage);
+                
+                CGContextRestoreGState(imageContext);
+                CGContextScaleCTM(imageContext, contentScale, -contentScale);
+                if (pSelf.snapshotScreenSize.width < pSelf.overlayView.bounds.size.width)
+                {
+                    CGContextTranslateCTM(imageContext, -(pSelf.snapshotScreenSize.width + pSelf.overlayView.bounds.size.width) / 2, 0.f);
+                }
+                else
+                {
+                    CGContextTranslateCTM(imageContext, 0.f, -(pSelf.snapshotScreenSize.height + pSelf.overlayView.bounds.size.height) / 2);
+                }
                 [pSelf.overlayView.layer renderInContext:imageContext];
                 
                 UIImage* snapshot = [UIImage imageWithCGImage:CGBitmapContextCreateImage(imageContext) scale:1.0f orientation:UIImageOrientationUp];

@@ -308,10 +308,16 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         PHAsset* phAsset = (PHAsset*)self.imageAssets[indexPath.row];
         PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
         requestOptions.networkAccessAllowed = YES;
+        requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
+            
+        };
         [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
             UIImage* image = [UIImage imageWithData:imageData];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissActivityIndicatorView];
+                if (!image)
+                    return;
+                
                 SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
                 editorVC.image = image;
                 editorVC.completionHandler = ^(PHAsset* phAsset) {
@@ -432,7 +438,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    self.okButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"confirm"]
+    self.okButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"]
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
                                                         action:@selector(confirm)];
