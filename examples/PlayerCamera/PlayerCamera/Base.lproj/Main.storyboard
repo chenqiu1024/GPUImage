@@ -312,6 +312,7 @@
                                     <navigationBar opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgN-UR-vTv">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="barTintColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                         <textAttributes key="titleTextAttributes">
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -530,6 +531,7 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZXK-Us-6zV">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <textAttributes key="titleTextAttributes">
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -571,8 +573,9 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -656,6 +659,8 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ahp-Ez-SHW">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <items>
                                     <navigationItem title="Title" id="XRD-Wj-KkH"/>
                                 </items>
@@ -699,7 +704,7 @@
                                                         <constraint firstAttribute="height" constant="32" id="Uxm-j5-VcX"/>
                                                         <constraint firstAttribute="width" constant="32" id="web-wL-u8W"/>
                                                     </constraints>
-                                                    <state key="normal" backgroundImage="remove_cross"/>
+                                                    <state key="normal" backgroundImage="delete_cross"/>
                                                 </button>
                                             </subviews>
                                         </view>
@@ -777,6 +782,7 @@
                                     <navigationBar opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cX2-Xx-Wbw">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="barTintColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                         <textAttributes key="titleTextAttributes">
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -904,9 +910,9 @@
         <image name="btn_player_pause.png" width="16" height="16"/>
         <image name="button_to_record" width="50" height="50"/>
         <image name="cell_to_select" width="23" height="23"/>
+        <image name="delete_cross" width="32" height="32"/>
         <image name="edit" width="30" height="30"/>
         <image name="microphone_open1" width="27" height="32"/>
         <image name="player_bottom_control_bg.png" width="16" height="16"/>
-        <image name="remove_cross" width="30" height="30"/>
     </resources>
 </document>
