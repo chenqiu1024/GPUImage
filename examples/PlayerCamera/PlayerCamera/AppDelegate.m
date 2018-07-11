@@ -31,12 +31,14 @@
     // Override point for customization after application launch.
     NSFileManager* fm = [NSFileManager defaultManager];
     NSString* docDirectoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+#if PRODUCT_ID == PRODUCT_ID_GridShow
     NSDirectoryEnumerator* enumerator = [fm enumeratorAtPath:docDirectoryPath];
     for (NSString* file in enumerator)
     {
         NSString* filePath = [docDirectoryPath stringByAppendingPathComponent:file];
         [fm removeItemAtPath:filePath error:nil];
     }
+#endif
     NSString* thumbnailDirectory = [docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory];
     NSString* videoDirectory = [docDirectoryPath stringByAppendingPathComponent:VideoDirectory];
     BOOL isDirectory = NO;
