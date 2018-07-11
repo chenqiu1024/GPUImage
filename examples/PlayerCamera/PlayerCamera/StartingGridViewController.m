@@ -311,7 +311,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
             if (progress < 1.0f)
             {
-                [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
+                [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.0f%%", progress*100]];
             }
         };
         [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
@@ -345,16 +345,16 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
         [phAssets insertObject:(PHAsset*)obj atIndex:0];
     }
     
+    __block int jobFinished = 0;
     NSMutableDictionary<NSNumber*, UIImage* >* index2Image = [[NSMutableDictionary alloc] init];
     PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
     requestOptions.networkAccessAllowed = YES;
     requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
-        if (progress < 1.0f)
+        //if (progress < 1.0f)
         {
-            //[self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
+            [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%d/%d", (jobFinished+1), (int)phAssets.count]];
         }
     };
-    __block int jobFinished = 0;
     for (NSUInteger i=0; i<phAssets.count; ++i)
     {
         PHAsset* phAsset = phAssets[i];
@@ -421,16 +421,16 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             [phAssets addObject:(PHAsset*)obj];
         }
         
+        __block int jobFinished = 0;
         NSMutableDictionary<NSNumber*, NSData* >* index2Data = [[NSMutableDictionary alloc] init];
         PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
         requestOptions.networkAccessAllowed = YES;
         requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
-            if (progress < 1.0f)
+            //if (progress < 1.0f)
             {
-                //[self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%0.2f%%", progress*100]];
+                [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%d/%d", (jobFinished+1), (int)phAssets.count]];
             }
         };
-        __block int jobFinished = 0;
         for (NSUInteger i=0; i<phAssets.count; ++i)
         {
             PHAsset* phAsset = phAssets[i];

@@ -206,6 +206,7 @@ NSString* durationString(NSTimeInterval duration) {
             }
         });
     };
+    __block int jobsDone = 0;
     for (NSIndexPath* indexPath in _selectedIndexPaths)
     {
         PHAsset* phAsset = [self.dataSource objectAtIndex:indexPath.row];
@@ -222,12 +223,15 @@ NSString* durationString(NSTimeInterval duration) {
             {
                 PHImageRequestOptions* requestOptions = [[PHImageRequestOptions alloc] init];
                 requestOptions.networkAccessAllowed = YES;
+                requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
+                    [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%d/%d", (jobsDone+1), (int)_selectedIndexPaths.count]];
+                };
                 [[PHCachingImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
                     PhotoLibrarySelectionItem* item = [[PhotoLibrarySelectionItem alloc] init];
                     item.mediaType = PHAssetMediaTypeImage;
                     item.resultOject = imageData;
                     [results addObject:item];
-                    if (results.count == _selectedIndexPaths.count)
+                    if (++jobsDone == _selectedIndexPaths.count)
                     {
                         completion();
                     }
@@ -237,10 +241,19 @@ NSString* durationString(NSTimeInterval duration) {
             {
                 PHVideoRequestOptions* requestOptions = [[PHVideoRequestOptions alloc] init];
                 requestOptions.networkAccessAllowed = YES;
+                requestOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
+                    [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%@ %0.0f%%", NSLocalizedString(@"FetchingVideo", @"FetchingVideo"), progress * 100.f]];
+                };
                 [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:requestOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                     AVURLAsset* urlAsset = (AVURLAsset*)asset;
                     if (!urlAsset)
+                    {
+                        if (++jobsDone == _selectedIndexPaths.count)
+                        {
+                            completion();
+                        }
                         return;
+                    }
 //                    NSString* sandboxExtensionTokenKey = info[@"PHImageFileSandboxExtensionTokenKey"];
 //                    NSArray* components = [sandboxExtensionTokenKey componentsSeparatedByString:@";"];
 //                    NSString* videoPath = [components.lastObject substringFromIndex:9];
@@ -257,6 +270,9 @@ NSString* durationString(NSTimeInterval duration) {
                     exporter.outputURL = [NSURL fileURLWithPath:tmpFilePath];
                     exporter.outputFileType = AVFileTypeQuickTimeMovie;
                     exporter.shouldOptimizeForNetworkUse = YES;
+                    NSTimer* progressTimer = [NSTimer timerWithTimeInterval:0.2f repeats:YES block:^(NSTimer * _Nonnull timer) {
+                        [self showActivityIndicatorViewInView:nil withText:[NSString stringWithFormat:@"%@ %0.0f%%", NSLocalizedString(@"ConvertingVideo", @"ConvertingVideo"), exporter.progress * 100.f]];
+                    }];
                     [exporter exportAsynchronouslyWithCompletionHandler:^{
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if (exporter.status == AVAssetExportSessionStatusCompleted)
@@ -265,13 +281,15 @@ NSString* durationString(NSTimeInterval duration) {
                                 item.mediaType = PHAssetMediaTypeVideo;
                                 item.resultOject = exporter.outputURL.absoluteString;
                                 [results addObject:item];
-                                if (results.count == _selectedIndexPaths.count)
-                                {
-                                    completion();
-                                }
+                            }
+                            if (++jobsDone == _selectedIndexPaths.count)
+                            {
+                                [progressTimer invalidate];
+                                completion();
                             }
                         });
                     }];
+                    [[NSRunLoop mainRunLoop] addTimer:progressTimer forMode:NSDefaultRunLoopMode];
                 }];
             }
         }
