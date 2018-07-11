@@ -467,7 +467,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     self.navItem.rightBarButtonItem = snapshotButtonItem;
     self.navItem.title = NSLocalizedString(@"ImageEdit", @"Image Edit");
     
-    [self.navBar makeTranslucent];
+    //[self.navBar makeTranslucent];
     //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
     //[self.navBar setBackgroundColor:[UIColor blackColor]];
     //[self.navBar setBarTintColor:[UIColor blackColor]];

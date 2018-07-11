@@ -362,7 +362,7 @@ GLboolean IJKGPUImage_GLES2_Renderer_renderOverlay(IJK_GLES2_Renderer *renderer,
     
     glClearColor(1.0, 0.5, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);               IJK_GLES2_checkError_TRACE("glClear");
-    ///!!!
+
     GLsizei visible_width  = renderer->frame_width;
     GLsizei visible_height = renderer->frame_height;
     if (overlay) {
@@ -397,8 +397,8 @@ GLboolean IJKGPUImage_GLES2_Renderer_renderOverlay(IJK_GLES2_Renderer *renderer,
         (buffer_width > 0 &&
          buffer_width > visible_width &&
          buffer_width != renderer->buffer_width &&
-         visible_width != renderer->visible_width)){
-            
+         visible_width != renderer->visible_width))
+    {
             renderer->vertices_changed = 0;
             
             IJKGPUImage_GLES2_Renderer_Vertices_apply(renderer);
@@ -413,8 +413,7 @@ GLboolean IJKGPUImage_GLES2_Renderer_renderOverlay(IJK_GLES2_Renderer *renderer,
             IJKGPUImage_GLES2_Renderer_TexCoords_reset(renderer);
             IJKGPUImage_GLES2_Renderer_TexCoords_cropRight(renderer, padding_normalized);
             IJKGPUImage_GLES2_Renderer_TexCoords_reloadVertex(renderer);
-        }
-    
+    }
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);      IJK_GLES2_checkError_TRACE("glDrawArrays");
     //*/
     return GL_TRUE;

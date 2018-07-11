@@ -362,7 +362,7 @@
     self.navItem.rightBarButtonItem = snapshotButtonItem;
     self.navItem.title = NSLocalizedString(@"VideoSnapshotEdit", @"Video Snapshot Edit");
     
-    [self.navBar makeTranslucent];
+    //[self.navBar makeTranslucent];
     //[self.navBar setBackgroundAndShadowColor:[UIColor blackColor]];
     //[self.navBar setBackgroundColor:[UIColor blackColor]];
     //[self.navBar setBarTintColor:[UIColor blackColor]];
