@@ -61,6 +61,18 @@ NSString* durationString(NSTimeInterval duration) {
 
 @implementation PhotoLibraryViewController
 
++(void) load {
+    PHFetchOptions* fetchOptions = [[PHFetchOptions alloc] init];
+    fetchOptions.includeHiddenAssets = NO;
+    fetchOptions.includeAllBurstAssets = NO;
+    fetchOptions.fetchLimit = 1;
+    PHFetchResult* fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
+    [fetchResult enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (NULL != stop)
+            *stop = YES;
+    }];
+}
+
 #pragma mark  UICollectionView Delegate&DataSource
 
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
