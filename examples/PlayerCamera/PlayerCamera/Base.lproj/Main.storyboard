@@ -246,11 +246,12 @@
                         <outlet property="overlayView" destination="dcC-gQ-lwS" id="f63-iw-KkL"/>
                         <outlet property="playOrPauseButton" destination="P8p-xi-Ouz" id="gK6-bd-V14"/>
                         <outlet property="progressSlider" destination="HRy-g7-XYH" id="LdI-at-Q8J"/>
+                        <segue destination="l3p-Fi-9pc" kind="show" identifier="ShowEditor" id="fxj-qy-QT9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-41" y="-539"/>
+            <point key="canvasLocation" x="-42" y="-539"/>
         </scene>
         <!--Video Snapshot View Controller-->
         <scene sceneID="NwA-Wb-49c">

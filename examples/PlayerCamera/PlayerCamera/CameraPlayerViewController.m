@@ -388,6 +388,11 @@
     }];
 }
 
+-(void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    _filterView.frame = self.overlayView.frame;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -411,14 +416,15 @@
     _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     
-    _filterView = [[GPUImageView alloc] initWithFrame:self.overlayView.bounds];
+    _filterView = [[GPUImageView alloc] initWithFrame:self.overlayView.frame];
     _filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     //_filterView.transform = CGAffineTransformMakeScale(1.f, -1.f);
-    [self.overlayView addSubview:_filterView];
+    [self.view addSubview:_filterView];
+    _filterView.translatesAutoresizingMaskIntoConstraints = NO;
     _filterView.fillMode = kGPUImageFillModePreserveAspectRatio;
     
     [self.view bringSubviewToFront:self.overlayView];
-    [self.overlayView sendSubviewToBack:_filterView];
+    [self.overlayView bringSubviewToFront:self.controlPanelView];
     
     UITapGestureRecognizer* tapRecognizer= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapRecognized:)];
     tapRecognizer.numberOfTapsRequired = 2;
