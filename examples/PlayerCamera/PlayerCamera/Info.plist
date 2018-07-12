@@ -38,15 +38,15 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>漫秀需要获得您的同意才能拍摄视频</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string></string>
 	<key>NSLocationUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>为了语音识别转字幕功能，漫秀需要获得您同意使用麦克风</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>漫秀从相册中选取图片供编辑处理时需要获得相册访问权限</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
