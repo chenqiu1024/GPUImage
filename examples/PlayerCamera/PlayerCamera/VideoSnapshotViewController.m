@@ -319,19 +319,6 @@
                         [pSelf dismissSelf:asset];
                     });
                 }];
-                //            UIImage* thumbImage = [snapshot imageScaledToFitMaxSize:CGSizeMake(snapshot.size.width/2, snapshot.size.height/2) orientation:UIImageOrientationUp];
-                //            BOOL succ = [WXApiRequestHandler sendImageData:data
-                //                                                   TagName:kImageTagName
-                //                                                MessageExt:kMessageExt
-                //                                                    Action:kMessageAction
-                //                                                ThumbImage:thumbImage
-                //                                                   InScene:WXSceneTimeline];//WXSceneSession
-                //            NSLog(@"#WX# Send message succ = %d", succ);
-                /*
-                 NSArray *activityItems = @[data0, data1];
-                 UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
-                 [self presentViewController:activityVC animated:TRUE completion:nil];
-                 //*/
             });
         });
     };

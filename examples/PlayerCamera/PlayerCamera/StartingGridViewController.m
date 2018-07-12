@@ -276,7 +276,16 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                 VideoSnapshotViewController* videoVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"VideoSnapshot"];
                 videoVC.sourceVideoFile = filePath;
                 videoVC.completionHandler = ^(PHAsset* phAsset) {
-                    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+                    NSString* localFilePath;
+                    if ([filePath hasPrefix:@"file://"])
+                    {
+                        localFilePath = [filePath substringFromIndex:@"file://".length];
+                    }
+                    else
+                    {
+                        localFilePath = filePath;
+                    }
+                    [[NSFileManager defaultManager] removeItemAtPath:localFilePath error:nil];
                     [self replaceOrAddPHAsset:phAsset atIndexPath:indexPath];
                     [self dismissActivityIndicatorView];
                 };
@@ -454,6 +463,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self dismissActivityIndicatorView];
                         UIActivityViewController* activityVC = [[UIActivityViewController alloc] initWithActivityItems:imageDatas applicationActivities:nil];
+                        activityVC.popoverPresentationController.sourceView = self.view;
                         [self presentViewController:activityVC animated:YES completion:nil];
                     });
                 }

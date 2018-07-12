@@ -16,6 +16,7 @@
 
 "FetchingVideo" = "正在获取视频";
 "ConvertingVideo" = "正在转换视频";
+"ConvertingFailure" = "视频导入失败";
 "ProcessingImages" = "正在处理图片，请稍候……";
 "ShareFailure" = "分享失败，请尝试减少图片数量或减小图片尺寸再试";
 

@@ -38,6 +38,12 @@
         NSString* filePath = [docDirectoryPath stringByAppendingPathComponent:file];
         [fm removeItemAtPath:filePath error:nil];
     }
+    enumerator = [fm enumeratorAtPath:NSTemporaryDirectory()];
+    for (NSString* file in enumerator)
+    {
+        NSString* filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:file];
+        [fm removeItemAtPath:filePath error:nil];
+    }
 #endif
     NSString* thumbnailDirectory = [docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory];
     NSString* videoDirectory = [docDirectoryPath stringByAppendingPathComponent:VideoDirectory];

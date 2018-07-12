@@ -282,6 +282,13 @@ NSString* durationString(NSTimeInterval duration) {
                                 item.resultOject = exporter.outputURL.absoluteString;
                                 [results addObject:item];
                             }
+                            else
+                            {
+                                UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"ConvertingFailure", @"ConvertingFailure") message:exporter.error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+                                UIAlertAction* action = [UIAlertAction actionWithTitle:NSLocalizedString(@"GotIt", @"GotIt") style:UIAlertActionStyleDefault handler:nil];
+                                [alertCtrl addAction:action];
+                                [self showViewController:alertCtrl sender:self];
+                            }
                             if (++jobsDone == _selectedIndexPaths.count)
                             {
                                 [progressTimer invalidate];
