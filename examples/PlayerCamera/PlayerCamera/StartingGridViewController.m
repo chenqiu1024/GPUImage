@@ -403,6 +403,7 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
 
 -(void) confirm {
     UIAlertController* actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    actionSheet.popoverPresentationController.sourceView = self.collectionView;
     UIAlertAction* longImageTimelineAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"ShareLongImageToMoments", @"Long Image To Timeline") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self shareLongImageToWeChatScene:WXSceneTimeline];
     }];
