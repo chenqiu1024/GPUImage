@@ -22,6 +22,8 @@
 
 #define DictateLabelBottomMargin 6.0f
 
+//#define USE_FACE_DETECT
+
 #pragma mark    UIElementsView
 
 CGSize scaleFactor(CGSize sourceSize, CGSize destSize, GPUImageFillModeType fillMode) {
@@ -222,8 +224,9 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 {
     UIColor* WXGreenColor;
 }
-
-//@property (nonatomic, strong) UIElementsView* uiElementsView;
+#ifdef USE_FACE_DETECT
+@property (nonatomic, strong) UIElementsView* uiElementsView;
+#endif
 @property (nonatomic, strong) GPUImagePicture* picture;
 
 @property (nonatomic, weak) IBOutlet UIView* overlayView;
@@ -260,9 +263,9 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
 @end
 
 @implementation SnapshotEditorViewController
-
-//@synthesize uiElementsView;
-
+#ifdef USE_FACE_DETECT
+@synthesize uiElementsView;
+#endif
 -(void) setControlsHidden:(BOOL)hidden {
     self.navBar.hidden = hidden;
     self.toolbar.hidden = hidden;
@@ -483,15 +486,16 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     //[self.overlayView sendSubviewToBack:_filterView];
     
     self.view.backgroundColor = [UIColor clearColor];
-/*
+#ifdef USE_FACE_DETECT
     self.uiElementsView = [[UIElementsView alloc] initWithFrame:self.view.bounds];
     self.uiElementsView.backgroundColor = [UIColor clearColor];
     [self.view insertSubview:self.uiElementsView belowSubview:self.overlayView];
-
+/*
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapped:)];
     tapRecognizer.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:tapRecognizer];
 //*/
+#endif
     _filterView.backgroundColor = [UIColor clearColor];
     self.picture = [[GPUImagePicture alloc] initWithImage:self.image];
     [self.picture addTarget:_filterView];
@@ -524,7 +528,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
         pSelf.filter = filter;
         [pSelf.picture processImage];
     };
-/*
+#ifdef USE_FACE_DETECT
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         IFlyFaceDetector* faceDetector = [IFlyFaceDetector sharedInstance];
         [faceDetector setParameter:@"1" forKey:@"align"];
@@ -538,7 +542,7 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
             [self.uiElementsView setNeedsDisplay];
         });
     });
-//*/
+#endif
     self.speechRecognizerResultString = @"";
     [self initSpeechRecognizer];
     [self startSpeechRecognizer];
