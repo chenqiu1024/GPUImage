@@ -351,6 +351,43 @@ NSString* durationString(NSTimeInterval duration) {
     [self.collectionView reloadData];
 }
 
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusDenied)
+    {
+        UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"PermissionDenied", @"PermissionDenied") message:NSLocalizedString(@"NeedPhotoLibraryPermission", @"NeedPhotoLibraryPermission") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* actionOK = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSURL* url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            if ([[UIApplication sharedApplication] canOpenURL:url])
+            {
+                if (@available(iOS 10.0, *))
+                {
+                    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                    }];
+                }
+                else
+                {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
+            }
+            /*
+             作者：MajorLMJ
+             链接：https://www.jianshu.com/p/b44f309feca0
+             來源：简书
+             简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+             //*/
+        }];
+        [alertCtrl addAction:actionOK];
+        UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alertCtrl addAction:actionCancel];
+        [self presentViewController:alertCtrl animated:NO completion:^{
+            
+        }];
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -7,5 +7,5 @@
 */
 "CFBundleDisplayName" = "漫秀";
 "NSPhotoLibraryUsageDescription" = "漫秀从相册中选取图片供编辑处理时需要获得相册访问权限";
-"NSCameraUsageDescription" = "漫秀需要获得您的同意才能拍摄视频";
+"NSCameraUsageDescription" = "为了使用拍摄视频截取图片功能，漫秀需要获得您的同意才能访问摄像头";
 "NSMicrophoneUsageDescription" = "为了语音识别转字幕功能，漫秀需要获得您同意使用麦克风";

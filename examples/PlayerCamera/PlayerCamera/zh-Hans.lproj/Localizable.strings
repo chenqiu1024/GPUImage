@@ -32,6 +32,11 @@
 
 "ExceedSelectionLimit" = "选择的数量超出上限";
 
+"PermissionDenied" = "需要给予权限";
+"NeedCameraPermission" = "漫秀需要获得您同意才能访问摄像头。为了使用拍摄视频截取图片功能，请在设置中开启摄像头访问权限";
+"NeedMicPermission" = "漫秀需要获得您同意才能访问麦克风。为了使用语音输入字幕功能，请在设置中开启麦克风访问权限";
+"NeedPhotoLibraryPermission" = "漫秀需要获得您同意才能访问相册。为了从相册中选取图片或视频进行编辑，请在设置中开启相册访问权限";
+
 "GotIt" = "知道了";
 "OK" = "好";
 "Cancel" = "取消";

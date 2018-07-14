@@ -28,9 +28,17 @@
 				<string>wxdf2a54deef888d98</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>Prefs</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>8</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>weixin</string>
@@ -38,7 +46,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>漫秀需要获得您的同意才能拍摄视频</string>
+	<string>为了使用拍摄视频截取图片功能，漫秀需要获得您的同意才能访问摄像头</string>
 	<key>NSContactsUsageDescription</key>
 	<string></string>
 	<key>NSLocationAlwaysUsageDescription</key>

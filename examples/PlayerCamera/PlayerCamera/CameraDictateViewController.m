@@ -214,6 +214,86 @@
     [nc addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [nc addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     //*/
+    NSString* mediaType = AVMediaTypeVideo;//读取媒体类型
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];//读取设备授权状态
+    if (authStatus == AVAuthorizationStatusDenied)
+    {
+        UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"PermissionDenied", @"PermissionDenied") message:NSLocalizedString(@"NeedCameraPermission", @"NeedCameraPermission") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* actionOK = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSURL* url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            if ([[UIApplication sharedApplication] canOpenURL:url])
+            {
+                if (@available(iOS 10.0, *))
+                {
+                    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                    }];
+                }
+                else
+                {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
+            }
+            /*
+             作者：MajorLMJ
+             链接：https://www.jianshu.com/p/b44f309feca0
+             來源：简书
+             简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+             //*/
+        }];
+        [alertCtrl addAction:actionOK];
+        UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self releaseSpeechRecognizer];
+            [self stopAndReleaseMovieWriter];
+            [_videoCamera stopCameraCapture];
+            [[NSFileManager defaultManager] removeItemAtPath:self.movieSavePath error:nil];
+            self.movieSavePath = nil;
+            [self dismissViewControllerAnimated:YES completion:nil];
+            if (self.completeHandler)
+            {
+                self.completeHandler(nil, nil);
+            }
+        }];
+        [alertCtrl addAction:actionCancel];
+        [self presentViewController:alertCtrl animated:NO completion:^{
+            
+        }];
+    }
+    else
+    {
+        authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];//读取设备授权状态
+        if (authStatus == AVAuthorizationStatusDenied)
+        {
+            UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"PermissionDenied", @"PermissionDenied") message:NSLocalizedString(@"NeedMicPermission", @"NeedMicPermission") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* actionOK = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL* url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                if ([[UIApplication sharedApplication] canOpenURL:url])
+                {
+                    if (@available(iOS 10.0, *))
+                    {
+                        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                        }];
+                    }
+                    else
+                    {
+                        [[UIApplication sharedApplication] openURL:url];
+                    }
+                }
+                /*
+                 作者：MajorLMJ
+                 链接：https://www.jianshu.com/p/b44f309feca0
+                 來源：简书
+                 简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+                 //*/
+            }];
+            [alertCtrl addAction:actionOK];
+            UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alertCtrl addAction:actionCancel];
+            [self presentViewController:alertCtrl animated:NO completion:^{
+                
+            }];
+        }
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
