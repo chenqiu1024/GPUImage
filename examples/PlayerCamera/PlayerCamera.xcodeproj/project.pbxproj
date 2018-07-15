@@ -11,7 +11,6 @@
 		520DA6DC1ED7248C009E4705 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6DB1ED7248C009E4705 /* AppDelegate.m */; };
 		520DA6DF1ED7248C009E4705 /* CameraPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6DE1ED7248C009E4705 /* CameraPlayerViewController.m */; };
 		520DA6E41ED7248C009E4705 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E31ED7248C009E4705 /* Assets.xcassets */; };
-		520DA6E71ED7248C009E4705 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 520DA6E51ED7248C009E4705 /* LaunchScreen.storyboard */; };
 		520DA6F21ED7248C009E4705 /* PlayerCameraUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DA6F11ED7248C009E4705 /* PlayerCameraUITests.m */; };
 		520DA7291ED72AC1009E4705 /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 520DA71A1ED72823009E4705 /* libGPUImage.a */; };
 		520DA72B1ED72AC7009E4705 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 520DA72A1ED72AC7009E4705 /* CoreMedia.framework */; };
@@ -749,7 +748,6 @@
 				BB21A15020F4A9A800908D91 /* Localizable.strings in Resources */,
 				5281155420ED373300E2B133 /* Main.storyboard in Resources */,
 				5279F99E20F3B583000920CE /* dotletterstiles.png in Resources */,
-				520DA6E71ED7248C009E4705 /* LaunchScreen.storyboard in Resources */,
 				520DA6E41ED7248C009E4705 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
