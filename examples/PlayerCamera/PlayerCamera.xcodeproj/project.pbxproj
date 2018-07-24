@@ -1049,6 +1049,7 @@
 					../../../ijkplayer_iOS/ios/build/universal/include,
 					"PlayerCamera/freetype-2.9.1/**",
 					../../framework/Source,
+					../../framework/GPUImage/Utils,
 				);
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1094,6 +1095,7 @@
 					../../../ijkplayer_iOS/ios/build/universal/include,
 					"PlayerCamera/freetype-2.9.1/**",
 					../../framework/Source,
+					../../framework/GPUImage/Utils,
 				);
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
