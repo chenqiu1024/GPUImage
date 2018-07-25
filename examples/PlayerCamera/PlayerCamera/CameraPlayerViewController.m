@@ -507,7 +507,7 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
+{DoctorLog(@"#VideoCapture# %s @ line%d", __FUNCTION__, __LINE__);
     // Map UIDeviceOrientation to UIInterfaceOrientation.
     UIInterfaceOrientation orient = UIInterfaceOrientationPortrait;
     switch ([[UIDevice currentDevice] orientation])
