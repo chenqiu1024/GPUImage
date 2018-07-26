@@ -2054,21 +2054,21 @@ int media_player_msg_loop(void* arg)
 - (void)applicationWillResignActive
 {
     NSLog(@"IJKFFMoviePlayerController:applicationWillResignActive: %d", (int)[UIApplication sharedApplication].applicationState);
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         if (_pauseInBackground) {
             [self pause:NO];
         }
-    });
+    //});
 }
 
 - (void)applicationDidEnterBackground
 {
     NSLog(@"IJKFFMoviePlayerController:applicationDidEnterBackground: %d", (int)[UIApplication sharedApplication].applicationState);
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         if (_pauseInBackground) {
             [self pause:NO];
         }
-    });
+    //});
 }
 
 - (void)applicationWillTerminate
@@ -2130,6 +2130,9 @@ int media_player_msg_loop(void* arg)
     if (NULL == overlay)
         return;
 
+    if (_mediaPlayer->mp_state == MP_STATE_PAUSED)
+        return;
+    
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
         
