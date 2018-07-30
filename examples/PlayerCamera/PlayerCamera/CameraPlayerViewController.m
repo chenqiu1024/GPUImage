@@ -668,7 +668,7 @@
         streamIndex++;
     }
     
-    if ((hasAnythingToSelect)
+    if (hasAnythingToSelect)
     {
         UIBarButtonItem* moreButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_more"] style:UIBarButtonItemStylePlain target:self action:@selector(showSubtitleAndAudioSelector)];
         self.navItem.rightBarButtonItem = moreButtonItem;
