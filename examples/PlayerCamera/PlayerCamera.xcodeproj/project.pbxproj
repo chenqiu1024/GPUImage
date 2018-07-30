@@ -970,7 +970,20 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../framework/Source/iOS,
+					"../../../ijkplayer_iOS/**",
+					"PlayerCamera/freetype-2.9.1",
+					../../framework/Source,
+					../../framework/GPUImage/Utils,
+					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/ijkmedia/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					../../../ijkplayer_iOS/ios/build/universal/lib,
+					"$(PROJECT_DIR)/PlayerCamera/freetype-2.9.1",
+					"$(PROJECT_DIR)/PlayerCamera/WeChat",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1014,7 +1027,20 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../framework/Source/iOS,
+					"../../../ijkplayer_iOS/**",
+					"PlayerCamera/freetype-2.9.1",
+					../../framework/Source,
+					../../framework/GPUImage/Utils,
+					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/ijkmedia/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					../../../ijkplayer_iOS/ios/build/universal/lib,
+					"$(PROJECT_DIR)/PlayerCamera/freetype-2.9.1",
+					"$(PROJECT_DIR)/PlayerCamera/WeChat",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1042,23 +1068,11 @@
 					"PRODUCT_ID=1",
 					"DEBUG=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					"../../framework/Source/iOS/**",
-					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
-					"../../../ijkplayer_iOS/ijkmedia/**",
-					../../../ijkplayer_iOS/ios/build/universal/include,
-					"PlayerCamera/freetype-2.9.1/**",
-					../../framework/Source,
-					../../framework/GPUImage/Utils,
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					../../../ijkplayer_iOS/ios/build/universal/lib,
-					"$(PROJECT_DIR)/PlayerCamera/freetype-2.9.1",
-					"$(PROJECT_DIR)/PlayerCamera/WeChat",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-Objc",
@@ -1088,23 +1102,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCT_ID=1";
-				HEADER_SEARCH_PATHS = (
-					"../../framework/Source/iOS/**",
-					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
-					"../../../ijkplayer_iOS/ijkmedia/**",
-					../../../ijkplayer_iOS/ios/build/universal/include,
-					"PlayerCamera/freetype-2.9.1/**",
-					../../framework/Source,
-					../../framework/GPUImage/Utils,
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = PlayerCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					../../../ijkplayer_iOS/ios/build/universal/lib,
-					"$(PROJECT_DIR)/PlayerCamera/freetype-2.9.1",
-					"$(PROJECT_DIR)/PlayerCamera/WeChat",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-Objc",
@@ -1160,22 +1162,11 @@
 					"PRODUCT_ID=2",
 					"DEBUG=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					"../../framework/Source/iOS/**",
-					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
-					"../../../ijkplayer_iOS/ijkmedia/**",
-					../../../ijkplayer_iOS/ios/build/universal/include,
-					"PlayerCamera/freetype-2.9.1/**",
-					../../framework/Source,
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "GridShow-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					../../../ijkplayer_iOS/ios/build/universal/lib,
-					"$(PROJECT_DIR)/PlayerCamera/freetype-2.9.1",
-					"$(PROJECT_DIR)/PlayerCamera/WeChat",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-Objc",
@@ -1205,22 +1196,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCT_ID=2";
-				HEADER_SEARCH_PATHS = (
-					"../../framework/Source/iOS/**",
-					"../../../ijkplayer_iOS/ios/IJKMediaPlayer/IJKMediaPlayer/**",
-					"../../../ijkplayer_iOS/ijkmedia/**",
-					../../../ijkplayer_iOS/ios/build/universal/include,
-					"PlayerCamera/freetype-2.9.1/**",
-					../../framework/Source,
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "GridShow-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					../../../ijkplayer_iOS/ios/build/universal/lib,
-					"$(PROJECT_DIR)/PlayerCamera/freetype-2.9.1",
-					"$(PROJECT_DIR)/PlayerCamera/WeChat",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-all_load",
