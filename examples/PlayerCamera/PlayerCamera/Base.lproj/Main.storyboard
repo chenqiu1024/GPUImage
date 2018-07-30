@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,13 +22,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="jWb-Nh-MyQ" userLabel="Mine"/>
+                    <tabBarItem key="tabBarItem" title="设置" id="jWb-Nh-MyQ" userLabel="Mine"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H3h-QN-lUC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-822" y="126"/>
         </scene>
-        <!--Videos-->
+        <!--片库-->
         <scene sceneID="tBN-WD-HHF">
             <objects>
                 <viewController id="3H3-gd-bui" customClass="VideoCollectionViewController" sceneMemberID="viewController">
@@ -92,7 +90,7 @@
                             <constraint firstItem="bna-9z-T8C" firstAttribute="top" secondItem="PJ7-WB-N1P" secondAttribute="bottom" id="z02-GA-Uwa"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Videos" id="tyG-gC-f8M"/>
+                    <tabBarItem key="tabBarItem" title="片库" id="tyG-gC-f8M"/>
                     <connections>
                         <outlet property="videoCollectionView" destination="bna-9z-T8C" id="X9s-3b-iWV"/>
                     </connections>
@@ -154,7 +152,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P8p-xi-Ouz" userLabel="PlayAndPause">
-                                                <rect key="frame" x="159" y="16" width="16" height="22"/>
+                                                <rect key="frame" x="159.5" y="16" width="16" height="22"/>
                                                 <state key="normal" image="btn_player_pause.png"/>
                                                 <connections>
                                                     <action selector="onClickPlayOrPause:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jtR-xR-KxZ"/>
@@ -206,7 +204,7 @@
                                         </items>
                                     </navigationBar>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wpo-Ca-flw">
-                                        <rect key="frame" x="106" y="300" width="163.5" height="48.5"/>
+                                        <rect key="frame" x="106" y="299.5" width="163.5" height="48.5"/>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="42"/>
                                         <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                         <nil key="highlightedColor"/>

@@ -81,36 +81,50 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
     self.tableView.contentInset = UIEdgeInsetsMake(20.0f, 0.0f, 0.0f, 0.0f);
 }
 
+-(NSInteger) audioSection {
+    if (!_audios || 0 == _audios.count)
+        return -1;
+    else
+        return 0;
+}
+
+-(NSInteger) subtitleSection {
+    if (!_subtitles || 0 == _subtitles.count)
+        return -1;
+    else
+        return [self audioSection] + 1;
+}
+
+-(NSInteger) confirmButtonSection {
+    return [self subtitleSection] + 1;
+}
+
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    NSInteger sections = 1;
-    if (_audios.count > 0) sections++;
-    if (_subtitles.count > 0) sections++;
-    return sections;
+    return [self confirmButtonSection] + 1;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0)
+    if (section == [self audioSection])
         return _audios.count;
-    else if (section == 1)
+    else if (section == [self subtitleSection])
         return _subtitles.count;
     return 1;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 2) return 0;
-    return 24.f;
+    if (section == [self audioSection])
+        return 24.f;
+    else if (section == [self subtitleSection])
+        return 24.f;
+    return 0;
 }
 
 -(NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    switch (section)
-    {
-        case 0:
-            return @"Audio(s):";
-        case 1:
-            return @"Subtitle(s):";
-        default:
-            return nil;
-    }
+    if (section == [self audioSection])
+        return @"Audio(s):";
+    else if (section == [self subtitleSection])
+        return @"Subtitle(s):";
+    return nil;
 }
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -122,56 +136,48 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     }
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
-    switch (indexPath.section)
+    if (indexPath.section == [self audioSection])
     {
-        case 0:
+        cell.textLabel.text = _audios[indexPath.row];
+        NSNumber* streamIndex = [_audioIndex2StreamIndex objectForKey:@(indexPath.row)];
+        if (streamIndex.integerValue == _selectedAudio)
         {
-            cell.textLabel.text = _audios[indexPath.row];
-            NSNumber* streamIndex = [_audioIndex2StreamIndex objectForKey:@(indexPath.row)];
-            if (streamIndex.integerValue == _selectedAudio)
-            {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            }
-            else
-            {
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
-            break;
-        case 1:
+        else
         {
-            cell.textLabel.text = _subtitles[indexPath.row];
-            NSNumber* streamIndex = [_subtitleIndex2StreamIndex objectForKey:@(indexPath.row)];
-            if (streamIndex.integerValue == _selectedSubtitle)
-            {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            }
-            else
-            {
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
-            break;
-        case 2:
+    }
+    else if (indexPath.section == [self subtitleSection])
+    {
+        cell.textLabel.text = _subtitles[indexPath.row];
+        NSNumber* streamIndex = [_subtitleIndex2StreamIndex objectForKey:@(indexPath.row)];
+        if (streamIndex.integerValue == _selectedSubtitle)
         {
-            UILabel* label = [[UILabel alloc] init];
-            label.text = @"OK";
-            [label sizeToFit];
-            label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-            [cell.contentView addSubview:label];
-            [label setCenter:cell.contentView.center];
-            //            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            //            cell.textLabel.text = @"OK";
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
-            break;
-        default:
-            break;
+        else
+        {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+    }
+    else if (indexPath.section == [self confirmButtonSection])
+    {
+        UILabel* label = [[UILabel alloc] init];
+        label.text = @"OK";
+        [label sizeToFit];
+        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [cell.contentView addSubview:label];
+        [label setCenter:cell.contentView.center];
+        //            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        //            cell.textLabel.text = @"OK";
     }
     return cell;
 }
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (0 == indexPath.section)
+    if ([self audioSection] == indexPath.section)
     {
         NSNumber* streamIndex = [_audioIndex2StreamIndex objectForKey:@(indexPath.row)];
         _selectedAudio = streamIndex.integerValue;
@@ -180,7 +186,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
             _selectedHandler(_selectedAudio);
         }
     }
-    else if (1 == indexPath.section)
+    else if ([self subtitleSection] == indexPath.section)
     {
         NSNumber* streamIndex = [_subtitleIndex2StreamIndex objectForKey:@(indexPath.row)];
         _selectedSubtitle = streamIndex.integerValue;
@@ -189,7 +195,7 @@ static NSString* SelectionTableViewButtonCellIdentifier = @"SelectionTableViewBu
             _selectedHandler(_selectedSubtitle);
         }
     }
-    else if (2 == indexPath.section)
+    else if ([self confirmButtonSection] == indexPath.section)
     {
         [self dismissViewControllerAnimated:NO completion:^{
             if (_completion)
