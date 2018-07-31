@@ -550,13 +550,36 @@
     UIImage* image = [_filter imageFromCurrentFramebuffer];
     if (image)
     {
+        /*
         [_ijkMovie pause];
-        //*
         [self performSegueWithIdentifier:@"ShowEditor" sender:image];
+        //SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
+        //editorVC.image = image;
+        //[self presentViewController:editorVC animated:YES completion:nil];
         /*/
-        SnapshotEditorViewController* editorVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SnapshotEditor"];
-        editorVC.image = image;
-        [self presentViewController:editorVC animated:YES completion:nil];
+        //[self onClickPlayOrPause:self.playOrPauseButton];
+        static NSTimer* tickTimer = nil;
+        /*static dispatch_once_t predicate;
+        dispatch_once(&predicate, ^{
+            tickTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f repeats:YES block:^(NSTimer * _Nonnull timer) {
+                _ijkMovie.currentPlaybackTime = _ijkMovie.currentPlaybackTime - 0.033f;
+            }];
+        });//*/
+        if (!tickTimer)
+        {
+            //[_ijkMovie pause];
+            tickTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f repeats:YES block:^(NSTimer * _Nonnull timer) {
+                _ijkMovie.currentPlaybackTime = _ijkMovie.currentPlaybackTime - 0.033f;
+            }];
+            //[[NSRunLoop currentRunLoop] addTimer:tickTimer forMode:NSDefaultRunLoopMode];
+            [_ijkMovie setPlaybackRate:-1.f];
+        }
+        else
+        {
+            [tickTimer invalidate];
+            tickTimer = nil;
+            [_ijkMovie setPlaybackRate:1.f];
+        }
         //*/
     }
 }
