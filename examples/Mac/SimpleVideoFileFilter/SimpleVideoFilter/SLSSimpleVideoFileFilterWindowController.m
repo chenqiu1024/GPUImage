@@ -48,7 +48,9 @@
 }
 
 - (void)runProcessingWithAVPlayerItem:(BOOL)withAVPlayerItem {
-    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
+//    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
+//    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/Gyro/VID_20170823_094312AA.MP4"];
+    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/TwirlingVRAudio/VID_20180806_185402AA.MP4"];
     
     self.playerItem = [[AVPlayerItem alloc] initWithURL:sampleURL];
     self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
