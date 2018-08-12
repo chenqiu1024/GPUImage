@@ -14,4 +14,6 @@
 
 +(UIImage*) longImageWithImages:(NSArray<UIImage* >*)images;
 
++(UIImage*) fixOrientation:(UIImage*)aImage;
+
 @end

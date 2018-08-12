@@ -48,15 +48,16 @@
 }
 
 - (void)runProcessingWithAVPlayerItem:(BOOL)withAVPlayerItem {
-    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
-    
+//    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
+    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
+
     self.playerItem = [[AVPlayerItem alloc] initWithURL:sampleURL];
     self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
     
     //movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
     movieFile = [[GPUImageMovie alloc] initWithPlayerItem:self.playerItem];
     movieFile.runBenchmark = YES;
-    movieFile.playAtActualSpeed = NO;
+    movieFile.playAtActualSpeed = YES;
     filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
     
@@ -87,7 +88,8 @@
                                            selector:@selector(retrievingProgress)
                                            userInfo:nil
                                             repeats:YES];
-    
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+
     [movieWriter setCompletionBlock:^{
         [filter removeTarget:movieWriter];
         [movieWriter finishRecording];

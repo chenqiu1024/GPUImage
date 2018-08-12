@@ -447,6 +447,31 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     [self.picture processImage];
 }
 
+-(void) reloadPicture:(UIImage*)image {
+    if (!self.filter)
+    {
+        [self.picture removeTarget:self.filterView];
+    }
+    else
+    {
+        [self.filter removeTarget:self.filterView];
+        [self.picture removeTarget:self.filter];
+    }
+    
+    self.image = image;
+    self.picture = [[GPUImagePicture alloc] initWithImage:image];
+    if (self.filter)
+    {
+        [self.picture addTarget:self.filter];
+        [self.filter addTarget:self.filterView];
+    }
+    else
+    {
+        [self.picture addTarget:self.filterView];
+    }
+    [self.picture processImage];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"sPLVC Next VC begin to load");
@@ -505,28 +530,8 @@ NSArray* transformFaceDetectResults(NSArray* personFaces, CGSize sourceSize, CGS
     __weak typeof(self) wSelf = self;
     self.filterCollectionView.filterSelectedHandler = ^(GPUImageFilter* filter) {
         __strong typeof(self) pSelf = wSelf;
-        if (!pSelf.filter)
-        {
-            [pSelf.picture removeTarget:pSelf.filterView];
-        }
-        else
-        {
-            [pSelf.filter removeTarget:pSelf.filterView];
-            [pSelf.picture removeTarget:pSelf.filter];
-        }
-        
-        pSelf.picture = [[GPUImagePicture alloc] initWithImage:pSelf.image];
-        if (filter)
-        {
-            [pSelf.picture addTarget:filter];
-            [filter addTarget:pSelf.filterView];
-        }
-        else
-        {
-            [pSelf.picture addTarget:pSelf.filterView];
-        }
         pSelf.filter = filter;
-        [pSelf.picture processImage];
+        [pSelf reloadPicture:pSelf.image];
     };
 #ifdef USE_FACE_DETECT
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

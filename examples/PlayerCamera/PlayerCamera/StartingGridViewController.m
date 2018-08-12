@@ -324,7 +324,9 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
             }
         };
         [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            UIImage* image = [UIImage imageWithData:imageData];
+            UIImage* originalImage = [UIImage imageWithData:imageData];
+            UIImage* image = [UIImage fixOrientation:originalImage];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissActivityIndicatorView];
                 if (!image)
@@ -368,7 +370,8 @@ static NSString* StartingGridCellIdentifier = @"StartingGrid";
     {
         PHAsset* phAsset = phAssets[i];
         [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:requestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            UIImage* img = [UIImage imageWithData:imageData];
+            UIImage* originalImage = [UIImage imageWithData:imageData];
+            UIImage* img = [UIImage fixOrientation:originalImage];
             if (img)
             {
                 [index2Image setObject:img forKey:@(i)];
