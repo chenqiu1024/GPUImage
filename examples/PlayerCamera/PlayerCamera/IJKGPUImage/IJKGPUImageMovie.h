@@ -78,6 +78,8 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 
 @interface IJKGPUImageMovie : GPUImageOutput<IJKMediaPlayback>
 
+@property (nonatomic, assign) UIImageOrientation orientation;
+
 @property (nonatomic, assign) BOOL mute;
 
 @property (nonatomic, assign) BOOL withSpeechRecognition;

@@ -8,6 +8,7 @@
 
 #import "IJKGPUImage_GLES2_Renderer.h"
 #import "ijksdl/gles2/internal.h"
+#import <GPUImage.h>
 
 static void IJKGPUImage_GLES2_printProgramInfo(GLuint program)
 {
@@ -237,13 +238,16 @@ static void IJKGPUImage_GLES2_Renderer_Vertices_apply(IJK_GLES2_Renderer *render
     
     float width     = renderer->frame_width;
     float height    = renderer->frame_height;
+    float boundWidth, boundHeight;
+    boundWidth = renderer->layer_width;
+    boundHeight = renderer->layer_height;
     
     if (renderer->frame_sar_num > 0 && renderer->frame_sar_den > 0) {
         width = width * renderer->frame_sar_num / renderer->frame_sar_den;
     }
     
-    const float dW  = (float)renderer->layer_width    / width;
-    const float dH  = (float)renderer->layer_height / height;
+    const float dW  = boundWidth    / width;
+    const float dH  = boundHeight / height;
     float dd        = 1.0f;
     float nW        = 1.0f;
     float nH        = 1.0f;
@@ -253,9 +257,9 @@ static void IJKGPUImage_GLES2_Renderer_Vertices_apply(IJK_GLES2_Renderer *render
         case IJK_GLES2_GRAVITY_RESIZE_ASPECT:       dd = FFMIN(dW, dH); break;
     }
     
-    nW = (width  * dd / (float)renderer->layer_width);
-    nH = (height * dd / (float)renderer->layer_height);
-    
+    nW = (width  * dd / boundWidth);
+    nH = (height * dd / boundHeight);
+    // 0:LB, 1:RB, 2:LT, 3:RT
     renderer->vertices[0] = - nW;
     renderer->vertices[1] = - nH;
     renderer->vertices[2] =   nW;
@@ -296,29 +300,120 @@ GLboolean IJKGPUImage_GLES2_Renderer_setGravity(IJK_GLES2_Renderer *renderer, in
 }
 
 static void IJKGPUImage_GLES2_Renderer_TexCoords_reset(IJK_GLES2_Renderer *renderer)
-{
+{// 0:LB, 1:RB, 2:LT, 3:RT
     // Mirror in Y axis:
-    renderer->texcoords[0] = 0.0f;
-    renderer->texcoords[1] = 0.0f;
-    renderer->texcoords[2] = 1.0f;
-    renderer->texcoords[3] = 0.0f;
-    renderer->texcoords[4] = 0.0f;
-    renderer->texcoords[5] = 1.0f;
-    renderer->texcoords[6] = 1.0f;
-    renderer->texcoords[7] = 1.0f;
+    switch (renderer->orientation)
+    {
+        case UIImageOrientationUp:
+            renderer->texcoords[0] = 0.0f;
+            renderer->texcoords[1] = 0.0f;
+            renderer->texcoords[2] = 1.0f;
+            renderer->texcoords[3] = 0.0f;
+            renderer->texcoords[4] = 0.0f;
+            renderer->texcoords[5] = 1.0f;
+            renderer->texcoords[6] = 1.0f;
+            renderer->texcoords[7] = 1.0f;
+            break;
+        case UIImageOrientationUpMirrored:
+            renderer->texcoords[0] = 1.0f;
+            renderer->texcoords[1] = 0.0f;
+            renderer->texcoords[2] = 0.0f;
+            renderer->texcoords[3] = 0.0f;
+            renderer->texcoords[4] = 1.0f;
+            renderer->texcoords[5] = 1.0f;
+            renderer->texcoords[6] = 0.0f;
+            renderer->texcoords[7] = 1.0f;
+            break;
+        case UIImageOrientationDown:
+            renderer->texcoords[0] = 0.0f;
+            renderer->texcoords[1] = 1.0f;
+            renderer->texcoords[2] = 1.0f;
+            renderer->texcoords[3] = 1.0f;
+            renderer->texcoords[4] = 0.0f;
+            renderer->texcoords[5] = 0.0f;
+            renderer->texcoords[6] = 1.0f;
+            renderer->texcoords[7] = 0.0f;
+            break;
+        case UIImageOrientationDownMirrored:
+            renderer->texcoords[0] = 1.0f;
+            renderer->texcoords[1] = 1.0f;
+            renderer->texcoords[2] = 0.0f;
+            renderer->texcoords[3] = 1.0f;
+            renderer->texcoords[4] = 1.0f;
+            renderer->texcoords[5] = 0.0f;
+            renderer->texcoords[6] = 0.0f;
+            renderer->texcoords[7] = 0.0f;
+            break;
+        case UIImageOrientationRight:
+            renderer->texcoords[0] = 0.0f;
+            renderer->texcoords[1] = 1.0f;
+            renderer->texcoords[2] = 0.0f;
+            renderer->texcoords[3] = 0.0f;
+            renderer->texcoords[4] = 1.0f;
+            renderer->texcoords[5] = 1.0f;
+            renderer->texcoords[6] = 1.0f;
+            renderer->texcoords[7] = 0.0f;
+            break;
+        case UIImageOrientationRightMirrored:
+            renderer->texcoords[0] = 1.0f;
+            renderer->texcoords[1] = 1.0f;
+            renderer->texcoords[2] = 1.0f;
+            renderer->texcoords[3] = 0.0f;
+            renderer->texcoords[4] = 0.0f;
+            renderer->texcoords[5] = 1.0f;
+            renderer->texcoords[6] = 0.0f;
+            renderer->texcoords[7] = 0.0f;
+            break;
+        case UIImageOrientationLeft:
+            renderer->texcoords[0] = 1.0f;
+            renderer->texcoords[1] = 0.0f;
+            renderer->texcoords[2] = 1.0f;
+            renderer->texcoords[3] = 1.0f;
+            renderer->texcoords[4] = 0.0f;
+            renderer->texcoords[5] = 0.0f;
+            renderer->texcoords[6] = 0.0f;
+            renderer->texcoords[7] = 1.0f;
+            break;
+        case UIImageOrientationLeftMirrored:
+            renderer->texcoords[0] = 0.0f;
+            renderer->texcoords[1] = 0.0f;
+            renderer->texcoords[2] = 0.0f;
+            renderer->texcoords[3] = 1.0f;
+            renderer->texcoords[4] = 1.0f;
+            renderer->texcoords[5] = 0.0f;
+            renderer->texcoords[6] = 1.0f;
+            renderer->texcoords[7] = 1.0f;
+            break;
+    }
 }
 
 static void IJKGPUImage_GLES2_Renderer_TexCoords_cropRight(IJK_GLES2_Renderer *renderer, GLfloat cropRight)
 {
     ALOGE("IJK_GLES2_Renderer_TexCoords_cropRight\n");
-    renderer->texcoords[0] = 0.0f;
-    renderer->texcoords[1] = 0.0f;
-    renderer->texcoords[2] = 1.0f - cropRight;
-    renderer->texcoords[3] = 0.0f;
-    renderer->texcoords[4] = 0.0f;
-    renderer->texcoords[5] = 1.0f;
-    renderer->texcoords[6] = 1.0f - cropRight;
-    renderer->texcoords[7] = 1.0f;
+    // 0:LB, 1:RB, 2:LT, 3:RT
+    switch (renderer->orientation)
+    {
+        case UIImageOrientationUp:
+        case UIImageOrientationDown:
+            renderer->texcoords[2] = 1.0f - cropRight;
+            renderer->texcoords[6] = 1.0f - cropRight;
+            break;
+        case UIImageOrientationUpMirrored:
+        case UIImageOrientationDownMirrored:
+            renderer->texcoords[0] = 1.0f - cropRight;
+            renderer->texcoords[4] = 1.0f - cropRight;
+            break;
+        case UIImageOrientationRight:
+        case UIImageOrientationLeftMirrored:
+            renderer->texcoords[4] = 1.0f - cropRight;
+            renderer->texcoords[6] = 1.0f - cropRight;
+            break;
+        case UIImageOrientationRightMirrored:
+        case UIImageOrientationLeft:
+            renderer->texcoords[0] = 1.0f - cropRight;
+            renderer->texcoords[2] = 1.0f - cropRight;
+            break;
+    }
 }
 
 static void IJKGPUImage_GLES2_Renderer_TexCoords_reloadVertex(IJK_GLES2_Renderer *renderer)

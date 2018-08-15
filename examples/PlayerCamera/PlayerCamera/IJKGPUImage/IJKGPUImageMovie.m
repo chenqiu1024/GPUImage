@@ -2103,6 +2103,9 @@ int media_player_msg_loop(void* arg)
 //*/
     IJKGPUImage_GLES2_Renderer_setGravity(_renderer, IJK_GLES2_GRAVITY_RESIZE_ASPECT, _inputVideoSize.width, _inputVideoSize.height);
     
+    _renderer->orientation = self.orientation;
+    _renderer->vertices_changed = 1;
+
     return YES;
 }
 
@@ -2135,8 +2138,24 @@ int media_player_msg_loop(void* arg)
     
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
-        
-        _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
+        switch (self.orientation)
+        {
+            case UIImageOrientationUp:
+            case UIImageOrientationUpMirrored:
+            case UIImageOrientationDown:
+            case UIImageOrientationDownMirrored:
+                _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
+                break;
+            case UIImageOrientationLeft:
+            case UIImageOrientationLeftMirrored:
+            case UIImageOrientationRight:
+            case UIImageOrientationRightMirrored:
+                _inputVideoSize = CGSizeMake(overlay->h, overlay->w);
+                break;
+            default:
+                _inputVideoSize = CGSizeMake(overlay->w, overlay->h);
+                break;
+        }
         //if (!outputFramebuffer || !CGSizeEqualToSize(outputFramebuffer.size, _inputVideoSize))
         {
             outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:_inputVideoSize onlyTexture:NO];
