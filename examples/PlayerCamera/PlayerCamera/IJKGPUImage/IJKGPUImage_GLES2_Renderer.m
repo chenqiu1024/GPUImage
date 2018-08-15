@@ -238,16 +238,29 @@ static void IJKGPUImage_GLES2_Renderer_Vertices_apply(IJK_GLES2_Renderer *render
     
     float width     = renderer->frame_width;
     float height    = renderer->frame_height;
-    float boundWidth, boundHeight;
-    boundWidth = renderer->layer_width;
-    boundHeight = renderer->layer_height;
     
     if (renderer->frame_sar_num > 0 && renderer->frame_sar_den > 0) {
         width = width * renderer->frame_sar_num / renderer->frame_sar_den;
     }
     
-    const float dW  = boundWidth    / width;
-    const float dH  = boundHeight / height;
+    switch (renderer->orientation)
+    {
+        case UIImageOrientationRightMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationLeft:
+        {
+            float tmp = height;
+            height = width;
+            width = tmp;
+        }
+            break;
+        default:
+            break;
+    }
+    
+    const float dW  = renderer->layer_width    / width;
+    const float dH  = renderer->layer_height / height;
     float dd        = 1.0f;
     float nW        = 1.0f;
     float nH        = 1.0f;
@@ -257,8 +270,8 @@ static void IJKGPUImage_GLES2_Renderer_Vertices_apply(IJK_GLES2_Renderer *render
         case IJK_GLES2_GRAVITY_RESIZE_ASPECT:       dd = FFMIN(dW, dH); break;
     }
     
-    nW = (width  * dd / boundWidth);
-    nH = (height * dd / boundHeight);
+    nW = (width  * dd / renderer->layer_width);
+    nH = (height * dd / renderer->layer_height);
     // 0:LB, 1:RB, 2:LT, 3:RT
     renderer->vertices[0] = - nW;
     renderer->vertices[1] = - nH;

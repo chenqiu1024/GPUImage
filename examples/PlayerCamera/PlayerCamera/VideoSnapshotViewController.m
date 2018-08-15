@@ -262,8 +262,13 @@
     self.filterView.snapshotCompletion = ^(UIImage* image) {
         if (!image)
             return;
+        ///!!!For Debug:
+        NSString* path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"snapshot.jpg"];
+        NSData* jpgData = UIImageJPEGRepresentation(image, 1.f);
+        [jpgData writeToFile:path atomically:NO];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             __strong typeof(self) pSelf = wSelf;
             [pSelf hideControls];
             pSelf.view.userInteractionEnabled = NO;
