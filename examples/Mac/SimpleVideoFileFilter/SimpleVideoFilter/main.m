@@ -7,7 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SLSSimpleVideoFileFilterWindowController.h"
 
 int main(int argc, const char * argv[]) {
+    if (argc > 1)
+    {
+        g_inputMP4Path = [NSString stringWithUTF8String:argv[1]];
+    }
     return NSApplicationMain(argc, argv);
 }

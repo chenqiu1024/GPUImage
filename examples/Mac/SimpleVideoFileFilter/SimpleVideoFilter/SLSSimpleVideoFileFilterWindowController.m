@@ -1,5 +1,8 @@
 #import "SLSSimpleVideoFileFilterWindowController.h"
+#import "MadvMP4BoxParser.hpp"
 #import <GPUImage/GPUImage.h>
+
+NSString* g_inputMP4Path;
 
 @interface SLSSimpleVideoFileFilterWindowController ()
 {
@@ -49,9 +52,10 @@
 
 - (void)runProcessingWithAVPlayerItem {
 //    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
-    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
+//    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
 //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/Gyro/VID_20170823_094312AA.MP4"];
 //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/TwirlingVRAudio/VID_20180806_185402AA.MP4"];
+    NSURL* sampleURL = [NSURL fileURLWithPath:g_inputMP4Path];
     
     AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:sampleURL];
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
@@ -118,9 +122,11 @@
 
 - (void)runProcessingWithURL {
     //    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
-    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
+//    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
     //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/Gyro/VID_20170823_094312AA.MP4"];
     //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/TwirlingVRAudio/VID_20180806_185402AA.MP4"];
+    NSURL* sampleURL = [NSURL fileURLWithPath:g_inputMP4Path];
+    parseMadvMP4Boxes(g_inputMP4Path.UTF8String);
     
     self.player = [AVPlayer playerWithURL:sampleURL];
     

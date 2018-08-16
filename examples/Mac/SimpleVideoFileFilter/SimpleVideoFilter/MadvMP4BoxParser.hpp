@@ -11,4 +11,14 @@
 
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+bool parseMadvMP4Boxes(const char* mp4Path);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* MadvMP4BoxParser_hpp */
