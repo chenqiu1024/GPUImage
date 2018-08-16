@@ -2138,7 +2138,7 @@ int media_player_msg_loop(void* arg)
     
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
-        ///!!!self.orientation = UIImageOrientationRight;
+        //self.orientation = UIImageOrientationRight;
         switch (self.orientation)
         {
             case UIImageOrientationUp:
