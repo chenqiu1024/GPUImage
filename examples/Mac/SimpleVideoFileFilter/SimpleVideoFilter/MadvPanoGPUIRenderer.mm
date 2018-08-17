@@ -2,6 +2,11 @@
 #import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <AVFoundation/AVFoundation.h>
 
+@interface MadvPanoGPUIRenderer ()
+{
+    MadvGLRenderer* _renderer;
+}
+@end
 
 @implementation MadvPanoGPUIRenderer
 
@@ -20,6 +25,11 @@
     
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
+        Vec2f lutSourceSize = { DEFAULT_LUT_VALUE_WIDTH, DEFAULT_LUT_VALUE_HEIGHT };
+        _renderer = new MadvGLRenderer(NULL, lutSourceSize, lutSourceSize, 180, 90);
+//        AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
+        _renderer->setIsYUVColorSpace(false);
+        _renderer->setDisplayMode(PanoramaDisplayModePlain);
     });
     
     return self;
@@ -27,6 +37,11 @@
 
 - (void)dealloc
 {
+    runSynchronouslyOnVideoProcessingQueue(^{
+        [GPUImageContext useImageProcessingContext];
+        delete _renderer;
+    });
+    
 #if !OS_OBJECT_USE_OBJC
     if (imageCaptureSemaphore != NULL)
     {
@@ -111,6 +126,10 @@
     glBindTexture(GL_TEXTURE_2D, [firstInputFramebuffer texture]);
     
     //TODO:
+    CGSize boundsSize = [self sizeOfFBO];
+    _renderer->setSourceTextures(firstInputFramebuffer.texture, firstInputFramebuffer.texture, GL_TEXTURE_2D, false);
+    _renderer->setDisplayMode(PanoramaDisplayModeSphere);
+    _renderer->draw(0, 0, boundsSize.width, boundsSize.height);
     
     [firstInputFramebuffer unlock];
     
