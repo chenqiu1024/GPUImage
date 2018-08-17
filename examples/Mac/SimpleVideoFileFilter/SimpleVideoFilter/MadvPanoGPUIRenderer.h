@@ -1,51 +1,10 @@
-#import "GPUImageOutput.h"
-
-#define STRINGIZE(x) #x
-#define STRINGIZE2(x) STRINGIZE(x)
-#define SHADER_STRING(text) @ STRINGIZE2(text)
-
-#define GPUImageHashIdentifier #
-#define GPUImageWrappedLabel(x) x
-#define GPUImageEscapedHashIdentifier(a) GPUImageWrappedLabel(GPUImageHashIdentifier)a
-
-extern NSString *const kGPUImageVertexShaderString;
-extern NSString *const kGPUImagePassthroughFragmentShaderString;
-
-struct GPUVector4 {
-    GLfloat one;
-    GLfloat two;
-    GLfloat three;
-    GLfloat four;
-};
-typedef struct GPUVector4 GPUVector4;
-
-struct GPUVector3 {
-    GLfloat one;
-    GLfloat two;
-    GLfloat three;
-};
-typedef struct GPUVector3 GPUVector3;
-
-struct GPUMatrix4x4 {
-    GPUVector4 one;
-    GPUVector4 two;
-    GPUVector4 three;
-    GPUVector4 four;
-};
-typedef struct GPUMatrix4x4 GPUMatrix4x4;
-
-struct GPUMatrix3x3 {
-    GPUVector3 one;
-    GPUVector3 two;
-    GPUVector3 three;
-};
-typedef struct GPUMatrix3x3 GPUMatrix3x3;
+#import <GPUImage/GPUImage.h>
 
 /** GPUImage's base filter class
  
  Filters and other subsequent elements in the chain conform to the GPUImageInput protocol, which lets them take in the supplied or processed texture from the previous link in the chain and do something with it. Objects one step further down the chain are considered targets, and processing can be branched by adding multiple targets to a single output or filter.
  */
-@interface GPUImageFilter : GPUImageOutput <GPUImageInput>
+@interface MadvPanoGPUIRenderer : GPUImageOutput <GPUImageInput>
 {
     GPUImageFramebuffer *firstInputFramebuffer;
     
@@ -55,7 +14,7 @@ typedef struct GPUMatrix3x3 GPUMatrix3x3;
     GLfloat backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha;
     
     BOOL isEndProcessing;
-
+    
     CGSize currentFilterSize;
     GPUImageRotationMode inputRotation;
     

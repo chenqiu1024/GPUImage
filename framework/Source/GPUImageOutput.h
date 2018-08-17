@@ -17,6 +17,10 @@ typedef NS_ENUM(NSInteger, UIImageOrientation) {
 };
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 dispatch_queue_attr_t GPUImageDefaultQueueAttribute(void);
 void runOnMainQueueWithoutDeadlocking(void (^block)(void));
 void runSynchronouslyOnVideoProcessingQueue(void (^block)(void));
@@ -24,6 +28,10 @@ void runAsynchronouslyOnVideoProcessingQueue(void (^block)(void));
 void runSynchronouslyOnContextQueue(GPUImageContext *context, void (^block)(void));
 void runAsynchronouslyOnContextQueue(GPUImageContext *context, void (^block)(void));
 void reportAvailableMemoryForGPUImage(NSString *tag);
+
+#ifdef __cplusplus
+}
+#endif
 
 @class GPUImageMovieWriter;
 

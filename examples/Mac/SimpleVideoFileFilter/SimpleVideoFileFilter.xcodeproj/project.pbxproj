@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52356F362126C38500A49F5F /* MadvPanoGPUIRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52356F352126C38500A49F5F /* MadvPanoGPUIRenderer.mm */; };
 		575AD8C91BEA6FC60088E866 /* sample_iPod.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 575AD8C81BEA6FC60088E866 /* sample_iPod.m4v */; };
 		79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m */; };
 		79C26E2E1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79C26E2D1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib */; };
@@ -15,13 +16,27 @@
 		79E8A5FF1A5ED6A700E6A226 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79E8A5FE1A5ED6A700E6A226 /* Images.xcassets */; };
 		79E8A6021A5ED6A700E6A226 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79E8A6001A5ED6A700E6A226 /* MainMenu.xib */; };
 		79E8A60E1A5ED6A700E6A226 /* SimpleVideoFilterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 79E8A60D1A5ED6A700E6A226 /* SimpleVideoFilterTests.m */; };
-		BBDF50D821257A7900491DE4 /* ISOBMFF_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDF50D521257A6000491DE4 /* ISOBMFF_macOS.framework */; };
+		BBDF50D821257A7900491DE4 /* ISOBMFF.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDF50D521257A6000491DE4 /* ISOBMFF.framework */; };
 		BBEAF8922125603800766C02 /* MADVPanoFramework_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBEAF88F2125602B00766C02 /* MADVPanoFramework_macOS.framework */; };
 		BBEAF8CE2125746F00766C02 /* MadvMP4BoxParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBEAF8CC2125746F00766C02 /* MadvMP4BoxParser.mm */; };
 		BCF8E9E51A75DE67005AE243 /* GPUImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BCF8E9E21A75DE3F005AE243 /* GPUImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		52356F322126734D00A49F5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BBEAF8872125602900766C02 /* MADVPano_Unix.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BBDF514A212660D300491DE4;
+			remoteInfo = MADVPano_Mac;
+		};
+		52356F372126C50400A49F5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCF8E9DD1A75DE3F005AE243 /* GPUImageMac.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCA3F31B17239B6500E28AEC;
+			remoteInfo = GPUImage;
+		};
 		79E8A6081A5ED6A700E6A226 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 79E8A5EC1A5ED6A700E6A226 /* Project object */;
@@ -92,13 +107,6 @@
 			remoteGlobalIDString = BCA3F31C17239B6500E28AEC;
 			remoteInfo = GPUImage;
 		};
-		BCF8E9E31A75DE5B005AE243 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BCF8E9DD1A75DE3F005AE243 /* GPUImageMac.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BCA3F31B17239B6500E28AEC;
-			remoteInfo = GPUImage;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -115,6 +123,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		52356F342126C38500A49F5F /* MadvPanoGPUIRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MadvPanoGPUIRenderer.h; sourceTree = "<group>"; };
+		52356F352126C38500A49F5F /* MadvPanoGPUIRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MadvPanoGPUIRenderer.mm; sourceTree = "<group>"; };
 		575AD8C81BEA6FC60088E866 /* sample_iPod.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_iPod.m4v; sourceTree = "<group>"; };
 		79C26E201A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLSSimpleVideoFileFilterWindowController.h; sourceTree = "<group>"; };
 		79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLSSimpleVideoFileFilterWindowController.m; sourceTree = "<group>"; };
@@ -141,7 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBDF50D821257A7900491DE4 /* ISOBMFF_macOS.framework in Frameworks */,
+				BBDF50D821257A7900491DE4 /* ISOBMFF.framework in Frameworks */,
 				BBEAF8922125603800766C02 /* MADVPanoFramework_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,6 +188,8 @@
 		79E8A5F61A5ED6A700E6A226 /* SimpleVideoFileFilter */ = {
 			isa = PBXGroup;
 			children = (
+				52356F342126C38500A49F5F /* MadvPanoGPUIRenderer.h */,
+				52356F352126C38500A49F5F /* MadvPanoGPUIRenderer.mm */,
 				79E8A5F91A5ED6A700E6A226 /* AppDelegate.h */,
 				79E8A5FA1A5ED6A700E6A226 /* AppDelegate.m */,
 				79C26E201A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.h */,
@@ -234,10 +246,10 @@
 		BBDF50C721257A6000491DE4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BBDF50CF21257A6000491DE4 /* libISOBMFF.a */,
+				BBDF50CF21257A6000491DE4 /* libISOBMFF_macOS.a */,
 				BBDF50D121257A6000491DE4 /* ISOBMFF-Tests.xctest */,
 				BBDF50D321257A6000491DE4 /* ISOBMFF-Dump */,
-				BBDF50D521257A6000491DE4 /* ISOBMFF_macOS.framework */,
+				BBDF50D521257A6000491DE4 /* ISOBMFF.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -247,6 +259,7 @@
 			children = (
 				BBEAF88D2125602B00766C02 /* MADVPano_Unix */,
 				BBEAF88F2125602B00766C02 /* MADVPanoFramework_macOS.framework */,
+				52356F332126734D00A49F5F /* MADVPano_Mac */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -274,9 +287,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				52356F382126C50400A49F5F /* PBXTargetDependency */,
 				BBDF50D721257A6C00491DE4 /* PBXTargetDependency */,
 				BBEAF8912125603200766C02 /* PBXTargetDependency */,
-				BCF8E9E41A75DE5B005AE243 /* PBXTargetDependency */,
 			);
 			name = SimpleVideoFileFilter;
 			productName = SimpleVideoFilter;
@@ -353,10 +366,17 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		BBDF50CF21257A6000491DE4 /* libISOBMFF.a */ = {
+		52356F332126734D00A49F5F /* MADVPano_Mac */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = MADVPano_Mac;
+			remoteRef = 52356F322126734D00A49F5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BBDF50CF21257A6000491DE4 /* libISOBMFF_macOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libISOBMFF.a;
+			path = libISOBMFF_macOS.a;
 			remoteRef = BBDF50CE21257A6000491DE4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -374,10 +394,10 @@
 			remoteRef = BBDF50D221257A6000491DE4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BBDF50D521257A6000491DE4 /* ISOBMFF_macOS.framework */ = {
+		BBDF50D521257A6000491DE4 /* ISOBMFF.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = ISOBMFF_macOS.framework;
+			path = ISOBMFF.framework;
 			remoteRef = BBDF50D421257A6000491DE4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -433,6 +453,7 @@
 				BBEAF8CE2125746F00766C02 /* MadvMP4BoxParser.mm in Sources */,
 				79E8A5FD1A5ED6A700E6A226 /* main.m in Sources */,
 				79E8A5FB1A5ED6A700E6A226 /* AppDelegate.m in Sources */,
+				52356F362126C38500A49F5F /* MadvPanoGPUIRenderer.mm in Sources */,
 				79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,6 +469,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		52356F382126C50400A49F5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPUImage;
+			targetProxy = 52356F372126C50400A49F5F /* PBXContainerItemProxy */;
+		};
 		79E8A6091A5ED6A700E6A226 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 79E8A5F31A5ED6A700E6A226 /* SimpleVideoFileFilter */;
@@ -462,11 +488,6 @@
 			isa = PBXTargetDependency;
 			name = MADVPanoFramework_macOS;
 			targetProxy = BBEAF8902125603200766C02 /* PBXContainerItemProxy */;
-		};
-		BCF8E9E41A75DE5B005AE243 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GPUImage;
-			targetProxy = BCF8E9E31A75DE5B005AE243 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
