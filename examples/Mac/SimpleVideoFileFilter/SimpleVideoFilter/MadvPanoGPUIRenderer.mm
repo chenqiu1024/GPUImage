@@ -5,8 +5,6 @@
 
 @implementation MadvPanoGPUIRenderer
 
-@synthesize preventRendering = _preventRendering;
-
 #pragma mark -
 #pragma mark Initialization and teardown
 
@@ -17,7 +15,6 @@
         return nil;
     }
     
-    _preventRendering = NO;
     imageCaptureSemaphore = dispatch_semaphore_create(0);
     dispatch_semaphore_signal(imageCaptureSemaphore);
     
@@ -94,11 +91,11 @@
 
 - (void)render
 {
-    if (self.preventRendering)
-    {
-        [firstInputFramebuffer unlock];
-        return;
-    }
+//    if (self.preventRendering)
+//    {
+//        [firstInputFramebuffer unlock];
+//        return;
+//    }
     
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
     [outputFramebuffer activateFramebuffer];
@@ -107,7 +104,7 @@
         [outputFramebuffer lock];
     }
     
-    glClearColor(0.f, 0.f, 0.f, 1.f);
+    glClearColor(0.f, 0.5f, 1.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     glActiveTexture(GL_TEXTURE2);
@@ -196,6 +193,110 @@
     [firstInputFramebuffer lock];
 }
 
+- (CGSize)rotatedSize:(CGSize)sizeToRotate forIndex:(NSInteger)textureIndex;
+{
+    CGSize rotatedSize = sizeToRotate;
+    
+//    if (GPUImageRotationSwapsWidthAndHeight(inputRotation))
+//    {
+//        rotatedSize.width = sizeToRotate.height;
+//        rotatedSize.height = sizeToRotate.width;
+//    }
+    
+    return rotatedSize;
+}
+
+- (CGPoint)rotatedPoint:(CGPoint)pointToRotate forRotation:(GPUImageRotationMode)rotation;
+{
+    CGPoint rotatedPoint;
+    switch(rotation)
+    {
+        case kGPUImageNoRotation: return pointToRotate; break;
+        case kGPUImageFlipHorizonal:
+        {
+            rotatedPoint.x = 1.0 - pointToRotate.x;
+            rotatedPoint.y = pointToRotate.y;
+        }; break;
+        case kGPUImageFlipVertical:
+        {
+            rotatedPoint.x = pointToRotate.x;
+            rotatedPoint.y = 1.0 - pointToRotate.y;
+        }; break;
+        case kGPUImageRotateLeft:
+        {
+            rotatedPoint.x = 1.0 - pointToRotate.y;
+            rotatedPoint.y = pointToRotate.x;
+        }; break;
+        case kGPUImageRotateRight:
+        {
+            rotatedPoint.x = pointToRotate.y;
+            rotatedPoint.y = 1.0 - pointToRotate.x;
+        }; break;
+        case kGPUImageRotateRightFlipVertical:
+        {
+            rotatedPoint.x = pointToRotate.y;
+            rotatedPoint.y = pointToRotate.x;
+        }; break;
+        case kGPUImageRotateRightFlipHorizontal:
+        {
+            rotatedPoint.x = 1.0 - pointToRotate.y;
+            rotatedPoint.y = 1.0 - pointToRotate.x;
+        }; break;
+        case kGPUImageRotate180:
+        {
+            rotatedPoint.x = 1.0 - pointToRotate.x;
+            rotatedPoint.y = 1.0 - pointToRotate.y;
+        }; break;
+    }
+    
+    return rotatedPoint;
+}
+
+- (void)setupFilterForSize:(CGSize)filterFrameSize;
+{
+    // This is where you can override to provide some custom setup, if your filter has a size-dependent element
+}
+
+- (void)setInputSize:(CGSize)newSize atIndex:(NSInteger)textureIndex;
+{
+//    if (self.preventRendering)
+//    {
+//        return;
+//    }
+    
+    if (overrideInputSize)
+    {
+        if (CGSizeEqualToSize(forcedMaximumSize, CGSizeZero))
+        {
+        }
+        else
+        {
+            CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(newSize, CGRectMake(0.0, 0.0, forcedMaximumSize.width, forcedMaximumSize.height));
+            inputTextureSize = insetRect.size;
+        }
+    }
+    else
+    {
+        CGSize rotatedSize = [self rotatedSize:newSize forIndex:textureIndex];
+        
+        if (CGSizeEqualToSize(rotatedSize, CGSizeZero))
+        {
+            inputTextureSize = rotatedSize;
+        }
+        else if (!CGSizeEqualToSize(inputTextureSize, rotatedSize))
+        {
+            inputTextureSize = rotatedSize;
+        }
+    }
+    
+    [self setupFilterForSize:[self sizeOfFBO]];
+}
+
+- (void)setInputRotation:(GPUImageRotationMode)newInputRotation atIndex:(NSInteger)textureIndex;
+{
+//    inputRotation = newInputRotation;
+}
+
 - (void)forceProcessingAtSize:(CGSize)frameSize;
 {
     if (CGSizeEqualToSize(frameSize, CGSizeZero))
@@ -258,6 +359,11 @@
         }
     }
 }
+
+- (void)setCurrentlyReceivingMonochromeInput:(BOOL)newValue {
+    
+}
+
 
 - (BOOL)wantsMonochromeInput;
 {

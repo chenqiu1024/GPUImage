@@ -14,8 +14,7 @@
     dispatch_semaphore_t imageCaptureSemaphore;
 }
 
-@property(readonly) CVPixelBufferRef renderTarget;///!!!
-@property(readwrite, nonatomic) BOOL preventRendering;
+@property(readonly) CVPixelBufferRef renderTarget;
 
 /// @name Initialization and teardown
 

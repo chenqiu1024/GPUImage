@@ -1,5 +1,6 @@
 #import "SLSSimpleVideoFileFilterWindowController.h"
 #import "MadvMP4BoxParser.hpp"
+#import "MadvPanoGPUIRenderer.h"
 #import <GPUImage/GPUImage.h>
 
 NSString* g_inputMP4Path;
@@ -64,8 +65,9 @@ NSString* g_inputMP4Path;
     movieFile = [[GPUImageMovie alloc] initWithPlayerItem:playerItem];
     movieFile.runBenchmark = YES;
     movieFile.playAtActualSpeed = YES;
-    filter = [[GPUImagePixellateFilter alloc] init];
+//    filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
+    filter = [[MadvPanoGPUIRenderer alloc] init];
     
     [movieFile addTarget:filter];
     
@@ -133,8 +135,9 @@ NSString* g_inputMP4Path;
     movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
     movieFile.runBenchmark = YES;
     movieFile.playAtActualSpeed = YES;
-    filter = [[GPUImagePixellateFilter alloc] init];
+//    filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
+    filter = [[MadvPanoGPUIRenderer alloc] init];
     
     [movieFile addTarget:filter];
     
