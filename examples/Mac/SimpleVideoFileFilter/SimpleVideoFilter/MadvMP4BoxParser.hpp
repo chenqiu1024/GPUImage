@@ -11,12 +11,23 @@
 
 #include <stdio.h>
 
+typedef struct {
+    void* lutData;
+    int lutDataSize;
+    
+    void* gyroData;
+    int gyroDataSize;
+    
+} MadvMP4Boxes;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-bool parseMadvMP4Boxes(const char* mp4Path);
+    MadvMP4Boxes* createMadvMP4Boxes(const char* mp4Path);
 
+    void releaseMadvMP4Boxes(MadvMP4Boxes* pBoxes);
+    
 #ifdef __cplusplus
 }
 #endif

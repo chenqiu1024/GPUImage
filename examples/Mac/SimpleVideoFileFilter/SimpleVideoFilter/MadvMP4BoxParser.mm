@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <stdlib.h>
 
 inline int32_t readLittleEndianInt32(const void* ptr) {
     const uint8_t* bytes = (const uint8_t*)ptr;
@@ -65,6 +66,7 @@ void enumerateInBoxes(const void* data, int size, void(*callback)(void* context,
 
 void handleBox(void* context, uint32_t boxType, uint8_t* boxData, int boxSize, bool* stop) {
     printf("boxType=0x%x, boxSize=%d, boxData=0x%lx, context=0x%lx\n", boxType, boxSize, (long)boxData, (long)context);
+    MadvMP4Boxes* pBoxes = (MadvMP4Boxes*)context;
     *stop = false;
     switch (boxType)
     {
@@ -83,6 +85,13 @@ void handleBox(void* context, uint32_t boxType, uint8_t* boxData, int boxSize, b
         {
             MADV_MP4_USERDATA_LUT_t* pLUTStruct = (MADV_MP4_USERDATA_LUT_t*)boxData;
             printf("LUT size = %d\n", pLUTStruct->size);
+            if (pBoxes)
+            {
+                if (pBoxes->lutData) free(pBoxes->lutData);
+                pBoxes->lutData = malloc(boxSize);
+                memcpy(pBoxes->lutData, boxData, boxSize);
+                pBoxes->lutDataSize = boxSize;
+            }
         }
             break;
         case MADV_MP4_USERDATA_GYRO_TYPE:
@@ -115,7 +124,8 @@ public:
     }
 };
 
-bool parseMadvMP4Boxes(const char* mp4Path) {
+MadvMP4Boxes* createMadvMP4Boxes(const char* mp4Path) {
+    MadvMP4Boxes* pBoxes = new MadvMP4Boxes;
     ISOBMFF::Parser parser;
     try
     {
@@ -126,7 +136,7 @@ bool parseMadvMP4Boxes(const char* mp4Path) {
     catch( const std::runtime_error & e )
     {
         std::cerr << e.what() << std::endl;
-        return false;
+        return NULL;
     }
     
     std::shared_ptr< ISOBMFF::File > file = parser.GetFile();
@@ -145,11 +155,18 @@ bool parseMadvMP4Boxes(const char* mp4Path) {
                     std::vector<uint8_t> userData = subBox->GetData();
                     int boxBytesSize = (int)userData.size();
                     std::cout << "udta length = " << boxBytesSize << std::endl;
-                    enumerateInBoxes(userData.data(), boxBytesSize, handleBox, NULL);
-                    return true;
+                    enumerateInBoxes(userData.data(), boxBytesSize, handleBox, pBoxes);
+                    return pBoxes;
                 }
             }
         }
     }
-    return true;
+    return pBoxes;
+}
+
+void releaseMadvMP4Boxes(MadvMP4Boxes* pBoxes) {
+    if (!pBoxes) return;
+    if (pBoxes->lutData) free(pBoxes->lutData);
+    if (pBoxes->gyroData) free(pBoxes->gyroData);
+    delete pBoxes;
 }

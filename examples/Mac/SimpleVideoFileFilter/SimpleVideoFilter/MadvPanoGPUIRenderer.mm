@@ -13,7 +13,7 @@
 #pragma mark -
 #pragma mark Initialization and teardown
 
-- (id)init
+-(id)initWithLUTPath:(NSString*)lutPath
 {
     if (!(self = [super init]))
     {
@@ -26,10 +26,10 @@
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
         Vec2f lutSourceSize = { DEFAULT_LUT_VALUE_WIDTH, DEFAULT_LUT_VALUE_HEIGHT };
-        _renderer = new MadvGLRenderer(NULL, lutSourceSize, lutSourceSize, 180, 90);
+        _renderer = new MadvGLRenderer(lutPath.UTF8String, lutSourceSize, lutSourceSize, 180, 90);
 //        AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
         _renderer->setIsYUVColorSpace(false);
-        _renderer->setDisplayMode(PanoramaDisplayModePlain);
+        _renderer->setDisplayMode(PanoramaDisplayModeLUTInMesh);
     });
     
     return self;
@@ -128,7 +128,7 @@
     //TODO:
     CGSize boundsSize = [self sizeOfFBO];
     _renderer->setSourceTextures(firstInputFramebuffer.texture, firstInputFramebuffer.texture, GL_TEXTURE_2D, false);
-    _renderer->setDisplayMode(PanoramaDisplayModeSphere);
+    _renderer->setDisplayMode(PanoramaDisplayModeLUTInShader);
     _renderer->draw(0, 0, boundsSize.width, boundsSize.height);
     
     [firstInputFramebuffer unlock];

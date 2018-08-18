@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		52356F362126C38500A49F5F /* MadvPanoGPUIRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52356F352126C38500A49F5F /* MadvPanoGPUIRenderer.mm */; };
 		575AD8C91BEA6FC60088E866 /* sample_iPod.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 575AD8C81BEA6FC60088E866 /* sample_iPod.m4v */; };
-		79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m */; };
+		79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.mm */; };
 		79C26E2E1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79C26E2D1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib */; };
 		79E8A5FB1A5ED6A700E6A226 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 79E8A5FA1A5ED6A700E6A226 /* AppDelegate.m */; };
 		79E8A5FD1A5ED6A700E6A226 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 79E8A5FC1A5ED6A700E6A226 /* main.m */; };
@@ -127,7 +127,7 @@
 		52356F352126C38500A49F5F /* MadvPanoGPUIRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MadvPanoGPUIRenderer.mm; sourceTree = "<group>"; };
 		575AD8C81BEA6FC60088E866 /* sample_iPod.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_iPod.m4v; sourceTree = "<group>"; };
 		79C26E201A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLSSimpleVideoFileFilterWindowController.h; sourceTree = "<group>"; };
-		79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLSSimpleVideoFileFilterWindowController.m; sourceTree = "<group>"; };
+		79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SLSSimpleVideoFileFilterWindowController.mm; sourceTree = "<group>"; };
 		79C26E2D1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SLSSimpleVideoFileFilterWindowController.xib; sourceTree = "<group>"; };
 		79E8A5F41A5ED6A700E6A226 /* SimpleVideoFileFilter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleVideoFileFilter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79E8A5F81A5ED6A700E6A226 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -193,7 +193,7 @@
 				79E8A5F91A5ED6A700E6A226 /* AppDelegate.h */,
 				79E8A5FA1A5ED6A700E6A226 /* AppDelegate.m */,
 				79C26E201A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.h */,
-				79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m */,
+				79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.mm */,
 				79C26E2D1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib */,
 				79E8A5FE1A5ED6A700E6A226 /* Images.xcassets */,
 				79E8A6001A5ED6A700E6A226 /* MainMenu.xib */,
@@ -454,7 +454,7 @@
 				79E8A5FD1A5ED6A700E6A226 /* main.m in Sources */,
 				79E8A5FB1A5ED6A700E6A226 /* AppDelegate.m in Sources */,
 				52356F362126C38500A49F5F /* MadvPanoGPUIRenderer.mm in Sources */,
-				79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m in Sources */,
+				79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,6 +529,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					TARGET_OS_OSX,
+					"USE_GLMAPBUFFER=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -567,6 +569,10 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					TARGET_OS_OSX,
+					"USE_GLMAPBUFFER=1",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

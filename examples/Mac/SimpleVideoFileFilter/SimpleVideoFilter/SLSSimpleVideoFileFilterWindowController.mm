@@ -1,6 +1,7 @@
 #import "SLSSimpleVideoFileFilterWindowController.h"
 #import "MadvMP4BoxParser.hpp"
 #import "MadvPanoGPUIRenderer.h"
+#import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <GPUImage/GPUImage.h>
 
 NSString* g_inputMP4Path;
@@ -22,6 +23,8 @@ NSString* g_inputMP4Path;
 
 //@property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (nonatomic, strong) AVPlayer *player;
+
+@property (nonatomic, copy) NSString* tempLUTDirectoryPath;
 
 @end
 
@@ -127,9 +130,11 @@ NSString* g_inputMP4Path;
 //    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
     //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/Gyro/VID_20170823_094312AA.MP4"];
     //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/TwirlingVRAudio/VID_20180806_185402AA.MP4"];
-    NSURL* sampleURL = [NSURL fileURLWithPath:g_inputMP4Path];
-    parseMadvMP4Boxes(g_inputMP4Path.UTF8String);
+    self.tempLUTDirectoryPath = makeTempLUTDirectory(g_inputMP4Path);
+    MadvMP4Boxes* pBoxes = createMadvMP4Boxes(g_inputMP4Path.UTF8String);
+    extractLUTFilesFromMem(self.tempLUTDirectoryPath.UTF8String, NULL, (const uint8_t*)pBoxes->lutData);
     
+    NSURL* sampleURL = [NSURL fileURLWithPath:g_inputMP4Path];
     self.player = [AVPlayer playerWithURL:sampleURL];
     
     movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
@@ -137,7 +142,9 @@ NSString* g_inputMP4Path;
     movieFile.playAtActualSpeed = YES;
 //    filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
-    filter = [[MadvPanoGPUIRenderer alloc] init];
+    filter = [[MadvPanoGPUIRenderer alloc] initWithLUTPath:self.tempLUTDirectoryPath];
+//    clearCachedLUT(self.tempLUTDirectoryPath.UTF8String);
+//    deleteIfTempLUTDirectory(self.tempLUTDirectoryPath.UTF8String);
     
     [movieFile addTarget:filter];
     

@@ -18,7 +18,7 @@
 
 /// @name Initialization and teardown
 
-- (id)init;
+-(id)initWithLUTPath:(NSString*)lutPath;
 
 /// @name Managing the display FBOs
 /** Size of the frame buffer object
