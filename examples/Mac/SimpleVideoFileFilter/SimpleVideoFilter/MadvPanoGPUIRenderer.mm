@@ -129,6 +129,15 @@
     CGSize boundsSize = [self sizeOfFBO];
     _renderer->setSourceTextures(firstInputFramebuffer.texture, firstInputFramebuffer.texture, GL_TEXTURE_2D, false);
     _renderer->setDisplayMode(PanoramaDisplayModeLUTInShader);
+    kmMat4 sourceTextureMatrix;
+    float sourceTextureMatrixData[] = {
+        1.f, 0.f, 0.f, 0.f,
+        0.f, -1.f, 0.f, 0.f,
+        0.f, 0.f, 1.f, 0.f,
+        0.f, 1.f, 0.f, 1.f,
+    };
+    kmMat4Fill(&sourceTextureMatrix, sourceTextureMatrixData);
+    _renderer->setTextureMatrix(&sourceTextureMatrix);
     _renderer->draw(0, 0, boundsSize.width, boundsSize.height);
     
     [firstInputFramebuffer unlock];
