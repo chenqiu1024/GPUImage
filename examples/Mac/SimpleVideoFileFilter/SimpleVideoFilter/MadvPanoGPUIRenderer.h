@@ -18,7 +18,7 @@
 
 /// @name Initialization and teardown
 
--(id)initWithLUTPath:(NSString*)lutPath;
+-(id)initWithLUTPath:(NSString*)lutPath gyroData:(void*)gyroData gyroDataFrames:(int)gyroDataFrames;
 
 /// @name Managing the display FBOs
 /** Size of the frame buffer object

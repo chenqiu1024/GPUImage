@@ -95,6 +95,13 @@ void handleBox(void* context, uint32_t boxType, uint8_t* boxData, int boxSize, b
         }
             break;
         case MADV_MP4_USERDATA_GYRO_TYPE:
+            if (pBoxes && boxSize > 0 && NULL != boxData)
+            {
+                if (pBoxes->gyroData) free(pBoxes->gyroData);
+                pBoxes->gyroData = malloc(boxSize);
+                memcpy(pBoxes->gyroData, boxData, boxSize);
+                pBoxes->gyroDataSize = boxSize;
+            }
             break;
         default:
             break;

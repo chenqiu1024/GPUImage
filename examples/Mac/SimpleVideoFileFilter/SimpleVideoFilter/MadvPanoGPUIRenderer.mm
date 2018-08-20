@@ -2,9 +2,40 @@
 #import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <AVFoundation/AVFoundation.h>
 
+BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
+    @try
+    {
+        if (!gyroData)
+            return NO;
+        
+        NSInteger iSrcByte = frameNumber * 36;
+        Byte* bytes = (Byte*)gyroData;
+        for (int j=0; j<9; ++j)
+        {
+            int b0 = bytes[iSrcByte++];
+            int b1 = bytes[iSrcByte++];
+            int b2 = bytes[iSrcByte++];
+            int b3 = bytes[iSrcByte++];
+            int intValue = (b0 & 0xff) | ((b1 & 0xff) << 8) | ((b2 & 0xff) << 16) | ((b3 & 0xff) << 24);
+            pMatrix[j] = *((float*) (int*) &intValue);
+        }
+        //NSLog(@"getGyroMatrix : frame#%d {%.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f}", (int)frameNumber, pMatrix[0],pMatrix[1],pMatrix[2],pMatrix[3],pMatrix[4],pMatrix[5],pMatrix[6],pMatrix[7],pMatrix[8]);
+        return YES;
+    }
+    @catch (id ex)
+    {
+        return NO;
+    }
+    @finally
+    {
+    }
+}
+
 @interface MadvPanoGPUIRenderer ()
 {
     MadvGLRenderer* _renderer;
+    void* _gyroData;
+    int _gyroDataFrames;
 }
 @end
 
@@ -13,12 +44,15 @@
 #pragma mark -
 #pragma mark Initialization and teardown
 
--(id)initWithLUTPath:(NSString*)lutPath
+-(id)initWithLUTPath:(NSString*)lutPath gyroData:(void*)gyroData gyroDataFrames:(int)gyroDataFrames
 {
     if (!(self = [super init]))
     {
         return nil;
     }
+    
+    _gyroData = gyroData;
+    _gyroDataFrames = gyroDataFrames;
     
     imageCaptureSemaphore = dispatch_semaphore_create(0);
     dispatch_semaphore_signal(imageCaptureSemaphore);
@@ -29,7 +63,17 @@
         _renderer = new MadvGLRenderer(lutPath.UTF8String, lutSourceSize, lutSourceSize, 180, 90);
 //        AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
         _renderer->setIsYUVColorSpace(false);
-        _renderer->setDisplayMode(PanoramaDisplayModeLUTInMesh);
+        _renderer->setDisplayMode(PanoramaDisplayModeFromCubeMap);
+        kmMat4 sourceTextureMatrix;
+        float sourceTextureMatrixData[] = {
+            1.f, 0.f, 0.f, 0.f,
+            0.f, -1.f, 0.f, 0.f,
+            0.f, 0.f, 1.f, 0.f,
+            0.f, 1.f, 0.f, 1.f,
+        };
+        kmMat4Fill(&sourceTextureMatrix, sourceTextureMatrixData);
+        _renderer->setTextureMatrix(&sourceTextureMatrix);
+        _renderer->setFlipY(true);
     });
     
     return self;
@@ -104,13 +148,21 @@
 #pragma mark -
 #pragma mark Rendering
 
-- (void)render
+- (void)renderAtTime:(CMTime)frameTime
 {
 //    if (self.preventRendering)
 //    {
 //        [firstInputFramebuffer unlock];
 //        return;
 //    }
+    ///!!!For Debug:
+    static NSUInteger frameNumber = 0;
+    if (frameNumber >= 0 && frameNumber < _gyroDataFrames && _renderer && _renderer->glCamera())
+    {
+        float gyroMatrix[9];
+        getGyroMatrix(gyroMatrix, frameNumber, _gyroData);
+        _renderer->glCamera()->setGyroMatrix(gyroMatrix, 3);
+    }
     
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
     [outputFramebuffer activateFramebuffer];
@@ -125,20 +177,10 @@
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, [firstInputFramebuffer texture]);
     
-    //TODO:
     CGSize boundsSize = [self sizeOfFBO];
     _renderer->setSourceTextures(firstInputFramebuffer.texture, firstInputFramebuffer.texture, GL_TEXTURE_2D, false);
-    _renderer->setDisplayMode(PanoramaDisplayModeLUTInShader);
-    kmMat4 sourceTextureMatrix;
-    float sourceTextureMatrixData[] = {
-        1.f, 0.f, 0.f, 0.f,
-        0.f, -1.f, 0.f, 0.f,
-        0.f, 0.f, 1.f, 0.f,
-        0.f, 1.f, 0.f, 1.f,
-    };
-    kmMat4Fill(&sourceTextureMatrix, sourceTextureMatrixData);
-    _renderer->setTextureMatrix(&sourceTextureMatrix);
     _renderer->draw(0, 0, boundsSize.width, boundsSize.height);
+//    _renderer->drawRemappedPanorama(0, 0, boundsSize.width, boundsSize.height, 16);
     
     [firstInputFramebuffer unlock];
     
@@ -146,6 +188,8 @@
     {
         dispatch_semaphore_signal(imageCaptureSemaphore);
     }
+    
+    frameNumber++;///!!!For Debug
 }
 
 - (void)informTargetsAboutNewFrameAtTime:(CMTime)frameTime;
@@ -205,7 +249,7 @@
 
 - (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
 {
-    [self render];
+    [self renderAtTime:frameTime];
     
     [self informTargetsAboutNewFrameAtTime:frameTime];
 }

@@ -12,6 +12,7 @@ NSString* g_inputMP4Path;
     GPUImageOutput<GPUImageInput> *filter;
     GPUImageMovieWriter *movieWriter;
     NSTimer * timer;
+    MadvMP4Boxes* _pBoxes;
 }
 
 @property (weak) IBOutlet GPUImageView *videoView;
@@ -30,6 +31,9 @@ NSString* g_inputMP4Path;
 
 @implementation SLSSimpleVideoFileFilterWindowController
 
+-(void) dealloc {
+    releaseMadvMP4Boxes(_pBoxes);
+}
 
 - (void)windowDidLoad {
     [super windowDidLoad];
@@ -130,9 +134,10 @@ NSString* g_inputMP4Path;
 //    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
     //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/Gyro/VID_20170823_094312AA.MP4"];
     //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/TwirlingVRAudio/VID_20180806_185402AA.MP4"];
+    releaseMadvMP4Boxes(_pBoxes);
+    _pBoxes = createMadvMP4Boxes(g_inputMP4Path.UTF8String);
     self.tempLUTDirectoryPath = makeTempLUTDirectory(g_inputMP4Path);
-    MadvMP4Boxes* pBoxes = createMadvMP4Boxes(g_inputMP4Path.UTF8String);
-    extractLUTFilesFromMem(self.tempLUTDirectoryPath.UTF8String, NULL, (const uint8_t*)pBoxes->lutData);
+    extractLUTFilesFromMem(self.tempLUTDirectoryPath.UTF8String, NULL, (const uint8_t*)_pBoxes->lutData);
     
     NSURL* sampleURL = [NSURL fileURLWithPath:g_inputMP4Path];
     self.player = [AVPlayer playerWithURL:sampleURL];
@@ -142,7 +147,7 @@ NSString* g_inputMP4Path;
     movieFile.playAtActualSpeed = YES;
 //    filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
-    filter = [[MadvPanoGPUIRenderer alloc] initWithLUTPath:self.tempLUTDirectoryPath];
+    filter = [[MadvPanoGPUIRenderer alloc] initWithLUTPath:self.tempLUTDirectoryPath gyroData:_pBoxes->gyroData gyroDataFrames:(_pBoxes->gyroDataSize/36)];
     clearCachedLUT(self.tempLUTDirectoryPath.UTF8String);
     deleteIfTempLUTDirectory(self.tempLUTDirectoryPath.UTF8String);
     
