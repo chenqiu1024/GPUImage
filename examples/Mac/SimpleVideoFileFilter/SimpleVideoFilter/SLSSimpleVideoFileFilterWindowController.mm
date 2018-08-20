@@ -143,8 +143,8 @@ NSString* g_inputMP4Path;
 //    filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
     filter = [[MadvPanoGPUIRenderer alloc] initWithLUTPath:self.tempLUTDirectoryPath];
-//    clearCachedLUT(self.tempLUTDirectoryPath.UTF8String);
-//    deleteIfTempLUTDirectory(self.tempLUTDirectoryPath.UTF8String);
+    clearCachedLUT(self.tempLUTDirectoryPath.UTF8String);
+    deleteIfTempLUTDirectory(self.tempLUTDirectoryPath.UTF8String);
     
     [movieFile addTarget:filter];
     
