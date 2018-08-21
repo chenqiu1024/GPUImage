@@ -184,6 +184,11 @@ NSArray<NSString* >* g_inputMP4Paths;
 - (void)runProcessingWithURL:(NSString*)url completion:(void(^)(void))completion {
     releaseMadvMP4Boxes(_pBoxes);
     _pBoxes = createMadvMP4Boxes(url.UTF8String);
+    if (NULL == _pBoxes->lutData && completion)
+    {
+        completion();
+        return;
+    }
     self.tempLUTDirectoryPath = makeTempLUTDirectory(url);
     extractLUTFilesFromMem(self.tempLUTDirectoryPath.UTF8String, NULL, (const uint8_t*)_pBoxes->lutData);
     
