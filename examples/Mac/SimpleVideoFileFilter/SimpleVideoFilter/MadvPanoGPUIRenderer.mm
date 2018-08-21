@@ -33,7 +33,8 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 
 @interface MadvPanoGPUIRenderer ()
 {
-    MadvGLRenderer* _renderer;
+    AutoRef<MadvGLRenderer> _renderer;
+    AutoRef<PanoCameraController> _panoController;
     void* _gyroData;
     int _gyroDataFrames;
 }
@@ -61,7 +62,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
         [GPUImageContext useImageProcessingContext];
         Vec2f lutSourceSize = { DEFAULT_LUT_VALUE_WIDTH, DEFAULT_LUT_VALUE_HEIGHT };
         _renderer = new MadvGLRenderer(lutPath.UTF8String, lutSourceSize, lutSourceSize, 180, 90);
-//        AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
+        _panoController = new PanoCameraController(_renderer);
         _renderer->setIsYUVColorSpace(false);
         kmMat4 sourceTextureMatrix;
         float sourceTextureMatrixData[] = {
@@ -82,7 +83,8 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 {
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
-        delete _renderer;
+        _renderer = NULL;
+        _panoController = NULL;
     });
     
 #if !OS_OBJECT_USE_OBJC
@@ -156,12 +158,12 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 //    }
     ///!!!For Debug:
     static NSUInteger frameNumber = 0;
-//    AutoRef<GLCamera> camera = _renderer->glCamera();
     if (frameNumber >= 0 && frameNumber < _gyroDataFrames && _renderer)
     {
         float gyroMatrix[9] = {1.f,0.f,0.f, 0.f,1.f,0.f, 0.f,0.f,1.f};
         getGyroMatrix(gyroMatrix, frameNumber, _gyroData);
-//        camera->setGyroMatrix(gyroMatrix, 3);
+//        NSLog(@"#GYRO# {%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f}", gyroMatrix[0], gyroMatrix[1], gyroMatrix[2], gyroMatrix[3], gyroMatrix[4], gyroMatrix[5], gyroMatrix[6], gyroMatrix[7], gyroMatrix[8]);
+        _panoController->setGyroMatrix(gyroMatrix, 3);
     }
     
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
