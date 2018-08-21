@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-extern NSString* g_inputMP4Path;
+extern NSArray<NSString* >* g_inputMP4Paths;
 
 @interface SLSSimpleVideoFileFilterWindowController : NSWindowController
 

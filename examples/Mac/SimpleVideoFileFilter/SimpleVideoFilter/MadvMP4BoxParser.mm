@@ -133,6 +133,9 @@ public:
 
 MadvMP4Boxes* createMadvMP4Boxes(const char* mp4Path) {
     MadvMP4Boxes* pBoxes = new MadvMP4Boxes;
+    pBoxes->gyroData = NULL;
+    pBoxes->lutData = NULL;
+    
     ISOBMFF::Parser parser;
     try
     {
@@ -173,7 +176,15 @@ MadvMP4Boxes* createMadvMP4Boxes(const char* mp4Path) {
 
 void releaseMadvMP4Boxes(MadvMP4Boxes* pBoxes) {
     if (!pBoxes) return;
-    if (pBoxes->lutData) free(pBoxes->lutData);
-    if (pBoxes->gyroData) free(pBoxes->gyroData);
+    if (pBoxes->lutData)
+    {
+        free(pBoxes->lutData);
+        pBoxes->lutData = NULL;
+    }
+    if (pBoxes->gyroData)
+    {
+        free(pBoxes->gyroData);
+        pBoxes->gyroData = NULL;
+    }
     delete pBoxes;
 }

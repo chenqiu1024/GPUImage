@@ -12,7 +12,12 @@
 int main(int argc, const char * argv[]) {
     if (argc > 1)
     {
-        g_inputMP4Path = [NSString stringWithUTF8String:argv[1]];
+        NSMutableArray<NSString* >* paths = [NSMutableArray new];
+        for (int iArg=1; iArg<3; ++iArg)
+        {
+            [paths addObject:[NSString stringWithUTF8String:argv[iArg]]];
+        }
+        g_inputMP4Paths = [NSArray arrayWithArray:paths];
     }
     return NSApplicationMain(argc, argv);
 }

@@ -4,7 +4,7 @@
 #import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <GPUImage/GPUImage.h>
 
-NSString* g_inputMP4Path;
+NSArray<NSString* >* g_inputMP4Paths;
 
 @interface SLSSimpleVideoFileFilterWindowController ()
 {
@@ -42,14 +42,36 @@ NSString* g_inputMP4Path;
 
 }
 
+-(void) processNextURL:(NSEnumerator<NSString* >*)iter {
+    NSString* url = [iter nextObject];
+    if (url)
+    {
+        [self runProcessingWithURL:url completion:^() {
+            [self processNextURL:iter];
+        }];
+        [self showProcessingUI];
+    }
+}
+
 - (IBAction)gpuImageMovieWithURLButtonAction:(id)sender {
-    [self runProcessingWithURL];
-    [self showProcessingUI];
+    NSEnumerator<NSString* >* iter = g_inputMP4Paths.objectEnumerator;
+    [self processNextURL:iter];
+}
+
+-(void) processNextAVPlayerItem:(NSEnumerator<NSString* >*)iter {
+    NSString* url = [iter nextObject];
+    if (url)
+    {
+        [self runProcessingWithAVPlayerItem:url completion:^() {
+            [self processNextAVPlayerItem:iter];
+        }];
+        [self showProcessingUI];
+    }
 }
 
 - (IBAction)gpuImageMovieWithAvplayeritemButtonAction:(id)sender {
-    [self runProcessingWithAVPlayerItem];
-    [self showProcessingUI];
+    NSEnumerator<NSString* >* iter = g_inputMP4Paths.objectEnumerator;
+    [self processNextAVPlayerItem:iter];
 }
 
 - (void)showProcessingUI {
@@ -58,12 +80,8 @@ NSString* g_inputMP4Path;
     self.avPlayerItemButton.hidden = YES;
 }
 
-- (void)runProcessingWithAVPlayerItem {
-//    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
-//    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
-//    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/Gyro/VID_20170823_094312AA.MP4"];
-//    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/TwirlingVRAudio/VID_20180806_185402AA.MP4"];
-    NSURL* sampleURL = [NSURL fileURLWithPath:g_inputMP4Path];
+- (void)runProcessingWithAVPlayerItem:(NSString*)url completion:(void(^)(void))completion {
+    NSURL* sampleURL = [NSURL fileURLWithPath:url];
     
     AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:sampleURL];
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
@@ -83,7 +101,8 @@ NSString* g_inputMP4Path;
     [filter addTarget:filterView];
     
     // In addition to displaying to the screen, write out a processed version of the movie to disk
-    NSString *pathToMovie = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Movie.m4v"];
+    NSString* movieName = [[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"_stitched.m4v"];
+    NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
     
@@ -112,6 +131,11 @@ NSString* g_inputMP4Path;
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
             self.progressLabel.stringValue = @"100%";
+            
+            if (completion)
+            {
+                completion();
+            }
         });
     }];
     
@@ -129,17 +153,13 @@ NSString* g_inputMP4Path;
     [(GPUImagePixellateFilter *)filter setFractionalWidthOfAPixel:[(NSSlider *)sender floatValue]];
 }
 
-- (void)runProcessingWithURL {
-    //    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
-//    NSURL* sampleURL = [NSURL fileURLWithPath:@"/Users/domqiu/Movies/VID_20170220_182639AA.MP4"];
-    //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/Gyro/VID_20170823_094312AA.MP4"];
-    //    NSURL *sampleURL = [NSURL fileURLWithPath:@"/Users/qiudong/Movies/SampleMedias/TwirlingVRAudio/VID_20180806_185402AA.MP4"];
+- (void)runProcessingWithURL:(NSString*)url completion:(void(^)(void))completion {
     releaseMadvMP4Boxes(_pBoxes);
-    _pBoxes = createMadvMP4Boxes(g_inputMP4Path.UTF8String);
-    self.tempLUTDirectoryPath = makeTempLUTDirectory(g_inputMP4Path);
+    _pBoxes = createMadvMP4Boxes(url.UTF8String);
+    self.tempLUTDirectoryPath = makeTempLUTDirectory(url);
     extractLUTFilesFromMem(self.tempLUTDirectoryPath.UTF8String, NULL, (const uint8_t*)_pBoxes->lutData);
     
-    NSURL* sampleURL = [NSURL fileURLWithPath:g_inputMP4Path];
+    NSURL* sampleURL = [NSURL fileURLWithPath:url];
     self.player = [AVPlayer playerWithURL:sampleURL];
     
     movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
@@ -158,7 +178,8 @@ NSString* g_inputMP4Path;
     [filter addTarget:filterView];
     
     // In addition to displaying to the screen, write out a processed version of the movie to disk
-    NSString *pathToMovie = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Movie.m4v"];
+    NSString* movieName = [[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"_stitched.m4v"];
+    NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
     
@@ -187,6 +208,11 @@ NSString* g_inputMP4Path;
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
             self.progressLabel.stringValue = @"100%";
+            
+            if (completion)
+            {
+                completion();
+            }
         });
     }];
     
