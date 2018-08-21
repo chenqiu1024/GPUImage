@@ -54,8 +54,36 @@ NSArray<NSString* >* g_inputMP4Paths;
 }
 
 - (IBAction)gpuImageMovieWithURLButtonAction:(id)sender {
-    NSEnumerator<NSString* >* iter = g_inputMP4Paths.objectEnumerator;
-    [self processNextURL:iter];
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setPrompt: @"打开"];
+    
+    openPanel.allowedFileTypes = [NSArray arrayWithObjects: @"mp4", @"mov", @"avi", @"mkv", @"rmvb", nil];
+    openPanel.allowsMultipleSelection = YES;
+    openPanel.directoryURL = nil;
+
+    [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == 1)
+        {
+//            NSURL* fileUrl = [[openPanel URLs] objectAtIndex:0];
+//            // 获取文件内容
+//            NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingFromURL:fileUrl error:nil];
+//            NSString *fileContext = [[NSString alloc] initWithData:fileHandle.readDataToEndOfFile encoding:NSUTF8StringEncoding];
+//            
+//            // 将 获取的数据传递给 ViewController 的 TextView
+//            ViewController *mainViewController = (ViewController *)[self gainMainViewController].contentViewController;
+//            mainViewController.showCodeTextView.string = fileContext;
+            NSArray* urls = [openPanel URLs];
+            NSMutableArray<NSString* >* urlStrings = [NSMutableArray new];
+            for (NSURL* url in urls)
+            {
+                [urlStrings addObject:url.path];
+            }
+            NSEnumerator<NSString* >* iter = urlStrings.objectEnumerator;
+            [self processNextURL:iter];
+        }
+    }];
+//    NSEnumerator<NSString* >* iter = g_inputMP4Paths.objectEnumerator;
+//    [self processNextURL:iter];
 }
 
 -(void) processNextAVPlayerItem:(NSEnumerator<NSString* >*)iter {
@@ -202,6 +230,7 @@ NSArray<NSString* >* g_inputMP4Paths;
     [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
     
     [movieWriter setCompletionBlock:^{
+        NSLog(@"completionBlock: movieWriter=0x%ld, movieFile=0x%ld, url='%@'", (long)movieWriter.hash, (long)movieFile.hash, url);
         [filter removeTarget:movieWriter];
         [movieWriter finishRecording];
         
