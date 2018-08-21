@@ -156,11 +156,12 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 //    }
     ///!!!For Debug:
     static NSUInteger frameNumber = 0;
-    if (frameNumber >= 0 && frameNumber < _gyroDataFrames && _renderer && _renderer->glCamera())
+//    AutoRef<GLCamera> camera = _renderer->glCamera();
+    if (frameNumber >= 0 && frameNumber < _gyroDataFrames && _renderer)
     {
-        float gyroMatrix[9];
+        float gyroMatrix[9] = {1.f,0.f,0.f, 0.f,1.f,0.f, 0.f,0.f,1.f};
         getGyroMatrix(gyroMatrix, frameNumber, _gyroData);
-        _renderer->glCamera()->setGyroMatrix(gyroMatrix, 3);
+//        camera->setGyroMatrix(gyroMatrix, 3);
     }
     
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
@@ -178,9 +179,10 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
     
     CGSize boundsSize = [self sizeOfFBO];
     _renderer->setSourceTextures(firstInputFramebuffer.texture, firstInputFramebuffer.texture, GL_TEXTURE_2D, false);
-    _renderer->setDisplayMode(PanoramaDisplayModeLUTInMesh);
-    _renderer->draw(0, 0, boundsSize.width, boundsSize.height);
-//    _renderer->drawRemappedPanorama(0, 0, boundsSize.width, boundsSize.height, 16);
+//    _renderer->setDisplayMode(PanoramaDisplayModeLUTInMesh);
+//    _renderer->draw(0, 0, boundsSize.width, boundsSize.height);
+    _renderer->setDisplayMode(PanoramaDisplayModeFromCubeMap | PanoramaDisplayModeLUTInMesh);///!!!#CRASH0821#
+    _renderer->drawRemappedPanorama(0, 0, boundsSize.width, boundsSize.height, 512);///!!!#CRASH0821#
     
     [firstInputFramebuffer unlock];
     
