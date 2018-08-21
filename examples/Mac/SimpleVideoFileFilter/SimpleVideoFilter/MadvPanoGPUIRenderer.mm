@@ -63,7 +63,6 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
         _renderer = new MadvGLRenderer(lutPath.UTF8String, lutSourceSize, lutSourceSize, 180, 90);
 //        AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
         _renderer->setIsYUVColorSpace(false);
-        _renderer->setDisplayMode(PanoramaDisplayModeFromCubeMap);
         kmMat4 sourceTextureMatrix;
         float sourceTextureMatrixData[] = {
             1.f, 0.f, 0.f, 0.f,
@@ -179,6 +178,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
     
     CGSize boundsSize = [self sizeOfFBO];
     _renderer->setSourceTextures(firstInputFramebuffer.texture, firstInputFramebuffer.texture, GL_TEXTURE_2D, false);
+    _renderer->setDisplayMode(PanoramaDisplayModeLUTInMesh);
     _renderer->draw(0, 0, boundsSize.width, boundsSize.height);
 //    _renderer->drawRemappedPanorama(0, 0, boundsSize.width, boundsSize.height, 16);
     
