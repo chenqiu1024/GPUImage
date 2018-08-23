@@ -20,10 +20,17 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     size_t videoWidth = CGImageGetWidth(image);
     size_t videoHeight = CGImageGetHeight(image);
     NSSize destSize;
-    if (videoHeight > videoWidth)
-        destSize = NSMakeSize(destMinSize, (float)destMinSize * (float)videoHeight / (float)videoWidth);
+    if (destMinSize > 0)
+    {
+        if (videoHeight > videoWidth)
+            destSize = NSMakeSize(destMinSize, (float)destMinSize * (float)videoHeight / (float)videoWidth);
+        else
+            destSize = NSMakeSize((float)destMinSize * (float)videoWidth / (float)videoHeight, destMinSize);
+    }
     else
-        destSize = NSMakeSize((float)destMinSize * (float)videoWidth / (float)videoHeight, destMinSize);
+    {
+        destSize = NSMakeSize(videoWidth, videoHeight);
+    }
     NSImage* thumb = [[NSImage alloc] initWithCGImage:image size:destSize];
     CGImageRelease(image);
     return thumb;
@@ -157,8 +164,8 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
-    
-    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(3456, 1728)];
+    NSImage* snapshot = getVideoImage(url, 99.f, -1);
+    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:snapshot.size];
     [filter addTarget:movieWriter];
     
     // Configure this for video from the movie file, where we want to preserve all video frames and audio samples
@@ -241,8 +248,8 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
-    
-    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(3456.0, 1728.0)];
+    NSImage* snapshot = getVideoImage(url, 99.f, -1);
+    movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:snapshot.size];
     [filter addTarget:movieWriter];
     
     // Configure this for video from the movie file, where we want to preserve all video frames and audio samples
