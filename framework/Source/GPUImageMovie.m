@@ -138,7 +138,7 @@
 }
 
 - (void)dealloc
-{
+{NSLog(@"#CRASH# Release movieFile=%@", self);
     [playerItemOutput setDelegate:nil queue:nil];
     
     // Moved into endProcessing
@@ -155,6 +155,7 @@
 - (void)enableSynchronizedEncodingUsingMovieWriter:(GPUImageMovieWriter *)movieWriter;
 {
     synchronizedMovieWriter = movieWriter;
+    NSLog(@"#CRASH# synchronizedMovieWriter = %@, self = %@", movieWriter, self);
     movieWriter.encodingLiveVideo = NO;
 }
 
@@ -264,7 +265,7 @@
     __unsafe_unretained GPUImageMovie *weakSelf = self;
 
     if (synchronizedMovieWriter != nil)
-    {
+    {NSLog(@"#CRASH# [synchronizedMovieWriter(%@) setVideoInputReadyCallback:***]; self=%@", synchronizedMovieWriter, self);
         [synchronizedMovieWriter setVideoInputReadyCallback:^{
             BOOL success = [weakSelf readNextVideoFrameFromOutput:readerVideoTrackOutput];
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
@@ -772,7 +773,7 @@ static CVReturn renderCallback(CVDisplayLinkRef displayLink,
 }
 
 - (void)endProcessing;
-{
+{NSLog(@"#CRASH# GPUImageMovie(%@) endProcessing", self);
     keepLooping = NO;
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
     [displayLink setPaused:YES];
@@ -780,13 +781,8 @@ static CVReturn renderCallback(CVDisplayLinkRef displayLink,
     CVDisplayLinkStop(displayLink);
 #endif
 
-    for (id<GPUImageInput> currentTarget in targets)
-    {
-        [currentTarget endProcessing];
-    }
-    
     if (synchronizedMovieWriter != nil)
-    {
+    {NSLog(@"#CRASH# [synchronizedMovieWriter(%@) setVideoInputReadyCallback:^{}]; self=%@", synchronizedMovieWriter, self);
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
         [synchronizedMovieWriter setVideoInputReadyCallback:^{return NO;}];
         [synchronizedMovieWriter setAudioInputReadyCallback:^{return NO;}];
@@ -795,6 +791,11 @@ static CVReturn renderCallback(CVDisplayLinkRef displayLink,
         [synchronizedMovieWriter setVideoInputReadyCallback:^{}];
         [synchronizedMovieWriter setAudioInputReadyCallback:^{}];
 #endif
+    }
+    
+    for (id<GPUImageInput> currentTarget in targets)
+    {
+        [currentTarget endProcessing];
     }
     
     if (self.playerItem && (displayLink != nil))

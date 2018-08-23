@@ -6,6 +6,29 @@
 
 NSArray<NSString* >* g_inputMP4Paths;
 
+NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
+{
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.appliesPreferredTrackTransform = NO;///!!!
+    CMTime ctime = CMTimeMake(timeMillSeconds, 1000);
+    NSError *error = nil;
+    CMTime actualTime;
+    CGImageRef image = [gen copyCGImageAtTime:ctime actualTime:&actualTime error:&error];
+    if (error)
+        NSLog(@"#Bug3763# getVideoImage(%d) error:%@", timeMillSeconds, error);
+    size_t videoWidth = CGImageGetWidth(image);
+    size_t videoHeight = CGImageGetHeight(image);
+    NSSize destSize;
+    if (videoHeight > videoWidth)
+        destSize = NSMakeSize(destMinSize, (float)destMinSize * (float)videoHeight / (float)videoWidth);
+    else
+        destSize = NSMakeSize((float)destMinSize * (float)videoWidth / (float)videoHeight, destMinSize);
+    NSImage* thumb = [[NSImage alloc] initWithCGImage:image size:destSize];
+    CGImageRelease(image);
+    return thumb;
+}
+
 @interface SLSSimpleVideoFileFilterWindowController ()
 {
     GPUImageMovie *movieFile;
@@ -116,6 +139,7 @@ NSArray<NSString* >* g_inputMP4Paths;
     
     //movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
     movieFile = [[GPUImageMovie alloc] initWithPlayerItem:playerItem];
+    NSLog(@"#CRASH# Create movieFile=%@", movieFile);
     movieFile.runBenchmark = YES;
     movieFile.playAtActualSpeed = YES;
 //    filter = [[GPUImagePixellateFilter alloc] init];
@@ -196,10 +220,12 @@ NSArray<NSString* >* g_inputMP4Paths;
     self.player = [AVPlayer playerWithURL:sampleURL];
     
     movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
+    NSLog(@"#CRASH# Create movieFile=%@", movieFile);
     movieFile.runBenchmark = YES;
     movieFile.playAtActualSpeed = YES;
 //    filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
+    if (filter) [filter removeAllTargets];
     filter = [[MadvPanoGPUIRenderer alloc] initWithLUTPath:self.tempLUTDirectoryPath gyroData:_pBoxes->gyroData gyroDataFrames:(_pBoxes->gyroDataSize/36)];
     clearCachedLUT(self.tempLUTDirectoryPath.UTF8String);
     deleteIfTempLUTDirectory(self.tempLUTDirectoryPath.UTF8String);
@@ -236,7 +262,6 @@ NSArray<NSString* >* g_inputMP4Paths;
     
     [movieWriter setCompletionBlock:^{
         NSLog(@"completionBlock: movieWriter=0x%ld, movieFile=0x%ld, url='%@'", (long)movieWriter.hash, (long)movieFile.hash, url);
-        [filter removeTarget:movieWriter];
         [movieWriter finishRecording];
         
         dispatch_async(dispatch_get_main_queue(), ^{
