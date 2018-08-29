@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Vlw-MZ-zfn">
+                    <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="xun-SD-9el"/>
+                </imageView>
+                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="v0e-oe-zg3">
+                    <rect key="frame" x="52" y="52" width="16" height="16"/>
+                </progressIndicator>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Vlw-MZ-zfn" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="Of1-kQ-gaU"/>
+                <constraint firstItem="v0e-oe-zg3" firstAttribute="centerX" secondItem="c22-O7-iKe" secondAttribute="centerX" id="XgU-if-so0"/>
+                <constraint firstAttribute="bottom" secondItem="Vlw-MZ-zfn" secondAttribute="bottom" id="c3j-6p-gjh"/>
+                <constraint firstItem="Vlw-MZ-zfn" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="lbG-Tc-ngX"/>
+                <constraint firstAttribute="trailing" secondItem="Vlw-MZ-zfn" secondAttribute="trailing" id="qHL-Ah-uhV"/>
+                <constraint firstItem="v0e-oe-zg3" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="ynP-na-0gH"/>
+            </constraints>
+        </customView>
+        <collectionViewItem identifier="MediaCollectionViewItem" id="md8-4b-Ltf" customClass="MediaCollectionViewItem">
+            <connections>
+                <outlet property="imageView" destination="Vlw-MZ-zfn" id="vhV-Qn-wCs"/>
+                <outlet property="progressIndicator" destination="v0e-oe-zg3" id="T1j-vY-aHD"/>
+                <outlet property="view" destination="c22-O7-iKe" id="F9N-Ee-y1W"/>
+            </connections>
+        </collectionViewItem>
+    </objects>
+</document>

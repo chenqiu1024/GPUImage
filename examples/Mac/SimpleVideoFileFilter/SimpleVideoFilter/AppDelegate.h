@@ -1,7 +1,9 @@
 #import <Cocoa/Cocoa.h>
 #import "SLSSimpleVideoFileFilterWindowController.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+
+
+@interface AppDelegate : NSObject
 {
     SLSSimpleVideoFileFilterWindowController *simpleVideoFileFilterWindowController;
 }
