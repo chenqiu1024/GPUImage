@@ -21,4 +21,8 @@
 
 @property (nonatomic, strong) NSArray* fileURLS;
 
+-(void) reloadData;
+
+-(void) refreshViews;
+
 @end

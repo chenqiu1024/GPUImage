@@ -13,7 +13,12 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="AppDelegate"/>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
+            <connections>
+                <outlet property="progressIndicator" destination="kC4-lo-1hu" id="uuO-rL-mmP"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="9bM-h6-11o"/>
+            </connections>
+        </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
@@ -673,6 +678,15 @@
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="kC4-lo-1hu">
+                        <rect key="frame" x="322" y="242" width="16" height="16"/>
+                    </progressIndicator>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="kC4-lo-1hu" firstAttribute="centerY" secondItem="EiT-Mj-1SZ" secondAttribute="centerY" id="8H4-3J-VAZ"/>
+                    <constraint firstItem="kC4-lo-1hu" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="OB1-rg-lKM"/>
+                </constraints>
             </view>
         </window>
     </objects>

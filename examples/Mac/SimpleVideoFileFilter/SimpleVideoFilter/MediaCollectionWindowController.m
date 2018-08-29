@@ -82,7 +82,10 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
             [self.sourceMediaThumbnails setObject:thumbnail forKey:path];
         }
     }
-//    [self.collectionView reloadData];
+}
+
+-(void) refreshViews {
+    [self.collectionView reloadData];
 }
 
 #pragma mark    NSCollectionViewDataSource/Delegate/DelegateFlowLayout
@@ -110,11 +113,16 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 
 #pragma mark    LifeCycle
 
+-(instancetype) initWithWindowNibName:(NSNibName)windowNibName {
+    if (self = [super initWithWindowNibName:windowNibName])
+    {
+        self.sourceMediaPaths = [[NSMutableArray alloc] init];
+        self.sourceMediaThumbnails = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
+
 -(void) awakeFromNib {
-    self.sourceMediaPaths = [[NSMutableArray alloc] init];
-    self.sourceMediaThumbnails = [[NSMutableDictionary alloc] init];
-    [self reloadData];
-    
     NSNib* mediaCellNib = [[NSNib alloc] initWithNibNamed:@"MediaCollectionViewItem" bundle:[NSBundle mainBundle]];
     [self.collectionView registerNib:mediaCellNib forItemWithIdentifier:mediaCellIdentifier];
 }
@@ -125,7 +133,11 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
     
 //    [self.collectionView registerClass:MediaCollectionViewItem.class forItemWithIdentifier:mediaCellIdentifier];
-//    [self reloadData];
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        self.collectionView.dataSource = self;
+//        self.collectionView.delegate = self;
+//        [self reloadData];
+//    });
 }
 
 @end
