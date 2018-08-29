@@ -9,7 +9,13 @@
 
 @property (weak) IBOutlet NSProgressIndicator* progressIndicator;
 
+@property (weak) IBOutlet NSCollectionView* collectionView;
+
+@property (strong) MediaCollectionWindowController* collectionController;
+
 -(IBAction)openFiles:(id)sender;
+
+-(IBAction)startProcess:(id)sender;
 
 @end
 
@@ -18,12 +24,9 @@
 -(IBAction)openFiles:(id)sender {
     NSOpenPanel* openPanel = [NSOpenPanel openPanel];
     [openPanel setPrompt: @"Open Source Media Files"];
-    
     openPanel.allowedFileTypes = [NSArray arrayWithObjects: @"mp4", @"mov", @"avi", @"mkv", @"rmvb", @"jpg", @"dng", nil];
     openPanel.allowsMultipleSelection = YES;
     openPanel.directoryURL = nil;
-    
-    
     [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == 1)
         {
@@ -36,7 +39,7 @@
             //            ViewController *mainViewController = (ViewController *)[self gainMainViewController].contentViewController;
             //            mainViewController.showCodeTextView.string = fileContext;
             [self.progressIndicator startAnimation:self];
-            
+            /*
             MediaCollectionWindowController* collectionVC = [[MediaCollectionWindowController alloc] initWithWindowNibName:@"MediaCollectionWindowController"];
             collectionVC.fileURLS = [openPanel URLs];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -46,14 +49,34 @@
                     [collectionVC showWindow:self];
                 });
             });
+            /*/
+            if (self.collectionController)
+            {
+                [self.collectionController releaseResources];
+            }
+            self.collectionController = [[MediaCollectionWindowController alloc] initWithCollectionView:self.collectionView];
+            self.collectionController.fileURLS = [openPanel URLs];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [self.collectionController reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.collectionController refreshViews];
+                    [self.progressIndicator stopAnimation:self];
+                });
+            });
+            //*/
         }
     }];
 }
 
+-(IBAction)startProcess:(id)sender {
+    SLSSimpleVideoFileFilterWindowController* transcodeWindowController = [[SLSSimpleVideoFileFilterWindowController alloc] initWithWindowNibName:@"SLSSimpleVideoFileFilterWindowController"];
+    transcodeWindowController.urlStrings = self.collectionController.sourceMediaPaths;
+    [transcodeWindowController showWindow:self];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-//    simpleVideoFileFilterWindowController = [[SLSSimpleVideoFileFilterWindowController alloc] initWithWindowNibName:@"SLSSimpleVideoFileFilterWindowController"];
-//    [simpleVideoFileFilterWindowController showWindow:self];
+//
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

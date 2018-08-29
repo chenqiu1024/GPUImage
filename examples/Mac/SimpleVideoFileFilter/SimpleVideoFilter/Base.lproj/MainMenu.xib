@@ -15,6 +15,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
+                <outlet property="collectionView" destination="5R6-dw-hgc" id="2JF-bX-1Y4"/>
                 <outlet property="progressIndicator" destination="kC4-lo-1hu" id="uuO-rL-mmP"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="9bM-h6-11o"/>
             </connections>
@@ -99,9 +100,10 @@
                                     <action selector="performClose:" target="-1" id="HmO-Ls-i7Q"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Save…" keyEquivalent="s" id="pxx-59-PXV">
+                            <menuItem title="Transcode All" id="pxx-59-PXV" userLabel="Transcode All">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="saveDocument:" target="-1" id="teZ-XB-qJY"/>
+                                    <action selector="startProcess:" target="Voe-Tx-rLC" id="7VY-fq-E5f"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Save As…" keyEquivalent="S" id="Bw7-FT-i3A">
@@ -679,15 +681,49 @@
                 <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="kC4-lo-1hu">
+                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JIT-fK-aHi">
+                        <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
+                        <clipView key="contentView" drawsBackground="NO" id="nUu-wp-ImI">
+                            <rect key="frame" x="1" y="1" width="658" height="498"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <collectionView id="5R6-dw-hgc">
+                                    <rect key="frame" x="0.0" y="0.0" width="658" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="IdQ-tq-Zf3">
+                                        <size key="itemSize" width="120" height="120"/>
+                                    </collectionViewFlowLayout>
+                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </collectionView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zRu-Oh-zT0">
+                            <rect key="frame" x="-100" y="-100" width="233" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="5H5-XP-Lyl">
+                            <rect key="frame" x="234" y="1" width="15" height="143"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <progressIndicator wantsLayer="YES" focusRingType="none" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="kC4-lo-1hu">
                         <rect key="frame" x="322" y="242" width="16" height="16"/>
                     </progressIndicator>
                 </subviews>
                 <constraints>
                     <constraint firstItem="kC4-lo-1hu" firstAttribute="centerY" secondItem="EiT-Mj-1SZ" secondAttribute="centerY" id="8H4-3J-VAZ"/>
+                    <constraint firstItem="JIT-fK-aHi" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="L8y-b0-8W6"/>
+                    <constraint firstAttribute="bottom" secondItem="JIT-fK-aHi" secondAttribute="bottom" id="NrD-mD-T90"/>
                     <constraint firstItem="kC4-lo-1hu" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="OB1-rg-lKM"/>
+                    <constraint firstItem="JIT-fK-aHi" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="okB-73-Ej5"/>
+                    <constraint firstAttribute="trailing" secondItem="JIT-fK-aHi" secondAttribute="trailing" id="vBd-Kn-bK5"/>
                 </constraints>
             </view>
         </window>
+        <view id="L7k-qi-uc1">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
     </objects>
 </document>

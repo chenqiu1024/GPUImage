@@ -49,9 +49,6 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 
 @interface MediaCollectionWindowController ()
 
-@property (nonatomic, strong) NSMutableArray<NSString* >* sourceMediaPaths;
-@property (nonatomic, strong) NSMutableDictionary<NSString*, NSImage* >* sourceMediaThumbnails;
-
 @end
 
 @implementation MediaCollectionWindowController
@@ -85,7 +82,8 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 }
 
 -(void) refreshViews {
-    [self.collectionView reloadData];
+    NSIndexSet* indexSet = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(0, 1)];
+    [self.collectionView reloadSections:indexSet];
 }
 
 #pragma mark    NSCollectionViewDataSource/Delegate/DelegateFlowLayout
@@ -113,6 +111,15 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 
 #pragma mark    LifeCycle
 
+-(void) dealloc {
+    [self releaseResources];
+}
+
+-(void) releaseResources {
+    [self.sourceMediaPaths removeAllObjects];
+    [self.sourceMediaThumbnails removeAllObjects];
+}
+
 -(instancetype) initWithWindowNibName:(NSNibName)windowNibName {
     if (self = [super initWithWindowNibName:windowNibName])
     {
@@ -122,7 +129,20 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
     return self;
 }
 
+-(instancetype) initWithCollectionView:(NSCollectionView*)collectionView {
+    if (self = [super init])
+    {
+        self.collectionView = collectionView;
+        self.sourceMediaPaths = [[NSMutableArray alloc] init];
+        self.sourceMediaThumbnails = [[NSMutableDictionary alloc] init];
+        [self awakeFromNib];
+    }
+    return self;
+}
+
 -(void) awakeFromNib {
+    self.collectionView.dataSource = self;
+    self.collectionView.delegate = self;
     NSNib* mediaCellNib = [[NSNib alloc] initWithNibNamed:@"MediaCollectionViewItem" bundle:[NSBundle mainBundle]];
     [self.collectionView registerNib:mediaCellNib forItemWithIdentifier:mediaCellIdentifier];
 }

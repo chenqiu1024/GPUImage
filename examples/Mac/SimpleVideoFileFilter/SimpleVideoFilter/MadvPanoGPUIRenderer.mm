@@ -34,7 +34,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 @interface MadvPanoGPUIRenderer ()
 {
     AutoRef<MadvGLRenderer> _renderer;
-//    AutoRef<PanoCameraController> _panoController;
+    AutoRef<PanoCameraController> _panoController;
 //    AutoRef<GLCamera> _glCamera;
     void* _gyroData;
     int _gyroDataFrames;
@@ -63,7 +63,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
         [GPUImageContext useImageProcessingContext];
         Vec2f lutSourceSize = { DEFAULT_LUT_VALUE_WIDTH, DEFAULT_LUT_VALUE_HEIGHT };
         _renderer = new MadvGLRenderer(lutPath.UTF8String, lutSourceSize, lutSourceSize, 180, 90);
-//        _panoController = new PanoCameraController(_renderer);
+        _panoController = new PanoCameraController(_renderer);
 //        _glCamera = _renderer->glCamera();
         _renderer->setIsYUVColorSpace(false);
         kmMat4 sourceTextureMatrix;
@@ -86,7 +86,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
         _renderer = NULL;
-//        _panoController = NULL;
+        _panoController = NULL;
 //        _glCamera = NULL;
     });
     
@@ -165,7 +165,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
         float gyroMatrix[9] = {1.f,0.f,0.f, 0.f,1.f,0.f, 0.f,0.f,1.f};
         getGyroMatrix(gyroMatrix, frameNumber, _gyroData);
 //        NSLog(@"#GYRO# {%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f}", gyroMatrix[0], gyroMatrix[1], gyroMatrix[2], gyroMatrix[3], gyroMatrix[4], gyroMatrix[5], gyroMatrix[6], gyroMatrix[7], gyroMatrix[8]);
-//        _panoController->setGyroMatrix(gyroMatrix, 3);
+        _panoController->setGyroMatrix(gyroMatrix, 3);
 //        _glCamera->setGyroMatrix(gyroMatrix, 3);
     }
     

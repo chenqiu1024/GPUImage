@@ -69,7 +69,9 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     [super windowDidLoad];
 
     self.containerView.hidden = YES;
-
+    
+    NSEnumerator<NSString* >* iter = self.urlStrings.objectEnumerator;
+    [self processNextURL:iter];
 }
 
 -(void) processNextURL:(NSEnumerator<NSString* >*)iter {

@@ -21,8 +21,15 @@
 
 @property (nonatomic, strong) NSArray* fileURLS;
 
+@property (nonatomic, strong) NSMutableArray<NSString* >* sourceMediaPaths;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NSImage* >* sourceMediaThumbnails;
+
 -(void) reloadData;
 
 -(void) refreshViews;
+
+-(void) releaseResources;
+
+-(instancetype) initWithCollectionView:(NSCollectionView*)collectionView;
 
 @end
