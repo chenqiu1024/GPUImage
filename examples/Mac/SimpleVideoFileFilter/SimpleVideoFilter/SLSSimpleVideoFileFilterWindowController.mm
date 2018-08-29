@@ -228,13 +228,17 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSURL* sampleURL = [NSURL fileURLWithPath:url];
     self.player = [AVPlayer playerWithURL:sampleURL];
     
+    if (filter)
+    {
+        [filter removeAllTargets];
+    }
     movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
     NSLog(@"#CRASH# Create movieFile=%@", movieFile);
     movieFile.runBenchmark = YES;
     movieFile.playAtActualSpeed = YES;
 //    filter = [[GPUImagePixellateFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
-    if (filter) [filter removeAllTargets];
+    
     filter = [[MadvPanoGPUIRenderer alloc] initWithLUTPath:self.tempLUTDirectoryPath gyroData:_pBoxes->gyroData gyroDataFrames:(_pBoxes->gyroDataSize/36)];
     clearCachedLUT(self.tempLUTDirectoryPath.UTF8String);
     deleteIfTempLUTDirectory(self.tempLUTDirectoryPath.UTF8String);

@@ -38,6 +38,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 //    AutoRef<GLCamera> _glCamera;
     void* _gyroData;
     int _gyroDataFrames;
+    NSUInteger _frameNumber;
 }
 @end
 
@@ -53,6 +54,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
         return nil;
     }
     
+    _frameNumber = 0;
     _gyroData = gyroData;
     _gyroDataFrames = gyroDataFrames;
     
@@ -159,12 +161,11 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 //        [firstInputFramebuffer unlock];
 //        return;
 //    }
-    static NSUInteger frameNumber = 0;
-    if (frameNumber >= 0 && frameNumber < _gyroDataFrames && _renderer)
+    if (_frameNumber >= 0 && _frameNumber < _gyroDataFrames && _renderer)
     {
         float gyroMatrix[9] = {1.f,0.f,0.f, 0.f,1.f,0.f, 0.f,0.f,1.f};
-        getGyroMatrix(gyroMatrix, frameNumber, _gyroData);
-//        NSLog(@"#GYRO# {%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f}", gyroMatrix[0], gyroMatrix[1], gyroMatrix[2], gyroMatrix[3], gyroMatrix[4], gyroMatrix[5], gyroMatrix[6], gyroMatrix[7], gyroMatrix[8]);
+        getGyroMatrix(gyroMatrix, _frameNumber, _gyroData);
+//        NSLog(@"#GYRO# Frame#%d {%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f}", _frameNumber, gyroMatrix[0], gyroMatrix[1], gyroMatrix[2], gyroMatrix[3], gyroMatrix[4], gyroMatrix[5], gyroMatrix[6], gyroMatrix[7], gyroMatrix[8]);
         _panoController->setGyroMatrix(gyroMatrix, 3);
 //        _glCamera->setGyroMatrix(gyroMatrix, 3);
     }
@@ -194,7 +195,7 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
         dispatch_semaphore_signal(imageCaptureSemaphore);
     }
     
-    frameNumber++;///!!!For Debug
+    _frameNumber++;///!!!For Debug
 }
 
 - (void)informTargetsAboutNewFrameAtTime:(CMTime)frameTime;
