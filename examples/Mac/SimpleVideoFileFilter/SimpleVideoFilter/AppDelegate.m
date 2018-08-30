@@ -82,6 +82,10 @@
     [self.collectionController setMediaTranscodingProgress:progress fileURL:fileURL];
 }
 
+-(void) onAllTranscodingDone:(SLSSimpleVideoFileFilterWindowController*)controller {
+    [controller close];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
 //

@@ -49,7 +49,9 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 }
 
 @property (weak) IBOutlet GPUImageView *videoView;
-@property (weak) IBOutlet NSTextField *progressLabel;
+//@property (weak) IBOutlet NSTextField *progressLabel;
+@property (weak) IBOutlet NSTextField* titleLabel;
+@property (weak) IBOutlet NSProgressIndicator* progressIndicator;
 
 @property (weak) IBOutlet NSView *containerView;
 @property (weak) IBOutlet NSButton *urlButton;
@@ -85,6 +87,13 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
             [self processNextURL:iter];
         }];
         [self showProcessingUI];
+    }
+    else
+    {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(onAllTranscodingDone:)])
+        {
+            [self.delegate onAllTranscodingDone:self];
+        }
     }
 }
 
@@ -194,7 +203,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
-            self.progressLabel.stringValue = @"100%";
+            self.progressIndicator.doubleValue = 1.0;
             
             if (completion)
             {
@@ -208,7 +217,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 
 - (void)retrievingProgress
 {
-    self.progressLabel.stringValue = [NSString stringWithFormat:@"%d%%", (int)(movieFile.progress * 100)];
+    self.progressIndicator.doubleValue = movieFile.progress;
     if (self.delegate && [self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
     {
         [self.delegate onTranscodingProgress:movieFile.progress fileURL:_sourceFileURL];
@@ -261,6 +270,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     _sourceFileURL = url;
+    self.titleLabel.stringValue = url;
     _destFileURL = pathToMovie;
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
     NSImage* snapshot = getVideoImage(url, 99.f, -1);
@@ -289,7 +299,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
         NSImage* thumbnail = getVideoImage(_destFileURL, 99.f, -1);
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
-            self.progressLabel.stringValue = @"100%";
+            self.progressIndicator.doubleValue = 1.0;
             
             if (self.delegate)
             {

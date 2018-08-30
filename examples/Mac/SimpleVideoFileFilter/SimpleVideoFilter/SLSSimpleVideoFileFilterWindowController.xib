@@ -1,100 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.13.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.13.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="SLSSimpleVideoFileFilterWindowController">
             <connections>
-                <outlet property="avPlayerItemButton" destination="sGy-9b-qta" id="1nS-MW-LQb"/>
                 <outlet property="containerView" destination="f0d-mO-Fb5" id="BkS-19-eCd"/>
-                <outlet property="progressLabel" destination="cNI-IW-jsa" id="5xP-Fg-lMn"/>
-                <outlet property="urlButton" destination="vql-UX-3Et" id="oSx-3D-m6P"/>
+                <outlet property="progressIndicator" destination="MEp-DG-xkw" id="dJn-4H-ekt"/>
+                <outlet property="titleLabel" destination="zQd-c4-U6k" id="hPG-Xy-iH0"/>
                 <outlet property="videoView" destination="dd0-IN-e64" id="tXV-v8-36j"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="eyV-Nd-iwu"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Simple Video File Filter View" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="Stitching Preview" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="660" height="500"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f0d-mO-Fb5">
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="f0d-mO-Fb5">
                         <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="16e-at-wsn">
-                                <rect key="frame" x="282" y="18" width="96" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" state="on" alignment="left" maxValue="0.20000000000000001" doubleValue="0.10000000000000001" tickMarkPosition="above" sliderType="linear" id="Sm7-en-kOI"/>
-                                <connections>
-                                    <action selector="updatePixelWidth:" target="-2" id="7lq-iA-lKw"/>
-                                </connections>
-                            </slider>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cNI-IW-jsa">
-                                <rect key="frame" x="604" y="463" width="38" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="AJP-0u-i9d">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dd0-IN-e64" customClass="GPUImageView">
-                                <rect key="frame" x="87" y="81" width="486" height="365"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="dd0-IN-e64" customClass="GPUImageView">
+                                <rect key="frame" x="70" y="120" width="520" height="260"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="520" id="NkH-q7-Ewv"/>
+                                    <constraint firstAttribute="height" constant="260" id="d2G-dg-796"/>
+                                </constraints>
                             </customView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5K-tM-V5u">
-                                <rect key="frame" x="541" y="463" width="63" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Progress:" id="fjh-hr-OfD">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fTL-rw-0NB">
-                                <rect key="frame" x="294" y="45" width="72" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pixel width" id="QYH-ev-Yc2">
+                            <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="MEp-DG-xkw">
+                                <rect key="frame" x="70" y="395" width="520" height="20"/>
+                            </progressIndicator>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zQd-c4-U6k">
+                                <rect key="frame" x="68" y="463" width="524" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="Wvi-bb-Gru">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="dd0-IN-e64" firstAttribute="centerY" secondItem="f0d-mO-Fb5" secondAttribute="centerY" id="ERq-Fc-k7a"/>
+                            <constraint firstItem="dd0-IN-e64" firstAttribute="leading" secondItem="MEp-DG-xkw" secondAttribute="leading" id="YhT-0U-xJU"/>
+                            <constraint firstItem="MEp-DG-xkw" firstAttribute="trailing" secondItem="zQd-c4-U6k" secondAttribute="trailing" id="ZOC-kg-rAA"/>
+                            <constraint firstItem="MEp-DG-xkw" firstAttribute="leading" secondItem="zQd-c4-U6k" secondAttribute="leading" id="bdl-et-0te"/>
+                            <constraint firstItem="dd0-IN-e64" firstAttribute="trailing" secondItem="MEp-DG-xkw" secondAttribute="trailing" id="dET-V4-Jpl"/>
+                            <constraint firstItem="zQd-c4-U6k" firstAttribute="top" secondItem="f0d-mO-Fb5" secondAttribute="top" constant="20" id="hPf-EW-rca"/>
+                            <constraint firstItem="dd0-IN-e64" firstAttribute="top" secondItem="MEp-DG-xkw" secondAttribute="bottom" constant="16" id="i7w-gm-KEg"/>
+                            <constraint firstItem="dd0-IN-e64" firstAttribute="centerX" secondItem="f0d-mO-Fb5" secondAttribute="centerX" id="pSR-NO-SjS"/>
+                        </constraints>
                     </customView>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vql-UX-3Et">
-                        <rect key="frame" x="14" y="464" width="204" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="GPUImageMovie with URL" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5fi-O3-btb">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="gpuImageMovieWithURLButtonAction:" target="-2" id="WEA-4a-wvC"/>
-                        </connections>
-                    </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sGy-9b-qta">
-                        <rect key="frame" x="14" y="440" width="259" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="GPUImageMovie with AVPlayerItem" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wnc-x4-dp7">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="gpuImageMovieWithAvplayeritemButtonAction:" target="-2" id="61N-Ob-vyk"/>
-                        </connections>
-                    </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="f0d-mO-Fb5" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="6D9-B9-5Yq"/>
+                    <constraint firstItem="f0d-mO-Fb5" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="LYY-xT-Hks"/>
+                    <constraint firstAttribute="bottom" secondItem="f0d-mO-Fb5" secondAttribute="bottom" id="r6s-Jd-GJa"/>
+                    <constraint firstAttribute="trailing" secondItem="f0d-mO-Fb5" secondAttribute="trailing" id="wYC-N4-rlM"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="viU-Oc-5RF"/>

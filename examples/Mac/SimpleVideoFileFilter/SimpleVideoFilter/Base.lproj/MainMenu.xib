@@ -23,9 +23,9 @@
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
-                <menuItem title="SimpleVideoFileFilter" id="1Xt-HY-uBw">
+                <menuItem title="MADV Stitch Tool" id="1Xt-HY-uBw">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="SimpleVideoFileFilter" systemMenu="apple" id="uQy-DD-JDr">
+                    <menu key="submenu" title="MADV Stitch Tool" systemMenu="apple" id="uQy-DD-JDr">
                         <items>
                             <menuItem title="About SimpleVideoFileFilter" id="5kV-Vb-QxS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -672,11 +672,11 @@
             </items>
             <point key="canvasLocation" x="46" y="-181"/>
         </menu>
-        <window title="SimpleVideoFileFilter" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="MADV Stitch Tool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="451" y="228" width="660" height="500"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
