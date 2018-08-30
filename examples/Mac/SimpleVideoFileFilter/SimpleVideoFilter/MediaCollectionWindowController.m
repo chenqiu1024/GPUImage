@@ -42,6 +42,20 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 
 static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionViewItem";
 
+@implementation MediaCellModel
+
+-(instancetype) initWithThumbnail:(NSImage*)thumbnail progress:(float)progress {
+    if (self = [super init])
+    {
+        self.thumbnail = thumbnail;
+        self.progress = progress;
+    }
+    return self;
+}
+
+@end
+
+
 @implementation MediaCollectionViewItem
 
 @end
@@ -55,29 +69,61 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 
 #pragma mark    Properties
 
+-(void) setMediaTranscodingProgress:(float)progress fileURL:(NSString*)fileURL {
+    MediaCellModel* model = [self.sourceMediaModels objectForKey:fileURL];
+    if (!model)
+    {
+        model = [[MediaCellModel alloc] initWithThumbnail:nil progress:progress];
+        [self.sourceMediaModels setObject:model forKey:fileURL];
+    }
+    else
+    {
+        model.progress = progress;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self refreshViews];
+    });
+}
+
+-(void) setMediaThumbnail:(NSImage*)thumbnail fileURL:(NSString*)fileURL {
+    MediaCellModel* model = [self.sourceMediaModels objectForKey:fileURL];
+    if (!model)
+    {
+        model = [[MediaCellModel alloc] initWithThumbnail:thumbnail progress:-1.f];
+        [self.sourceMediaModels setObject:model forKey:fileURL];
+    }
+    else
+    {
+        model.thumbnail = thumbnail;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self refreshViews];
+    });
+}
+
 -(void) reloadData {
     [self.sourceMediaPaths removeAllObjects];
-    [self.sourceMediaThumbnails removeAllObjects];
+    [self.sourceMediaModels removeAllObjects];
     for (NSURL* url in self.fileURLS)
     {
         NSString* path = url.path;
         NSString* ext = path.pathExtension.lowercaseString;
         [self.sourceMediaPaths addObject:path];
+        NSImage* thumbnail;
         if ([ext isEqualToString:@"jpg"])
         {
-            NSImage* thumbnail = [[NSImage alloc] initWithContentsOfFile:path];
-            [self.sourceMediaThumbnails setObject:thumbnail forKey:path];
+            thumbnail = [[NSImage alloc] initWithContentsOfFile:path];
         }
         else if ([ext isEqualToString:@"dng"])
         {
-            NSImage* thumbnail = [[NSImage alloc] initWithContentsOfFile:path];
-            [self.sourceMediaThumbnails setObject:thumbnail forKey:path];
+            thumbnail = [[NSImage alloc] initWithContentsOfFile:path];
         }
         else
         {
-            NSImage* thumbnail = getVideoImage(path, 99.f, -1);
-            [self.sourceMediaThumbnails setObject:thumbnail forKey:path];
+            thumbnail = getVideoImage(path, 99.f, -1);
         }
+        MediaCellModel* model = [[MediaCellModel alloc] initWithThumbnail:thumbnail progress:-1.f];
+        [self.sourceMediaModels setObject:model forKey:path];
     }
 }
 
@@ -97,11 +143,23 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 }
 
 - (NSCollectionViewItem *)collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath {
-    NSCollectionViewItem* cellItem = [collectionView makeItemWithIdentifier:mediaCellIdentifier forIndexPath:indexPath];
+    MediaCollectionViewItem* cellItem = (MediaCollectionViewItem*)[collectionView makeItemWithIdentifier:mediaCellIdentifier forIndexPath:indexPath];
     NSString* path = self.sourceMediaPaths[indexPath.item];
     [cellItem.imageView setToolTip:path];
-    NSImage* image = [self.sourceMediaThumbnails objectForKey:path];
-    [cellItem.imageView setImage:image];
+    MediaCellModel* model = [self.sourceMediaModels objectForKey:path];
+    [cellItem.imageView setImage:model.thumbnail];
+    cellItem.imageView.alphaValue = (model.progress < 1.f ? 0.5f : 1.0f);
+    if (model.progress < 0.f || model.progress >= 1.f)
+    {
+        [cellItem.progressIndicator stopAnimation:self];
+        cellItem.progressIndicator.hidden = YES;
+    }
+    else
+    {
+        cellItem.progressIndicator.hidden = NO;
+        [cellItem.progressIndicator startAnimation:self];
+        cellItem.progressIndicator.doubleValue = model.progress;
+    }
     return cellItem;
 }
 
@@ -117,14 +175,14 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 
 -(void) releaseResources {
     [self.sourceMediaPaths removeAllObjects];
-    [self.sourceMediaThumbnails removeAllObjects];
+    [self.sourceMediaModels removeAllObjects];
 }
 
 -(instancetype) initWithWindowNibName:(NSNibName)windowNibName {
     if (self = [super initWithWindowNibName:windowNibName])
     {
         self.sourceMediaPaths = [[NSMutableArray alloc] init];
-        self.sourceMediaThumbnails = [[NSMutableDictionary alloc] init];
+        self.sourceMediaModels = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -134,7 +192,7 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
     {
         self.collectionView = collectionView;
         self.sourceMediaPaths = [[NSMutableArray alloc] init];
-        self.sourceMediaThumbnails = [[NSMutableDictionary alloc] init];
+        self.sourceMediaModels = [[NSMutableDictionary alloc] init];
         [self awakeFromNib];
     }
     return self;

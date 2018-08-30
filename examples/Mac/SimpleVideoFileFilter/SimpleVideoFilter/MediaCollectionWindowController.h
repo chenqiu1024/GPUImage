@@ -8,6 +8,17 @@
 
 #import <Cocoa/Cocoa.h>
 
+@interface MediaCellModel : NSObject
+
+@property (strong) NSImage* thumbnail;
+
+@property (assign) float progress;
+
+-(instancetype) initWithThumbnail:(NSImage*)thumbnail progress:(float)progress;
+
+@end
+
+
 @interface MediaCollectionViewItem : NSCollectionViewItem
 
 @property (weak) IBOutlet NSProgressIndicator* progressIndicator;
@@ -22,7 +33,10 @@
 @property (nonatomic, strong) NSArray* fileURLS;
 
 @property (nonatomic, strong) NSMutableArray<NSString* >* sourceMediaPaths;
-@property (nonatomic, strong) NSMutableDictionary<NSString*, NSImage* >* sourceMediaThumbnails;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, MediaCellModel* >* sourceMediaModels;
+
+-(void) setMediaTranscodingProgress:(float)progress fileURL:(NSString*)fileURL;
+-(void) setMediaThumbnail:(NSImage*)thumbnail fileURL:(NSString*)fileURL;
 
 -(void) reloadData;
 

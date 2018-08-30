@@ -17,8 +17,8 @@
                     <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="xun-SD-9el"/>
                 </imageView>
-                <progressIndicator wantsLayer="YES" focusRingType="none" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="v0e-oe-zg3">
-                    <rect key="frame" x="52" y="52" width="16" height="16"/>
+                <progressIndicator wantsLayer="YES" focusRingType="none" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="1" displayedWhenStopped="NO" bezeled="NO" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="v0e-oe-zg3">
+                    <rect key="frame" x="44" y="44" width="32" height="32"/>
                 </progressIndicator>
             </subviews>
             <constraints>

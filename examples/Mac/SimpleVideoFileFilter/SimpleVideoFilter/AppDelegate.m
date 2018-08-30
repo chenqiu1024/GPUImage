@@ -2,8 +2,7 @@
 #import "MediaCollectionWindowController.h"
 #import <GPUImage/GPUImage.h>
 
-
-@interface AppDelegate ()
+@interface AppDelegate () <TranscodeDelegate>
 
 @property (weak) IBOutlet NSWindow *window;
 
@@ -70,8 +69,17 @@
 
 -(IBAction)startProcess:(id)sender {
     SLSSimpleVideoFileFilterWindowController* transcodeWindowController = [[SLSSimpleVideoFileFilterWindowController alloc] initWithWindowNibName:@"SLSSimpleVideoFileFilterWindowController"];
+    transcodeWindowController.delegate = self;
     transcodeWindowController.urlStrings = self.collectionController.sourceMediaPaths;
     [transcodeWindowController showWindow:self];
+}
+
+-(void) onTranscodingDone:(NSImage *)thumbnail fileURL:(NSString *)fileURL {
+    [self.collectionController setMediaThumbnail:thumbnail fileURL:fileURL];
+}
+
+-(void) onTranscodingProgress:(float)progress fileURL:(NSString *)fileURL {
+    [self.collectionController setMediaTranscodingProgress:progress fileURL:fileURL];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {

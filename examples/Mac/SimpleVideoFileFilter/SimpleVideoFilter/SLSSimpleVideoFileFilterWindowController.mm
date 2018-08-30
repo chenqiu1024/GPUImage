@@ -43,6 +43,9 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     GPUImageMovieWriter *movieWriter;
     NSTimer * timer;
     MadvMP4Boxes* _pBoxes;
+    
+    NSString* _sourceFileURL;
+    NSString* _destFileURL;
 }
 
 @property (weak) IBOutlet GPUImageView *videoView;
@@ -206,6 +209,10 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 - (void)retrievingProgress
 {
     self.progressLabel.stringValue = [NSString stringWithFormat:@"%d%%", (int)(movieFile.progress * 100)];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+    {
+        [self.delegate onTranscodingProgress:movieFile.progress fileURL:_sourceFileURL];
+    }
 }
 
 - (IBAction)updatePixelWidth:(id)sender
@@ -253,6 +260,8 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSString* movieName = [[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"_stitched.m4v"];
     NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
+    _sourceFileURL = url;
+    _destFileURL = pathToMovie;
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
     NSImage* snapshot = getVideoImage(url, 99.f, -1);
     movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:snapshot.size];
@@ -277,9 +286,22 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
         NSLog(@"completionBlock: movieWriter=0x%ld, movieFile=0x%ld, url='%@'", (long)movieWriter.hash, (long)movieFile.hash, url);
         [movieWriter finishRecording];
         
+        NSImage* thumbnail = getVideoImage(_destFileURL, 99.f, -1);
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
             self.progressLabel.stringValue = @"100%";
+            
+            if (self.delegate)
+            {
+                if ([self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+                {
+                    [self.delegate onTranscodingProgress:1.f fileURL:_sourceFileURL];
+                }
+                if ([self.delegate respondsToSelector:@selector(onTranscodingDone:fileURL:)])
+                {
+                    [self.delegate onTranscodingDone:thumbnail fileURL:_sourceFileURL];
+                }
+            }
             
             if (completion)
             {
