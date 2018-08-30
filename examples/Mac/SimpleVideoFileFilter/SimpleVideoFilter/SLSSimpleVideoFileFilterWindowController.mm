@@ -3,7 +3,7 @@
 #import "MadvPanoGPUIRenderer.h"
 #import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <GPUImage/GPUImage.h>
-// TODO: 1.Filter out non-MADV medias; 2.Ignore ill rotation matrix; 3."Add files" and "Clear files" buttons and "Gyro Stablization" checkbox; 4.Picture stitching;
+// TODO: 1.Filter out non-MADV medias; 2.Ignore ill rotation matrix; 3."Add files" and "Clear files" buttons and "Gyro Stablization" checkbox;
 NSArray<NSString* >* g_inputMP4Paths;
 
 NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
@@ -83,9 +83,26 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSString* url = [iter nextObject];
     if (url)
     {
-        [self runProcessingWithURL:url completion:^() {
-            [self processNextURL:iter];
-        }];
+        NSString* ext = url.pathExtension.lowercaseString;
+        if ([ext isEqualToString:@"jpg"])
+        {
+            [self processJPEG:url completion:^(NSString* destPath) {
+                [self processNextURL:iter];
+            }];
+        }
+        else if ([ext isEqualToString:@"dng"])
+        {
+            [self processDNG:url completion:^(NSString* destPath) {
+                [self processNextURL:iter];
+            }];
+        }
+        else
+        {
+            [self runProcessingWithURL:url completion:^() {
+                [self processNextURL:iter];
+            }];
+        }
+        
         [self showProcessingUI];
     }
     else
@@ -231,6 +248,11 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 }
 
 -(void) processDNG:(NSString*)sourcePath completion:(void(^)(NSString*))completion {
+    GPUImageView* filterView = (GPUImageView*)self.videoView;
+    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
+    [picture addTarget:filterView];
+    [picture processImage];
+    
     NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.dng"]];
     NSString* tempLUTDirectory = makeTempLUTDirectory(sourcePath);
@@ -266,16 +288,39 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     //*/
     glContext->swapBuffers();
     XGLContext::makeNullCurrent();
+    delete glContext;
+    deleteIfTempLUTDirectory(tempLUTDirectory.UTF8String);
+    
+    NSImage* image = [[NSImage alloc] initWithContentsOfFile:destPath];
+    if (self.delegate)
+    {
+        if ([self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+        {
+            [self.delegate onTranscodingProgress:1.f fileURL:sourcePath];
+        }
+        if ([self.delegate respondsToSelector:@selector(onTranscodingDone:fileURL:)])
+        {
+            [self.delegate onTranscodingDone:image fileURL:sourcePath];
+        }
+    }
+    
+    [picture removeAllTargets];
+    picture = [[GPUImagePicture alloc] initWithImage:image];
+    [picture addTarget:filterView];
+    [picture processImage];
     if (completion)
     {
         completion(destPath);
     }
-    delete glContext;
-    deleteIfTempLUTDirectory(tempLUTDirectory.UTF8String);
 }
 
 -(void) processJPEG:(NSString*)sourcePath completion:(void(^)(NSString*))completion {
     //exifPrint(cstrSourcePath, std::cout);
+    GPUImageView* filterView = (GPUImageView*)self.videoView;
+    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
+    [picture addTarget:filterView];
+    [picture processImage];
+    
     NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.jpg"]];
     NSString* tempLUTDirectory = makeTempLUTDirectory(sourcePath);
@@ -303,12 +348,30 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
                                          360, 180);
     glContext->swapBuffers();
     XGLContext::makeNullCurrent();
+    delete glContext;
+    deleteIfTempLUTDirectory(tempLUTDirectory.UTF8String);
+    
+    NSImage* image = [[NSImage alloc] initWithContentsOfFile:destPath];
+    if (self.delegate)
+    {
+        if ([self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+        {
+            [self.delegate onTranscodingProgress:1.f fileURL:sourcePath];
+        }
+        if ([self.delegate respondsToSelector:@selector(onTranscodingDone:fileURL:)])
+        {
+            [self.delegate onTranscodingDone:image fileURL:sourcePath];
+        }
+    }
+    
+    [picture removeAllTargets];
+    picture = [[GPUImagePicture alloc] initWithImage:image];
+    [picture addTarget:filterView];
+    [picture processImage];
     if (completion)
     {
         completion(destPath);
     }
-    delete glContext;
-    deleteIfTempLUTDirectory(tempLUTDirectory.UTF8String);
 }
 
 - (void)runProcessingWithURL:(NSString*)url completion:(void(^)(void))completion {
