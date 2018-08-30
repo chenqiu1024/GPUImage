@@ -230,6 +230,87 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     [(GPUImagePixellateFilter *)filter setFractionalWidthOfAPixel:[(NSSlider *)sender floatValue]];
 }
 
+-(void) processDNG:(NSString*)sourcePath completion:(void(^)(NSString*))completion {
+    NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.dng"]];
+    NSString* tempLUTDirectory = makeTempLUTDirectory(sourcePath);
+    
+    TIFFHeader tiffHeader;
+    std::list<std::list<DirectoryEntry> > IFDList;
+    MadvEXIFExtension madvEXIFExt = readMadvEXIFExtensionFromRaw(sourcePath.UTF8String, &tiffHeader, IFDList);
+    
+    int64_t lutOffset = 0;
+    if (madvEXIFExt.withEmbeddedLUT)
+    {
+        lutOffset = madvEXIFExt.embeddedLUTOffset;
+        createDirectories(tempLUTDirectory.UTF8String);
+        extractLUTFiles(tempLUTDirectory.UTF8String, sourcePath.UTF8String, (int32_t)lutOffset);
+    }
+    
+    //            ALOGE("madvEXIFExt = {embeddedLUTOffset:%ld, width:%d, height:%d, sceneType:%x}, lutPath='%s'\n", (long)madvEXIFExt.embeddedLUTOffset, madvEXIFExt.width, madvEXIFExt.height, madvEXIFExt.sceneType, cstrLUTPath);
+    
+    XGLContext* glContext = new XGLContext(madvEXIFExt.width, madvEXIFExt.height, true, true, 3);
+    glContext->makeCurrent();
+    
+    MVProgressClosure progressCallback;
+    progressCallback.callback = NULL;
+    progressCallback.context = NULL;
+    /*/!!!For Debug:
+     createFakeDNG(cstrDestPath, cstrSourcePath, 4, 4);
+     /*/
+    MadvGLRenderer::renderMadvRawToRaw(destPath.UTF8String, sourcePath.UTF8String,
+                                       madvEXIFExt.width, madvEXIFExt.height,
+                                       0 == madvEXIFExt.sceneType ? NULL : tempLUTDirectory.UTF8String,
+                                       0, NULL,
+                                       madvEXIFExt.cameraParams.gyroMatrix, (madvEXIFExt.gyroMatrixBytes > 0 ? 3 : 0), LONGITUDE_SEGMENTS, LATITUDE_SEGMENTS, progressCallback);
+    //*/
+    glContext->swapBuffers();
+    XGLContext::makeNullCurrent();
+    if (completion)
+    {
+        completion(destPath);
+    }
+    delete glContext;
+    deleteIfTempLUTDirectory(tempLUTDirectory.UTF8String);
+}
+
+-(void) processJPEG:(NSString*)sourcePath completion:(void(^)(NSString*))completion {
+    //exifPrint(cstrSourcePath, std::cout);
+    NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.jpg"]];
+    NSString* tempLUTDirectory = makeTempLUTDirectory(sourcePath);
+    
+    jpeg_decompress_struct cinfo = readImageInfoFromJPEG(sourcePath.UTF8String);
+    MadvEXIFExtension madvExifExt = readMadvEXIFExtensionFromJPEG(sourcePath.UTF8String);
+    int64_t lutOffset = 0;
+    if (madvExifExt.withEmbeddedLUT)
+    {
+        lutOffset = readLUTOffsetInJPEG(sourcePath.UTF8String);
+        createDirectories(tempLUTDirectory.UTF8String);
+        extractLUTFiles(tempLUTDirectory.UTF8String, sourcePath.UTF8String, (int32_t)lutOffset);
+    }
+    
+    XGLContext* glContext = new XGLContext(cinfo.image_width, cinfo.image_height, true, true, 3);
+    glContext->makeCurrent();
+    
+    int filterID = 0;
+    MadvGLRenderer::renderMadvJPEGToJPEG(destPath.UTF8String,
+                                         sourcePath.UTF8String,
+                                         cinfo.image_width, cinfo.image_height,
+                                         0 == madvExifExt.sceneType ? NULL : tempLUTDirectory.UTF8String,
+                                         filterID, NULL,
+                                         madvExifExt.cameraParams.gyroMatrix, (madvExifExt.gyroMatrixBytes > 0 ? 3 : 0),
+                                         360, 180);
+    glContext->swapBuffers();
+    XGLContext::makeNullCurrent();
+    if (completion)
+    {
+        completion(destPath);
+    }
+    delete glContext;
+    deleteIfTempLUTDirectory(tempLUTDirectory.UTF8String);
+}
+
 - (void)runProcessingWithURL:(NSString*)url completion:(void(^)(void))completion {
     releaseMadvMP4Boxes(_pBoxes);
     _pBoxes = createMadvMP4Boxes(url.UTF8String);
