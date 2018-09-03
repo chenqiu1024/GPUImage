@@ -191,7 +191,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     [filter addTarget:filterView];
     
     // In addition to displaying to the screen, write out a processed version of the movie to disk
-    NSString* movieName = [[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"_stitched.m4v"];
+    NSString* movieName = [[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"_stitched.mp4"];
     NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
@@ -410,7 +410,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     [filter addTarget:filterView];
     
     // In addition to displaying to the screen, write out a processed version of the movie to disk
-    NSString* movieName = [[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"_stitched.m4v"];
+    NSString* movieName = [[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"_stitched.mp4"];
     NSString* pathToMovie = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:movieName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
     _sourceFileURL = url;
