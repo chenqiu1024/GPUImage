@@ -3,7 +3,7 @@
 #import "MadvPanoGPUIRenderer.h"
 #import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <GPUImage/GPUImage.h>
-// TODO: 1.Filter out non-MADV medias; 2.Ignore ill rotation matrix; 3."Add files" and "Clear files" buttons and "Gyro Stablization" checkbox;
+// TODO: 1.Filter out non-MADV medias; 2."Add files" and "Clear files" buttons and "Gyro Stablization" checkbox;
 NSArray<NSString* >* g_inputMP4Paths;
 
 NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
