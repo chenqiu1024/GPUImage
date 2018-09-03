@@ -261,12 +261,15 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     std::list<std::list<DirectoryEntry> > IFDList;
     MadvEXIFExtension madvEXIFExt = readMadvEXIFExtensionFromRaw(sourcePath.UTF8String, &tiffHeader, IFDList);
     
-    int64_t lutOffset = 0;
-    if (madvEXIFExt.withEmbeddedLUT)
+    if (madvEXIFExt.withEmbeddedLUT && madvEXIFExt.embeddedLUTOffset >= 0)
     {
-        lutOffset = madvEXIFExt.embeddedLUTOffset;
         createDirectories(tempLUTDirectory.UTF8String);
-        extractLUTFiles(tempLUTDirectory.UTF8String, sourcePath.UTF8String, (int32_t)lutOffset);
+        extractLUTFiles(tempLUTDirectory.UTF8String, sourcePath.UTF8String, (int32_t)madvEXIFExt.embeddedLUTOffset);
+    }
+    else
+    {
+        madvEXIFExt.withEmbeddedLUT = false;
+        madvEXIFExt.embeddedLUTOffset = 0;
     }
     
     //            ALOGE("madvEXIFExt = {embeddedLUTOffset:%ld, width:%d, height:%d, sceneType:%x}, lutPath='%s'\n", (long)madvEXIFExt.embeddedLUTOffset, madvEXIFExt.width, madvEXIFExt.height, madvEXIFExt.sceneType, cstrLUTPath);
@@ -327,12 +330,15 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     
     jpeg_decompress_struct cinfo = readImageInfoFromJPEG(sourcePath.UTF8String);
     MadvEXIFExtension madvExifExt = readMadvEXIFExtensionFromJPEG(sourcePath.UTF8String);
-    int64_t lutOffset = 0;
-    if (madvExifExt.withEmbeddedLUT)
+    if (madvExifExt.withEmbeddedLUT && madvExifExt.embeddedLUTOffset >= 0)
     {
-        lutOffset = readLUTOffsetInJPEG(sourcePath.UTF8String);
         createDirectories(tempLUTDirectory.UTF8String);
-        extractLUTFiles(tempLUTDirectory.UTF8String, sourcePath.UTF8String, (int32_t)lutOffset);
+        extractLUTFiles(tempLUTDirectory.UTF8String, sourcePath.UTF8String, (int32_t)madvExifExt.embeddedLUTOffset);
+    }
+    else
+    {
+        madvExifExt.withEmbeddedLUT = false;
+        madvExifExt.embeddedLUTOffset = 0;
     }
     
     XGLContext* glContext = new XGLContext(cinfo.image_width, cinfo.image_height, true, true, 3);
