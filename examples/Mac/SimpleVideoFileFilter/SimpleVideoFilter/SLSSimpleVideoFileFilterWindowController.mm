@@ -248,10 +248,10 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 }
 
 -(void) processDNG:(NSString*)sourcePath completion:(void(^)(NSString*))completion {
-    GPUImageView* filterView = (GPUImageView*)self.videoView;
-    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
-    [picture addTarget:filterView];
-    [picture processImage];
+//    GPUImageView* filterView = (GPUImageView*)self.videoView;
+//    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
+//    [picture addTarget:filterView];
+//    [picture processImage];
     
     NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.dng"]];
@@ -304,10 +304,10 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
         }
     }
     
-    [picture removeAllTargets];
-    picture = [[GPUImagePicture alloc] initWithImage:image];
-    [picture addTarget:filterView];
-    [picture processImage];
+//    [picture removeAllTargets];
+//    picture = [[GPUImagePicture alloc] initWithImage:image];
+//    [picture addTarget:filterView];
+//    [picture processImage];
     if (completion)
     {
         completion(destPath);
@@ -316,10 +316,10 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 
 -(void) processJPEG:(NSString*)sourcePath completion:(void(^)(NSString*))completion {
     //exifPrint(cstrSourcePath, std::cout);
-    GPUImageView* filterView = (GPUImageView*)self.videoView;
-    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
-    [picture addTarget:filterView];
-    [picture processImage];
+//    GPUImageView* filterView = (GPUImageView*)self.videoView;
+//    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
+//    [picture addTarget:filterView];
+//    [picture processImage];
     
     NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.jpg"]];
@@ -364,10 +364,10 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
         }
     }
     
-    [picture removeAllTargets];
-    picture = [[GPUImagePicture alloc] initWithImage:image];
-    [picture addTarget:filterView];
-    [picture processImage];
+//    [picture removeAllTargets];
+//    picture = [[GPUImagePicture alloc] initWithImage:image];
+//    [picture addTarget:filterView];
+//    [picture processImage];
     if (completion)
     {
         completion(destPath);
