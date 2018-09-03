@@ -3,7 +3,7 @@
 #import "MadvPanoGPUIRenderer.h"
 #import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <GPUImage/GPUImage.h>
-// TODO: 1.Filter out non-MADV medias; 2."Add files" and "Clear files" buttons and "Gyro Stablization" checkbox;
+// TODO: 1."Add files" and "Clear files" buttons and "Gyro Stablization" checkbox; 2. OOM and CRASH;
 NSArray<NSString* >* g_inputMP4Paths;
 
 NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
@@ -377,9 +377,12 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 - (void)runProcessingWithURL:(NSString*)url completion:(void(^)(void))completion {
     releaseMadvMP4Boxes(_pBoxes);
     _pBoxes = createMadvMP4Boxes(url.UTF8String);
-    if (NULL == _pBoxes->lutData && completion)
+    if (NULL == _pBoxes->lutData)
     {
-        completion();
+        if (completion)
+        {
+            completion();
+        }
         return;
     }
     self.tempLUTDirectoryPath = makeTempLUTDirectory(url);
