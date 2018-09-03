@@ -161,13 +161,19 @@ BOOL getGyroMatrix(float* pMatrix, NSInteger frameNumber, void* gyroData) {
 //        [firstInputFramebuffer unlock];
 //        return;
 //    }
-    if (_frameNumber >= 0 && _frameNumber < _gyroDataFrames && _renderer)
+    if (_frameNumber < _gyroDataFrames && _renderer)
     {
         float gyroMatrix[9] = {1.f,0.f,0.f, 0.f,1.f,0.f, 0.f,0.f,1.f};
         getGyroMatrix(gyroMatrix, _frameNumber, _gyroData);
 //        NSLog(@"#GYRO# Frame#%d {%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f}", _frameNumber, gyroMatrix[0], gyroMatrix[1], gyroMatrix[2], gyroMatrix[3], gyroMatrix[4], gyroMatrix[5], gyroMatrix[6], gyroMatrix[7], gyroMatrix[8]);
-        _panoController->setGyroMatrix(gyroMatrix, 3);
-//        _glCamera->setGyroMatrix(gyroMatrix, 3);
+        kmMat4 rotationMatrix;
+        float gyroMatrix4[16] = {gyroMatrix[0], gyroMatrix[3], gyroMatrix[6], 0.f, gyroMatrix[1], gyroMatrix[4], gyroMatrix[7], 0.f, gyroMatrix[2], gyroMatrix[5], gyroMatrix[8], 0.f, 0.f, 0.f, 0.f, 1.f};
+        kmMat4Fill(&rotationMatrix, gyroMatrix4);
+        if (GLCamera::checkRotationMatrix(&rotationMatrix, true, NULL))
+        {
+            _panoController->setGyroMatrix(gyroMatrix, 3);
+//          _glCamera->setGyroMatrix(gyroMatrix, 3);
+        }
     }
     
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
