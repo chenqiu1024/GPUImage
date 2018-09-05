@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 
-NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
+NSImage* getVideoThumbnail(NSString* videoURL, int timeMillSeconds, float destMaxSize)
 {
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
     AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
@@ -24,17 +24,10 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     size_t videoWidth = CGImageGetWidth(image);
     size_t videoHeight = CGImageGetHeight(image);
     NSSize destSize;
-    if (destMinSize > 0)
-    {
-        if (videoHeight > videoWidth)
-            destSize = NSMakeSize(destMinSize, (float)destMinSize * (float)videoHeight / (float)videoWidth);
-        else
-            destSize = NSMakeSize((float)destMinSize * (float)videoWidth / (float)videoHeight, destMinSize);
-    }
+    if (videoHeight > videoWidth)
+        destSize = NSMakeSize(destMaxSize, destMaxSize * (float)videoHeight / (float)videoWidth);
     else
-    {
-        destSize = NSMakeSize(videoWidth, videoHeight);
-    }
+        destSize = NSMakeSize(destMaxSize * (float)videoWidth / (float)videoHeight, destMaxSize);
     NSImage* thumb = [[NSImage alloc] initWithCGImage:image size:destSize];
     CGImageRelease(image);
     return thumb;
@@ -120,7 +113,7 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
         }
         else
         {
-            thumbnail = getVideoImage(path, 99.f, -1);
+            thumbnail = getVideoThumbnail(path, 99.f, 100.f);
         }
         MediaCellModel* model = [[MediaCellModel alloc] initWithThumbnail:thumbnail progress:-1.f];
         [self.sourceMediaModels setObject:model forKey:path];
