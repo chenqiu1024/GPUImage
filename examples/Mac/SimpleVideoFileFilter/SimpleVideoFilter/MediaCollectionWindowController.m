@@ -7,6 +7,7 @@
 //
 
 #import "MediaCollectionWindowController.h"
+#import <MADVPanoFramework_macOS/MADVPanoFramework_macOS.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 

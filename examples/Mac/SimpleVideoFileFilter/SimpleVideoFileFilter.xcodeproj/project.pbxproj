@@ -147,7 +147,7 @@
 		79E8A60D1A5ED6A700E6A226 /* SimpleVideoFilterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleVideoFilterTests.m; sourceTree = "<group>"; };
 		BB5F5BF8213637CE003386A9 /* MediaCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MediaCollectionViewItem.xib; sourceTree = "<group>"; };
 		BB5F5C0321365247003386A9 /* MediaCollectionWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaCollectionWindowController.h; sourceTree = "<group>"; };
-		BB5F5C0421365247003386A9 /* MediaCollectionWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaCollectionWindowController.m; sourceTree = "<group>"; };
+		BB5F5C0421365247003386A9 /* MediaCollectionWindowController.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MediaCollectionWindowController.m; sourceTree = "<group>"; };
 		BB5F5C0521365247003386A9 /* MediaCollectionWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MediaCollectionWindowController.xib; sourceTree = "<group>"; };
 		BBDF50C621257A6000491DE4 /* ISOBMFF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ISOBMFF.xcodeproj; path = ../../../../../ISOBMFF/ISOBMFF.xcodeproj; sourceTree = "<group>"; };
 		BBEAF8872125602900766C02 /* MADVPano_Unix.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MADVPano_Unix.xcodeproj; path = ../../../../../MADVPano_Unix/MADVPano_Unix.xcodeproj; sourceTree = "<group>"; };
