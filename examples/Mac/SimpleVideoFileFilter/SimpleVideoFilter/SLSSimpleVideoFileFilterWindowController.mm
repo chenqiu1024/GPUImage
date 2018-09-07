@@ -76,7 +76,9 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     self.containerView.hidden = YES;
     
     NSEnumerator<NSString* >* iter = self.urlStrings.objectEnumerator;
-    [self processNextURL:iter];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^() {
+        [self processNextURL:iter];
+    });
 }
 
 -(void) processNextURL:(NSEnumerator<NSString* >*)iter {
@@ -164,9 +166,11 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 }
 
 - (void)showProcessingUI {
-    self.containerView.hidden = NO;
-    self.urlButton.hidden = YES;
-    self.avPlayerItemButton.hidden = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.containerView.hidden = NO;
+        self.urlButton.hidden = YES;
+        self.avPlayerItemButton.hidden = YES;
+    });
 }
 
 - (void)runProcessingWithAVPlayerItem:(NSString*)url completion:(void(^)(void))completion {
@@ -258,19 +262,28 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.dng"]];
     NSString* tempLUTDirectory = makeTempLUTDirectory(sourcePath);
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate onTranscodingProgress:0.f fileURL:sourcePath];
+        });
+    }
+    
     MadvGLRenderer::renderMadvRawToRaw(destPath, sourcePath, tempLUTDirectory, 0, 0);
     
     NSImage* image = [[NSImage alloc] initWithContentsOfFile:destPath];
     if (self.delegate)
     {
-        if ([self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
-        {
-            [self.delegate onTranscodingProgress:1.f fileURL:sourcePath];
-        }
-        if ([self.delegate respondsToSelector:@selector(onTranscodingDone:fileURL:)])
-        {
-            [self.delegate onTranscodingDone:image fileURL:sourcePath];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+            {
+                [self.delegate onTranscodingProgress:1.f fileURL:sourcePath];
+            }
+            if ([self.delegate respondsToSelector:@selector(onTranscodingDone:fileURL:)])
+            {
+                [self.delegate onTranscodingDone:image fileURL:sourcePath];
+            }
+        });
     }
     
 //    [picture removeAllTargets];
@@ -295,19 +308,28 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.jpg"]];
     NSString* tempLUTDirectory = makeTempLUTDirectory(sourcePath);
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate onTranscodingProgress:0.f fileURL:sourcePath];
+        });
+    }
+    
     MadvGLRenderer::renderMadvJPEGToJPEG(destPath, sourcePath, tempLUTDirectory, 0, 0);
     
     NSImage* image = [[NSImage alloc] initWithContentsOfFile:destPath];
     if (self.delegate)
     {
-        if ([self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
-        {
-            [self.delegate onTranscodingProgress:1.f fileURL:sourcePath];
-        }
-        if ([self.delegate respondsToSelector:@selector(onTranscodingDone:fileURL:)])
-        {
-            [self.delegate onTranscodingDone:image fileURL:sourcePath];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
+            {
+                [self.delegate onTranscodingProgress:1.f fileURL:sourcePath];
+            }
+            if ([self.delegate respondsToSelector:@selector(onTranscodingDone:fileURL:)])
+            {
+                [self.delegate onTranscodingDone:image fileURL:sourcePath];
+            }
+        });
     }
     
 //    [picture removeAllTargets];
