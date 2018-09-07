@@ -98,6 +98,7 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
 -(void) reloadData {
     [self.sourceMediaPaths removeAllObjects];
     [self.sourceMediaModels removeAllObjects];
+    NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     for (NSURL* url in self.fileURLS)
     {
         NSString* path = url.path;
@@ -106,11 +107,19 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
         NSImage* thumbnail;
         if ([ext isEqualToString:@"jpg"])
         {
-            thumbnail = [[NSImage alloc] initWithContentsOfFile:path];
+            NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[path.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_thumbnail.jpg"]];
+            NSString* tempLUTDirectory = makeTempLUTDirectory(path);
+            MadvGLRenderer::renderMadvJPEGToJPEG(destPath, path, tempLUTDirectory, 256, 128, true);
+            thumbnail = [[NSImage alloc] initWithContentsOfFile:destPath];
+            unlink(destPath.UTF8String);
         }
         else if ([ext isEqualToString:@"dng"])
         {
-            thumbnail = [[NSImage alloc] initWithContentsOfFile:path];
+            NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[path.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_thumbnail.dng"]];
+            NSString* tempLUTDirectory = makeTempLUTDirectory(path);
+            MadvGLRenderer::renderMadvRawToRaw(destPath, path, tempLUTDirectory, 256, 128, true);
+            thumbnail = [[NSImage alloc] initWithContentsOfFile:destPath];
+            unlink(destPath.UTF8String);
         }
         else
         {
