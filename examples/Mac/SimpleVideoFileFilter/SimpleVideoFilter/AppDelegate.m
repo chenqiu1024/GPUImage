@@ -6,6 +6,12 @@
 
 @property (weak) IBOutlet NSWindow *window;
 
+@property (weak) IBOutlet NSMenu* menu;
+@property (weak) IBOutlet NSMenu* fileMenu;
+@property (strong) NSMenuItem* fileMenuItem;
+@property (strong) NSMenuItem* openMenuItem;
+@property (strong) NSMenuItem* transcodeMenuItem;
+
 @property (weak) IBOutlet NSProgressIndicator* progressIndicator;
 
 @property (weak) IBOutlet NSCollectionView* collectionView;
@@ -21,6 +27,14 @@
 @implementation AppDelegate
 
 -(IBAction)openFiles:(id)sender {
+    self.fileMenuItem.enabled = NO;
+    [self.menu update];
+    self.openMenuItem.enabled = NO;
+    self.openMenuItem.hidden = YES;
+//    self.transcodeMenuItem.enabled = NO;
+//    self.transcodeMenuItem.hidden = YES;
+    [self.fileMenu update];
+    
     NSOpenPanel* openPanel = [NSOpenPanel openPanel];
     [openPanel setPrompt: @"Open Source Media Files"];
     openPanel.allowedFileTypes = [NSArray arrayWithObjects: @"mp4", @"mov", @"avi", @"mkv", @"rmvb", @"jpg", @"dng", nil];
@@ -60,6 +74,14 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.collectionController refreshViews];
                     [self.progressIndicator stopAnimation:self];
+
+                    self.fileMenuItem.enabled = YES;
+                    [self.menu update];
+                    self.openMenuItem.enabled = YES;
+                    self.openMenuItem.hidden = NO;
+                    self.transcodeMenuItem.enabled = YES;
+                    self.transcodeMenuItem.hidden = NO;
+                    [self.fileMenu update];
                 });
             });
             //*/
@@ -72,6 +94,9 @@
     transcodeWindowController.delegate = self;
     transcodeWindowController.urlStrings = self.collectionController.sourceMediaPaths;
     [transcodeWindowController showWindow:self];
+    self.transcodeMenuItem.enabled = NO;
+    self.transcodeMenuItem.hidden = YES;
+    [self.menu update];
 }
 
 -(void) onTranscodingDone:(NSImage *)thumbnail fileURL:(NSString *)fileURL {
@@ -88,7 +113,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-//
+    self.fileMenuItem = [self.menu itemWithTitle:@"File"];
+    self.openMenuItem = [self.fileMenu itemWithTitle:@"Open..."];
+    self.transcodeMenuItem = [self.fileMenu itemWithTitle:@"Transcode All"];
+    self.transcodeMenuItem.enabled = NO;
+    self.transcodeMenuItem.hidden = YES;
+    [self.menu update];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

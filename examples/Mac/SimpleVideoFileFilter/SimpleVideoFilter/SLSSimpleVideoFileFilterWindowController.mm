@@ -252,6 +252,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 //    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
 //    [picture addTarget:filterView];
 //    [picture processImage];
+    self.window.alphaValue = 0.f;
     
     NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.dng"]];
@@ -288,6 +289,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 //    GPUImagePicture* picture = [[GPUImagePicture alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
 //    [picture addTarget:filterView];
 //    [picture processImage];
+    self.window.alphaValue = 0.f;
     
     NSString* documentDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[sourcePath.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_stitched.jpg"]];
@@ -319,6 +321,8 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
 }
 
 - (void)runProcessingWithURL:(NSString*)url completion:(void(^)(void))completion {
+    self.window.alphaValue = 1.f;
+    
     releaseMadvMP4Boxes(_pBoxes);
     _pBoxes = createMadvMP4Boxes(url.UTF8String);
     if (NULL == _pBoxes->lutData)
