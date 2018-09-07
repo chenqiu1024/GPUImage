@@ -22,6 +22,8 @@
 		BB5F5C0721365247003386A9 /* MediaCollectionWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5C0421365247003386A9 /* MediaCollectionWindowController.m */; };
 		BB5F5C0821365247003386A9 /* MediaCollectionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB5F5C0521365247003386A9 /* MediaCollectionWindowController.xib */; };
 		BB5F5C0921365247003386A9 /* MediaCollectionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB5F5C0521365247003386A9 /* MediaCollectionWindowController.xib */; };
+		BBDF328D21426A61000DA4F6 /* ISOBMFF.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBDF50D521257A6000491DE4 /* ISOBMFF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BBDF328E21426A68000DA4F6 /* MADVPanoFramework_macOS.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBEAF88F2125602B00766C02 /* MADVPanoFramework_macOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BBDF50D821257A7900491DE4 /* ISOBMFF.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDF50D521257A6000491DE4 /* ISOBMFF.framework */; };
 		BBEAF8922125603800766C02 /* MADVPanoFramework_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBEAF88F2125602B00766C02 /* MADVPanoFramework_macOS.framework */; };
 		BBEAF8CE2125746F00766C02 /* MadvMP4BoxParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBEAF8CC2125746F00766C02 /* MadvMP4BoxParser.mm */; };
@@ -122,6 +124,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				BBDF328E21426A68000DA4F6 /* MADVPanoFramework_macOS.framework in CopyFiles */,
+				BBDF328D21426A61000DA4F6 /* ISOBMFF.framework in CopyFiles */,
 				BCF8E9E51A75DE67005AE243 /* GPUImage.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
