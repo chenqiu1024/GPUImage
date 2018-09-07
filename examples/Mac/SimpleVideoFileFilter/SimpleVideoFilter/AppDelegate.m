@@ -115,7 +115,7 @@
     // Insert code here to initialize your application
     self.fileMenuItem = [self.menu itemWithTitle:@"File"];
     self.openMenuItem = [self.fileMenu itemWithTitle:@"Open..."];
-    self.transcodeMenuItem = [self.fileMenu itemWithTitle:@"Transcode All"];
+    self.transcodeMenuItem = [self.fileMenu itemWithTitle:@"Stitch All"];
     self.transcodeMenuItem.enabled = NO;
     self.transcodeMenuItem.hidden = YES;
     [self.menu update];

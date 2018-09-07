@@ -241,7 +241,9 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     self.progressIndicator.doubleValue = movieFile.progress;
     if (self.delegate && [self.delegate respondsToSelector:@selector(onTranscodingProgress:fileURL:)])
     {
-        [self.delegate onTranscodingProgress:movieFile.progress fileURL:_sourceFileURL];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate onTranscodingProgress:movieFile.progress fileURL:_sourceFileURL];
+        });
     }
 }
 
@@ -402,12 +404,14 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
     [movieWriter startRecording];
     [movieFile startProcessing];
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.3f
-                                             target:self
-                                           selector:@selector(retrievingProgress)
-                                           userInfo:nil
-                                            repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        timer = [NSTimer scheduledTimerWithTimeInterval:0.3f
+                                                 target:self
+                                               selector:@selector(retrievingProgress)
+                                               userInfo:nil
+                                                repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+    });
     
     [movieWriter setCompletionBlock:^{
         NSLog(@"completionBlock: movieWriter=0x%ld, movieFile=0x%ld, url='%@'", (long)movieWriter.hash, (long)movieFile.hash, url);

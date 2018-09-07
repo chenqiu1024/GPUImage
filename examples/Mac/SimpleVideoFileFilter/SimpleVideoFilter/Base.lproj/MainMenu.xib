@@ -79,8 +79,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                            <menuItem title="Transcode All" enabled="NO" id="pxx-59-PXV" userLabel="Transcode All">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Stitch All" enabled="NO" keyEquivalent="s" id="pxx-59-PXV" userLabel="Stitch All">
                                 <connections>
                                     <action selector="startProcess:" target="Voe-Tx-rLC" id="7VY-fq-E5f"/>
                                 </connections>
@@ -115,11 +114,11 @@
             </items>
             <point key="canvasLocation" x="46" y="-181"/>
         </menu>
-        <window title="MADV Stitch Tool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="MADV Stitch Tool v0.1a" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="451" y="228" width="660" height="500"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -128,7 +127,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="660" height="500"/>
                         <clipView key="contentView" drawsBackground="NO" id="nUu-wp-ImI">
                             <rect key="frame" x="1" y="1" width="658" height="498"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <collectionView id="5R6-dw-hgc">
                                     <rect key="frame" x="0.0" y="0.0" width="658" height="498"/>
