@@ -271,7 +271,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
         });
     }
     
-    MadvGLRenderer::renderMadvRawToRaw(destPath, sourcePath, tempLUTDirectory, 0, 0);
+    MadvGLRenderer::renderMadvRawToRaw(destPath.UTF8String, sourcePath.UTF8String, tempLUTDirectory.UTF8String, 0, 0);
     
     NSImage* image = [[NSImage alloc] initWithContentsOfFile:destPath];
     if (self.delegate)
@@ -317,7 +317,7 @@ NSImage* getVideoImage(NSString* videoURL, int timeMillSeconds, int destMinSize)
         });
     }
     
-    MadvGLRenderer::renderMadvJPEGToJPEG(destPath, sourcePath, tempLUTDirectory, 0, 0);
+    MadvGLRenderer::renderMadvJPEGToJPEG(destPath.UTF8String, sourcePath.UTF8String, tempLUTDirectory.UTF8String, 0, 0);
     
     NSImage* image = [[NSImage alloc] initWithContentsOfFile:destPath];
     if (self.delegate)

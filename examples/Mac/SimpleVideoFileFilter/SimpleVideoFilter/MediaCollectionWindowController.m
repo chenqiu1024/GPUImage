@@ -109,7 +109,7 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
         {
             NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[path.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_thumbnail.jpg"]];
             NSString* tempLUTDirectory = makeTempLUTDirectory(path);
-            MadvGLRenderer::renderMadvJPEGToJPEG(destPath, path, tempLUTDirectory, 256, 128, true);
+            MadvGLRenderer::renderMadvJPEGToJPEG(destPath.UTF8String, path.UTF8String, tempLUTDirectory.UTF8String, 256, 128, true);
             thumbnail = [[NSImage alloc] initWithContentsOfFile:destPath];
             unlink(destPath.UTF8String);
         }
@@ -117,7 +117,7 @@ static NSUserInterfaceItemIdentifier mediaCellIdentifier = @"MediaCollectionView
         {
             NSString* destPath = [documentDirectory stringByAppendingPathComponent:[[path.lastPathComponent stringByDeletingPathExtension] stringByAppendingString:@"_thumbnail.dng"]];
             NSString* tempLUTDirectory = makeTempLUTDirectory(path);
-            MadvGLRenderer::renderMadvRawToRaw(destPath, path, tempLUTDirectory, 256, 128, true);
+            MadvGLRenderer::renderMadvRawToRaw(destPath.UTF8String, path.UTF8String, tempLUTDirectory.UTF8String, 256, 128, true);
             thumbnail = [[NSImage alloc] initWithContentsOfFile:destPath];
             unlink(destPath.UTF8String);
         }
