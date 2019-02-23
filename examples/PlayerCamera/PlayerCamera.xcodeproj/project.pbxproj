@@ -90,7 +90,8 @@
 		529DA59020EF542E0051E248 /* UINavigationBar+Translucent.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA58E20EF542E0051E248 /* UINavigationBar+Translucent.m */; };
 		529DA59320EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA59220EF7BF40051E248 /* PhotoLibraryHelper.m */; };
 		529DA59420EF7BF40051E248 /* PhotoLibraryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 529DA59220EF7BF40051E248 /* PhotoLibraryHelper.m */; };
-		52A9F15722211C1800355B41 /* IJKMediaFrameworkWithSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52A9F14B22211A3C00355B41 /* IJKMediaFrameworkWithSSL.framework */; };
+		52A9F15C22211C8E00355B41 /* IJKMediaFrameworkWithSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52A9F14B22211A3C00355B41 /* IJKMediaFrameworkWithSSL.framework */; };
+		52A9F15D22211C8E00355B41 /* IJKMediaFrameworkWithSSL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52A9F14B22211A3C00355B41 /* IJKMediaFrameworkWithSSL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		52C4BF9620CC0770002FC393 /* NSString+OpenGLES.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C4BF9520CC0770002FC393 /* NSString+OpenGLES.m */; };
 		52CAA9D41F66D3D000351014 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CAA9D31F66D3D000351014 /* libstdc++.tbd */; };
 		52CB035D205511E000329861 /* IJKGPUImageMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CB035C205511E000329861 /* IJKGPUImageMovie.m */; };
@@ -178,7 +179,14 @@
 			remoteGlobalIDString = E654EA941B6B27E600B0F2D0;
 			remoteInfo = IJKMediaFrameworkTests;
 		};
-		52A9F15522211AEC00355B41 /* PBXContainerItemProxy */ = {
+		52A9F15A22211C5400355B41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5450AFC11E63EA4300568494;
+			remoteInfo = IJKMediaFrameworkWithSSL;
+		};
+		52A9F15E22211C8E00355B41 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 52CB034D20550F0F00329861 /* IJKMediaPlayer.xcodeproj */;
 			proxyType = 1;
@@ -188,7 +196,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		52257C8320ABE01600140039 /* Embed Frameworks */ = {
+		5281153020ECBADF00E2B133 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -198,12 +206,13 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5281153020ECBADF00E2B133 /* Embed Frameworks */ = {
+		52A9F16022211C8E00355B41 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				52A9F15D22211C8E00355B41 /* IJKMediaFrameworkWithSSL.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,7 +327,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52A9F15722211C1800355B41 /* IJKMediaFrameworkWithSSL.framework in Frameworks */,
 				5281150220ECB1FC00E2B133 /* AddressBook.framework in Frameworks */,
 				5281150020ECB1E600E2B133 /* CFNetwork.framework in Frameworks */,
 				52D32C3020E3DF3E00E93331 /* CoreTelephony.framework in Frameworks */,
@@ -327,6 +335,7 @@
 				52D32C3220E3DF5D00E93331 /* SystemConfiguration.framework in Frameworks */,
 				527C39CB20ECB10200CC64AE /* libWeChatSDK.a in Frameworks */,
 				52D32C2E20E3DE6500E93331 /* AudioToolbox.framework in Frameworks */,
+				52A9F15C22211C8E00355B41 /* IJKMediaFrameworkWithSSL.framework in Frameworks */,
 				52E2A73E20E5306A00BB445A /* iflyMSC.framework in Frameworks */,
 				BBB7963120B2F6EE0059C1DA /* libiconv.tbd in Frameworks */,
 				BBB7962F20B2F6E90059C1DA /* libbz2.tbd in Frameworks */,
@@ -581,13 +590,14 @@
 				520DA6D01ED7248C009E4705 /* Sources */,
 				520DA6D11ED7248C009E4705 /* Frameworks */,
 				520DA6D21ED7248C009E4705 /* Resources */,
-				52257C8320ABE01600140039 /* Embed Frameworks */,
+				52A9F16022211C8E00355B41 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				52A9F15622211AEC00355B41 /* PBXTargetDependency */,
 				520DA7251ED72ABE009E4705 /* PBXTargetDependency */,
+				52A9F15B22211C5400355B41 /* PBXTargetDependency */,
+				52A9F15F22211C8E00355B41 /* PBXTargetDependency */,
 			);
 			name = GijkPlayer;
 			productName = PlayerCamera;
@@ -863,10 +873,15 @@
 			name = GPUImage;
 			targetProxy = 5281150520ECBADF00E2B133 /* PBXContainerItemProxy */;
 		};
-		52A9F15622211AEC00355B41 /* PBXTargetDependency */ = {
+		52A9F15B22211C5400355B41 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = IJKMediaFrameworkWithSSL;
-			targetProxy = 52A9F15522211AEC00355B41 /* PBXContainerItemProxy */;
+			targetProxy = 52A9F15A22211C5400355B41 /* PBXContainerItemProxy */;
+		};
+		52A9F15F22211C8E00355B41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = IJKMediaFrameworkWithSSL;
+			targetProxy = 52A9F15E22211C8E00355B41 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
