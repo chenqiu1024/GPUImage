@@ -215,13 +215,13 @@
 
 -(IBAction)onClickOverlay:(id)sender {
     if (self.controlPanelView.isHidden)
-    {DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    {NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
         [self setControlsHidden:NO];
         [self refreshMediaControl];
         [self performSelector:@selector(hideControls) withObject:nil afterDelay:5.0f];
     }
     else
-    {DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    {NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControls) object:nil];
         [self hideControls];
     }
@@ -232,23 +232,23 @@
 }
 
 -(IBAction)didSliderTouchDown:(id)sender {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     _isProgressSliderBeingDragged = YES;
 }
 
 -(IBAction)didSliderTouchUpInside:(id)sender {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     _ijkMovie.currentPlaybackTime = self.progressSlider.value;
     _isProgressSliderBeingDragged = NO;
 }
 
 -(IBAction)didSliderTouchUpOutside:(id)sender {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     _isProgressSliderBeingDragged = NO;
 }
 
 -(IBAction)didSliderTouchCancel:(id)sender {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __FUNCTION__, __LINE__);
     _isProgressSliderBeingDragged = NO;
 }
 
@@ -269,12 +269,12 @@
 
 -(IBAction)onClickPlayOrPause:(id)sender {
     if (_ijkMovie.isPlaying)
-    {DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    {NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
         [_ijkMovie pause];
         [self setPlayOrPauseButtonState:NO];
     }
     else
-    {DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    {NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
         [_ijkMovie play];
         [self setPlayOrPauseButtonState:YES];
     }
@@ -348,20 +348,20 @@
 #pragma mark - View lifecycle
 
 -(void) applicationDidBecomeActive:(id)sender {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     [self setupMovieWriter];
     [self startMovieWriteRecording];
     [_videoCamera resumeCameraCapture];
 }
 
 -(void) applicationWillResignActive:(id)sender {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     [self disassembleMovieWriter];
     [_videoCamera pauseCameraCapture];
 }
 
 -(void) dealloc {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeMovieNotificationObservers];
 }
@@ -375,7 +375,7 @@
 }
 
 -(void) dismissSelf {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     [_ijkMovie shutdown];
     [self disassembleMovieWriter];
     [_videoCamera stopCameraCapture];
@@ -507,7 +507,7 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+{NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     // Map UIDeviceOrientation to UIInterfaceOrientation.
     UIInterfaceOrientation orient = UIInterfaceOrientationPortrait;
     switch ([[UIDevice currentDevice] orientation])
@@ -545,7 +545,7 @@
 }
 
 -(void) onDoubleTapRecognized:(UITapGestureRecognizer*)pan {
-    DoctorLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+    NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     [_filter useNextFrameForImageCapture];
     UIImage* image = [_filter imageFromCurrentFramebuffer];
     if (image)
@@ -602,7 +602,7 @@
     switch (pan.state)
     {
         case UIGestureRecognizerStateBegan:
-            DoctorLog(@"#VideoCapture# %s UIGestureRecognizerStateBegan @ line%d", __PRETTY_FUNCTION__, __LINE__);
+            NSLog(@"#VideoCapture# %s UIGestureRecognizerStateBegan @ line%d", __PRETTY_FUNCTION__, __LINE__);
             self.fastSeekLabel.hidden = NO;
             break;
         case UIGestureRecognizerStateChanged:
@@ -611,7 +611,7 @@
             break;
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
-            DoctorLog(@"#VideoCapture# %s UIGestureRecognizerStateEnded @ line%d", __PRETTY_FUNCTION__, __LINE__);
+            NSLog(@"#VideoCapture# %s UIGestureRecognizerStateEnded @ line%d", __PRETTY_FUNCTION__, __LINE__);
             self.fastSeekLabel.hidden = YES;
             _ijkMovie.currentPlaybackTime = destTime;
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControls) object:nil];

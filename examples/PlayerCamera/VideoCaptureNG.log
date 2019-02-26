@@ -22,3 +22,29 @@ layer[29696:1695106] #VideoCapture# GPUImageVideoCamera$captureOutput return#1 i
 2019-02-26 17:44:29.849758+0800 GijkPlayer[29696:1695184] #VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 893
 2019-02-26 17:44:29.950210+0800 GijkPlayer[29696:1695106] #VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVideoCamera.m -[GPUImageVideoCamera captureOutput:didOutputSampleBuffer:fromConnection:] 893
 
+
+                                                                                                                                                                       -----------------------------
+
+                                                                                                                                                                       2019-02-26 18:05:19.451419+0800 GijkPlayer[29789:1698783] #VideoCapture# _captureSession(0x283955650) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 110
+2019-02-26 18:05:19.466747+0800 GijkPlayer[29789:1698783] #VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x283b25720 by _captureSession:0x283955650,  in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 209
+-02-26 18:05:19.470800+0800 GijkPlayer[29789:1698783] #VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 228
+2019-02-26 18:05:19.554531+0800 GijkPlayer[29789:1698783] #VideoCapture# _captureSession(0x283955650) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+02019-02-26 18:05:19.578931+0800 GijkPlayer[29789:1698783] #VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x283b1a040 by _captureSession:0x283955650,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+:19.590729+0800 GijkPlayer[29789:1698783] #VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+2019-02-26 18:05:19.916076+0800 GijkPlayer[29789:1698783] #VideoCapture# GPUImageVideoCamera$startCameraCapture in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 341
+layer[29789:1698783] #VideoCapture# GPUImageVideoCamera$startCameraCapture : startRunning in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 343
+2019-02-26 18:05:20.381260+0800 GijkPlayer[29789:1699021] #VideoCapture# GPUImageVideoCamera$ca2019-02-26 18:05:20.395439+0800 GijkPlayer[29789:1699021] #VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPUImageVid
+
+----------------------------
+
+2019-02-26 18:07:11.870767+0800 GijkPlayer[29807:1700180] #VideoCapture# _captureSession(0x281021400) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 110
+2019-02-26 18:07:11.885287+0800 GijkPlayer[29807:1700180] #VideoCapture# GPUImageVideoCamera $ canAddVideoOutput(V):0x281248200 by _captureSession:0x281021400,  in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 209
+2019-02-26 18:07:11.889308+0800 GijkPlayer[29807:1700180] #VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Video output in GPUImageVideoCamera.m -[GPUImageVideoCamera initWithSessionPreset:cameraPosition:] 228
+2019-02-26 18:07:11.949515+0800 GijkPlayer[29807:1700180] #VideoCapture# _captureSession(0x281021400) beginConfiguration in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 260
+2019-02-26 18:07:11.968253+0800 GijkPlayer[29807:1700180] #VideoCapture# GPUImageVideoCamera $ canAddAudioOutput(A):0x281241460 by _captureSession:0x281021400,  in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 272
+
+2019-02-26 18:07:11.969545+0800 GijkPlayer[29807:1700180] #VideoCapture# GPUImageVideoCamera $ commitConfiguration after adding Audio output in GPUImageVideoCamera.m -[GPUImageVideoCamera addAudioInputsAndOutputs] 280
+r2019-02-26 18:07:12.269762+0800 GijkPlayer[29807:1700180] #VideoCapture# GPUImageVideoCamera$startCameraCapture in GPUImageVideoCamera.m -[GPUImageVideoCamera startCameraCapture] 341
+
+2019-02-26 18:07:12.529363+0800 GijkPlayer[29807:1700402] #VideoCapture# GPUImageVideoCamera$captureO2019-02-26 18:07:12.544290+0800 GijkPlayer[29807:1700402] #VideoCapture# GPUImageVideoCamera$captureOutput return#1 in GPU2019-02-26 18:07:16.677887+0800 GijkPlayer[29807:1700180] #VideoCapture# -[CameraPlayerViewController applicationWillResignActive:] @ line358
+
