@@ -875,10 +875,10 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-    if (captureOutput != audioOutput)
-    {
-        NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput in %s %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __PRETTY_FUNCTION__, __LINE__);
-    }
+//    if (captureOutput != audioOutput)
+//    {
+//        NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput in %s %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __PRETTY_FUNCTION__, __LINE__);
+//    }
     if (!self.captureSession.isRunning)
     {//NSLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#0 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __PRETTY_FUNCTION__, __LINE__);
         return;
@@ -894,19 +894,23 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
             return;
         }
         
-        CFRetain(sampleBuffer);
-        runAsynchronouslyOnVideoProcessingQueue(^{
-            //Feature Detection Hook.
-            if (self.delegate)
-            {
-                [self.delegate willOutputSampleBuffer:sampleBuffer];
-            }
-
-            [self processVideoSampleBuffer:sampleBuffer];
-
-            CFRelease(sampleBuffer);
-            dispatch_semaphore_signal(frameRenderingSemaphore);
-        });
+        CMSampleBufferRef copiedSampleBuffer = NULL;
+        OSStatus result = CMSampleBufferCreateCopy(kCFAllocatorDefault, sampleBuffer, &copiedSampleBuffer);
+        if (noErr == result && NULL != copiedSampleBuffer)
+        {
+            runAsynchronouslyOnVideoProcessingQueue(^{
+                //Feature Detection Hook.
+                if (self.delegate)
+                {
+                    [self.delegate willOutputSampleBuffer:copiedSampleBuffer];
+                }
+                
+                [self processVideoSampleBuffer:copiedSampleBuffer];
+                
+                CFRelease(copiedSampleBuffer);
+                dispatch_semaphore_signal(frameRenderingSemaphore);
+            });
+        }
     }
 }
 
