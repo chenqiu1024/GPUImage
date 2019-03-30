@@ -554,8 +554,8 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
     BOOL signaled = YES;
     while (!finished && signaled)
     {NSLog(@"#Crash# imageOfVideo : [cond wait];");
-        signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3.0f]];
-        ///!!![cond wait];
+        ///!!!signaled = [cond waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3.0f]];
+        [cond wait];
     }
     [cond unlock];
 //    ijkMovie = nil;
@@ -2319,7 +2319,7 @@ int media_player_msg_loop(void* arg)
         //*
         if (self.snapshotCompletionHandler)
         {
-            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) <= 1.0f || self.snapshotDestTime > self.duration)
+            if (fabs(self.currentPlaybackTime - self.snapshotDestTime) <= 2.0f || self.snapshotDestTime >= self.duration)
             {
                 UIImage* snapshot = [self snapshotImage];
                 self.snapshotCompletionHandler(snapshot);

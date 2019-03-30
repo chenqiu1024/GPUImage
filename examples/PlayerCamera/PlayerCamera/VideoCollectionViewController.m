@@ -131,6 +131,8 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 */
 
 -(NSString*) thumbnailPathForKey:(NSString*)key {
+    key = [key stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    key = [key stringByReplacingOccurrencesOfString:@"\\" withString:@"_"];
     return [[[_docDirectoryPath stringByAppendingPathComponent:ThumbnailDirectory] stringByAppendingPathComponent:key] stringByAppendingPathExtension:@"thumb"];
 }
 
@@ -187,11 +189,16 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     ThumbnailCacheItem* cacheItem = [_thumbnailCache objectForKey:fileURL];
     if (!cacheItem || !cacheItem.thumbnail)
     {
-        NSString* thumbnailPath = [self thumbnailPathForKey:cacheItem.key];
-        UIImage* thumbnail;
+        NSString* thumbnailPath = [self thumbnailPathForKey:fileURL];
+        UIImage* thumbnail = nil;
         if ([[NSFileManager defaultManager] fileExistsAtPath:thumbnailPath])
         {
             thumbnail = [UIImage imageWithContentsOfFile:thumbnailPath];
+            if (thumbnail)
+            {
+                cacheItem = [[ThumbnailCacheItem alloc] initWithKey:fileURL thumbnail:thumbnail];
+                [_thumbnailCache setObject:cacheItem forKey:fileURL cost:cacheItem.cost];
+            }
         }
         else
         {
@@ -212,11 +219,6 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
                     [self.videoCollectionView reloadItemsAtIndexPaths:@[indexPath]];
                 });
             }];
-        }
-        if (!thumbnail)
-        {
-            cacheItem = [[ThumbnailCacheItem alloc] initWithKey:fileURL thumbnail:thumbnail];
-            [_thumbnailCache setObject:cacheItem forKey:fileURL cost:cacheItem.cost];
         }
     }
     cell.thumbnailImageView.image = cacheItem.thumbnail;
