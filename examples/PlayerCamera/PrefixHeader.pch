@@ -18,6 +18,8 @@
 #define ThumbnailDirectory @"thumbs"
 #define VideoDirectory @"videos"
 
+#define NO_CAPTURING_WHILE_PLAYING
+
 // IFLY
 
 #endif /* PrefixHeader_pch */

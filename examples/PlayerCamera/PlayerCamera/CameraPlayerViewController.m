@@ -312,12 +312,13 @@
 }
 
 -(void) disassembleMovieWriter {
+    if (!_movieWriter) return;
     [_videoCamera removeTarget:_movieWriter];
     ///!!!_videoCamera.audioEncodingTarget = nil;
     [self stopAndReleaseMovieWriter];
 }
 
--(void) initMovieWriterWithDateTime:(NSDate*)dateTime size:(CGSize)size {
+-(void) initMovieWriterWithDateTime:(NSDate*) dateTime size:(CGSize)size {
     if (_movieWriter)
     {
         [self stopAndReleaseMovieWriter];
@@ -329,13 +330,16 @@
     NSString* pathToMovie = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:VideoDirectory] stringByAppendingPathComponent:fileName];
     //NSString* pathToMovie = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
     unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
+#ifndef NO_CAPTURING_WHILE_PLAYING
     NSURL* movieURL = [NSURL fileURLWithPath:pathToMovie];
     _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:size];
+#endif
     _movieWriter.encodingLiveVideo = YES;
 }
 
 -(void) setupMovieWriter {
     [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
+    if (!_movieWriter) return;
     [_videoCamera addTarget:_movieWriter];
     _videoCamera.audioEncodingTarget = _movieWriter;
     ///[_ijkMovie addTarget:_movieWriter];

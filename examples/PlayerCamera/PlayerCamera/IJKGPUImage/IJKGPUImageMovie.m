@@ -599,7 +599,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         [ijkMovie shutdownSynchronously];
         NSLog(@"#Crash# render : AFTER [self shutdownSynchronously];");
         ///!!!ijkMovie = nil;
-        if (completionHandler)
+        if (completionHandler && snapshotImage)
         {
             completionHandler(snapshotImage);
         }

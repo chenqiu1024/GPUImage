@@ -203,6 +203,11 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
             [IJKGPUImageMovie imageOfVideo:fileURL atTime:CMTimeMake(45, 1) completionHandler:^(UIImage* image) {
                 ThumbnailCacheItem* cacheItem = [[ThumbnailCacheItem alloc] initWithKey:fileURL thumbnail:image];
                 [_thumbnailCache setObject:cacheItem forKey:fileURL cost:cacheItem.cost];
+                
+                NSData* thumbnailData = UIImagePNGRepresentation(image);
+                NSString* thumbnailPath = [self thumbnailPathForKey:fileURL];
+                [thumbnailData writeToFile:thumbnailPath atomically:NO];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.videoCollectionView reloadItemsAtIndexPaths:@[indexPath]];
                 });

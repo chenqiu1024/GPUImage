@@ -875,12 +875,13 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-//    if (captureOutput != audioOutput)
-//    {
+    if (captureOutput != audioOutput)
+    {
 //        NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput in %s %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __PRETTY_FUNCTION__, __LINE__);
-//    }
+        DoctorLog(@"#.#");
+    }
     if (!self.captureSession.isRunning)
-    {//NSLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#0 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __PRETTY_FUNCTION__, __LINE__);
+    {DoctorLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#0 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __PRETTY_FUNCTION__, __LINE__);
         return;
     }
     else if (captureOutput == audioOutput)
@@ -890,7 +891,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     else
     {
         if (dispatch_semaphore_wait(frameRenderingSemaphore, DISPATCH_TIME_NOW) != 0)
-        {//NSLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
+        {DoctorLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#1 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __FUNCTION__, __LINE__);
             return;
         }
         
