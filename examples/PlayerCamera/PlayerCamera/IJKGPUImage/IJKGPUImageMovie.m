@@ -14,6 +14,7 @@
 
 #import "ijkplayer_ios.h"
 #import "ijksdl/ios/ijksdl_ios.h"
+#import "ijksdl/ios/IJKSDLAudioKit.h"
 #import "ijksdl/gles2/internal.h"
 #include "ijksdl/ijksdl_gles2.h"
 #include "ijksdl/ios/ijksdl_vout_overlay_videotoolbox.h"
@@ -146,9 +147,9 @@ void fillSinWaveS16LSB(Uint8* dst, int stride, int sampleCount, int sampleRate, 
 }
 
 static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
-//    NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
+    NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream) return;
-    
+    /*
     IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
     if (!ijkgpuMovie || !ijkgpuMovie.withSpeechRecognition || ijkgpuMovie.mute)
         return;
@@ -177,16 +178,63 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
 //                [ijkgpuMovie.iFlySpeechRecognizer stopListening];
 //            }
             free(singleChannelData);
-            
-            for (int i=0; i<audioParams.channels; ++i)
+        }
+            break;
+        default:
+            break;
+    }
+    /*/
+    switch (audioParams.format)
+    {
+        case AUDIO_S16LSB:
+        {
+            //for (int i=0; i<audioParams.channels; ++i)
             {
-//                fillSinWaveS16LSB(stream + 2*i, audioParams.channels, audioParams.samples, audioParams.freq, 300 + 500*i, 0.5f);
+                //fillSinWaveS16LSB(stream + 2*i, audioParams.channels, audioParams.samples, audioParams.freq, 300 + 500*i, 0.5f);
             }
         }
             break;
         default:
             break;
     }
+    
+    AudioStreamBasicDescription audioFormat;
+    IJKSDLGetAudioStreamBasicDescriptionFromSpec((const SDL_AudioSpec*)&audioParams, &audioFormat);
+    CMFormatDescriptionRef format = NULL;
+    OSStatus status = CMAudioFormatDescriptionCreate(kCFAllocatorDefault, &audioFormat, 0, nil, 0, nil, nil, &format);
+    if (status != noErr)
+    {
+        NSLog(@"Error in CMAudioFormatDescriptionCreate");
+        //TODO:
+    }
+
+    CMSampleTimingInfo timing;
+    timing.duration = CMTimeMake(1, audioParams.freq);
+    ///!!!TODO:    timing.presentationTimeStamp
+    timing.decodeTimeStamp = kCMTimeInvalid;
+    
+    CMBlockBufferRef blockBuffer;
+    CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault, stream, len, kCFAllocatorNull, NULL, 0, len, 0, &blockBuffer);
+    
+    CMSampleBufferRef sampleBuffer = NULL;
+    //*
+    const size_t sampleSizeArray[] = {len};
+    status = CMSampleBufferCreateReady(kCFAllocatorDefault, blockBuffer, format, audioParams.samples, 1, &timing, 1, sampleSizeArray, &sampleBuffer);
+    if (status != noErr)
+    {
+        NSLog(@"Error in CMSampleBufferCreate");
+        //TODO:
+    }
+    /*/
+    status = CMSampleBufferCreate(kCFAllocatorDefault, nil, NO, nil, nil, format, audioParams.samples, 1, &timing, 0, nil, &sampleBuffer);
+    if (status != noErr)
+    {
+        NSLog(@"Error in CMSampleBufferCreate");
+        //TODO:
+    }
+    CMSampleBufferSetDataBuffer(sampleBuffer, blockBuffer);
+    //*/
+    //*/
 }
 
 static void releaseAudioCallbackUserData(void* userdata) {
