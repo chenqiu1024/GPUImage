@@ -28,11 +28,11 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     GPUImageFramebuffer *firstInputFramebuffer;
     
     BOOL discont;
-    CMTime startTime, previousFrameTime, previousAudioTime;
-    CMTime audioOffsetTime, videoOffsetTime;
+    CMTime startTime, previousFrameTime, previousAudioTime0, previousAudioTime1;
+    CMTime audioOffsetTime0, audioOffsetTime1, videoOffsetTime;
     
     dispatch_queue_t audioQueue, videoQueue;
-    BOOL audioEncodingIsFinished, videoEncodingIsFinished;
+    BOOL audioEncoding0IsFinished, audioEncoding1IsFinished, videoEncodingIsFinished;
 
     BOOL isRecording;
 }
@@ -85,7 +85,8 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     self.enabled = YES;
     alreadyFinishedRecording = NO;
     videoEncodingIsFinished = NO;
-    audioEncodingIsFinished = NO;
+    audioEncoding0IsFinished = NO;
+    audioEncoding1IsFinished = NO;
 
     discont = NO;
     videoSize = newSize;
@@ -94,7 +95,8 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     startTime = kCMTimeInvalid;
     _encodingLiveVideo = [[outputSettings objectForKey:@"EncodingLiveVideo"] isKindOfClass:[NSNumber class]] ? [[outputSettings objectForKey:@"EncodingLiveVideo"] boolValue] : YES;
     previousFrameTime = kCMTimeNegativeInfinity;
-    previousAudioTime = kCMTimeNegativeInfinity;
+    previousAudioTime0 = kCMTimeNegativeInfinity;
+    previousAudioTime1 = kCMTimeNegativeInfinity;
     inputRotation = kGPUImageNoRotation;
     
     _movieWriterContext = [[GPUImageContext alloc] init];
@@ -263,7 +265,8 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     else
     {
         assetWriterVideoInput.expectsMediaDataInRealTime = _encodingLiveVideo;
-        assetWriterAudioInput.expectsMediaDataInRealTime = _encodingLiveVideo;
+        assetWriterAudioInput0.expectsMediaDataInRealTime = _encodingLiveVideo;
+        assetWriterAudioInput1.expectsMediaDataInRealTime = _encodingLiveVideo;
     }
 }
 
@@ -304,10 +307,15 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             videoEncodingIsFinished = YES;
             [assetWriterVideoInput markAsFinished];
         }
-        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncodingIsFinished )
+        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncoding0IsFinished )
         {
-            audioEncodingIsFinished = YES;
-            [assetWriterAudioInput markAsFinished];
+            audioEncoding0IsFinished = YES;
+            [assetWriterAudioInput0 markAsFinished];
+        }
+        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncoding1IsFinished )
+        {
+            audioEncoding1IsFinished = YES;
+            [assetWriterAudioInput1 markAsFinished];
         }
         [assetWriter cancelWriting];
     });
@@ -334,10 +342,15 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             videoEncodingIsFinished = YES;
             [assetWriterVideoInput markAsFinished];
         }
-        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncodingIsFinished )
+        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncoding0IsFinished )
         {
-            audioEncodingIsFinished = YES;
-            [assetWriterAudioInput markAsFinished];
+            audioEncoding0IsFinished = YES;
+            [assetWriterAudioInput0 markAsFinished];
+        }
+        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncoding1IsFinished )
+        {
+            audioEncoding1IsFinished = YES;
+            [assetWriterAudioInput1 markAsFinished];
         }
 #if (!defined(__IPHONE_6_0) || (__IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0))
         // Not iOS 6 SDK
@@ -376,45 +389,45 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         CFRetain(audioBuffer);
 
         CMTime currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(audioBuffer);
-        if (audioOffsetTime.value <= 0)
+        if (audioOffsetTime0.value <= 0)
         {
-            audioOffsetTime = currentSampleTime;
+            audioOffsetTime0 = currentSampleTime;
         }
         
         if (discont) {
             discont = NO;
             
             CMTime current;
-            if (audioOffsetTime.value > 0) {
-                current = CMTimeSubtract(currentSampleTime, audioOffsetTime);
+            if (audioOffsetTime0.value > 0) {
+                current = CMTimeSubtract(currentSampleTime, audioOffsetTime0);
 //                NSLog(@"#Timestamp# current = CMTimeSubtract(currentSampleTime, offsetTime);// currentSampleTime=%f, offsetTime=%f, current=%f", CMTimeGetSeconds(currentSampleTime), CMTimeGetSeconds(offsetTime), CMTimeGetSeconds(current));
             } else {
                 current = currentSampleTime;
 //                NSLog(@"#Timestamp# current = currentSampleTime;// currentSampleTime=%f, current=%f", CMTimeGetSeconds(currentSampleTime), CMTimeGetSeconds(current));
             }
             
-            CMTime offset = CMTimeSubtract(current, previousAudioTime);
+            CMTime offset = CMTimeSubtract(current, previousAudioTime0);
             
-            if (audioOffsetTime.value == 0) {
-                audioOffsetTime = offset;
+            if (audioOffsetTime0.value == 0) {
+                audioOffsetTime0 = offset;
 //                NSLog(@"#Timestamp# offsetTime = offset; =%f", CMTimeGetSeconds(offset));
             } else {
 //                NSLog(@"#Timestamp# offsetTime = CMTimeAdd(offsetTime, offset); offsetTime=%f, offset=%f, =%f", CMTimeGetSeconds(offsetTime), CMTimeGetSeconds(offset), CMTimeGetSeconds(CMTimeAdd(offsetTime, offset)));
-                audioOffsetTime = CMTimeAdd(audioOffsetTime, offset);
+                audioOffsetTime0 = CMTimeAdd(audioOffsetTime0, offset);
             }
         }
         
-        if (audioOffsetTime.value > 0) {
+        if (audioOffsetTime0.value > 0) {
             CMSampleBufferRef tmpBufferRef = audioBuffer;
 //            NSLog(@"#Timestamp# Before adjust, currentSampleTime=%f", CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(audioBuffer)));
-            audioBuffer = [self adjustTime:tmpBufferRef by:audioOffsetTime];
+            audioBuffer = [self adjustTime:tmpBufferRef by:audioOffsetTime0];
 //            NSLog(@"#Timestamp# After adjust, currentSampleTime=%f", CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(audioBuffer)));
             CFRelease(tmpBufferRef);
         }
         // record most recent time so we know the length of the pause
         
         currentSampleTime = CMSampleBufferGetPresentationTimeStamp(audioBuffer);
-        previousAudioTime = currentSampleTime;
+        previousAudioTime0 = currentSampleTime;
         
         if (CMTIME_IS_INVALID(startTime))
         {
@@ -429,7 +442,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             });
         }
         
-        if (!assetWriterAudioInput.readyForMoreMediaData && _encodingLiveVideo)
+        if (!assetWriterAudioInput0.readyForMoreMediaData && _encodingLiveVideo)
         {
 //            NSLog(@"#Timestamp# 1: Had to drop an audio frame: %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, currentSampleTime)));
             if (_shouldInvalidateAudioSampleWhenDone)
@@ -466,18 +479,18 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         
 //        NSLog(@"Recorded audio sample time: %lld, %d, %lld", currentSampleTime.value, currentSampleTime.timescale, currentSampleTime.epoch);
         void(^write)() = ^() {
-            while( ! assetWriterAudioInput.readyForMoreMediaData && ! _encodingLiveVideo && ! audioEncodingIsFinished ) {
+            while( ! assetWriterAudioInput0.readyForMoreMediaData && ! _encodingLiveVideo && ! audioEncoding0IsFinished ) {
                 NSDate *maxDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
                 //NSLog(@"audio waiting...");
                 [[NSRunLoop currentRunLoop] runUntilDate:maxDate];
             }
-            if (!assetWriterAudioInput.readyForMoreMediaData)
+            if (!assetWriterAudioInput0.readyForMoreMediaData)
             {
 //                NSLog(@"#Timestamp# 2: Had to drop an audio frame %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, currentSampleTime)));
             }
             else if(assetWriter.status == AVAssetWriterStatusWriting)
             {
-                if (![assetWriterAudioInput appendSampleBuffer:audioBuffer])
+                if (![assetWriterAudioInput0 appendSampleBuffer:audioBuffer])
                     NSLog(@"#Timestamp# Problem appending audio buffer at time: %f", CMTimeGetSeconds(currentSampleTime));
 //                else
 //                    NSLog(@"#Timestamp# Success appending audio buffer at time: %f", CMTimeGetSeconds(currentSampleTime));
@@ -507,6 +520,153 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     else
     {
 //        NSLog(@"#Timestamp# No audio track");
+    }
+}
+
+- (void)processAudioBuffer1:(CMSampleBufferRef)audioBuffer;
+{
+    if (!isRecording || _paused)
+    {
+        return;
+    }
+    
+    //    if (_hasAudioTrack && CMTIME_IS_VALID(startTime))
+    if (_hasAudioTrack)
+    {
+        CFRetain(audioBuffer);
+        
+        CMTime currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(audioBuffer);
+        if (audioOffsetTime1.value <= 0)
+        {
+            audioOffsetTime1 = currentSampleTime;
+        }
+        
+        if (discont) {
+            discont = NO;
+            
+            CMTime current;
+            if (audioOffsetTime1.value > 0) {
+                current = CMTimeSubtract(currentSampleTime, audioOffsetTime1);
+                //                NSLog(@"#Timestamp# current = CMTimeSubtract(currentSampleTime, offsetTime);// currentSampleTime=%f, offsetTime=%f, current=%f", CMTimeGetSeconds(currentSampleTime), CMTimeGetSeconds(offsetTime), CMTimeGetSeconds(current));
+            } else {
+                current = currentSampleTime;
+                //                NSLog(@"#Timestamp# current = currentSampleTime;// currentSampleTime=%f, current=%f", CMTimeGetSeconds(currentSampleTime), CMTimeGetSeconds(current));
+            }
+            
+            CMTime offset = CMTimeSubtract(current, previousAudioTime1);
+            
+            if (audioOffsetTime1.value == 0) {
+                audioOffsetTime1 = offset;
+                //                NSLog(@"#Timestamp# offsetTime = offset; =%f", CMTimeGetSeconds(offset));
+            } else {
+                //                NSLog(@"#Timestamp# offsetTime = CMTimeAdd(offsetTime, offset); offsetTime=%f, offset=%f, =%f", CMTimeGetSeconds(offsetTime), CMTimeGetSeconds(offset), CMTimeGetSeconds(CMTimeAdd(offsetTime, offset)));
+                audioOffsetTime1 = CMTimeAdd(audioOffsetTime1, offset);
+            }
+        }
+        
+        if (audioOffsetTime1.value > 0) {
+            CMSampleBufferRef tmpBufferRef = audioBuffer;
+            //            NSLog(@"#Timestamp# Before adjust, currentSampleTime=%f", CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(audioBuffer)));
+            audioBuffer = [self adjustTime:tmpBufferRef by:audioOffsetTime1];
+            //            NSLog(@"#Timestamp# After adjust, currentSampleTime=%f", CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(audioBuffer)));
+            CFRelease(tmpBufferRef);
+        }
+        // record most recent time so we know the length of the pause
+        
+        currentSampleTime = CMSampleBufferGetPresentationTimeStamp(audioBuffer);
+        previousAudioTime1 = currentSampleTime;
+        
+        if (CMTIME_IS_INVALID(startTime))
+        {
+            runSynchronouslyOnContextQueue(_movieWriterContext, ^{
+                if ((audioInputReadyCallback == NULL) && (assetWriter.status != AVAssetWriterStatusWriting))
+                {
+                    [assetWriter startWriting];
+                }
+                [assetWriter startSessionAtSourceTime:currentSampleTime];
+                startTime = currentSampleTime;
+                //                NSLog(@"#Timestamp# startTime = currentSampleTime = %f", CMTimeGetSeconds(startTime));
+            });
+        }
+        
+        if (!assetWriterAudioInput1.readyForMoreMediaData && _encodingLiveVideo)
+        {
+            //            NSLog(@"#Timestamp# 1: Had to drop an audio frame: %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, currentSampleTime)));
+            if (_shouldInvalidateAudioSampleWhenDone)
+            {
+                CMSampleBufferInvalidate(audioBuffer);
+            }
+            CFRelease(audioBuffer);
+            return;
+        }
+        
+        //        NSLog(@"#Timestamp# previousAudioTime = currentSampleTime = CMSampleBufferGetPresentationTimeStamp(audioBuffer); =%f", CMTimeGetSeconds(previousAudioTime));
+        //if the consumer wants to do something with the audio samples before writing, let him.
+        if (self.audioProcessingCallback) {
+            //need to introspect into the opaque CMBlockBuffer structure to find its raw sample buffers.
+            CMBlockBufferRef buffer = CMSampleBufferGetDataBuffer(audioBuffer);
+            CMItemCount numSamplesInBuffer = CMSampleBufferGetNumSamples(audioBuffer);
+            AudioBufferList audioBufferList;
+            
+            CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(audioBuffer,
+                                                                    NULL,
+                                                                    &audioBufferList,
+                                                                    sizeof(audioBufferList),
+                                                                    NULL,
+                                                                    NULL,
+                                                                    kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
+                                                                    &buffer
+                                                                    );
+            //passing a live pointer to the audio buffers, try to process them in-place or we might have syncing issues.
+            for (int bufferCount=0; bufferCount < audioBufferList.mNumberBuffers; bufferCount++) {
+                SInt16 *samples = (SInt16 *)audioBufferList.mBuffers[bufferCount].mData;
+                self.audioProcessingCallback(&samples, numSamplesInBuffer);
+            }
+        }
+        
+        //        NSLog(@"Recorded audio sample time: %lld, %d, %lld", currentSampleTime.value, currentSampleTime.timescale, currentSampleTime.epoch);
+        void(^write)() = ^() {
+            while( ! assetWriterAudioInput1.readyForMoreMediaData && ! _encodingLiveVideo && ! audioEncoding1IsFinished ) {
+                NSDate *maxDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+                //NSLog(@"audio waiting...");
+                [[NSRunLoop currentRunLoop] runUntilDate:maxDate];
+            }
+            if (!assetWriterAudioInput1.readyForMoreMediaData)
+            {
+                //                NSLog(@"#Timestamp# 2: Had to drop an audio frame %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, currentSampleTime)));
+            }
+            else if(assetWriter.status == AVAssetWriterStatusWriting)
+            {
+                if (![assetWriterAudioInput1 appendSampleBuffer:audioBuffer])
+                    NSLog(@"#Timestamp# Problem appending audio buffer at time: %f", CMTimeGetSeconds(currentSampleTime));
+                //                else
+                //                    NSLog(@"#Timestamp# Success appending audio buffer at time: %f", CMTimeGetSeconds(currentSampleTime));
+            }
+            else
+            {
+                //                NSLog(@"#Timestamp# Wrote an audio frame %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, currentSampleTime)));
+            }
+            
+            if (_shouldInvalidateAudioSampleWhenDone)
+            {
+                CMSampleBufferInvalidate(audioBuffer);
+            }
+            CFRelease(audioBuffer);
+        };
+        //        runAsynchronouslyOnContextQueue(_movieWriterContext, write);
+        if( _encodingLiveVideo )
+        {
+            //            NSLog(@"#Timestamp# 4 return, _encodingLiveVideo=%d", _encodingLiveVideo);
+            runAsynchronouslyOnContextQueue(_movieWriterContext, write);
+        }
+        else
+        {
+            write();
+        }
+    }
+    else
+    {
+        //        NSLog(@"#Timestamp# No audio track");
     }
 }
 
@@ -548,7 +708,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     if (audioInputReadyCallback != NULL)
     {
         audioQueue = dispatch_queue_create("com.sunsetlakesoftware.GPUImage.audioReadingQueue", GPUImageDefaultQueueAttribute());
-        [assetWriterAudioInput requestMediaDataWhenReadyOnQueue:audioQueue usingBlock:^{
+        [assetWriterAudioInput0 requestMediaDataWhenReadyOnQueue:audioQueue usingBlock:^{
             if( _paused )
             {
                 //NSLog(@"audio requestMediaDataWhenReadyOnQueue paused");
@@ -557,15 +717,15 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
                 return;
             }
             //NSLog(@"audio requestMediaDataWhenReadyOnQueue begin");
-            while( assetWriterAudioInput.readyForMoreMediaData && ! _paused )
+            while( assetWriterAudioInput0.readyForMoreMediaData && ! _paused )
             {
-                if( audioInputReadyCallback && ! audioInputReadyCallback() && ! audioEncodingIsFinished )
+                if( audioInputReadyCallback && ! audioInputReadyCallback() && ! audioEncoding0IsFinished )
                 {
                     runAsynchronouslyOnContextQueue(_movieWriterContext, ^{
-                        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncodingIsFinished )
+                        if( assetWriter.status == AVAssetWriterStatusWriting && ! audioEncoding0IsFinished )
                         {
-                            audioEncodingIsFinished = YES;
-                            [assetWriterAudioInput markAsFinished];
+                            audioEncoding0IsFinished = YES;
+                            [assetWriterAudioInput0 markAsFinished];
                         }
                     });
                 }
@@ -984,9 +1144,12 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
                                    nil];*/
         }
         
-        assetWriterAudioInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioOutputSettings];
-        [assetWriter addInput:assetWriterAudioInput];
-        assetWriterAudioInput.expectsMediaDataInRealTime = _encodingLiveVideo;
+        assetWriterAudioInput0 = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioOutputSettings];
+        assetWriterAudioInput1 = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioOutputSettings];
+        [assetWriter addInput:assetWriterAudioInput0];
+        [assetWriter addInput:assetWriterAudioInput1];
+        assetWriterAudioInput0.expectsMediaDataInRealTime = _encodingLiveVideo;
+        assetWriterAudioInput1.expectsMediaDataInRealTime = _encodingLiveVideo;
     }
     else
     {
@@ -1007,8 +1170,10 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         return kCMTimeZero;
     if( ! CMTIME_IS_NEGATIVE_INFINITY(previousFrameTime) )
         return CMTimeSubtract(previousFrameTime, startTime);
-    if( ! CMTIME_IS_NEGATIVE_INFINITY(previousAudioTime) )
-        return CMTimeSubtract(previousAudioTime, startTime);
+    if( ! CMTIME_IS_NEGATIVE_INFINITY(previousAudioTime0) )
+        return CMTimeSubtract(previousAudioTime0, startTime);
+    if( ! CMTIME_IS_NEGATIVE_INFINITY(previousAudioTime1) )
+        return CMTimeSubtract(previousAudioTime1, startTime);
     return kCMTimeZero;
 }
 
