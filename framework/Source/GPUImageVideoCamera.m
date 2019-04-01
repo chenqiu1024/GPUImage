@@ -812,7 +812,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 
 - (void)processAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 {
-    [self.audioEncodingTarget processAudioBuffer:sampleBuffer]; 
+    [self.audioEncodingTarget processAudioBuffer0:sampleBuffer]; 
 }
 
 - (void)convertYUVToRGBOutput;
