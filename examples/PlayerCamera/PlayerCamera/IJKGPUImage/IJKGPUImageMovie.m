@@ -122,6 +122,8 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.3--ijk0.8.0--20170829--001
 @property (nonatomic, assign) float faceDetectInterval;
 @property (nonatomic, copy) NSDate* prevFaceDetectTime;
 
+@property (nonatomic, assign) NSUInteger totalAudioSamples;
+
 -(void) initIflyVoiceRecognizer;
 
 @end
@@ -149,9 +151,11 @@ void fillSinWaveS16LSB(Uint8* dst, int stride, int sampleCount, int sampleRate, 
 static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
     NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream) return;
-    /*
     IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
-    if (!ijkgpuMovie || !ijkgpuMovie.withSpeechRecognition || ijkgpuMovie.mute)
+    if (!ijkgpuMovie)
+        return;
+    /*
+    if (!ijkgpuMovie.withSpeechRecognition || ijkgpuMovie.mute)
         return;
     
     if (ijkgpuMovie.iFlySpeechRecognizer == nil)
@@ -184,56 +188,61 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
             break;
     }
     /*/
-    switch (audioParams.format)
+    if (ijkgpuMovie.delegate && [ijkgpuMovie.delegate respondsToSelector:@selector(ijkGIMovieDidDecodeAudioSampleBuffer:)])
     {
-        case AUDIO_S16LSB:
+        switch (audioParams.format)
         {
-            //for (int i=0; i<audioParams.channels; ++i)
+            case AUDIO_S16LSB:
             {
-                //fillSinWaveS16LSB(stream + 2*i, audioParams.channels, audioParams.samples, audioParams.freq, 300 + 500*i, 0.5f);
+                //for (int i=0; i<audioParams.channels; ++i)
+                {
+                    //fillSinWaveS16LSB(stream + 2*i, audioParams.channels, audioParams.samples, audioParams.freq, 300 + 500*i, 0.5f);
+                }
             }
+                break;
+            default:
+                break;
         }
-            break;
-        default:
-            break;
+        
+        AudioStreamBasicDescription audioFormat;
+        IJKSDLGetAudioStreamBasicDescriptionFromSpec((const SDL_AudioSpec*)&audioParams, &audioFormat);
+        CMFormatDescriptionRef format = NULL;
+        OSStatus status = CMAudioFormatDescriptionCreate(kCFAllocatorDefault, &audioFormat, 0, nil, 0, nil, nil, &format);
+        if (status != noErr)
+        {
+            NSLog(@"Error in CMAudioFormatDescriptionCreate");
+            //TODO:
+        }
+        
+        CMSampleTimingInfo timing;
+        timing.duration = CMTimeMake(1, audioParams.freq);
+        ijkgpuMovie.totalAudioSamples += audioParams.samples;
+        timing.presentationTimeStamp = CMTimeMake(ijkgpuMovie.totalAudioSamples, audioParams.freq);
+        timing.decodeTimeStamp = kCMTimeInvalid;
+        
+        CMBlockBufferRef blockBuffer;
+        CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault, stream, len, kCFAllocatorNull, NULL, 0, len, 0, &blockBuffer);
+        
+        CMSampleBufferRef sampleBuffer = NULL;
+        //*
+        const size_t sampleSizeArray[] = {len};
+        status = CMSampleBufferCreateReady(kCFAllocatorDefault, blockBuffer, format, audioParams.samples, 1, &timing, 1, sampleSizeArray, &sampleBuffer);
+        if (status != noErr)
+        {
+            NSLog(@"Error in CMSampleBufferCreate");
+            //TODO:
+        }
+        /*/
+         status = CMSampleBufferCreate(kCFAllocatorDefault, nil, NO, nil, nil, format, audioParams.samples, 1, &timing, 0, nil, &sampleBuffer);
+         if (status != noErr)
+         {
+         NSLog(@"Error in CMSampleBufferCreate");
+         //TODO:
+         }
+         CMSampleBufferSetDataBuffer(sampleBuffer, blockBuffer);
+         //*/
+        [ijkgpuMovie.delegate ijkGIMovieDidDecodeAudioSampleBuffer:sampleBuffer];
     }
-    
-    AudioStreamBasicDescription audioFormat;
-    IJKSDLGetAudioStreamBasicDescriptionFromSpec((const SDL_AudioSpec*)&audioParams, &audioFormat);
-    CMFormatDescriptionRef format = NULL;
-    OSStatus status = CMAudioFormatDescriptionCreate(kCFAllocatorDefault, &audioFormat, 0, nil, 0, nil, nil, &format);
-    if (status != noErr)
-    {
-        NSLog(@"Error in CMAudioFormatDescriptionCreate");
-        //TODO:
-    }
-
-    CMSampleTimingInfo timing;
-    timing.duration = CMTimeMake(1, audioParams.freq);
-    ///!!!TODO:    timing.presentationTimeStamp
-    timing.decodeTimeStamp = kCMTimeInvalid;
-    
-    CMBlockBufferRef blockBuffer;
-    CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault, stream, len, kCFAllocatorNull, NULL, 0, len, 0, &blockBuffer);
-    
-    CMSampleBufferRef sampleBuffer = NULL;
-    //*
-    const size_t sampleSizeArray[] = {len};
-    status = CMSampleBufferCreateReady(kCFAllocatorDefault, blockBuffer, format, audioParams.samples, 1, &timing, 1, sampleSizeArray, &sampleBuffer);
-    if (status != noErr)
-    {
-        NSLog(@"Error in CMSampleBufferCreate");
-        //TODO:
-    }
-    /*/
-    status = CMSampleBufferCreate(kCFAllocatorDefault, nil, NO, nil, nil, format, audioParams.samples, 1, &timing, 0, nil, &sampleBuffer);
-    if (status != noErr)
-    {
-        NSLog(@"Error in CMSampleBufferCreate");
-        //TODO:
-    }
-    CMSampleBufferSetDataBuffer(sampleBuffer, blockBuffer);
-    //*/
     //*/
 }
 
@@ -818,6 +827,7 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         // init media resource
         _urlString = aUrlString;
         
+        _totalAudioSamples = 0;
         // init player
         if (muted)
         {

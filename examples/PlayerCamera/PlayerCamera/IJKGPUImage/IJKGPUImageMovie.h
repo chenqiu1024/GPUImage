@@ -69,10 +69,12 @@ typedef void(^SnapshotCompletionHandler)(UIImage*);
 @class IJKGPUImageMovie;
 @protocol IJKGPUImageMovieDelegate <NSObject>
 
--(void) ijkGIMovieRenderedOneFrame:(IJKGPUImageMovie*)ijkgpuMovie;
+-(void)ijkGIMovieRenderedOneFrame:(IJKGPUImageMovie*)ijkgpuMovie;
 
--(void) ijkGIMovieDidDetectFaces:(IJKGPUImageMovie*)ijkgpuMovie result:(NSArray*)result;
--(void) ijkGIMovieDidRecognizeSpeech:(IJKGPUImageMovie*)ijkgpuMovie result:(NSString*)result;
+-(void)ijkGIMovieDidDetectFaces:(IJKGPUImageMovie*)ijkgpuMovie result:(NSArray*)result;
+-(void)ijkGIMovieDidRecognizeSpeech:(IJKGPUImageMovie*)ijkgpuMovie result:(NSString*)result;
+
+-(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
 @end
 
