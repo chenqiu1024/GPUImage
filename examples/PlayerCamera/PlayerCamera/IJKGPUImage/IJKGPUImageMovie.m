@@ -148,8 +148,8 @@ void fillSinWaveS16LSB(Uint8* dst, int stride, int sampleCount, int sampleRate, 
     }
 }
 
-static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
-    NSLog(@"#AudioCallback# audioPlayCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
+static void audioPlayCallback(void* userdata, Uint8* stream, int len, double presentTime, SDL_AudioSpecParams audioParams) {
+    NSLog(@"#AudioCallback# audioPlayCallback(presentTime=%f, len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", presentTime, len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream) return;
     IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
     if (!ijkgpuMovie)
@@ -218,6 +218,8 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, SDL_AudioS
         timing.duration = CMTimeMake(1, audioParams.freq);
         ijkgpuMovie.totalAudioSamples += audioParams.samples;
         timing.presentationTimeStamp = CMTimeMake(ijkgpuMovie.totalAudioSamples, audioParams.freq);
+        NSLog(@"#AudioCallback# audioPlayCallback: Calculated timestamp = %f", CMTimeGetSeconds(timing.presentationTimeStamp));
+        //timing.presentationTimeStamp = CMTimeMake(presentTime, 1.0);
         timing.decodeTimeStamp = kCMTimeInvalid;
         
         CMBlockBufferRef blockBuffer;

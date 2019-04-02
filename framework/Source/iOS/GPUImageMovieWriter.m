@@ -548,7 +548,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             CMTime current;
             if (audioOffsetTime1.value > 0) {
                 current = CMTimeSubtract(currentSampleTime, audioOffsetTime1);
-//                                NSLog(@"#Timestamp# current = CMTimeSubtract(currentSampleTime, offsetTime);// currentSampleTime=%f, offsetTime=%f, current=%f", CMTimeGetSeconds(currentSampleTime), CMTimeGetSeconds(offsetTime1), CMTimeGetSeconds(current));
+                                NSLog(@"#Timestamp# current = CMTimeSubtract(currentSampleTime, offsetTime);// currentSampleTime=%f, offsetTime=%f, current=%f", CMTimeGetSeconds(currentSampleTime), CMTimeGetSeconds(audioOffsetTime1), CMTimeGetSeconds(current));
             } else {
                 current = currentSampleTime;
                                 NSLog(@"#Timestamp# current = currentSampleTime;// currentSampleTime=%f, current=%f", CMTimeGetSeconds(currentSampleTime), CMTimeGetSeconds(current));
@@ -560,7 +560,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
                 audioOffsetTime1 = offset;
                                 NSLog(@"#Timestamp# offsetTime = offset; =%f", CMTimeGetSeconds(offset));
             } else {
-//                                NSLog(@"#Timestamp# offsetTime = CMTimeAdd(offsetTime, offset); offsetTime=%f, offset=%f, =%f", CMTimeGetSeconds(offsetTime), CMTimeGetSeconds(offset), CMTimeGetSeconds(CMTimeAdd(offsetTime, offset)));
+                                NSLog(@"#Timestamp# offsetTime = CMTimeAdd(offsetTime, offset); offsetTime=%f, offset=%f, =%f", CMTimeGetSeconds(audioOffsetTime1), CMTimeGetSeconds(offset), CMTimeGetSeconds(CMTimeAdd(audioOffsetTime1, offset)));
                 audioOffsetTime1 = CMTimeAdd(audioOffsetTime1, offset);
             }
         }
@@ -640,12 +640,12 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             {
                 if (![assetWriterAudioInput1 appendSampleBuffer:audioBuffer])
                     NSLog(@"#Timestamp# Problem appending audio buffer at time: %f", CMTimeGetSeconds(currentSampleTime));
-                                else
-                                    NSLog(@"#Timestamp# Success appending audio buffer at time: %f", CMTimeGetSeconds(currentSampleTime));
+                else
+                    NSLog(@"#Timestamp# Success appending audio buffer at time: %f", CMTimeGetSeconds(currentSampleTime));
             }
             else
             {
-                                NSLog(@"#Timestamp# Wrote an audio frame %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, currentSampleTime)));
+                NSLog(@"#Timestamp# Wrote an audio frame %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, currentSampleTime)));
             }
             
             if (_shouldInvalidateAudioSampleWhenDone)
@@ -657,7 +657,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         //        runAsynchronouslyOnContextQueue(_movieWriterContext, write);
         if( _encodingLiveVideo )
         {
-                        NSLog(@"#Timestamp# 4 return, _encodingLiveVideo=%d", _encodingLiveVideo);
+            NSLog(@"#Timestamp# 4 return, _encodingLiveVideo=%d", _encodingLiveVideo);
             runAsynchronouslyOnContextQueue(_movieWriterContext, write);
         }
         else

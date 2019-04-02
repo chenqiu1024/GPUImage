@@ -806,9 +806,9 @@
 //        [_accessoriesView setNeedsDisplay];
 //    });
 }
-//-(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-//    [_movieWriter processAudioBuffer1:sampleBuffer];
-//}
+-(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+//    [_movieWriter processAudioBuffer0:sampleBuffer];
+}
 
 
 @end
