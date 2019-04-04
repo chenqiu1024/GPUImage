@@ -807,7 +807,7 @@
 //    });
 }
 -(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    [_movieWriter processAudioBuffer1:sampleBuffer];
+    ///!!![_movieWriter processAudioBuffer1:sampleBuffer];
 }
 
 
