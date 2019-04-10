@@ -193,24 +193,41 @@ static void audioDecodeCallbackProcedure(void* userdata, Uint8* stream, int len,
 
 static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
     NSLog(@"#AudioCallback# audioMixedCallback(len=%d, stream=0x%lx, format=0x%x, channels=%d, samples=%d, freq=%d)", len, (long)stream, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
-    return;
-    if (NULL == stream) return;
+    if (NULL == stream)
+        return;
+    
     IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
     if (!ijkgpuMovie)
         return;
+    
     if (ijkgpuMovie.delegate && [ijkgpuMovie.delegate respondsToSelector:@selector(ijkGIMovieDidDecodeAudioSampleBuffer:)])
     {
+        int samples = 0;
         switch (audioParams.format)
         {
+            case AUDIO_U8:
+            case AUDIO_S8:
+                samples = len;
+                break;
+            case AUDIO_U16LSB:
             case AUDIO_S16LSB:
+            case AUDIO_U16MSB:
+            case AUDIO_S16MSB:
+                samples = len / 2;
+            case AUDIO_S32LSB:
+            case AUDIO_S32MSB:
+            case AUDIO_F32LSB:
+            case AUDIO_F32MSB:
             {
                 //for (int i=0; i<audioParams.channels; ++i)
-                {
+                //{
                     //fillSinWaveS16LSB(stream + 2*i, audioParams.channels, audioParams.samples, audioParams.freq, 300 + 500*i, 0.5f);
-                }
+                //}
+                samples = len / 4;
             }
                 break;
             default:
+                samples = 0;
                 break;
         }
         
@@ -227,10 +244,10 @@ static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, 
         CMSampleTimingInfo timing;
         //timing.duration = CMTimeMake(audioParams.samples, audioParams.freq);
         timing.duration = CMTimeMake(1, audioParams.freq);
-        ijkgpuMovie.totalAudioSamples += audioParams.samples;
+        ijkgpuMovie.totalAudioSamples += samples / audioParams.channels;
         timing.presentationTimeStamp = CMTimeMake(ijkgpuMovie.totalAudioSamples, audioParams.freq);
         //timing.presentationTimeStamp = CMTimeMake(presentTime, 1.0);
-        NSLog(@"#AudioCallback# audioPlayCallback: Calculated timestamp = %f", CMTimeGetSeconds(timing.presentationTimeStamp));
+        NSLog(@"#AudioCallback# audioPlayCallback: Calculated timestamp = %f, =%ld/%d", CMTimeGetSeconds(timing.presentationTimeStamp), ijkgpuMovie.totalAudioSamples, audioParams.freq);
         //timing.decodeTimeStamp = CMTimeMake(decodeTime, 1.0);
         timing.decodeTimeStamp = kCMTimeInvalid;
         
