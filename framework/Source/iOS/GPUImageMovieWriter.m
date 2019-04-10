@@ -1104,7 +1104,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         else if (audioOutputSettings == nil)
         {
             AVAudioSession *sharedAudioSession = [AVAudioSession sharedInstance];
-            [sharedAudioSession setCategory:AVAudioSessionCategoryAmbient error:nil];
+            [sharedAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
             double preferredHardwareSampleRate;
             
             if ([sharedAudioSession respondsToSelector:@selector(sampleRate)])

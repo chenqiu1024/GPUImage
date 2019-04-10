@@ -148,8 +148,8 @@ void fillSinWaveS16LSB(Uint8* dst, int stride, int sampleCount, int sampleRate, 
     }
 }
 
-static void audioPlayCallback(void* userdata, Uint8* stream, int len, double presentTime, double decodeTime, SDL_AudioSpecParams audioParams) {
-    NSLog(@"#AudioCallback# audioPlayCallback(presentTime=%f, len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", presentTime, len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
+static void audioDecodeCallbackProcedure(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
+    NSLog(@"#AudioCallback# audioDecodeCallback(len=%d, format=0x%x, channels=%d, samples=%d, freq=%d)", len, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream) return;
     IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
     if (!ijkgpuMovie)
@@ -188,6 +188,16 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, double pre
             break;
     }
     /*/
+    //*/
+}
+
+static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
+    NSLog(@"#AudioCallback# audioMixedCallback(len=%d, stream=0x%lx, format=0x%x, channels=%d, samples=%d, freq=%d)", len, (long)stream, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
+    return;
+    if (NULL == stream) return;
+    IJKGPUImageMovie* ijkgpuMovie = (__bridge IJKGPUImageMovie*)userdata;
+    if (!ijkgpuMovie)
+        return;
     if (ijkgpuMovie.delegate && [ijkgpuMovie.delegate respondsToSelector:@selector(ijkGIMovieDidDecodeAudioSampleBuffer:)])
     {
         switch (audioParams.format)
@@ -218,11 +228,11 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, double pre
         //timing.duration = CMTimeMake(audioParams.samples, audioParams.freq);
         timing.duration = CMTimeMake(1, audioParams.freq);
         ijkgpuMovie.totalAudioSamples += audioParams.samples;
-        //timing.presentationTimeStamp = CMTimeMake(ijkgpuMovie.totalAudioSamples, audioParams.freq);
-        timing.presentationTimeStamp = CMTimeMake(presentTime, 1.0);
+        timing.presentationTimeStamp = CMTimeMake(ijkgpuMovie.totalAudioSamples, audioParams.freq);
+        //timing.presentationTimeStamp = CMTimeMake(presentTime, 1.0);
         NSLog(@"#AudioCallback# audioPlayCallback: Calculated timestamp = %f", CMTimeGetSeconds(timing.presentationTimeStamp));
-        timing.decodeTimeStamp = CMTimeMake(decodeTime, 1.0);
-        //timing.decodeTimeStamp = kCMTimeInvalid;
+        //timing.decodeTimeStamp = CMTimeMake(decodeTime, 1.0);
+        timing.decodeTimeStamp = kCMTimeInvalid;
         
         CMBlockBufferRef blockBuffer;
         CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault, stream, len, kCFAllocatorNull, NULL, 0, len, 0, &blockBuffer);
@@ -247,14 +257,13 @@ static void audioPlayCallback(void* userdata, Uint8* stream, int len, double pre
          //*/
         [ijkgpuMovie.delegate ijkGIMovieDidDecodeAudioSampleBuffer:sampleBuffer];
     }
-    //*/
 }
 
 static void releaseAudioCallbackUserData(void* userdata) {
     __unused id weakObj = (__bridge_transfer id)userdata;
 }
 
-IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute, SDL_AudioCallback audioCallback, void* audioCallbackUserData, void(*audioCallbackUserDataRelease)(void*))
+IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute, AudioDataCallbackStruct audioDecodeCallback, AudioDataCallbackStruct audioMixedCallback)
 {
     IjkMediaPlayer *mp = ijkmp_create(msg_loop);
     if (!mp)
@@ -271,9 +280,8 @@ IjkMediaPlayer* ijkgpuplayer_create(int(*msg_loop)(void*), bool mute, SDL_AudioC
     {
         mp->ffplayer->pipeline->func_open_audio_output = func_open_audio_output_empty;
     }
-    mp->ffplayer->audioCallback = audioPlayCallback;///#AudioCallback#
-    mp->ffplayer->audioCallbackUserData = audioCallbackUserData;
-    mp->ffplayer->audioCallbackUserDataRelease = audioCallbackUserDataRelease;
+    mp->ffplayer->audioDecodeCallback = audioDecodeCallback;///#AudioCallback#
+    mp->ffplayer->audioMixedCallback = audioMixedCallback;
     return mp;
     
 fail:
@@ -833,13 +841,22 @@ static int ijkff_inject_callback(void* opaque, int message, void* data, size_t d
         
         _totalAudioSamples = 0;
         // init player
+        AudioDataCallbackStruct audioDecodeCallback = {0}, audioMixedCallback = {0};
         if (muted)
         {
-            _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, NULL, NULL, NULL);
+            _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, audioDecodeCallback, audioMixedCallback);
         }
         else
         {
-            _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, audioPlayCallback, (__bridge_retained void*)self, releaseAudioCallbackUserData);
+            audioDecodeCallback.callbackFunction = audioDecodeCallbackProcedure;
+            audioDecodeCallback.contextData = (__bridge_retained void*)self;
+            audioDecodeCallback.contextDataReleaseFunction = releaseAudioCallbackUserData;
+            
+            audioMixedCallback.callbackFunction = audioMixedCallbackProcedure;
+            audioMixedCallback.contextData = (__bridge_retained void*)self;
+            audioMixedCallback.contextDataReleaseFunction = releaseAudioCallbackUserData;
+            
+            _mediaPlayer = ijkgpuplayer_create(media_player_msg_loop, muted, audioDecodeCallback, audioMixedCallback);
         }
         
         _msgPool = [[IJKFFMoviePlayerMessagePool alloc] init];
