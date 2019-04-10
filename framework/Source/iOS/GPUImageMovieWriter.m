@@ -1090,7 +1090,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
 	[self setHasAudioTrack:newValue audioSettings:nil];
 }
 
-- (void)setHasAudioTrack:(BOOL)newValue audioSettings:(NSDictionary *)audioOutputSettings;
+- (void)setHasAudioTrack:(BOOL)newValue audioSettings:(NSDictionary *)audioOutputSettings0;
 {
     _hasAudioTrack = newValue;
     
@@ -1099,9 +1099,9 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         if (_shouldPassthroughAudio)
         {
 			// Do not set any settings so audio will be the same as passthrough
-			audioOutputSettings = nil;
+			audioOutputSettings0 = nil;
         }
-        else if (audioOutputSettings == nil)
+        else if (audioOutputSettings0 == nil)
         {
             AVAudioSession *sharedAudioSession = [AVAudioSession sharedInstance];
             [sharedAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
@@ -1123,7 +1123,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             bzero( &acl, sizeof(acl));
             acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
             
-            audioOutputSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+            audioOutputSettings0 = [NSDictionary dictionaryWithObjectsAndKeys:
                                          [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
                                          [ NSNumber numberWithInt: 1 ], AVNumberOfChannelsKey,
                                          [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
@@ -1145,8 +1145,20 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
                                    nil];*/
         }
         
-        assetWriterAudioInput0 = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioOutputSettings];
-        assetWriterAudioInput1 = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioOutputSettings];
+        AudioChannelLayout steroACL;
+        bzero( &steroACL, sizeof(steroACL));
+        steroACL.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
+        NSDictionary* audioOutputSettings1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+                                              [ NSNumber numberWithInt: 2 ], AVNumberOfChannelsKey,
+                                              [ NSNumber numberWithFloat: 16000 ], AVSampleRateKey,
+                                              [ NSData dataWithBytes: &steroACL length: sizeof( steroACL ) ], AVChannelLayoutKey,
+                                              //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
+                                              [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
+                                              nil];
+        
+        assetWriterAudioInput0 = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioOutputSettings0];
+        assetWriterAudioInput1 = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioOutputSettings1];
         [assetWriter addInput:assetWriterAudioInput0];
         [assetWriter addInput:assetWriterAudioInput1];
         assetWriterAudioInput0.expectsMediaDataInRealTime = _encodingLiveVideo;
