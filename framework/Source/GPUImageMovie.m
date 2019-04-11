@@ -476,7 +476,7 @@ static CVReturn renderCallback(CVDisplayLinkRef displayLink,
         if (audioSampleBufferRef)
         {
             //NSLog(@"read an audio frame: %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, CMSampleBufferGetOutputPresentationTimeStamp(audioSampleBufferRef))));
-            [self.audioEncodingTarget processAudioBuffer0:audioSampleBufferRef];
+            ///!!![self.audioEncodingTarget processAudioBuffer0:audioSampleBufferRef];
             CFRelease(audioSampleBufferRef);
             return YES;
         }

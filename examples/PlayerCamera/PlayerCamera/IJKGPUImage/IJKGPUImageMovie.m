@@ -244,7 +244,7 @@ static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, 
         CMSampleTimingInfo timing;
         //timing.duration = CMTimeMake(audioParams.samples, audioParams.freq);
         timing.duration = CMTimeMake(1, audioParams.freq);
-        ijkgpuMovie.totalAudioSamples += samples / audioParams.channels;
+        ijkgpuMovie.totalAudioSamples += samples;///!!! / audioParams.channels;
         timing.presentationTimeStamp = CMTimeMake(ijkgpuMovie.totalAudioSamples, audioParams.freq);
         //timing.presentationTimeStamp = CMTimeMake(presentTime, 1.0);
         NSLog(@"#AudioCallback# audioPlayCallback: Calculated timestamp = %f, =%ld/%d", CMTimeGetSeconds(timing.presentationTimeStamp), ijkgpuMovie.totalAudioSamples, audioParams.freq);

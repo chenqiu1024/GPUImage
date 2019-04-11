@@ -807,7 +807,10 @@
 //    });
 }
 -(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    ///!!![_movieWriter processAudioBuffer1:sampleBuffer];
+    [_movieWriter processAudioBuffer1:sampleBuffer];
+    NSInteger retainCount = CFGetRetainCount(sampleBuffer);
+    NSLog(@"#SampleBuffer# Retain count = %ld", retainCount);
+    CFRelease(sampleBuffer);
 }
 
 
