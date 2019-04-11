@@ -1096,6 +1096,21 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     
     if (_hasAudioTrack)
     {
+        AVAudioSession *sharedAudioSession = [AVAudioSession sharedInstance];
+        
+        double preferredHardwareSampleRate;
+        if ([sharedAudioSession respondsToSelector:@selector(sampleRate)])
+        {
+            preferredHardwareSampleRate = [sharedAudioSession sampleRate];
+        }
+        else
+        {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            preferredHardwareSampleRate = [[AVAudioSession sharedInstance] currentHardwareSampleRate];
+#pragma clang diagnostic pop
+        }
+        
         if (_shouldPassthroughAudio)
         {
 			// Do not set any settings so audio will be the same as passthrough
@@ -1103,21 +1118,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         }
         else if (audioOutputSettings0 == nil)
         {
-            AVAudioSession *sharedAudioSession = [AVAudioSession sharedInstance];
             [sharedAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-            double preferredHardwareSampleRate;
-            
-            if ([sharedAudioSession respondsToSelector:@selector(sampleRate)])
-            {
-                preferredHardwareSampleRate = [sharedAudioSession sampleRate];
-            }
-            else
-            {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                preferredHardwareSampleRate = [[AVAudioSession sharedInstance] currentHardwareSampleRate];
-#pragma clang diagnostic pop
-            }
             
             AudioChannelLayout acl;
             bzero( &acl, sizeof(acl));
@@ -1151,7 +1152,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         NSDictionary* audioOutputSettings1 = [NSDictionary dictionaryWithObjectsAndKeys:
                                               [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
                                               [ NSNumber numberWithInt: 2 ], AVNumberOfChannelsKey,
-                                              [ NSNumber numberWithFloat: 16000 ], AVSampleRateKey,
+                                              [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
                                               [ NSData dataWithBytes: &steroACL length: sizeof( steroACL ) ], AVChannelLayoutKey,
                                               //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
                                               [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
