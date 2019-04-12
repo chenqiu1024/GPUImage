@@ -807,8 +807,8 @@
 //    });
 }
 -(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    [GPUImageVideoCamera printCMSampleBuffer:sampleBuffer];
-    [_movieWriter processAudioBuffer1:sampleBuffer];
+//    [GPUImageVideoCamera printCMSampleBuffer:sampleBuffer];
+//    [_movieWriter processAudioBuffer1:sampleBuffer];
 //    NSInteger retainCount = CFGetRetainCount(sampleBuffer);
 //    NSLog(@"#SampleBuffer# Retain count = %ld", retainCount);
     CFRelease(sampleBuffer);

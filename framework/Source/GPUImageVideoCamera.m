@@ -817,12 +817,12 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     CMTime outputDecodeTimeStamp = CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer);
     CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     CMTime outputPresentationTimeStamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer);
-    CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
-    CMMediaType mediaType = CMFormatDescriptionGetMediaType(formatDescription);
-    FourCharCode mediaSubType = CMFormatDescriptionGetMediaSubType(formatDescription);
+//    CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
+//    CMMediaType mediaType = CMFormatDescriptionGetMediaType(formatDescription);
+//    FourCharCode mediaSubType = CMFormatDescriptionGetMediaSubType(formatDescription);
     CMItemCount numSamples = CMSampleBufferGetNumSamples(sampleBuffer);
     size_t totalSampleSize = CMSampleBufferGetTotalSampleSize(sampleBuffer);
-    NSLog(@"#SampleBuffer# mediaType=%c%c%c%c:%c%c%c%c, numSamples=%ld, totalSampleSize=%ld, duration=%f, outputDuration=%f, decodeTime=%f, outputDecodeTime=%f, presentTime=%f, outputPresentTime=%f", ((char*)&mediaType)[0],((char*)&mediaType)[1],((char*)&mediaType)[2],((char*)&mediaType)[3], ((char*)&mediaSubType)[0],((char*)&mediaSubType)[1],((char*)&mediaSubType)[2],((char*)&mediaSubType)[3], numSamples, totalSampleSize, CMTimeGetSeconds(duration), CMTimeGetSeconds(outputDuration), CMTimeGetSeconds(decodeTimeStamp), CMTimeGetSeconds(outputDecodeTimeStamp), CMTimeGetSeconds(presentationTimeStamp), CMTimeGetSeconds(outputPresentationTimeStamp));
+    NSLog(@"#SampleBuffer# numSamples=%ld, totalSampleSize=%ld, duration=%.4f, outputDuration=%.4f, decodeTime=%.4f, outputDecodeTime=%.4f, presentTime=%.4f, outputPresentTime=%.4f", /*((char*)&mediaType)[0],((char*)&mediaType)[1],((char*)&mediaType)[2],((char*)&mediaType)[3], ((char*)&mediaSubType)[0],((char*)&mediaSubType)[1],((char*)&mediaSubType)[2],((char*)&mediaSubType)[3], */numSamples, totalSampleSize, CMTimeGetSeconds(duration), CMTimeGetSeconds(outputDuration), CMTimeGetSeconds(decodeTimeStamp), CMTimeGetSeconds(outputDecodeTimeStamp), CMTimeGetSeconds(presentationTimeStamp), CMTimeGetSeconds(outputPresentationTimeStamp));
 //    CMBlockBufferRef blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
 //    CMSampleBufferGetSampleTimingInfoArray(<#CMSampleBufferRef  _Nonnull sbuf#>, <#CMItemCount numSampleTimingEntries#>, <#CMSampleTimingInfo * _Nullable timingArrayOut#>, <#CMItemCount * _Nullable timingArrayEntriesNeededOut#>)
 //    CMSampleBufferGetSampleTimingInfo(<#CMSampleBufferRef  _Nonnull sbuf#>, <#CMItemIndex sampleIndex#>, <#CMSampleTimingInfo * _Nonnull timingInfoOut#>)
@@ -835,10 +835,52 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 //    CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(<#CMSampleBufferRef  _Nonnull sbuf#>, <#size_t * _Nullable bufferListSizeNeededOut#>, <#AudioBufferList * _Nullable bufferListOut#>, <#size_t bufferListSize#>, <#CFAllocatorRef  _Nullable blockBufferStructureAllocator#>, <#CFAllocatorRef  _Nullable blockBufferBlockAllocator#>, <#uint32_t flags#>, <#CMBlockBufferRef  _Nullable * _Nullable blockBufferOut#>)
 }
 
++(CMSampleBufferRef) copyCMSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    CMSampleBufferRef copy = NULL;
+    
+    CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
+//    CMTime outputDuration = CMSampleBufferGetOutputDuration(sampleBuffer);
+    CMTime decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer);
+//    CMTime outputDecodeTimeStamp = CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer);
+    CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+//    CMTime outputPresentationTimeStamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer);
+    CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
+//    CMMediaType mediaType = CMFormatDescriptionGetMediaType(formatDescription);
+//    FourCharCode mediaSubType = CMFormatDescriptionGetMediaSubType(formatDescription);
+    CMItemCount numSamples = CMSampleBufferGetNumSamples(sampleBuffer);
+    size_t totalSampleSize = CMSampleBufferGetTotalSampleSize(sampleBuffer);
+    
+    CMSampleTimingInfo timing;
+    timing.duration = duration;
+    timing.duration.timescale *= numSamples;
+    timing.presentationTimeStamp = presentationTimeStamp;
+    timing.decodeTimeStamp = decodeTimeStamp;
+    
+    CMBlockBufferRef blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
+    size_t dataSize = CMBlockBufferGetDataLength(blockBuffer);
+    void* data = malloc(dataSize);
+    CMBlockBufferCopyDataBytes(blockBuffer, 0, dataSize, data);
+    CMBlockBufferRef blockBufferCopy;
+    CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault, data, totalSampleSize, kCFAllocatorNull, NULL, 0, totalSampleSize, 0, &blockBufferCopy);
+//    NSLog(@"#SampleBuffer# dataSize=%ld, sizeOfSourceBlock=%ld, sizeOfCopiedBlock=%ld", (long)dataSize, CMBlockBufferGetDataLength(blockBuffer), CMBlockBufferGetDataLength(blockBufferCopy));
+    free(data);
+    
+    const size_t sampleSizeArray[] = {2};
+    CMSampleBufferCreateReady(kCFAllocatorDefault, blockBufferCopy, formatDescription, numSamples, 1, &timing, 1, sampleSizeArray, &copy);
+    return copy;
+//    NSLog(@"#SampleBuffer# mediaType=%c%c%c%c:%c%c%c%c, numSamples=%ld, totalSampleSize=%ld, duration=%f, outputDuration=%f, decodeTime=%f, outputDecodeTime=%f, presentTime=%f, outputPresentTime=%f", ((char*)&mediaType)[0],((char*)&mediaType)[1],((char*)&mediaType)[2],((char*)&mediaType)[3], ((char*)&mediaSubType)[0],((char*)&mediaSubType)[1],((char*)&mediaSubType)[2],((char*)&mediaSubType)[3], numSamples, totalSampleSize, CMTimeGetSeconds(duration), CMTimeGetSeconds(outputDuration), CMTimeGetSeconds(decodeTimeStamp), CMTimeGetSeconds(outputDecodeTimeStamp), CMTimeGetSeconds(presentationTimeStamp), CMTimeGetSeconds(outputPresentationTimeStamp));
+}
+
 - (void)processAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 {
     [self.class printCMSampleBuffer:sampleBuffer];
-    ///!!![self.audioEncodingTarget processAudioBuffer0:sampleBuffer];
+    CMSampleBufferRef copied = [self.class copyCMSampleBuffer:sampleBuffer];
+    [self.class printCMSampleBuffer:copied];
+    
+//    [self.audioEncodingTarget processAudioBuffer0:sampleBuffer];
+    [self.audioEncodingTarget processAudioBuffer0:copied];
+    
+    CFRelease(copied);
 }
 
 - (void)convertYUVToRGBOutput;
