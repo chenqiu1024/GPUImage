@@ -256,7 +256,7 @@ static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, 
         
         CMSampleBufferRef sampleBuffer = NULL;
         //*
-        const size_t sampleSizeArray[] = {len};
+        const size_t sampleSizeArray[] = {2};
         status = CMSampleBufferCreateReady(kCFAllocatorDefault, blockBuffer, format, audioParams.samples, 1, &timing, 1, sampleSizeArray, &sampleBuffer);
         if (status != noErr)
         {

@@ -863,7 +863,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     CMBlockBufferRef blockBufferCopy;
     CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault, data, totalSampleSize, kCFAllocatorNull, NULL, 0, totalSampleSize, 0, &blockBufferCopy);
 //    NSLog(@"#SampleBuffer# dataSize=%ld, sizeOfSourceBlock=%ld, sizeOfCopiedBlock=%ld", (long)dataSize, CMBlockBufferGetDataLength(blockBuffer), CMBlockBufferGetDataLength(blockBufferCopy));
-    free(data);
+//    free(data);
     
     const size_t sampleSizeArray[] = {2};
     CMSampleBufferCreateReady(kCFAllocatorDefault, blockBufferCopy, formatDescription, numSamples, 1, &timing, 1, sampleSizeArray, &copy);
@@ -873,14 +873,14 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 
 - (void)processAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 {
-    [self.class printCMSampleBuffer:sampleBuffer];
-    CMSampleBufferRef copied = [self.class copyCMSampleBuffer:sampleBuffer];
-    [self.class printCMSampleBuffer:copied];
-    
-//    [self.audioEncodingTarget processAudioBuffer0:sampleBuffer];
-    [self.audioEncodingTarget processAudioBuffer0:copied];
-    
-    CFRelease(copied);
+//    [self.class printCMSampleBuffer:sampleBuffer];
+//    CMSampleBufferRef copied = [self.class copyCMSampleBuffer:sampleBuffer];
+//    [self.class printCMSampleBuffer:copied];
+//    
+////    [self.audioEncodingTarget processAudioBuffer0:sampleBuffer];
+//    [self.audioEncodingTarget processAudioBuffer0:copied];
+//    
+//    CFRelease(copied);
 }
 
 - (void)convertYUVToRGBOutput;
