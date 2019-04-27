@@ -874,35 +874,45 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 +(CMSampleBufferRef) createForgedCMSampleBuffer:(CMSampleBufferRef)sampleBuffer {
     const float Frequency = 530;
     static size_t samplesCount = 0;
+    static NSTimeInterval timestamp = 0.f;
     
     CMSampleBufferRef copy = NULL;
     
     CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
-    //    CMTime outputDuration = CMSampleBufferGetOutputDuration(sampleBuffer);
-    CMTime decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer);
-    //    CMTime outputDecodeTimeStamp = CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer);
-    CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    //    CMTime outputPresentationTimeStamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer);
+    timestamp = [[NSDate date] timeIntervalSince1970];
+    
     CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
+    const AudioStreamBasicDescription* audioStreamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription);
+    CMItemCount numSamples = audioStreamBasicDescription->mSampleRate * CMTimeGetSeconds(duration);
+    //    CMTime outputDuration = CMSampleBufferGetOutputDuration(sampleBuffer);
+//    CMTime decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer);
+    //    CMTime outputDecodeTimeStamp = CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer);
+    //    CMTime outputPresentationTimeStamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer);
     //    CMMediaType mediaType = CMFormatDescriptionGetMediaType(formatDescription);
     //    FourCharCode mediaSubType = CMFormatDescriptionGetMediaSubType(formatDescription);
+    /*
+    CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     CMItemCount numSamples = CMSampleBufferGetNumSamples(sampleBuffer);
     size_t totalSampleSize = CMSampleBufferGetTotalSampleSize(sampleBuffer);
+    /*/
+    CMTime presentationTimeStamp = CMTimeMake((int64_t)timestamp, 1);
+    size_t totalSampleSize = numSamples * sizeof(int16_t);
+    //*/
     
     CMSampleTimingInfo timing;
     timing.duration = duration;
     timing.duration.timescale *= numSamples;
     timing.presentationTimeStamp = presentationTimeStamp;
-    timing.decodeTimeStamp = decodeTimeStamp;
+    timing.decodeTimeStamp = kCMTimeInvalid;//decodeTimeStamp;
     
-    const AudioStreamBasicDescription* audioStreamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription);
+    
 //    CMBlockBufferRef blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
 //    size_t dataSize = CMBlockBufferGetDataLength(blockBuffer);
-    int16_t* data = (int16_t*) malloc(numSamples * sizeof(int16_t));
+    int16_t* data = (int16_t*) malloc(totalSampleSize);
     for (int i=0; i<numSamples; ++i)
     {
         float phase = 2.0f * M_PI * (samplesCount++) * Frequency / audioStreamBasicDescription->mSampleRate;
-        int16_t amplitude = (int16_t)(sinf(phase) * 32767);
+        int16_t amplitude = (int16_t)(sinf(phase) * 16384);
         data[i] = amplitude;
     }
 //    CMBlockBufferCopyDataBytes(blockBuffer, 0, dataSize, data);
