@@ -1113,7 +1113,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             preferredHardwareSampleRate = [[AVAudioSession sharedInstance] currentHardwareSampleRate];
 #pragma clang diagnostic pop
         }
-        
+        preferredHardwareSampleRate = 48000;///!!!
         if (_shouldPassthroughAudio)
         {
 			// Do not set any settings so audio will be the same as passthrough
