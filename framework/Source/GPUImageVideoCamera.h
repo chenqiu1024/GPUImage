@@ -154,5 +154,6 @@ void setColorConversion709( GLfloat conversionMatrix[9] );
 + (BOOL)isFrontFacingCameraPresent;
 
 +(void) printCMSampleBuffer:(CMSampleBufferRef)sampleBuffer;
++(CMSampleBufferRef) createForgedCMSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
 @end
