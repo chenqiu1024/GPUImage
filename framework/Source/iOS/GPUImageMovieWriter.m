@@ -1114,6 +1114,15 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
 #pragma clang diagnostic pop
         }
         preferredHardwareSampleRate = 48000;///!!!
+        AudioChannelLayout acl0;
+        bzero( &acl0, sizeof(acl0));
+        acl0.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
+        
+        AudioChannelLayout acl1;
+        //        bzero( &acl1, sizeof(acl1));
+        //        acl1.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
+        acl1 = acl0;
+        
         if (_shouldPassthroughAudio)
         {
 			// Do not set any settings so audio will be the same as passthrough
@@ -1123,18 +1132,14 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         {
             [sharedAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
             
-            AudioChannelLayout acl;
-            bzero( &acl, sizeof(acl));
-            acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
-            
             audioOutputSettings0 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
-                                         [ NSNumber numberWithInt: 1 ], AVNumberOfChannelsKey,
-                                         [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
-                                         [ NSData dataWithBytes: &acl length: sizeof( acl ) ], AVChannelLayoutKey,
-                                         //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
-                                         [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
-                                         nil];
+                                    [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+                                    [ NSNumber numberWithInt: 2 ], AVNumberOfChannelsKey,
+                                    [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
+                                    [ NSData dataWithBytes: &acl0 length: sizeof( acl0 ) ], AVChannelLayoutKey,
+                                    //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
+                                    [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
+                                    nil];
 /*
             AudioChannelLayout acl;
             bzero( &acl, sizeof(acl));
@@ -1149,14 +1154,11 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
                                    nil];*/
         }
         
-        AudioChannelLayout steroACL;
-        bzero( &steroACL, sizeof(steroACL));
-        steroACL.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
         NSDictionary* audioOutputSettings1 = [NSDictionary dictionaryWithObjectsAndKeys:
                                               [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
-                                              [ NSNumber numberWithInt: 1 ], AVNumberOfChannelsKey,
+                                              [ NSNumber numberWithInt: 2 ], AVNumberOfChannelsKey,
                                               [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
-                                              [ NSData dataWithBytes: &steroACL length: sizeof( steroACL ) ], AVChannelLayoutKey,
+                                              [ NSData dataWithBytes: &acl1 length: sizeof( acl1 ) ], AVChannelLayoutKey,
                                               //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
                                               [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
                                               nil];
