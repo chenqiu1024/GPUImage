@@ -945,14 +945,14 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 
 - (void)processAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 {
-    [self.class printCMSampleBuffer:sampleBuffer];
+//    [self.class printCMSampleBuffer:sampleBuffer];
 //    CMSampleBufferRef copied = [self.class copyCMSampleBuffer:sampleBuffer];
-    CMSampleBufferRef copied = [self.class createForgedCMSampleBuffer:sampleBuffer];
-    [self.class printCMSampleBuffer:copied];
+//    CMSampleBufferRef copied = [self.class createForgedCMSampleBuffer:sampleBuffer];
+//    [self.class printCMSampleBuffer:copied];
 
 //    [self.audioEncodingTarget processAudioBuffer0:sampleBuffer];
-    [self.audioEncodingTarget processAudioBuffer0:copied];
-    CFRelease(copied);
+//    [self.audioEncodingTarget processAudioBuffer0:copied];
+//    CFRelease(copied);
 }
 
 - (void)convertYUVToRGBOutput;

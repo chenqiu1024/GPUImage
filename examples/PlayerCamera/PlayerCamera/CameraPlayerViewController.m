@@ -807,10 +807,13 @@
 //    });
 }
 -(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-//    [GPUImageVideoCamera printCMSampleBuffer:sampleBuffer];
-//    [_movieWriter processAudioBuffer0:sampleBuffer];
+    [GPUImageVideoCamera printCMSampleBuffer:sampleBuffer];
+    CMSampleBufferRef copiedSampleBuffer = [GPUImageVideoCamera createForgedCMSampleBuffer:sampleBuffer];
+    [GPUImageVideoCamera printCMSampleBuffer:copiedSampleBuffer];
+    [_movieWriter processAudioBuffer0:copiedSampleBuffer];
 //    NSInteger retainCount = CFGetRetainCount(sampleBuffer);
 //    NSLog(@"#SampleBuffer# Retain count = %ld", retainCount);
+    CFRelease(copiedSampleBuffer);
     CFRelease(sampleBuffer);
 }
 
