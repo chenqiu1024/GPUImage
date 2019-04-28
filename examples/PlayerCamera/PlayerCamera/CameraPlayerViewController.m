@@ -810,10 +810,8 @@
     [GPUImageVideoCamera printCMSampleBuffer:sampleBuffer];
 //    [_movieWriter processAudioBuffer0:sampleBuffer];
     CMSampleBufferRef copiedSampleBuffer = [GPUImageVideoCamera createForgedCMSampleBuffer:sampleBuffer];
-    [GPUImageVideoCamera printCMSampleBuffer:copiedSampleBuffer];
+//    [GPUImageVideoCamera printCMSampleBuffer:copiedSampleBuffer];
     [_movieWriter processAudioBuffer0:copiedSampleBuffer];
-//    NSInteger retainCount = CFGetRetainCount(sampleBuffer);
-//    NSLog(@"#SampleBuffer# Retain count = %ld", retainCount);
     CFRelease(copiedSampleBuffer);
     CFRelease(sampleBuffer);
 }

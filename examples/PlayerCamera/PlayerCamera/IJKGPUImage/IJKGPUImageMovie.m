@@ -192,6 +192,8 @@ static void audioDecodeCallbackProcedure(void* userdata, Uint8* stream, int len,
 }
 
 static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
+    audioParams.channels = 2;
+    audioParams.freq = 44100;
     NSLog(@"#AudioCallback# audioMixedCallback(len=%d, stream=0x%lx, format=0x%x, channels=%d, samples=%d, freq=%d)", len, (long)stream, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream)
         return;
@@ -230,11 +232,12 @@ static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, 
                 samples = 0;
                 break;
         }
+        samples /= audioParams.channels;
         
         AudioStreamBasicDescription audioFormat;
         IJKSDLGetAudioStreamBasicDescriptionFromSpec((const SDL_AudioSpec*)&audioParams, &audioFormat);
         CMFormatDescriptionRef format = NULL;
-        OSStatus status = CMAudioFormatDescriptionCreate(kCFAllocatorDefault, &audioFormat, 0, nil, 0, nil, nil, &format);
+        OSStatus status = CMAudioFormatDescriptionCreate(kCFAllocatorDefault, &audioFormat, 0, nil, 0, nil, NULL, &format);
         if (status != noErr)
         {
             NSLog(@"Error in CMAudioFormatDescriptionCreate");
@@ -257,7 +260,7 @@ static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, 
         CMSampleBufferRef sampleBuffer = NULL;
         //*
         const size_t sampleSizeArray[] = {2};
-        status = CMSampleBufferCreateReady(kCFAllocatorDefault, blockBuffer, format, audioParams.samples, 1, &timing, 1, sampleSizeArray, &sampleBuffer);
+        status = CMSampleBufferCreateReady(kCFAllocatorDefault, blockBuffer, format, samples, 1, &timing, 1, sampleSizeArray, &sampleBuffer);
         if (status != noErr)
         {
             NSLog(@"Error in CMSampleBufferCreate");

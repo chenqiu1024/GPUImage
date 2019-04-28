@@ -910,9 +910,6 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     audioStreamBasicDescription->mBytesPerPacket *= (numChannels / audioStreamBasicDescription->mChannelsPerFrame);
     audioStreamBasicDescription->mChannelsPerFrame = numChannels;
     
-    const float Frequencies[] = {530, 450};
-    static size_t samplesCount = 0;
-    
     CMFormatDescriptionRef formatDescriptionCopy;
     CMAudioFormatDescriptionCreate(kCFAllocatorDefault, audioStreamBasicDescription, 0, nil, 0, nil, NULL, &formatDescriptionCopy);
     CMItemCount numSamples = audioStreamBasicDescription->mSampleRate * CMTimeGetSeconds(duration);
@@ -926,6 +923,9 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     timing.decodeTimeStamp = kCMTimeInvalid;
     
     int16_t* data = (int16_t*) malloc(totalSampleSize);
+    /*
+    const float Frequencies[] = {530, 450};
+    static size_t samplesCount = 0;
     for (int i=0; i<numSamples; ++i)
     {
         for (int c=0; c<numChannels; c++)
@@ -936,6 +936,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
         }
         samplesCount++;
     }
+    /*/
+    CMBlockBufferRef blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
+    size_t dataSize = CMBlockBufferGetDataLength(blockBuffer);
+    CMBlockBufferCopyDataBytes(blockBuffer, 0, totalSampleSize < dataSize ? totalSampleSize : dataSize, data);
+    //*/
     CMBlockBufferRef blockBufferCopy;
     CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault, data, totalSampleSize, kCFAllocatorNull, NULL, 0, totalSampleSize, 0, &blockBufferCopy);
     
