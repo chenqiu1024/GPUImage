@@ -904,6 +904,8 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
     AudioStreamBasicDescription* audioStreamBasicDescription = (AudioStreamBasicDescription*) CMAudioFormatDescriptionGetStreamBasicDescription(CMSampleBufferGetFormatDescription(sampleBuffer));
     int numChannels = 2;
+    double sampleRate = 44100.0;
+    audioStreamBasicDescription->mSampleRate = sampleRate;
     audioStreamBasicDescription->mBytesPerFrame *= (numChannels / audioStreamBasicDescription->mChannelsPerFrame);
     audioStreamBasicDescription->mBytesPerPacket *= (numChannels / audioStreamBasicDescription->mChannelsPerFrame);
     audioStreamBasicDescription->mChannelsPerFrame = numChannels;

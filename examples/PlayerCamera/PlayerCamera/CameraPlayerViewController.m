@@ -808,6 +808,7 @@
 }
 -(void)ijkGIMovieDidDecodeAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer {
     [GPUImageVideoCamera printCMSampleBuffer:sampleBuffer];
+//    [_movieWriter processAudioBuffer0:sampleBuffer];
     CMSampleBufferRef copiedSampleBuffer = [GPUImageVideoCamera createForgedCMSampleBuffer:sampleBuffer];
     [GPUImageVideoCamera printCMSampleBuffer:copiedSampleBuffer];
     [_movieWriter processAudioBuffer0:copiedSampleBuffer];
