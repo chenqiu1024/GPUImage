@@ -901,7 +901,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 }
 
 +(CMSampleBufferRef) createForgedCMSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
+    CMTime duration;
+//    static NSDate* prevTimeStamp = nil;
+//    if (prevTimeStamp)
+//    {
+//        NSDate* now = [NSDate date];
+//        duration = CMTimeMake([now timeIntervalSinceDate:prevTimeStamp] * 1000, 1000);
+//    }
+//    else
+//    {
+//        prevTimeStamp = [NSDate date];
+//        return NULL;
+//    }
+    duration = CMSampleBufferGetDuration(sampleBuffer);
     AudioStreamBasicDescription* audioStreamBasicDescription = (AudioStreamBasicDescription*) CMAudioFormatDescriptionGetStreamBasicDescription(CMSampleBufferGetFormatDescription(sampleBuffer));
     int numChannels = 2;
     double sampleRate = 44100.0;

@@ -379,7 +379,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
 
 - (void)processAudioBuffer0:(CMSampleBufferRef)audioBuffer;
 {
-    if (!isRecording || _paused)
+    if (!isRecording || _paused || NULL == audioBuffer)
     {
         return;
     }
@@ -526,7 +526,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
 
 - (void)processAudioBuffer1:(CMSampleBufferRef)audioBuffer;
 {
-    if (!isRecording || _paused)
+    if (!isRecording || _paused || NULL == audioBuffer)
     {
         return;
     }
