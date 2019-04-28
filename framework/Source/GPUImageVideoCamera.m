@@ -902,8 +902,11 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 
 +(CMSampleBufferRef) createForgedCMSampleBuffer:(CMSampleBufferRef)sampleBuffer {
     CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
-    const AudioStreamBasicDescription* audioStreamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(CMSampleBufferGetFormatDescription(sampleBuffer));
-    int numChannels = 1;
+    AudioStreamBasicDescription* audioStreamBasicDescription = (AudioStreamBasicDescription*) CMAudioFormatDescriptionGetStreamBasicDescription(CMSampleBufferGetFormatDescription(sampleBuffer));
+    int numChannels = 2;
+    audioStreamBasicDescription->mBytesPerFrame *= (numChannels / audioStreamBasicDescription->mChannelsPerFrame);
+    audioStreamBasicDescription->mBytesPerPacket *= (numChannels / audioStreamBasicDescription->mChannelsPerFrame);
+    audioStreamBasicDescription->mChannelsPerFrame = numChannels;
     
     const float Frequencies[] = {530, 450};
     static size_t samplesCount = 0;
@@ -942,15 +945,14 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 
 - (void)processAudioSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 {
-//    [self.class printCMSampleBuffer:sampleBuffer];
+    [self.class printCMSampleBuffer:sampleBuffer];
 //    CMSampleBufferRef copied = [self.class copyCMSampleBuffer:sampleBuffer];
-//    CMSampleBufferRef copied = [self.class createForgedCMSampleBuffer:sampleBuffer];
-//    [self.class printCMSampleBuffer:copied];
-//
-    [self.audioEncodingTarget processAudioBuffer0:sampleBuffer];
-//    [self.audioEncodingTarget processAudioBuffer0:copied];
-//
-//    CFRelease(copied);
+    CMSampleBufferRef copied = [self.class createForgedCMSampleBuffer:sampleBuffer];
+    [self.class printCMSampleBuffer:copied];
+
+//    [self.audioEncodingTarget processAudioBuffer0:sampleBuffer];
+    [self.audioEncodingTarget processAudioBuffer0:copied];
+    CFRelease(copied);
 }
 
 - (void)convertYUVToRGBOutput;
