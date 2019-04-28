@@ -232,7 +232,6 @@ static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, 
                 samples = 0;
                 break;
         }
-        samples /= audioParams.channels;
         
         AudioStreamBasicDescription audioFormat;
         IJKSDLGetAudioStreamBasicDescriptionFromSpec((const SDL_AudioSpec*)&audioParams, &audioFormat);

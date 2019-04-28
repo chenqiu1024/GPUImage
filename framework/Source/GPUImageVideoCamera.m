@@ -837,9 +837,10 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
 }
 
 +(void) printCMSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
     CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
     const AudioStreamBasicDescription* asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription);
-    NSLog(@"#SampleBuffer# channels=%d, sampleRate=%f, formatID=%d, bytesPerFrame=%d, framesPerPacket=%d, bytesPerPacket=%d", asbd->mChannelsPerFrame, asbd->mSampleRate, asbd->mFormatID, asbd->mBytesPerFrame, asbd->mFramesPerPacket, asbd->mBytesPerPacket);
+    NSLog(@"#SampleBuffer# channels=%d, sampleRate=%f, duration=%f formatID=%d, bytesPerFrame=%d, framesPerPacket=%d, bytesPerPacket=%d", asbd->mChannelsPerFrame, asbd->mSampleRate, CMTimeGetSeconds(duration), asbd->mFormatID, asbd->mBytesPerFrame, asbd->mFramesPerPacket, asbd->mBytesPerPacket);
 //    CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
 //    CMTime outputDuration = CMSampleBufferGetOutputDuration(sampleBuffer);
 //    CMTime decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer);
