@@ -810,6 +810,32 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     }  
 }
 
++(void) printCMFormatDescription:(CMFormatDescriptionRef)format {
+    CFTypeID typeID = CMFormatDescriptionGetTypeID();
+    CFDictionaryRef extensions = CMFormatDescriptionGetExtensions(format);
+    size_t formatListSize, layoutListSize;
+    /*const AudioFormatListItem* formatList = */CMAudioFormatDescriptionGetFormatList(format, &formatListSize);
+    /*const AudioStreamBasicDescription* asbd = */CMAudioFormatDescriptionGetStreamBasicDescription(format);
+    const AudioChannelLayout* audioChannelLayoutList = CMAudioFormatDescriptionGetChannelLayout(format, &layoutListSize);
+    NSLog(@"#AFD# type=%ld, formatList.size=%ld, channelLayout.size=%ld", (long)typeID, formatListSize, layoutListSize);
+    NSLog(@"#AFD# extensions%@", NULL == extensions ? @" is NULL":[NSString stringWithFormat:@".size = %ld", CFDictionaryGetCount(extensions)]);
+    NSLog(@"#AFD# audioChannelLayoutList.size = %ld", layoutListSize);
+    for (int i=0; i<layoutListSize; ++i)
+    {
+        AudioChannelLayout audioChannelLayout = audioChannelLayoutList[i];
+        NSLog(@"#AFD# ACL.channelBitmap = %d", (int)audioChannelLayout.mChannelBitmap);
+        NSLog(@"#AFD# ACL.channelLayoutTag = 0x%lx", (long)audioChannelLayout.mChannelLayoutTag);
+        NSLog(@"#AFD# ACL.channelDescriptions.size = %d", (int)audioChannelLayout.mNumberChannelDescriptions);
+        for (int j=0; j<audioChannelLayout.mNumberChannelDescriptions; ++j)
+        {
+            AudioChannelDescription aclDesc = audioChannelLayout.mChannelDescriptions[j];
+            NSLog(@"#AFD# ACL.channelDescriptions[%d].flags = 0x%x", j, aclDesc.mChannelFlags);
+            NSLog(@"#AFD# ACL.channelDescriptions[%d].label = 0x%x", j, aclDesc.mChannelLabel);
+            NSLog(@"#AFD# ACL.channelDescriptions[%d].coordinates = {%f,%f,%f}", j, aclDesc.mCoordinates[0], aclDesc.mCoordinates[1], aclDesc.mCoordinates[2]);
+        }
+    }
+}
+
 +(void) printCMSampleBuffer:(CMSampleBufferRef)sampleBuffer {
     CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
     const AudioStreamBasicDescription* asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription);
