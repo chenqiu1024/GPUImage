@@ -558,10 +558,10 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 - (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
 {
     static const GLfloat imageVertices[] = {
-        -1.0f, -1.0f,
-        1.0f, -1.0f,
-        -1.0f,  1.0f,
-        1.0f,  1.0f,
+        -1.0f, -1.0f,//LB
+        1.0f, -1.0f,//RB
+        -1.0f,  1.0f,//LT
+        1.0f,  1.0f,//RT
     };
     
     [self renderToTextureWithVertices:imageVertices textureCoordinates:[[self class] textureCoordinatesForRotation:inputRotation]];

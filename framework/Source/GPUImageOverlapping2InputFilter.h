@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GPUImageOverlapping2InputFilter : GPUImageTwoInputFilter
 
+- (void)renderToTextureWithVertices:(const GLfloat *)vertices textureCoordinates:(const GLfloat *)textureCoordinates;
+
 @end
 
 NS_ASSUME_NONNULL_END
