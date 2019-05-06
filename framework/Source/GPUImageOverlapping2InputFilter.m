@@ -8,7 +8,7 @@
 
 #import "GPUImageOverlapping2InputFilter.h"
 
-NSString *const kGPUImageTwoInputTextureVertexShaderString = SHADER_STRING
+NSString *const kGPUImageOverlapping2VertexShaderString = SHADER_STRING
 (
  attribute vec4 position;
  attribute vec4 inputTextureCoordinate;
@@ -32,7 +32,7 @@ NSString *const kGPUImageTwoInputTextureVertexShaderString = SHADER_STRING
 
 - (id)initWithFragmentShaderFromString:(NSString *)fragmentShaderString;
 {
-    if (!(self = [self initWithVertexShaderFromString:kGPUImageTwoInputTextureVertexShaderString fragmentShaderFromString:fragmentShaderString]))
+    if (!(self = [self initWithVertexShaderFromString:kGPUImageOverlapping2VertexShaderString fragmentShaderFromString:fragmentShaderString]))
     {
         return nil;
     }
