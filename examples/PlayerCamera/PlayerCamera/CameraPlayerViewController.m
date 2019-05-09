@@ -191,7 +191,13 @@
         position = _ijkMovie.currentPlaybackTime;
     minutes = floorf(position / 60.f);
     seconds = roundf(position - minutes * 60);
+    if (seconds >= 60)
+    {
+        seconds -= 60;
+        minutes++;
+    }
     self.progressSlider.value = (position > 0) ? position : 0.0f;
+    
     self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
     
     [self setPlayOrPauseButtonState:_ijkMovie.isPlaying];
