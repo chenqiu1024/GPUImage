@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import "GPUImageContext.h"
+#import "GPUImageView.h"
 
 extern NSString *const kGPUImageColorSwizzlingFragmentShaderString;
 
@@ -32,6 +33,7 @@ extern NSString *const kGPUImageColorSwizzlingFragmentShaderString;
     GPUImageRotationMode inputRotation;
 }
 
+@property(readwrite, nonatomic) GPUImageFillModeType fillMode;
 @property(readwrite, nonatomic) BOOL hasAudioTrack;
 @property(readwrite, nonatomic) BOOL shouldPassthroughAudio;
 @property(readwrite, nonatomic) BOOL shouldInvalidateAudioSampleWhenDone;

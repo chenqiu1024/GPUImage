@@ -40,4 +40,6 @@ typedef NS_ENUM(NSUInteger, GPUImageFillModeType) {
 
 - (void)setCurrentlyReceivingMonochromeInput:(BOOL)newValue;
 
++ (const GLfloat *)textureCoordinatesForRotation:(GPUImageRotationMode)rotationMode;
+
 @end

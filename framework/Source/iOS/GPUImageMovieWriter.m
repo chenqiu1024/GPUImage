@@ -35,6 +35,9 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     BOOL audioEncoding0IsFinished, audioEncoding1IsFinished, videoEncodingIsFinished;
 
     BOOL isRecording;
+    
+    CGSize inputImageSize;
+    GLfloat imageVertices[8];
 }
 
 // Movie recording
@@ -99,6 +102,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     previousAudioTime0 = kCMTimeNegativeInfinity;
     previousAudioTime1 = kCMTimeNegativeInfinity;
     inputRotation = kGPUImageNoRotation;
+    _fillMode = kGPUImageFillModePreserveAspectRatio;
     
     _movieWriterContext = [[GPUImageContext alloc] init];
     [_movieWriterContext useSharegroup:[[[GPUImageContext sharedImageProcessingContext] context] sharegroup]];
@@ -840,6 +844,83 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     glViewport(0, 0, (int)videoSize.width, (int)videoSize.height);
 }
 
+#pragma mark -
+#pragma mark Handling fill mode
+
+- (void)recalculateViewGeometry;
+{
+    runSynchronouslyOnVideoProcessingQueue(^{
+        CGFloat heightScaling, widthScaling;
+        
+        CGSize currentViewSize = videoSize;
+        
+        //    CGFloat imageAspectRatio = inputImageSize.width / inputImageSize.height;
+        //    CGFloat viewAspectRatio = currentViewSize.width / currentViewSize.height;
+        
+        CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputImageSize, CGRectMake(0, 0, videoSize.width, videoSize.height));
+        switch(_fillMode)
+        {
+            case kGPUImageFillModeStretch:
+            {
+                widthScaling = 1.0;
+                heightScaling = 1.0;
+            }; break;
+            case kGPUImageFillModePreserveAspectRatio:
+            {
+                widthScaling = insetRect.size.width / currentViewSize.width;
+                heightScaling = insetRect.size.height / currentViewSize.height;
+            }; break;
+            case kGPUImageFillModePreserveAspectRatioAndFill:
+            {
+                //            CGFloat widthHolder = insetRect.size.width / currentViewSize.width;
+                widthScaling = currentViewSize.height / insetRect.size.height;
+                heightScaling = currentViewSize.width / insetRect.size.width;
+            }; break;
+        }
+        
+        imageVertices[0] = -widthScaling;
+        imageVertices[1] = -heightScaling;
+        imageVertices[2] = widthScaling;
+        imageVertices[3] = -heightScaling;
+        imageVertices[4] = -widthScaling;
+        imageVertices[5] = heightScaling;
+        imageVertices[6] = widthScaling;
+        imageVertices[7] = heightScaling;
+    });
+    
+    //    static const GLfloat imageVertices[] = {
+    //        -1.0f, -1.0f,
+    //        1.0f, -1.0f,
+    //        -1.0f,  1.0f,
+    //        1.0f,  1.0f,
+    //    };
+}
+
+- (void)setFillMode:(GPUImageFillModeType)newValue;
+{
+    _fillMode = newValue;
+    [self recalculateViewGeometry];
+}
+
+- (void)setInputSize:(CGSize)newSize atIndex:(NSInteger)textureIndex;
+{
+    runSynchronouslyOnVideoProcessingQueue(^{
+        CGSize rotatedSize = newSize;
+        
+        if (GPUImageRotationSwapsWidthAndHeight(inputRotation))
+        {
+            rotatedSize.width = newSize.height;
+            rotatedSize.height = newSize.width;
+        }
+        
+        if (!CGSizeEqualToSize(inputImageSize, rotatedSize))
+        {
+            inputImageSize = rotatedSize;
+            [self recalculateViewGeometry];
+        }
+    });
+}
+
 - (void)renderAtInternalSizeUsingFramebuffer:(GPUImageFramebuffer *)inputFramebufferToUse;
 {
     [_movieWriterContext useAsCurrentContext];
@@ -851,14 +932,6 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // This needs to be flipped to write out to video correctly
-    static const GLfloat squareVertices[] = {
-        -1.0f, -1.0f,
-        1.0f, -1.0f,
-        -1.0f,  1.0f,
-        1.0f,  1.0f,
-    };
-    
-    const GLfloat *textureCoordinates = [GPUImageFilter textureCoordinatesForRotation:inputRotation];
     
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, [inputFramebufferToUse texture]);
@@ -866,8 +939,17 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     
 //    NSLog(@"Movie writer framebuffer: %@", inputFramebufferToUse);
     
-    glVertexAttribPointer(colorSwizzlingPositionAttribute, 2, GL_FLOAT, 0, 0, squareVertices);
-	glVertexAttribPointer(colorSwizzlingTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, textureCoordinates);
+//    static const GLfloat squareVertices[] = {
+//        -1.0f, -1.0f,
+//        1.0f, -1.0f,
+//        -1.0f,  1.0f,
+//        1.0f,  1.0f,
+//    };
+//    const GLfloat *textureCoordinates = [GPUImageFilter textureCoordinatesForRotation:inputRotation];
+//    glVertexAttribPointer(colorSwizzlingPositionAttribute, 2, GL_FLOAT, 0, 0, squareVertices);
+//    glVertexAttribPointer(colorSwizzlingTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, textureCoordinates);
+    glVertexAttribPointer(colorSwizzlingPositionAttribute, 2, GL_FLOAT, 0, 0, imageVertices);
+    glVertexAttribPointer(colorSwizzlingTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, [GPUImageView textureCoordinatesForRotation:inputRotation]);
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glFinish();
@@ -1040,10 +1122,6 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
 - (void)setInputRotation:(GPUImageRotationMode)newInputRotation atIndex:(NSInteger)textureIndex;
 {
     inputRotation = newInputRotation;
-}
-
-- (void)setInputSize:(CGSize)newSize atIndex:(NSInteger)textureIndex;
-{
 }
 
 - (CGSize)maximumOutputSize;
