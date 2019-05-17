@@ -342,11 +342,13 @@
 #endif
     _movieWriter.encodingLiveVideo = YES;
 }
-
+//#define SWAP_RENDER_TARGETS
 -(void) setupMovieWriter {
     [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
     if (!_movieWriter) return;
+#ifndef SWAP_RENDER_TARGETS
     [_videoCamera addTarget:_movieWriter];
+#endif
     _videoCamera.audioEncodingTarget = _movieWriter;
     ///[_ijkMovie addTarget:_movieWriter];
 }
@@ -470,8 +472,9 @@
     blendFilter.mix = 1.0f;
     [_filter addTarget:blendFilter];
     [uiElement addTarget:blendFilter];
+#ifndef SWAP_RENDER_TARGETS
     [blendFilter addTarget:_filterView];
-    
+#endif
     __weak typeof(self) wSelf = self;
     [_filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
         __strong typeof(self) sSelf = wSelf;
@@ -501,6 +504,10 @@
     [_videoCamera startCameraCapture];
     [_videoCamera resumeCameraCapture];
     NSLog(@"sPLVC Next VC finished load");
+#ifdef SWAP_RENDER_TARGETS
+    [_videoCamera addTarget:_movieWriter];
+    [_videoCamera addTarget:_filterView];
+#endif
 }
 
 - (void)viewDidUnload
@@ -517,7 +524,7 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
+{
     // Map UIDeviceOrientation to UIInterfaceOrientation.
     UIInterfaceOrientation orient = UIInterfaceOrientationPortrait;
     switch ([[UIDevice currentDevice] orientation])
@@ -546,7 +553,7 @@
             break;
     }
     _videoCamera.outputImageOrientation = orient;
-    
+    //NSLog(@"#Rotation# orient=%ld, [[UIDevice currentDevice] orientation]=%ld, at %d in %s", orient, [[UIDevice currentDevice] orientation], __LINE__, __PRETTY_FUNCTION__);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
