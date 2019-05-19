@@ -938,10 +938,10 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     };
     
     static const GLfloat rotateRightTextureCoordinates[] = {
-        1.0f, 0.0f,
         1.0f, 1.0f,
-        0.0f, 0.0f,
+        1.0f, 0.0f,
         0.0f, 1.0f,
+        0.0f, 0.0f,
     };
     
     static const GLfloat rotateLeftTextureCoordinates[] = {
@@ -952,24 +952,24 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
     };
     
     static const GLfloat verticalFlipTextureCoordinates[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
         0.0f, 1.0f,
         1.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
     };
     
-    static const GLfloat horizontalFlipTextureCoordinates[] = {
-        1.0f, 0.0f,
-        0.0f, 0.0f,
+    static const GLfloat horizontalFlipTextureCoordinates[] = {//?
         1.0f, 1.0f,
         0.0f, 1.0f,
+        1.0f, 0.0f,
+        0.0f, 0.0f,
     };
     
     static const GLfloat rotateRightVerticalFlipTextureCoordinates[] = {
-        1.0f, 1.0f,
         1.0f, 0.0f,
-        0.0f, 1.0f,
+        1.0f, 1.0f,
         0.0f, 0.0f,
+        0.0f, 1.0f,
     };
     
     static const GLfloat rotateRightHorizontalFlipTextureCoordinates[] = {

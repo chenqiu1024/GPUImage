@@ -6,6 +6,22 @@
 
 extern dispatch_queue_attr_t GPUImageDefaultQueueAttribute(void);
 
+const char* GPUImageRotationModeStr(GPUImageRotationMode rotationMode) {
+    switch (rotationMode) {
+        case kGPUImageNoRotation:return "kGPUImageNoRotation";
+        case kGPUImageRotateLeft:return "kGPUImageRotateLeft";
+        case kGPUImageRotateRight:return "kGPUImageRotateRight";
+        case kGPUImageFlipVertical:return "kGPUImageFlipVertical";
+        case kGPUImageFlipHorizonal:return "kGPUImageFlipHorizonal";
+        case kGPUImageRotateRightFlipVertical:return "kGPUImageRotateRightFlipVertical";
+        case kGPUImageRotateRightFlipHorizontal:return "kGPUImageRotateRightFlipHorizontal";
+        case kGPUImageRotate180:return "kGPUImageRotate180";
+        default:
+            return "N/A";
+            break;
+    }
+}
+
 @interface GPUImageContext()
 {
     NSMutableDictionary *shaderProgramCache;
