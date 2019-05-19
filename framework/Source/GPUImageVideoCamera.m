@@ -1109,19 +1109,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:internalRotation = kGPUImageRotateRightFlipVertical;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:internalRotation = kGPUImageRotate180;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:internalRotation = kGPUImageFlipHorizonal;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:internalRotation = kGPUImageFlipVertical;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:internalRotation = kGPUImageNoRotation;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                     }
                 }
                 else
@@ -1129,19 +1129,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:internalRotation = kGPUImageRotateRight;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:internalRotation = kGPUImageRotateLeft;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:internalRotation = kGPUImageRotate180;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:internalRotation = kGPUImageNoRotation;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:internalRotation = kGPUImageNoRotation;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                     }
                 }
             }
@@ -1152,19 +1152,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:internalRotation = kGPUImageRotateRightFlipVertical;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:internalRotation = kGPUImageRotateRightFlipHorizontal;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:internalRotation = kGPUImageFlipHorizonal;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:internalRotation = kGPUImageFlipVertical;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:internalRotation = kGPUImageNoRotation;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                    }
                 }
                 else
@@ -1172,19 +1172,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:internalRotation = kGPUImageRotateRight;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:internalRotation = kGPUImageRotateLeft;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:internalRotation = kGPUImageNoRotation;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:internalRotation = kGPUImageRotate180;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:internalRotation = kGPUImageNoRotation;
-                            NSLog(@"internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# internalRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                     }
                 }
             }
@@ -1198,19 +1198,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:outputRotation = kGPUImageRotateRightFlipVertical;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:outputRotation = kGPUImageRotate180;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:outputRotation = kGPUImageFlipHorizonal;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:outputRotation = kGPUImageFlipVertical;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:outputRotation = kGPUImageNoRotation;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                     }
                 }
                 else
@@ -1218,19 +1218,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:outputRotation = kGPUImageRotateRight;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:outputRotation = kGPUImageRotateLeft;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:outputRotation = kGPUImageRotate180;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:outputRotation = kGPUImageNoRotation;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:outputRotation = kGPUImageNoRotation;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                     }
                 }
             }
@@ -1241,19 +1241,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:outputRotation = kGPUImageRotateRightFlipVertical;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:outputRotation = kGPUImageRotateRightFlipHorizontal;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:outputRotation = kGPUImageFlipHorizonal;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:outputRotation = kGPUImageFlipVertical;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:outputRotation = kGPUImageNoRotation;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                     }
                 }
                 else
@@ -1261,19 +1261,19 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
                     switch(_outputImageOrientation)
                     {
                         case UIInterfaceOrientationPortrait:outputRotation = kGPUImageRotateRight;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationPortraitUpsideDown:outputRotation = kGPUImageRotateLeft;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeLeft:outputRotation = kGPUImageNoRotation;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         case UIInterfaceOrientationLandscapeRight:outputRotation = kGPUImageRotate180;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                             break;
                         default:outputRotation = kGPUImageNoRotation;
-                            NSLog(@"outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
+                            NSLog(@"#Rotation# outputRotation=%s . at %d in %s", GPUImageRotationModeStr(internalRotation), __LINE__, __PRETTY_FUNCTION__);
                     }
                 }
             }
