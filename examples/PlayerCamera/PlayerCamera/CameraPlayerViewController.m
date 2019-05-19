@@ -446,11 +446,11 @@
     
     [self.view bringSubviewToFront:self.overlayView];
     [self.overlayView bringSubviewToFront:self.controlPanelView];
-    
+    /*///!!!
     UITapGestureRecognizer* tapRecognizer= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTapRecognized:)];
     tapRecognizer.numberOfTapsRequired = 2;
     [self.overlayView addGestureRecognizer:tapRecognizer];
-    
+    //*/
     UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanRecognized:)];
     panRecognizer.minimumNumberOfTouches = 1;
     panRecognizer.delegate = self;

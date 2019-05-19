@@ -1038,7 +1038,7 @@ void setColorConversion709( GLfloat conversionMatrix[9] )
     if (captureOutput != audioOutput)
     {
 //        NSLog(@"#VideoCapture# GPUImageVideoCamera $ captureOutput in %s %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent.UTF8String, __PRETTY_FUNCTION__, __LINE__);
-        DoctorLog(@"#.#");
+        //DoctorLog(@"#.#");
     }
     if (!self.captureSession.isRunning)
     {DoctorLog(@"#VideoCapture# GPUImageVideoCamera$captureOutput return#0 in %@ %s %d", [NSString stringWithUTF8String:__FILE__].lastPathComponent, __PRETTY_FUNCTION__, __LINE__);
