@@ -17,6 +17,8 @@
 
 #define VideoSegmentDuration 20.f
 
+#define PlayProgressRecordKey @"PlayProgressRecord"
+
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
@@ -114,8 +116,6 @@
     GPUImageVideoCamera* _videoCamera;
     GPUImageOutput<GPUImageInput>* _filter;
     //    GPUImageMovieWriter *movieWriter;
-    
-    IJKGPUImageMovie* _ijkMovie;
 //    UIImageView* _imageView;
     
     GPUImageView* _filterView;
@@ -127,6 +127,8 @@
     
     NSTimeInterval _fastSeekStartTime;
 }
+
+@property (nonatomic, strong) IJKGPUImageMovie* ijkMovie;;
 
 -(void)removeMovieNotificationObservers;
 -(void)installMovieNotificationObservers;
@@ -364,6 +366,16 @@
         __strong typeof(self) sSelf = wSelf;
         [sSelf applicationWillResignActive:nil];
         [sSelf applicationDidBecomeActive:nil];
+
+        NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+        NSMutableDictionary* playProgresses = [[ud objectForKey:PlayProgressRecordKey] mutableCopy];
+        if (!playProgresses)
+        {
+            playProgresses = [[NSMutableDictionary alloc] init];
+        }
+        [playProgresses setObject:@(sSelf.ijkMovie.currentPlaybackTime) forKey:sSelf.ijkMovie.contentURLString.lastPathComponent];
+        [ud setObject:playProgresses forKey:PlayProgressRecordKey];
+        [ud synchronize];
     }];
     [[NSRunLoop mainRunLoop] addTimer:_restartTimer forMode:NSRunLoopCommonModes];
 }
@@ -729,6 +741,17 @@
     {
         self.navItem.rightBarButtonItem = nil;
     }
+    NSLog(@"mediaIsPreparedToPlayDidChange:%@", notification);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2.5f), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+        NSDictionary* playProgress = [ud objectForKey:PlayProgressRecordKey];
+        NSNumber* previousProgress = [playProgress objectForKey:_ijkMovie.contentURLString.lastPathComponent];
+        if (previousProgress)
+        {
+            NSTimeInterval progress = [previousProgress floatValue];
+            [_ijkMovie setCurrentPlaybackTime:progress];
+        }
+    });
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
