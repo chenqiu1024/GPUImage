@@ -1269,7 +1269,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
             preferredHardwareSampleRate = [[AVAudioSession sharedInstance] currentHardwareSampleRate];
 #pragma clang diagnostic pop
         }
-//        preferredHardwareSampleRate = 48000;///!!!
+        preferredHardwareSampleRate = 48000;///!!!
         AudioChannelLayout acl0;
         bzero( &acl0, sizeof(acl0));
         acl0.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;

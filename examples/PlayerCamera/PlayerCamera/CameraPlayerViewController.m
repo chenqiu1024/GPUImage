@@ -15,6 +15,8 @@
 #import <LogManager.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
+#define VideoSegmentDuration 10.f
+
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
 #define VideoSource VideoSource_IJKGPUImageMovie_VideoPlay
@@ -118,6 +120,8 @@
     
     GPUImageView* _filterView;
     GPUImageMovieWriter* _movieWriter;
+    
+    NSTimer* _restartTimer;
     
     BOOL _isProgressSliderBeingDragged;
     
@@ -286,12 +290,14 @@
     }
 }
 
--(void) stopAndReleaseMovieWriter {
-    if (!_movieWriter)
+-(void) stopAndReleaseMovieWriter:(GPUImageMovieWriter*)movieWriter {
+    [_restartTimer invalidate];
+    
+    if (!movieWriter)
         return;
     
-    [_movieWriter finishRecording];
-    _movieWriter = nil;
+    [movieWriter finishRecording];
+    movieWriter = nil;
     /*
      ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
      if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:movieURL])
@@ -317,18 +323,16 @@
      //*/
 }
 
--(void) disassembleMovieWriter {
-    if (!_movieWriter) return;
-    [_videoCamera removeTarget:_movieWriter];
+-(void) disassembleMovieWriter:(GPUImageMovieWriter*)movieWriter {
+    if (!movieWriter) return;
+    [_videoCamera removeTarget:movieWriter];
     ///!!!_videoCamera.audioEncodingTarget = nil;
-    [self stopAndReleaseMovieWriter];
+    [self stopAndReleaseMovieWriter:movieWriter];
 }
 
 -(void) initMovieWriterWithDateTime:(NSDate*) dateTime size:(CGSize)size {
-    if (_movieWriter)
-    {
-        [self stopAndReleaseMovieWriter];
-    }
+    GPUImageMovieWriter* prevMovieWriter = _movieWriter;
+    [self stopAndReleaseMovieWriter:prevMovieWriter];
     
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyyMMdd_hhmmss";
@@ -355,6 +359,13 @@
 
 -(void) startMovieWriteRecording {
     [_movieWriter startRecording];
+    __weak typeof(self) wSelf = self;
+    _restartTimer = [NSTimer scheduledTimerWithTimeInterval:VideoSegmentDuration repeats:YES block:^(NSTimer * _Nonnull timer) {
+        __strong typeof(self) sSelf = wSelf;
+        [sSelf applicationWillResignActive:nil];
+        [sSelf applicationDidBecomeActive:nil];
+    }];
+    [[NSRunLoop mainRunLoop] addTimer:_restartTimer forMode:NSRunLoopCommonModes];
 }
 
 #pragma mark - View lifecycle
@@ -368,7 +379,7 @@
 
 -(void) applicationWillResignActive:(id)sender {
     NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
-    [self disassembleMovieWriter];
+    [self disassembleMovieWriter:_movieWriter];
     [_videoCamera pauseCameraCapture];
 }
 
@@ -389,7 +400,7 @@
 -(void) dismissSelf {
     NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     [_ijkMovie shutdown];
-    [self disassembleMovieWriter];
+    [self disassembleMovieWriter:_movieWriter];
     [_videoCamera stopCameraCapture];
     [self removeMovieNotificationObservers];
     [self dismissViewControllerAnimated:YES completion:nil];

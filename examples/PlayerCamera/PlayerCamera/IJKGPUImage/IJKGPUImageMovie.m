@@ -192,8 +192,8 @@ static void audioDecodeCallbackProcedure(void* userdata, Uint8* stream, int len,
 }
 
 static void audioMixedCallbackProcedure(void* userdata, Uint8* stream, int len, SDL_AudioSpecParams audioParams) {
-    audioParams.channels = 2;
-    audioParams.freq = 44100;
+    //audioParams.channels = 2;
+    //audioParams.freq = 44100;
     NSLog(@"#AudioCallback# audioMixedCallback(len=%d, stream=0x%lx, format=0x%x, channels=%d, samples=%d, freq=%d)", len, (long)stream, audioParams.format, audioParams.channels, audioParams.samples, audioParams.freq);
     if (NULL == stream)
         return;
