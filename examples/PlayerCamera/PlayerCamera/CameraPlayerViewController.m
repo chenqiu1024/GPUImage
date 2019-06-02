@@ -366,7 +366,7 @@
         __strong typeof(self) sSelf = wSelf;
         [sSelf applicationWillResignActive:nil];
         [sSelf applicationDidBecomeActive:nil];
-
+//*
         NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
         NSMutableDictionary* playProgresses = [[ud objectForKey:PlayProgressRecordKey] mutableCopy];
         if (!playProgresses)
@@ -376,6 +376,7 @@
         [playProgresses setObject:@(sSelf.ijkMovie.currentPlaybackTime) forKey:sSelf.ijkMovie.contentURLString.lastPathComponent];
         [ud setObject:playProgresses forKey:PlayProgressRecordKey];
         [ud synchronize];
+ //*/
     }];
     [[NSRunLoop mainRunLoop] addTimer:_restartTimer forMode:NSRunLoopCommonModes];
 }
@@ -742,7 +743,8 @@
         self.navItem.rightBarButtonItem = nil;
     }
     NSLog(@"mediaIsPreparedToPlayDidChange:%@", notification);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2.5f), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //*
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 1.5f), dispatch_get_main_queue(), ^{
         NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
         NSDictionary* playProgress = [ud objectForKey:PlayProgressRecordKey];
         NSNumber* previousProgress = [playProgress objectForKey:_ijkMovie.contentURLString.lastPathComponent];
@@ -752,6 +754,7 @@
             [_ijkMovie setCurrentPlaybackTime:progress];
         }
     });
+    //*/
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification
