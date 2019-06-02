@@ -15,7 +15,7 @@
 #import <LogManager.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>
 
-#define VideoSegmentDuration 10.f
+#define VideoSegmentDuration 20.f
 
 #define VideoSource_IJKGPUImageMovie_VideoPlay 2
 
@@ -380,6 +380,7 @@
 -(void) applicationWillResignActive:(id)sender {
     NSLog(@"#VideoCapture# %s @ line%d", __PRETTY_FUNCTION__, __LINE__);
     [self disassembleMovieWriter:_movieWriter];
+    _movieWriter = nil;
     [_videoCamera pauseCameraCapture];
 }
 
