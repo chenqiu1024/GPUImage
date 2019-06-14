@@ -14,5 +14,7 @@
 
 @property (nonatomic, copy) NSString* sourceVideoFile;
 
+@property (nonatomic, assign) BOOL recordWhilePlaying;
+
 @end
 

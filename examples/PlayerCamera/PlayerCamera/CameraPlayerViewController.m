@@ -293,6 +293,7 @@
 }
 
 -(void) stopAndReleaseMovieWriter:(GPUImageMovieWriter*)movieWriter {
+    if (!_recordWhilePlaying) return;
     [_restartTimer invalidate];
     
     if (!movieWriter)
@@ -326,6 +327,7 @@
 }
 
 -(void) disassembleMovieWriter:(GPUImageMovieWriter*)movieWriter {
+    if (!_recordWhilePlaying) return;
     if (!movieWriter) return;
     [_videoCamera removeTarget:movieWriter];
     ///!!!_videoCamera.audioEncodingTarget = nil;
@@ -333,6 +335,7 @@
 }
 
 -(void) initMovieWriterWithDateTime:(NSDate*) dateTime size:(CGSize)size {
+    if (!_recordWhilePlaying) return;
     GPUImageMovieWriter* prevMovieWriter = _movieWriter;
     [self stopAndReleaseMovieWriter:prevMovieWriter];
     
@@ -350,6 +353,7 @@
 }
 //#define SWAP_RENDER_TARGETS
 -(void) setupMovieWriter {
+    if (!_recordWhilePlaying) return;
     [self initMovieWriterWithDateTime:[NSDate date] size:CGSizeMake(480.0, 640.0)];
     if (!_movieWriter) return;
 #ifndef SWAP_RENDER_TARGETS
@@ -360,6 +364,7 @@
 }
 
 -(void) startMovieWriteRecording {
+    if (!_recordWhilePlaying) return;
     [_movieWriter startRecording];
     __weak typeof(self) wSelf = self;
     _restartTimer = [NSTimer scheduledTimerWithTimeInterval:VideoSegmentDuration repeats:YES block:^(NSTimer * _Nonnull timer) {

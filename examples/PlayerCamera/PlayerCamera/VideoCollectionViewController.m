@@ -69,6 +69,8 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 
 @property (nonatomic, strong) IBOutlet UICollectionView* videoCollectionView;
 
+@property (nonatomic, assign) BOOL withHiddenMedias;
+
 @end
 
 @implementation VideoCollectionViewController
@@ -91,7 +93,14 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     NSEnumerator<NSString* >* fileEnumerator = [fm enumeratorAtPath:_docDirectoryPath];
     for (NSString* file in fileEnumerator)
     {
-        if ([file pathComponents].count > 1) continue;
+        if (_withHiddenMedias)
+        {
+            NSArray<NSString* >* pathComponents = file.pathComponents;
+            if (pathComponents.count <= 1 || ![pathComponents[pathComponents.count - 2] isEqualToString:@"videos"])
+                continue;
+        }
+        else if ([file pathComponents].count > 1)
+            continue;
         NSString* ext = [[file pathExtension] lowercaseString];
         if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"] || [ext isEqualToString:@"mov"] || [ext isEqualToString:@"rm"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"m3u8"] || [ext isEqualToString:@"wmv"])
         {
@@ -155,6 +164,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     /*/
     NSString* fileURL = [_files objectAtIndex:indexPath.row];
     CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+    playerVC.recordWhilePlaying = !_withHiddenMedias;
     playerVC.sourceVideoFile = fileURL;
     [self presentViewController:playerVC animated:YES completion:nil];
     //*/
@@ -166,6 +176,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     {
         NSLog(@"videoURL = %@", videoURL);
         CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+        playerVC.recordWhilePlaying = !_withHiddenMedias;
         playerVC.sourceVideoFile = [videoURL absoluteString];
         [self presentViewController:playerVC animated:YES completion:nil];
     }
