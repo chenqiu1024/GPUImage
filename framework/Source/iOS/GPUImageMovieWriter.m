@@ -1286,7 +1286,7 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         }
         else if (audioOutputSettings0 == nil)
         {
-            [sharedAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+            [sharedAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:/*AVAudioSessionCategoryOptionDefaultToSpeaker|*/AVAudioSessionCategoryOptionAllowBluetooth error:nil];
             
             audioOutputSettings0 = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
