@@ -664,7 +664,7 @@
 				TargetAttributes = {
 					520DA6D31ED7248C009E4705 = {
 						CreatedOnToolsVersion = 8.3.1;
-						DevelopmentTeam = XNCE899229;
+						DevelopmentTeam = QBAB3CS86A;
 						ProvisioningStyle = Manual;
 					};
 					520DA6EC1ED7248C009E4705 = {
@@ -683,6 +683,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				"zh-Hans",
@@ -1071,7 +1072,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = XNCE899229;
+				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1095,7 +1096,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.gijkplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7539b2d0-48e3-46f1-8ba7-65cb077f526a";
-				PROVISIONING_PROFILE_SPECIFIER = "Domqiu Wildcard iOS Development ProvisioninProfile";
+				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development MADV360";
 				STRIP_STYLE = "non-global";
 				VALID_ARCHS = arm64;
 			};
@@ -1108,7 +1109,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = XNCE899229;
+				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1129,7 +1130,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cyllenge.gijkplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7539b2d0-48e3-46f1-8ba7-65cb077f526a";
-				PROVISIONING_PROFILE_SPECIFIER = "Domqiu Wildcard iOS Development ProvisioninProfile";
+				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development MADV360";
 				STRIP_STYLE = "non-global";
 				VALID_ARCHS = arm64;
 			};
