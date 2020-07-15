@@ -93,7 +93,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="o8v-5J-nJD">
-                                <rect key="frame" x="16" y="20" width="343" height="598"/>
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nfE-hf-rQb">
                                     <size key="itemSize" width="300" height="200"/>
@@ -165,7 +165,6 @@
                     </tabBar>
                     <connections>
                         <segue destination="3H3-gd-bui" kind="relationship" relationship="viewControllers" id="g9d-JI-fly"/>
-                        <segue destination="QRa-Kd-fbg" kind="relationship" relationship="viewControllers" id="WSg-sY-QK9"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ezw-e7-PyC" userLabel="First Responder" sceneMemberID="firstResponder"/>

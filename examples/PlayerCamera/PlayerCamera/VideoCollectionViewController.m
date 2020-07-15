@@ -83,6 +83,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     _thumbnailCache.delegate = self;
     
     _files = [[NSMutableArray alloc] init];
+        [_files insertObject:@"rtsp://admin:9to77TO5@192.168.1.5:8554/live" atIndex:0];
 //    [_files insertObject:@"rtsp://192.168.42.1/live" atIndex:0];
 //    [_files insertObject:@"https://tzn8.com/bunnies.mp4" atIndex:0];
 //    [_files insertObject:@"https://devstreaming-cdn.apple.com/videos/wwdc/2014/604xxg7crkljcr8/604/ipad_c.m3u8" atIndex:0];
@@ -164,6 +165,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     /*/
     NSString* fileURL = [_files objectAtIndex:indexPath.row];
     CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+    playerVC.modalPresentationStyle = UIModalPresentationFullScreen;
     playerVC.recordWhilePlaying = !_withHiddenMedias;
     playerVC.sourceVideoFile = fileURL;
     [self presentViewController:playerVC animated:YES completion:nil];
@@ -176,6 +178,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     {
         NSLog(@"videoURL = %@", videoURL);
         CameraPlayerViewController* playerVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CameraPlayer"];
+        playerVC.modalPresentationStyle = UIModalPresentationFullScreen;
         playerVC.recordWhilePlaying = !_withHiddenMedias;
         playerVC.sourceVideoFile = [videoURL absoluteString];
         [self presentViewController:playerVC animated:YES completion:nil];
