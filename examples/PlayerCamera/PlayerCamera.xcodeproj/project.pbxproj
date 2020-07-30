@@ -397,9 +397,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		52021E2324D3344F00946F11 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		520DA6CB1ED7248B009E4705 = {
 			isa = PBXGroup;
 			children = (
+				52021E2324D3344F00946F11 /* Resources */,
 				524F116B20B1DA4C0045795F /* PrefixHeader.pch */,
 				520DA7121ED7280C009E4705 /* Frameworks */,
 				520DA6D61ED7248C009E4705 /* PlayerCamera */,

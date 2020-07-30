@@ -90,24 +90,34 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     //    [_files insertObject:@"https://pan.baidu.com/play/video#/video?path=%2F20170820%2FMOVI0001_To0124_1207_1043_2101_2110_2010_2055_2135_0238%20-%20Segment11(00_24_10.000-00_26_11.560).mp4&t=-1" atIndex:0];
     
     NSFileManager* fm = [NSFileManager defaultManager];
-    _docDirectoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    NSEnumerator<NSString* >* fileEnumerator = [fm enumeratorAtPath:_docDirectoryPath];
-    for (NSString* file in fileEnumerator)
+    for (int i = 0; i < 2; i++)
     {
-        if (_withHiddenMedias)
+        if (i == 0)
         {
-            NSArray<NSString* >* pathComponents = file.pathComponents;
-            if (pathComponents.count <= 1 || ![pathComponents[pathComponents.count - 2] isEqualToString:@"videos"])
-                continue;
+            _docDirectoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
         }
-        else if ([file pathComponents].count > 1)
-            continue;
-        NSString* ext = [[file pathExtension] lowercaseString];
-        if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"] || [ext isEqualToString:@"mov"] || [ext isEqualToString:@"rm"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"m3u8"] || [ext isEqualToString:@"wmv"])
+        else
         {
-            NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
-            [_files addObject:filePath];
-            
+            _docDirectoryPath = [[NSBundle mainBundle] bundlePath];
+        }
+        NSEnumerator<NSString* >* fileEnumerator = [fm enumeratorAtPath:_docDirectoryPath];
+        for (NSString* file in fileEnumerator)
+        {
+            if (_withHiddenMedias)
+            {
+                NSArray<NSString* >* pathComponents = file.pathComponents;
+                if (pathComponents.count <= 1 || ![pathComponents[pathComponents.count - 2] isEqualToString:@"videos"])
+                    continue;
+            }
+            else if ([file pathComponents].count > 1)
+                continue;
+            NSString* ext = [[file pathExtension] lowercaseString];
+            if ([ext isEqualToString:@"mp4"] || [ext isEqualToString:@"avi"] || [ext isEqualToString:@"3gpp"] || [ext isEqualToString:@"mkv"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"flv"] || [ext isEqualToString:@"mpg"] || [ext isEqualToString:@"mpeg"] || [ext isEqualToString:@"mov"] || [ext isEqualToString:@"rm"] || [ext isEqualToString:@"rmvb"] || [ext isEqualToString:@"m3u8"] || [ext isEqualToString:@"wmv"])
+            {
+                NSString* filePath = [_docDirectoryPath stringByAppendingPathComponent:file];
+                [_files addObject:filePath];
+                
+            }
         }
     }
     

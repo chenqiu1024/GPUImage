@@ -74,7 +74,7 @@
     NSString *initString = [[NSString alloc] initWithFormat:@"appid=%@",APPID_VALUE];
     
     //Configure and initialize iflytek services.(This interface must been invoked in application:didFinishLaunchingWithOptions:)
-    [IFlySpeechUtility createUtility:initString];
+//    [IFlySpeechUtility createUtility:initString];
     
     [WXApi startLogByLevel:WXLogLevelNormal logBlock:^(NSString *log) {
         NSLog(@"log : %@", log);
