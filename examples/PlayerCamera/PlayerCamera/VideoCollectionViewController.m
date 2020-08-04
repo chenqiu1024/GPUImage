@@ -83,7 +83,7 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
     _thumbnailCache.delegate = self;
     
     _files = [[NSMutableArray alloc] init];
-        [_files insertObject:@"rtsp://admin:9to77TO5@192.168.1.5:8554/live" atIndex:0];
+//        [_files insertObject:@"rtsp://admin:9to77TO5@192.168.1.5:8554/live" atIndex:0];
 //    [_files insertObject:@"rtsp://192.168.42.1/live" atIndex:0];
 //    [_files insertObject:@"https://tzn8.com/bunnies.mp4" atIndex:0];
 //    [_files insertObject:@"https://devstreaming-cdn.apple.com/videos/wwdc/2014/604xxg7crkljcr8/604/ipad_c.m3u8" atIndex:0];
@@ -199,7 +199,8 @@ NSString* VideoCollectionCellIdentifier = @"VideoCollectionCellIdentifier";
 -(__kindof UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     VideoCollectionCell* cell = (VideoCollectionCell*) [collectionView dequeueReusableCellWithReuseIdentifier:VideoCollectionCellIdentifier forIndexPath:indexPath];
     NSString* fileURL = [_files objectAtIndex:indexPath.row];
-    cell.titleLabel.text = [fileURL hasPrefix:_docDirectoryPath] ? fileURL.lastPathComponent : fileURL;
+//    cell.titleLabel.text = [fileURL hasPrefix:_docDirectoryPath] ? fileURL.lastPathComponent : fileURL;
+    cell.titleLabel.text = fileURL.lastPathComponent;
     ThumbnailCacheItem* cacheItem = [_thumbnailCache objectForKey:fileURL];
     if (!cacheItem || !cacheItem.thumbnail)
     {
