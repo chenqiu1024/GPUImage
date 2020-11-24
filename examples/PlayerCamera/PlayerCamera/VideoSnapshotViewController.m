@@ -391,7 +391,7 @@
 #else
     _ijkMovie = [[IJKGPUImageMovie alloc] initWithContentURLString:self.sourceVideoFile muted:NO];
     //_ijkMovie.withSpeechRecognition = YES;
-    //_ijkMovie.withFaceDetect = YES;
+//    _ijkMovie.withFaceDetect = YES;
 #endif
     _ijkMovie.delegate = self;
     [_ijkMovie setPauseInBackground:YES];
