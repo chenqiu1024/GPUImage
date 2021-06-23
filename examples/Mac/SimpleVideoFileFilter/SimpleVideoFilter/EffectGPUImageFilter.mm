@@ -225,8 +225,8 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 //        [outputFramebuffer lock];
 //    }
 
-//    testEffect(0, 0, true);///!!!
-    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
+    testEffect(0, 0, true);///!!!
+//    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
     
     if (nullptr == _effectHandle)
     {
