@@ -31,13 +31,31 @@
 
 }
 
+-(IBAction) onOpenFile:(id)sender {
+    NSOpenPanel* openPanel = NSOpenPanel.openPanel;
+    openPanel.prompt = @"Open Source Media Files";
+    openPanel.allowedFileTypes = @[@"mp4", @"mov", @"avi", @"mkv", @"rmvb"];
+    openPanel.allowsMultipleSelection = NO;
+    openPanel.directoryURL = nil;
+    NSLog(@"self.window=%@", self.window);
+    [openPanel beginSheet:self.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == 0)
+        {
+            [self runProcessingWithURL:openPanel.URL];
+            [self showProcessingUI];
+        }
+    }];
+}
+
 - (IBAction)gpuImageMovieWithURLButtonAction:(id)sender {
-    [self runProcessingWithAVPlayerItem:NO];
+    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
+    [self runProcessingWithURL:sampleURL];
     [self showProcessingUI];
 }
 
 - (IBAction)gpuImageMovieWithAvplayeritemButtonAction:(id)sender {
-    [self runProcessingWithAVPlayerItem:YES];
+    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
+    [self runProcessingWithURL:sampleURL];
     [self showProcessingUI];
 }
 
@@ -47,10 +65,8 @@
     self.avPlayerItemButton.hidden = YES;
 }
 
-- (void)runProcessingWithAVPlayerItem:(BOOL)withAVPlayerItem {
-    NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"sample_iPod" withExtension:@"m4v"];
-    
-    self.playerItem = [[AVPlayerItem alloc] initWithURL:sampleURL];
+- (void)runProcessingWithURL:(NSURL*)url {
+    self.playerItem = [[AVPlayerItem alloc] initWithURL:url];
     self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
     
     //movieFile = [[GPUImageMovie alloc] initWithURL:sampleURL];
