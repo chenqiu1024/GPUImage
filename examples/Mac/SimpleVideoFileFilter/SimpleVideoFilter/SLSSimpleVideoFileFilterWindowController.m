@@ -1,6 +1,6 @@
 #import "SLSSimpleVideoFileFilterWindowController.h"
 #import <GPUImage/GPUImage.h>
-#import "bef_effect_api.h"
+#import "EffectGPUImageFilter.h"
 
 @interface SLSSimpleVideoFileFilterWindowController ()
 {
@@ -77,7 +77,8 @@
     movieFile = [[GPUImageMovie alloc] initWithPlayerItem:self.playerItem];
     movieFile.runBenchmark = YES;
     movieFile.playAtActualSpeed = NO;
-    filter = [[GPUImagePixellateFilter alloc] init];
+//    filter = [[GPUImagePixellateFilter alloc] init];
+    filter = [[EffectGPUImageFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
     
     [movieFile addTarget:filter];
