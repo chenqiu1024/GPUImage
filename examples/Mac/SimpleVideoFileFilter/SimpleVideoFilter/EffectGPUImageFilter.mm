@@ -225,7 +225,7 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 //        [outputFramebuffer lock];
 //    }
 
-    testEffect(0, 0, true);///!!!
+//    testEffect(0, 0, true);///!!!
 //    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
     
     if (nullptr == _effectHandle)
@@ -242,13 +242,15 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
         bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
     }
     
+    GLint inputTexture = firstInputFramebuffer.texture;
+    GLint outputTexture = outputFramebuffer.texture;
     double timestamp = CMTimeGetSeconds(frameTime);
     bef_effect_result_t result;
     result = bef_effect_set_width_height(_effectHandle, inputTextureSize.width, inputTextureSize.height);//设定处理宽高给effect
     NSLog(@"result of bef_effect_set_width_height() = %d", result);
-    result = bef_effect_algorithm_texture(_effectHandle, firstInputFramebuffer.texture, timestamp);//effect调资源包中设定的算法处理得到所需的该帧算法结果
+    result = bef_effect_algorithm_texture(_effectHandle, inputTexture, timestamp);//effect调资源包中设定的算法处理得到所需的该帧算法结果
     NSLog(@"result of bef_effect_algorithm_texture() = %d", result);
-    result = bef_effect_process_texture(_effectHandle, firstInputFramebuffer.texture, outputFramebuffer.texture, timestamp);//处理inputTexture叠加特效输出到outputTexture
+    result = bef_effect_process_texture(_effectHandle, inputTexture, outputTexture, timestamp);//处理inputTexture叠加特效输出到outputTexture
     NSLog(@"result of bef_effect_process_texture() = %d", result);
     
     [outputFramebuffer activateFramebuffer];

@@ -43,10 +43,12 @@ void testEffect(GLint inputTexture, GLint outputTexture, bool createContext)
         [glCtx makeCurrentContext];
     }
     
+    bef_effect_result_t result;
     bef_effect_handle_t _effectHandle = NULL;
     if (NULL == _effectHandle)
     {
-        bef_effect_create_handle(&_effectHandle, false);
+        result = bef_effect_create_handle(&_effectHandle, false);
+        NSLog(@"result of bef_effect_create_handle() = %d", result);
         bef_effect_use_pipeline_processor(_effectHandle, false);
         bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
         bef_effect_init_with_resource_finder_v2(_effectHandle, width, height, modelFinder, NULL ,"MacOS");
@@ -68,7 +70,6 @@ void testEffect(GLint inputTexture, GLint outputTexture, bool createContext)
     }
     
     double timestamp = 0.0;///!!!CMTimeGetSeconds(frameTime);
-    bef_effect_result_t result;
     result = bef_effect_set_width_height(_effectHandle, width, height);//设定处理宽高给effect
     NSLog(@"result of bef_effect_set_width_height() = %d", result);
     result = bef_effect_algorithm_texture(_effectHandle, inputTexture, timestamp);//effect调资源包中设定的算法处理得到所需的该帧算法结果
