@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		575AD8C91BEA6FC60088E866 /* sample_iPod.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 575AD8C81BEA6FC60088E866 /* sample_iPod.m4v */; settings = {ASSET_TAGS = (); }; };
+		575AD8C91BEA6FC60088E866 /* sample_iPod.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 575AD8C81BEA6FC60088E866 /* sample_iPod.m4v */; };
 		79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C26E211A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m */; };
 		79C26E2E1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79C26E2D1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib */; };
 		79E8A5FB1A5ED6A700E6A226 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 79E8A5FA1A5ED6A700E6A226 /* AppDelegate.m */; };
@@ -15,6 +15,25 @@
 		79E8A5FF1A5ED6A700E6A226 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79E8A5FE1A5ED6A700E6A226 /* Images.xcassets */; };
 		79E8A6021A5ED6A700E6A226 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79E8A6001A5ED6A700E6A226 /* MainMenu.xib */; };
 		79E8A60E1A5ED6A700E6A226 /* SimpleVideoFilterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 79E8A60D1A5ED6A700E6A226 /* SimpleVideoFilterTests.m */; };
+		BBFE27C32683231200BD44DB /* cats.MP4 in Resources */ = {isa = PBXBuildFile; fileRef = BBFE27C22683231200BD44DB /* cats.MP4 */; };
+		BBFE2A01268324D400BD44DB /* libbytenn.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE290D268324D400BD44DB /* libbytenn.dylib */; };
+		BBFE2A02268324D400BD44DB /* libbach_naviavatardrive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE290E268324D400BD44DB /* libbach_naviavatardrive.a */; };
+		BBFE2A03268324D400BD44DB /* libbach_audioavatar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE290F268324D400BD44DB /* libbach_audioavatar.a */; };
+		BBFE2A04268324D400BD44DB /* libbach_audioproducer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2910268324D400BD44DB /* libbach_audioproducer.a */; };
+		BBFE2A05268324D400BD44DB /* libbach_carseries.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2911268324D400BD44DB /* libbach_carseries.a */; };
+		BBFE2A06268324D400BD44DB /* libeffect.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2912268324D400BD44DB /* libeffect.dylib */; };
+		BBFE2A07268324D400BD44DB /* libkn_effectmanager.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2913268324D400BD44DB /* libkn_effectmanager.dylib */; };
+		BBFE2A08268324D400BD44DB /* libglfw.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2914268324D400BD44DB /* libglfw.3.dylib */; };
+		BBFE2A09268324D400BD44DB /* libportaudio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2915268324D400BD44DB /* libportaudio.dylib */; };
+		BBFE2A0A268324D400BD44DB /* libbach_nh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2916268324D400BD44DB /* libbach_nh.a */; };
+		BBFE2A0B268324D400BD44DB /* libbach_deepinpaint.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFE2917268324D400BD44DB /* libbach_deepinpaint.a */; };
+		BBFE2AA02683278C00BD44DB /* EffectGPUImageFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBFE2A9F2683278C00BD44DB /* EffectGPUImageFilter.mm */; };
+		BBFE2AA526832B9000BD44DB /* EffectResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BBFE2AA426832B9000BD44DB /* EffectResources.bundle */; };
+		BBFE2AA826832CFB00BD44DB /* libglfw.3.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFE2914268324D400BD44DB /* libglfw.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		BBFE2AA926832CFD00BD44DB /* libbytenn.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFE290D268324D400BD44DB /* libbytenn.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		BBFE2AAA26832CFF00BD44DB /* libeffect.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFE2912268324D400BD44DB /* libeffect.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		BBFE2AAB26832D0000BD44DB /* libkn_effectmanager.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFE2913268324D400BD44DB /* libkn_effectmanager.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		BBFE2AAC26832D0200BD44DB /* libportaudio.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFE2915268324D400BD44DB /* libportaudio.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BCF8E9E51A75DE67005AE243 /* GPUImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BCF8E9E21A75DE3F005AE243 /* GPUImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -49,7 +68,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				BBFE2AAC26832D0200BD44DB /* libportaudio.dylib in CopyFiles */,
 				BCF8E9E51A75DE67005AE243 /* GPUImage.framework in CopyFiles */,
+				BBFE2AAB26832D0000BD44DB /* libkn_effectmanager.dylib in CopyFiles */,
+				BBFE2AAA26832CFF00BD44DB /* libeffect.dylib in CopyFiles */,
+				BBFE2AA826832CFB00BD44DB /* libglfw.3.dylib in CopyFiles */,
+				BBFE2AA926832CFD00BD44DB /* libbytenn.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +94,336 @@
 		79E8A6071A5ED6A700E6A226 /* SimpleVideoFileFilter.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleVideoFileFilter.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		79E8A60C1A5ED6A700E6A226 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79E8A60D1A5ED6A700E6A226 /* SimpleVideoFilterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleVideoFilterTests.m; sourceTree = "<group>"; };
+		BBFE27C22683231200BD44DB /* cats.MP4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = cats.MP4; sourceTree = "<group>"; };
+		BBFE27C7268324D300BD44DB /* bef_framework_public_base_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_framework_public_base_define.h; sourceTree = "<group>"; };
+		BBFE27C8268324D300BD44DB /* bef_effect_touch_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_touch_api.h; sourceTree = "<group>"; };
+		BBFE27C9268324D300BD44DB /* bef_effect_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_api.h; sourceTree = "<group>"; };
+		BBFE27CA268324D300BD44DB /* bef_framework_public_algorithm_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_framework_public_algorithm_define.h; sourceTree = "<group>"; };
+		BBFE27CB268324D300BD44DB /* bef_effect_build_macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_build_macro.h; sourceTree = "<group>"; };
+		BBFE27CC268324D300BD44DB /* bef_effect_global_filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_global_filter.h; sourceTree = "<group>"; };
+		BBFE27CD268324D300BD44DB /* bef_moment_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_moment_define.h; sourceTree = "<group>"; };
+		BBFE27CE268324D300BD44DB /* AudioPlayerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayerInterface.h; sourceTree = "<group>"; };
+		BBFE27CF268324D300BD44DB /* bef_benchmark_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_benchmark_api.h; sourceTree = "<group>"; };
+		BBFE27D0268324D300BD44DB /* bef_ae_video_canvas_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_ae_video_canvas_api.h; sourceTree = "<group>"; };
+		BBFE27D1268324D300BD44DB /* bef_moment_algorithm_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_moment_algorithm_define.h; sourceTree = "<group>"; };
+		BBFE27D2268324D300BD44DB /* bef_moment_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_moment_api.h; sourceTree = "<group>"; };
+		BBFE27D3268324D300BD44DB /* bef_effect_aerender_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_aerender_api.h; sourceTree = "<group>"; };
+		BBFE27D4268324D300BD44DB /* bef_effect_algorithm_rect_doc_det_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_rect_doc_det_api.h; sourceTree = "<group>"; };
+		BBFE27D5268324D300BD44DB /* bef_framework_public_enum_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_framework_public_enum_define.h; sourceTree = "<group>"; };
+		BBFE27D6268324D300BD44DB /* bef_effect_algorithm_face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_face.h; sourceTree = "<group>"; };
+		BBFE27D7268324D300BD44DB /* bef_effect_gpu_detect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_gpu_detect.h; sourceTree = "<group>"; };
+		BBFE27D8268324D300BD44DB /* bef_effect_algorithm_audio_onset_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_audio_onset_api.h; sourceTree = "<group>"; };
+		BBFE27D9268324D300BD44DB /* bef_effect_public_business_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_public_business_define.h; sourceTree = "<group>"; };
+		BBFE27DA268324D300BD44DB /* bef_effect_algorithm_after_effect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_after_effect.h; sourceTree = "<group>"; };
+		BBFE27DB268324D300BD44DB /* bef_framework_public_geometry_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_framework_public_geometry_define.h; sourceTree = "<group>"; };
+		BBFE27DC268324D300BD44DB /* bef_effect_public_skeleton_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_public_skeleton_define.h; sourceTree = "<group>"; };
+		BBFE27DD268324D300BD44DB /* bef_effect_ar_core_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_ar_core_api.h; sourceTree = "<group>"; };
+		BBFE27DE268324D300BD44DB /* bef_effect_algorithm_face_clusting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_face_clusting.h; sourceTree = "<group>"; };
+		BBFE27DF268324D300BD44DB /* bef_effect_hand_detect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_hand_detect.h; sourceTree = "<group>"; };
+		BBFE27E0268324D300BD44DB /* bef_effect_auto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_auto.h; sourceTree = "<group>"; };
+		BBFE27E1268324D300BD44DB /* bef_msg_delegate_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_msg_delegate_manager.h; sourceTree = "<group>"; };
+		BBFE27E2268324D300BD44DB /* bef_effect_lua_base_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_lua_base_object.h; sourceTree = "<group>"; };
+		BBFE27E3268324D300BD44DB /* bef_info_sticker_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_info_sticker_api.h; sourceTree = "<group>"; };
+		BBFE27E4268324D300BD44DB /* bef_effect_3d_object_manipulate_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_3d_object_manipulate_api.h; sourceTree = "<group>"; };
+		BBFE27E5268324D300BD44DB /* bef_effect_algorithm_similarity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_similarity.h; sourceTree = "<group>"; };
+		BBFE27E6268324D300BD44DB /* bef_effect_algorithm_portrait_matting_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_portrait_matting_api.h; sourceTree = "<group>"; };
+		BBFE27E9268324D300BD44DB /* IFUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFUIButton.h; sourceTree = "<group>"; };
+		BBFE27EA268324D300BD44DB /* IFResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFResponder.h; sourceTree = "<group>"; };
+		BBFE27EB268324D300BD44DB /* IFUIScrollView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFUIScrollView.hpp; sourceTree = "<group>"; };
+		BBFE27EC268324D300BD44DB /* IFUITab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFUITab.h; sourceTree = "<group>"; };
+		BBFE27ED268324D300BD44DB /* IFUIScrollBar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFUIScrollBar.hpp; sourceTree = "<group>"; };
+		BBFE27EE268324D300BD44DB /* IFUIControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFUIControl.h; sourceTree = "<group>"; };
+		BBFE27EF268324D300BD44DB /* IFUISliderThumb.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFUISliderThumb.hpp; sourceTree = "<group>"; };
+		BBFE27F0268324D300BD44DB /* IFUISlider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFUISlider.hpp; sourceTree = "<group>"; };
+		BBFE27F2268324D300BD44DB /* IFAnchorAlignmentDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFAnchorAlignmentDefine.h; sourceTree = "<group>"; };
+		BBFE27F3268324D300BD44DB /* IFAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27F5268324D300BD44DB /* IFSkeletonAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFSkeletonAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27F6268324D300BD44DB /* IFHandAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFHandAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27F7268324D300BD44DB /* IFLicensePlateAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFLicensePlateAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27F8268324D300BD44DB /* IFJointAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFJointAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27F9268324D300BD44DB /* IFFaceAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFFaceAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27FA268324D300BD44DB /* IFTeethAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTeethAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27FB268324D300BD44DB /* IFMugAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFMugAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27FC268324D300BD44DB /* IFARScanAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFARScanAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27FD268324D300BD44DB /* IFForegroundAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFForegroundAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27FE268324D300BD44DB /* IFObjectAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFObjectAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE27FF268324D300BD44DB /* IFNailAnchorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFNailAnchorAlignment.h; sourceTree = "<group>"; };
+		BBFE2800268324D300BD44DB /* IFAnchorAlignmentSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFAnchorAlignmentSystem.h; sourceTree = "<group>"; };
+		BBFE2801268324D300BD44DB /* IFAnchorAlignmentCalibrate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFAnchorAlignmentCalibrate.h; sourceTree = "<group>"; };
+		BBFE2803268324D300BD44DB /* IFSprite2d.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFSprite2d.hpp; sourceTree = "<group>"; };
+		BBFE2804268324D300BD44DB /* IFUIAnchor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFUIAnchor.hpp; sourceTree = "<group>"; };
+		BBFE2805268324D300BD44DB /* IFOBB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFOBB.h; sourceTree = "<group>"; };
+		BBFE2806268324D300BD44DB /* IFWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFWidget.hpp; sourceTree = "<group>"; };
+		BBFE2807268324D300BD44DB /* IFEventDistributor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFEventDistributor.hpp; sourceTree = "<group>"; };
+		BBFE2808268324D300BD44DB /* IFUILabel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFUILabel.hpp; sourceTree = "<group>"; };
+		BBFE2809268324D300BD44DB /* IFTransform2d.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFTransform2d.hpp; sourceTree = "<group>"; };
+		BBFE280A268324D300BD44DB /* IFTween.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFTween.hpp; sourceTree = "<group>"; };
+		BBFE280B268324D300BD44DB /* IFHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFHelper.h; sourceTree = "<group>"; };
+		BBFE280C268324D300BD44DB /* IFScriptComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFScriptComponent.h; sourceTree = "<group>"; };
+		BBFE280D268324D300BD44DB /* IFBoxCollider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFBoxCollider.hpp; sourceTree = "<group>"; };
+		BBFE280E268324D300BD44DB /* IFAnimSpriteSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFAnimSpriteSystem.hpp; sourceTree = "<group>"; };
+		BBFE280F268324D300BD44DB /* IFLayer2dSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFLayer2dSystem.hpp; sourceTree = "<group>"; };
+		BBFE2810268324D300BD44DB /* IFCanvas2d.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFCanvas2d.hpp; sourceTree = "<group>"; };
+		BBFE2811268324D300BD44DB /* IFTweenPosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFTweenPosition.hpp; sourceTree = "<group>"; };
+		BBFE2812268324D300BD44DB /* IFCollider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFCollider.hpp; sourceTree = "<group>"; };
+		BBFE2813268324D300BD44DB /* IFLayer2d.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IFLayer2d.hpp; sourceTree = "<group>"; };
+		BBFE2814268324D300BD44DB /* bef_ae_video_feature_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_ae_video_feature_api.h; sourceTree = "<group>"; };
+		BBFE2815268324D300BD44DB /* LiveAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveAudioPlayer.h; sourceTree = "<group>"; };
+		BBFE2816268324D300BD44DB /* bef_slam_camera_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_slam_camera_api.h; sourceTree = "<group>"; };
+		BBFE2817268324D300BD44DB /* bef_effect_algorithm_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_api.h; sourceTree = "<group>"; };
+		BBFE2818268324D300BD44DB /* bef_effect_javascript_binding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_javascript_binding.h; sourceTree = "<group>"; };
+		BBFE2819268324D300BD44DB /* bef_effect_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_common.h; sourceTree = "<group>"; };
+		BBFE281A268324D300BD44DB /* bef_slam_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_slam_api.h; sourceTree = "<group>"; };
+		BBFE281B268324D300BD44DB /* RequirementDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequirementDefine.h; sourceTree = "<group>"; };
+		BBFE281C268324D300BD44DB /* bef_effect_public_hand_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_public_hand_define.h; sourceTree = "<group>"; };
+		BBFE281D268324D300BD44DB /* bef_effect_body_distortion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_body_distortion.h; sourceTree = "<group>"; };
+		BBFE281E268324D300BD44DB /* bef_effect_public_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_public_define.h; sourceTree = "<group>"; };
+		BBFE281F268324D300BD44DB /* bef_effect_transition_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_transition_api.h; sourceTree = "<group>"; };
+		BBFE2820268324D300BD44DB /* bef_effect_public_face_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_public_face_define.h; sourceTree = "<group>"; };
+		BBFE2821268324D300BD44DB /* bef_effect_public_avatar_drive_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_public_avatar_drive_define.h; sourceTree = "<group>"; };
+		BBFE2822268324D300BD44DB /* bef_effect_algorithm_c1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_c1.h; sourceTree = "<group>"; };
+		BBFE2823268324D300BD44DB /* bef_effect_mv_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_mv_api.h; sourceTree = "<group>"; };
+		BBFE2824268324D300BD44DB /* bef_effect_sticker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_sticker.h; sourceTree = "<group>"; };
+		BBFE2825268324D300BD44DB /* bef_info_sticker_public_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_info_sticker_public_define.h; sourceTree = "<group>"; };
+		BBFE2826268324D300BD44DB /* bef_effect_ar_core_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_ar_core_define.h; sourceTree = "<group>"; };
+		BBFE2827268324D300BD44DB /* bef_effect_face_distortionV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_face_distortionV2.h; sourceTree = "<group>"; };
+		BBFE2828268324D300BD44DB /* bef_effect_brush2d_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_brush2d_define.h; sourceTree = "<group>"; };
+		BBFE2829268324D300BD44DB /* bef_effect_xt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_xt.h; sourceTree = "<group>"; };
+		BBFE282A268324D300BD44DB /* bef_effect_composer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_composer.h; sourceTree = "<group>"; };
+		BBFE282B268324D300BD44DB /* bef_effect_audio_effect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_audio_effect.h; sourceTree = "<group>"; };
+		BBFE282C268324D300BD44DB /* bef_effect_face_detect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_face_detect.h; sourceTree = "<group>"; };
+		BBFE282D268324D300BD44DB /* bef_effect_algorithm_face_verify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_face_verify.h; sourceTree = "<group>"; };
+		BBFE282E268324D300BD44DB /* bef_ae_style_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_ae_style_api.h; sourceTree = "<group>"; };
+		BBFE282F268324D300BD44DB /* bef_effect_video_after_effect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_video_after_effect.h; sourceTree = "<group>"; };
+		BBFE2830268324D300BD44DB /* bef_effect_imgproc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_imgproc.h; sourceTree = "<group>"; };
+		BBFE2831268324D300BD44DB /* bef_effect_public_business_mv_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_public_business_mv_define.h; sourceTree = "<group>"; };
+		BBFE2832268324D300BD44DB /* bef_ae_brick_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_ae_brick_api.h; sourceTree = "<group>"; };
+		BBFE2833268324D300BD44DB /* bef_effect_dynamic_load_library.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_dynamic_load_library.h; sourceTree = "<group>"; };
+		BBFE2834268324D300BD44DB /* bef_effect_algorithm_general_obj_detect_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_algorithm_general_obj_detect_api.h; sourceTree = "<group>"; };
+		BBFE2835268324D300BD44DB /* bef_app_manager_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_app_manager_api.h; sourceTree = "<group>"; };
+		BBFE2836268324D300BD44DB /* bef_effect_photo_face_detect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_photo_face_detect.h; sourceTree = "<group>"; };
+		BBFE2837268324D300BD44DB /* bef_effect_for_faceReshapeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_for_faceReshapeTool.h; sourceTree = "<group>"; };
+		BBFE2838268324D300BD44DB /* bef_effect_general_param.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_general_param.h; sourceTree = "<group>"; };
+		BBFE2839268324D300BD44DB /* bef_framework_public_constant_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_framework_public_constant_define.h; sourceTree = "<group>"; };
+		BBFE283A268324D300BD44DB /* MessageDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDefine.h; sourceTree = "<group>"; };
+		BBFE283B268324D300BD44DB /* VEAudioPlayerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VEAudioPlayerFactory.h; sourceTree = "<group>"; };
+		BBFE283C268324D300BD44DB /* bef_effect_cloud_rendering_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bef_effect_cloud_rendering_define.h; sourceTree = "<group>"; };
+		BBFE283E268324D300BD44DB /* Avatar3D_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avatar3D_Model.h; sourceTree = "<group>"; };
+		BBFE283F268324D300BD44DB /* FaceGanSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceGanSDK_API.h; sourceTree = "<group>"; };
+		BBFE2840268324D300BD44DB /* ImageTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTransform.h; sourceTree = "<group>"; };
+		BBFE2841268324D300BD44DB /* Teeth_Model_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Teeth_Model_.h; sourceTree = "<group>"; };
+		BBFE2842268324D300BD44DB /* FaceNewLandmark_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceNewLandmark_Model.h; sourceTree = "<group>"; };
+		BBFE2843268324D300BD44DB /* PortraitMatting_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortraitMatting_Model.h; sourceTree = "<group>"; };
+		BBFE2844268324D300BD44DB /* Skeleton_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeleton_API.h; sourceTree = "<group>"; };
+		BBFE2845268324D300BD44DB /* MVRecommend_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVRecommend_Model.h; sourceTree = "<group>"; };
+		BBFE2846268324D300BD44DB /* CarDoor_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarDoor_Model.h; sourceTree = "<group>"; };
+		BBFE2847268324D300BD44DB /* Skeleton_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeleton_Model.h; sourceTree = "<group>"; };
+		BBFE2848268324D300BD44DB /* IndoorSeg_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndoorSeg_API.h; sourceTree = "<group>"; };
+		BBFE2849268324D300BD44DB /* ObjectDetection2_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectDetection2_API.h; sourceTree = "<group>"; };
+		BBFE284A268324D300BD44DB /* face_fitting_API2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = face_fitting_API2.h; sourceTree = "<group>"; };
+		BBFE284B268324D300BD44DB /* FaceFitting_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceFitting_Model.h; sourceTree = "<group>"; };
+		BBFE284C268324D300BD44DB /* PetMatting_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PetMatting_Model.h; sourceTree = "<group>"; };
+		BBFE284D268324D300BD44DB /* CarDoorSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarDoorSDK_API.h; sourceTree = "<group>"; };
+		BBFE284E268324D300BD44DB /* BigGan_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigGan_API.h; sourceTree = "<group>"; };
+		BBFE284F268324D300BD44DB /* GeneralObjectDetection_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralObjectDetection_API.h; sourceTree = "<group>"; };
+		BBFE2850268324D300BD44DB /* FaceLight_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceLight_Model.h; sourceTree = "<group>"; };
+		BBFE2851268324D300BD44DB /* AvatarDrive_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarDrive_API.h; sourceTree = "<group>"; };
+		BBFE2852268324D300BD44DB /* seg_geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seg_geometry.h; sourceTree = "<group>"; };
+		BBFE2853268324D300BD44DB /* smash_module_tpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smash_module_tpl.h; sourceTree = "<group>"; };
+		BBFE2854268324D300BD44DB /* Hand_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hand_Model.h; sourceTree = "<group>"; };
+		BBFE2855268324D300BD44DB /* Mug_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mug_Model.h; sourceTree = "<group>"; };
+		BBFE2856268324D300BD44DB /* VideoTempRec_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTempRec_Model.h; sourceTree = "<group>"; };
+		BBFE2857268324D300BD44DB /* ActionDetection_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionDetection_API.h; sourceTree = "<group>"; };
+		BBFE2858268324D300BD44DB /* CarLandmarks_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarLandmarks_API.h; sourceTree = "<group>"; };
+		BBFE2859268324D300BD44DB /* Bling_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bling_API.h; sourceTree = "<group>"; };
+		BBFE285A268324D300BD44DB /* Teeth_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Teeth_API.h; sourceTree = "<group>"; };
+		BBFE285B268324D300BD44DB /* C1_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C1_API.h; sourceTree = "<group>"; };
+		BBFE285C268324D300BD44DB /* ActionRecognition_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionRecognition_Model.h; sourceTree = "<group>"; };
+		BBFE285D268324D300BD44DB /* AttrSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttrSDK_API.h; sourceTree = "<group>"; };
+		BBFE285E268324D300BD44DB /* FaceClusting_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceClusting_Model.h; sourceTree = "<group>"; };
+		BBFE285F268324D300BD44DB /* AvgFilterTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvgFilterTracker.h; sourceTree = "<group>"; };
+		BBFE2860268324D300BD44DB /* Animoji_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animoji_Model.h; sourceTree = "<group>"; };
+		BBFE2861268324D300BD44DB /* smash_cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smash_cJSON.h; sourceTree = "<group>"; };
+		BBFE2862268324D300BD44DB /* FaceClusting_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceClusting_API.h; sourceTree = "<group>"; };
+		BBFE2863268324D300BD44DB /* SkySeg_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkySeg_API.h; sourceTree = "<group>"; };
+		BBFE2864268324D300BD44DB /* ssd_multi_scale_proposal_layer_pytorch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssd_multi_scale_proposal_layer_pytorch.h; sourceTree = "<group>"; };
+		BBFE2865268324D300BD44DB /* MemojiMatch_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemojiMatch_API.h; sourceTree = "<group>"; };
+		BBFE2866268324D300BD44DB /* face_fitting_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = face_fitting_API.h; sourceTree = "<group>"; };
+		BBFE2867268324D300BD44DB /* VideoTrans_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTrans_API.h; sourceTree = "<group>"; };
+		BBFE2868268324D300BD44DB /* gan_utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gan_utils.hpp; sourceTree = "<group>"; };
+		BBFE2869268324D300BD44DB /* jsonwrapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsonwrapper.hpp; sourceTree = "<group>"; };
+		BBFE286A268324D300BD44DB /* MattingContour_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MattingContour_API.h; sourceTree = "<group>"; };
+		BBFE286B268324D300BD44DB /* CarLandmarks_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarLandmarks_Model.h; sourceTree = "<group>"; };
+		BBFE286C268324D300BD44DB /* GenderGan_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenderGan_API.h; sourceTree = "<group>"; };
+		BBFE286D268324D300BD44DB /* SkinSeg_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinSeg_API.h; sourceTree = "<group>"; };
+		BBFE286E268324D300BD44DB /* PetFace_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PetFace_API.h; sourceTree = "<group>"; };
+		BBFE286F268324D300BD44DB /* mm_detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mm_detector.h; sourceTree = "<group>"; };
+		BBFE2870268324D300BD44DB /* FaceSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceSDK_API.h; sourceTree = "<group>"; };
+		BBFE2873268324D300BD44DB /* Enigma_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enigma_API.h; sourceTree = "<group>"; };
+		BBFE2874268324D300BD44DB /* BigGan_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigGan_Model.h; sourceTree = "<group>"; };
+		BBFE2875268324D400BD44DB /* FaceBeautifySDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceBeautifySDK_API.h; sourceTree = "<group>"; };
+		BBFE2876268324D400BD44DB /* ImageTransformNewAlign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTransformNewAlign.h; sourceTree = "<group>"; };
+		BBFE2879268324D400BD44DB /* tag_conf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tag_conf.h; sourceTree = "<group>"; };
+		BBFE287A268324D400BD44DB /* GroundSeg_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroundSeg_API.h; sourceTree = "<group>"; };
+		BBFE287B268324D400BD44DB /* clothes_seg_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clothes_seg_Model.h; sourceTree = "<group>"; };
+		BBFE287C268324D400BD44DB /* mean_face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mean_face.h; sourceTree = "<group>"; };
+		BBFE287D268324D400BD44DB /* Blob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blob.h; sourceTree = "<group>"; };
+		BBFE287E268324D400BD44DB /* OldGan_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OldGan_API.h; sourceTree = "<group>"; };
+		BBFE287F268324D400BD44DB /* MemojiMatchsafe_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemojiMatchsafe_Model.h; sourceTree = "<group>"; };
+		BBFE2880268324D400BD44DB /* GeneralObjectDetection_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralObjectDetection_Model.h; sourceTree = "<group>"; };
+		BBFE2881268324D400BD44DB /* MemojiMatchsafe_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemojiMatchsafe_API.h; sourceTree = "<group>"; };
+		BBFE2882268324D400BD44DB /* HandTV_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandTV_Model.h; sourceTree = "<group>"; };
+		BBFE2883268324D400BD44DB /* HdrnetSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HdrnetSDK_API.h; sourceTree = "<group>"; };
+		BBFE2884268324D400BD44DB /* AvatarUpperbody3D_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarUpperbody3D_API.h; sourceTree = "<group>"; };
+		BBFE2885268324D400BD44DB /* Avacap_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avacap_API.h; sourceTree = "<group>"; };
+		BBFE2886268324D400BD44DB /* Head3d_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Head3d_Model.h; sourceTree = "<group>"; };
+		BBFE2887268324D400BD44DB /* HairParser_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HairParser_Model.h; sourceTree = "<group>"; };
+		BBFE2888268324D400BD44DB /* common_typedefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common_typedefs.h; sourceTree = "<group>"; };
+		BBFE2889268324D400BD44DB /* mm_multi_scale_proposal_layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mm_multi_scale_proposal_layer.h; sourceTree = "<group>"; };
+		BBFE288A268324D400BD44DB /* DynamicGesture_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicGesture_Model.h; sourceTree = "<group>"; };
+		BBFE288B268324D400BD44DB /* net_decode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = net_decode.h; sourceTree = "<group>"; };
+		BBFE288C268324D400BD44DB /* C2_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C2_API.h; sourceTree = "<group>"; };
+		BBFE288D268324D400BD44DB /* GenericObjectSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericObjectSDK_API.h; sourceTree = "<group>"; };
+		BBFE288E268324D400BD44DB /* LaughGan_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaughGan_API.h; sourceTree = "<group>"; };
+		BBFE288F268324D400BD44DB /* LaughGan_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaughGan_Model.h; sourceTree = "<group>"; };
+		BBFE2890268324D400BD44DB /* InstrumentPlay_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstrumentPlay_API.h; sourceTree = "<group>"; };
+		BBFE2891268324D400BD44DB /* InteractiveMatting_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractiveMatting_API.h; sourceTree = "<group>"; };
+		BBFE2892268324D400BD44DB /* BeautyGan_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeautyGan_API.h; sourceTree = "<group>"; };
+		BBFE2893268324D400BD44DB /* Skel4ActionRec_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skel4ActionRec_API.h; sourceTree = "<group>"; };
+		BBFE2894268324D400BD44DB /* EarSeg_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarSeg_API.h; sourceTree = "<group>"; };
+		BBFE2895268324D400BD44DB /* GenderGan_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenderGan_Model.h; sourceTree = "<group>"; };
+		BBFE2896268324D400BD44DB /* Enigma_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enigma_API.h; sourceTree = "<group>"; };
+		BBFE2897268324D400BD44DB /* FaceVerify_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceVerify_Model.h; sourceTree = "<group>"; };
+		BBFE2898268324D400BD44DB /* HumanParsing_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumanParsing_API.h; sourceTree = "<group>"; };
+		BBFE2899268324D400BD44DB /* HairParser_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HairParser_API.h; sourceTree = "<group>"; };
+		BBFE289A268324D400BD44DB /* AfterEffect_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AfterEffect_Model.h; sourceTree = "<group>"; };
+		BBFE289B268324D400BD44DB /* animoji_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = animoji_API.h; sourceTree = "<group>"; };
+		BBFE289C268324D400BD44DB /* LipSegmentationSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LipSegmentationSDK_API.h; sourceTree = "<group>"; };
+		BBFE289D268324D400BD44DB /* MicrophoneAttention_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MicrophoneAttention_Model.h; sourceTree = "<group>"; };
+		BBFE289E268324D400BD44DB /* FaceNewLandmark_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceNewLandmark_API.h; sourceTree = "<group>"; };
+		BBFE289F268324D400BD44DB /* PortraitMatting_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortraitMatting_API.h; sourceTree = "<group>"; };
+		BBFE28A0268324D400BD44DB /* ObjectDetection2_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectDetection2_Model.h; sourceTree = "<group>"; };
+		BBFE28A1268324D400BD44DB /* C1_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C1_Model.h; sourceTree = "<group>"; };
+		BBFE28A2268324D400BD44DB /* ActionDetection_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionDetection_Model.h; sourceTree = "<group>"; };
+		BBFE28A3268324D400BD44DB /* BeautyGan_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeautyGan_Model.h; sourceTree = "<group>"; };
+		BBFE28A4268324D400BD44DB /* openssl_aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openssl_aes.h; sourceTree = "<group>"; };
+		BBFE28A5268324D400BD44DB /* CarSegmentation_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarSegmentation_Model.h; sourceTree = "<group>"; };
+		BBFE28A6268324D400BD44DB /* smash_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smash_base.h; sourceTree = "<group>"; };
+		BBFE28A7268324D400BD44DB /* DepthEstimation_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepthEstimation_API.h; sourceTree = "<group>"; };
+		BBFE28A8268324D400BD44DB /* AvatarDrive_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarDrive_Model.h; sourceTree = "<group>"; };
+		BBFE28A9268324D400BD44DB /* Blob.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Blob.hpp; sourceTree = "<group>"; };
+		BBFE28AA268324D400BD44DB /* CatFace_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatFace_API.h; sourceTree = "<group>"; };
+		BBFE28AB268324D400BD44DB /* PetMatting_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PetMatting_API.h; sourceTree = "<group>"; };
+		BBFE28AC268324D400BD44DB /* smash_runtime_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smash_runtime_info.h; sourceTree = "<group>"; };
+		BBFE28AD268324D400BD44DB /* C3Cls_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C3Cls_API.h; sourceTree = "<group>"; };
+		BBFE28AE268324D400BD44DB /* Nail_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nail_Model.h; sourceTree = "<group>"; };
+		BBFE28AF268324D400BD44DB /* ClothesSeg_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClothesSeg_API.h; sourceTree = "<group>"; };
+		BBFE28B0268324D400BD44DB /* SwapperMe_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwapperMe_API.h; sourceTree = "<group>"; };
+		BBFE28B1268324D400BD44DB /* SkinUnified_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinUnified_API.h; sourceTree = "<group>"; };
+		BBFE28B2268324D400BD44DB /* MemojiMatch_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemojiMatch_Model.h; sourceTree = "<group>"; };
+		BBFE28B3268324D400BD44DB /* ssd_detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssd_detector.h; sourceTree = "<group>"; };
+		BBFE28B4268324D400BD44DB /* AvatarUpperbody3D_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarUpperbody3D_Model.h; sourceTree = "<group>"; };
+		BBFE28B5268324D400BD44DB /* seg_expval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seg_expval.h; sourceTree = "<group>"; };
+		BBFE28B6268324D400BD44DB /* OldGan_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OldGan_Model.h; sourceTree = "<group>"; };
+		BBFE28B7268324D400BD44DB /* smash_moment_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smash_moment_base.h; sourceTree = "<group>"; };
+		BBFE28B8268324D400BD44DB /* IndoorSeg_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndoorSeg_Model.h; sourceTree = "<group>"; };
+		BBFE28B9268324D400BD44DB /* FaceBeautifySDK_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceBeautifySDK_Model.h; sourceTree = "<group>"; };
+		BBFE28BA268324D400BD44DB /* FaceGanSDK_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceGanSDK_Model.h; sourceTree = "<group>"; };
+		BBFE28BB268324D400BD44DB /* Avatar3D_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avatar3D_API.h; sourceTree = "<group>"; };
+		BBFE28BC268324D400BD44DB /* Similarity_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Similarity_Model.h; sourceTree = "<group>"; };
+		BBFE28BD268324D400BD44DB /* GazeEstimation_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GazeEstimation_Model.h; sourceTree = "<group>"; };
+		BBFE28BE268324D400BD44DB /* MicrophoneAttention_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MicrophoneAttention_API.h; sourceTree = "<group>"; };
+		BBFE28BF268324D400BD44DB /* Joints_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joints_Model.h; sourceTree = "<group>"; };
+		BBFE28C0268324D400BD44DB /* HeadSeg_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadSeg_API.h; sourceTree = "<group>"; };
+		BBFE28C1268324D400BD44DB /* DynamicGesture_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicGesture_API.h; sourceTree = "<group>"; };
+		BBFE28C2268324D400BD44DB /* tt_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tt_common.h; sourceTree = "<group>"; };
+		BBFE28C3268324D400BD44DB /* Face_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Face_Model.h; sourceTree = "<group>"; };
+		BBFE28C4268324D400BD44DB /* tt_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tt_utils.h; sourceTree = "<group>"; };
+		BBFE28C5268324D400BD44DB /* ssd_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssd_base.h; sourceTree = "<group>"; };
+		BBFE28C6268324D400BD44DB /* CarSegmentation_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarSegmentation_API.h; sourceTree = "<group>"; };
+		BBFE28C7268324D400BD44DB /* SkinUnified_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinUnified_Model.h; sourceTree = "<group>"; };
+		BBFE28C8268324D400BD44DB /* ssd_detector_pytorch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssd_detector_pytorch.h; sourceTree = "<group>"; };
+		BBFE28C9268324D400BD44DB /* ObjectDetection_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectDetection_Model.h; sourceTree = "<group>"; };
+		BBFE28CA268324D400BD44DB /* ARScan_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARScan_Model.h; sourceTree = "<group>"; };
+		BBFE28CB268324D400BD44DB /* MugDetect_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MugDetect_API.h; sourceTree = "<group>"; };
+		BBFE28CC268324D400BD44DB /* GazeEstimation_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GazeEstimation_API.h; sourceTree = "<group>"; };
+		BBFE28CD268324D400BD44DB /* AfterEffect_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AfterEffect_API.h; sourceTree = "<group>"; };
+		BBFE28CE268324D400BD44DB /* ResParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResParser.h; sourceTree = "<group>"; };
+		BBFE28CF268324D400BD44DB /* res_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = res_manager.h; sourceTree = "<group>"; };
+		BBFE28D0268324D400BD44DB /* HandTV_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandTV_API.h; sourceTree = "<group>"; };
+		BBFE28D1268324D400BD44DB /* VideoTrans_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTrans_Model.h; sourceTree = "<group>"; };
+		BBFE28D2268324D400BD44DB /* ActionRecognition_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionRecognition_API.h; sourceTree = "<group>"; };
+		BBFE28D3268324D400BD44DB /* image_processing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image_processing.h; sourceTree = "<group>"; };
+		BBFE28D4268324D400BD44DB /* SnapShot_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapShot_API.h; sourceTree = "<group>"; };
+		BBFE28D5268324D400BD44DB /* FaceMask_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceMask_API.h; sourceTree = "<group>"; };
+		BBFE28D6268324D400BD44DB /* Head3d_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Head3d_API.h; sourceTree = "<group>"; };
+		BBFE28D7268324D400BD44DB /* HandSDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandSDK_API.h; sourceTree = "<group>"; };
+		BBFE28D8268324D400BD44DB /* InputParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputParameter.h; sourceTree = "<group>"; };
+		BBFE28D9268324D400BD44DB /* Foot_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Foot_API.h; sourceTree = "<group>"; };
+		BBFE28DA268324D400BD44DB /* SkinSeg_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinSeg_Model.h; sourceTree = "<group>"; };
+		BBFE28DB268324D400BD44DB /* Foot_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Foot_Model.h; sourceTree = "<group>"; };
+		BBFE28DC268324D400BD44DB /* MVRecommend_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVRecommend_API.h; sourceTree = "<group>"; };
+		BBFE28DD268324D400BD44DB /* predictor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = predictor.h; sourceTree = "<group>"; };
+		BBFE28DE268324D400BD44DB /* autovector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autovector.h; sourceTree = "<group>"; };
+		BBFE28DF268324D400BD44DB /* FacePartBeautySDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacePartBeautySDK_API.h; sourceTree = "<group>"; };
+		BBFE28E0268324D400BD44DB /* CatFace_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatFace_Model.h; sourceTree = "<group>"; };
+		BBFE28E1268324D400BD44DB /* PetFace_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PetFace_Model.h; sourceTree = "<group>"; };
+		BBFE28E2268324D400BD44DB /* tt_model_package.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tt_model_package.h; sourceTree = "<group>"; };
+		BBFE28E3268324D400BD44DB /* PornClassifier_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PornClassifier_Model.h; sourceTree = "<group>"; };
+		BBFE28E4268324D400BD44DB /* BeautySDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeautySDK_API.h; sourceTree = "<group>"; };
+		BBFE28E5268324D400BD44DB /* VideoCls_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCls_API.h; sourceTree = "<group>"; };
+		BBFE28E6268324D400BD44DB /* RfcnDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RfcnDetector.h; sourceTree = "<group>"; };
+		BBFE28E7268324D400BD44DB /* C2_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C2_Model.h; sourceTree = "<group>"; };
+		BBFE28E8268324D400BD44DB /* FaceMask_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceMask_Model.h; sourceTree = "<group>"; };
+		BBFE28E9268324D400BD44DB /* FaceLight_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceLight_API.h; sourceTree = "<group>"; };
+		BBFE28EA268324D400BD44DB /* PornClassifier_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PornClassifier_API.h; sourceTree = "<group>"; };
+		BBFE28EB268324D400BD44DB /* ARScan_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARScan_API.h; sourceTree = "<group>"; };
+		BBFE28EC268324D400BD44DB /* AIMoment_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIMoment_Model.h; sourceTree = "<group>"; };
+		BBFE28ED268324D400BD44DB /* idream_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idream_API.h; sourceTree = "<group>"; };
+		BBFE28EE268324D400BD44DB /* HeadSeg_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadSeg_Model.h; sourceTree = "<group>"; };
+		BBFE28EF268324D400BD44DB /* ssd_multi_scale_proposal_layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssd_multi_scale_proposal_layer.h; sourceTree = "<group>"; };
+		BBFE28F0268324D400BD44DB /* SkySeg_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkySeg_Model.h; sourceTree = "<group>"; };
+		BBFE28F1268324D400BD44DB /* VideoTempRec_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTempRec_API.h; sourceTree = "<group>"; };
+		BBFE28F2268324D400BD44DB /* EarSeg_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarSeg_Model.h; sourceTree = "<group>"; };
+		BBFE28F3268324D400BD44DB /* predictor_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = predictor_base.h; sourceTree = "<group>"; };
+		BBFE28F4268324D400BD44DB /* SceneLight_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneLight_API.h; sourceTree = "<group>"; };
+		BBFE28F5268324D400BD44DB /* FaceClusting_API2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceClusting_API2.h; sourceTree = "<group>"; };
+		BBFE28F6268324D400BD44DB /* FaceVerifySDK_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceVerifySDK_API.h; sourceTree = "<group>"; };
+		BBFE28F7268324D400BD44DB /* HdrnetSDK_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HdrnetSDK_Model.h; sourceTree = "<group>"; };
+		BBFE28F8268324D400BD44DB /* FacePartBeautySDK_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacePartBeautySDK_Model.h; sourceTree = "<group>"; };
+		BBFE28F9268324D400BD44DB /* AIMoment_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIMoment_API.h; sourceTree = "<group>"; };
+		BBFE28FA268324D400BD44DB /* SceneLight_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneLight_Model.h; sourceTree = "<group>"; };
+		BBFE28FB268324D400BD44DB /* TTJointsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTJointsAPI.h; sourceTree = "<group>"; };
+		BBFE28FC268324D400BD44DB /* FaceAttr_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceAttr_Model.h; sourceTree = "<group>"; };
+		BBFE28FD268324D400BD44DB /* idream_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idream_Model.h; sourceTree = "<group>"; };
+		BBFE28FE268324D400BD44DB /* groundSeg_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = groundSeg_Model.h; sourceTree = "<group>"; };
+		BBFE28FF268324D400BD44DB /* internal_smash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = internal_smash.h; sourceTree = "<group>"; };
+		BBFE2900268324D400BD44DB /* FaceClusting_Define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceClusting_Define.h; sourceTree = "<group>"; };
+		BBFE2901268324D400BD44DB /* tt_bench.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tt_bench.h; sourceTree = "<group>"; };
+		BBFE2902268324D400BD44DB /* Avacap_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avacap_Model.h; sourceTree = "<group>"; };
+		BBFE2903268324D400BD44DB /* HumanParsing_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumanParsing_Model.h; sourceTree = "<group>"; };
+		BBFE2904268324D400BD44DB /* DepthEstimation_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepthEstimation_Model.h; sourceTree = "<group>"; };
+		BBFE2905268324D400BD44DB /* Similarity_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Similarity_API.h; sourceTree = "<group>"; };
+		BBFE2906268324D400BD44DB /* ClothMesh_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClothMesh_Model.h; sourceTree = "<group>"; };
+		BBFE2907268324D400BD44DB /* ClothMesh_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClothMesh_API.h; sourceTree = "<group>"; };
+		BBFE2908268324D400BD44DB /* tt_log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tt_log.h; sourceTree = "<group>"; };
+		BBFE2909268324D400BD44DB /* Nail_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nail_API.h; sourceTree = "<group>"; };
+		BBFE290A268324D400BD44DB /* VideoCls_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCls_Model.h; sourceTree = "<group>"; };
+		BBFE290B268324D400BD44DB /* C3Cls_Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C3Cls_Model.h; sourceTree = "<group>"; };
+		BBFE290D268324D400BD44DB /* libbytenn.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libbytenn.dylib; sourceTree = "<group>"; };
+		BBFE290E268324D400BD44DB /* libbach_naviavatardrive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbach_naviavatardrive.a; sourceTree = "<group>"; };
+		BBFE290F268324D400BD44DB /* libbach_audioavatar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbach_audioavatar.a; sourceTree = "<group>"; };
+		BBFE2910268324D400BD44DB /* libbach_audioproducer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbach_audioproducer.a; sourceTree = "<group>"; };
+		BBFE2911268324D400BD44DB /* libbach_carseries.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbach_carseries.a; sourceTree = "<group>"; };
+		BBFE2912268324D400BD44DB /* libeffect.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libeffect.dylib; sourceTree = "<group>"; };
+		BBFE2913268324D400BD44DB /* libkn_effectmanager.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libkn_effectmanager.dylib; sourceTree = "<group>"; };
+		BBFE2914268324D400BD44DB /* libglfw.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libglfw.3.dylib; sourceTree = "<group>"; };
+		BBFE2915268324D400BD44DB /* libportaudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libportaudio.dylib; sourceTree = "<group>"; };
+		BBFE2916268324D400BD44DB /* libbach_nh.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbach_nh.a; sourceTree = "<group>"; };
+		BBFE2917268324D400BD44DB /* libbach_deepinpaint.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbach_deepinpaint.a; sourceTree = "<group>"; };
+		BBFE2A9E2683278C00BD44DB /* EffectGPUImageFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EffectGPUImageFilter.h; sourceTree = "<group>"; };
+		BBFE2A9F2683278C00BD44DB /* EffectGPUImageFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EffectGPUImageFilter.mm; sourceTree = "<group>"; };
+		BBFE2AA426832B9000BD44DB /* EffectResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = EffectResources.bundle; sourceTree = "<group>"; };
 		BCF8E9DD1A75DE3F005AE243 /* GPUImageMac.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImageMac.xcodeproj; path = ../../../../framework/GPUImageMac.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +432,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBFE2A04268324D400BD44DB /* libbach_audioproducer.a in Frameworks */,
+				BBFE2A08268324D400BD44DB /* libglfw.3.dylib in Frameworks */,
+				BBFE2A05268324D400BD44DB /* libbach_carseries.a in Frameworks */,
+				BBFE2A09268324D400BD44DB /* libportaudio.dylib in Frameworks */,
+				BBFE2A0B268324D400BD44DB /* libbach_deepinpaint.a in Frameworks */,
+				BBFE2A01268324D400BD44DB /* libbytenn.dylib in Frameworks */,
+				BBFE2A0A268324D400BD44DB /* libbach_nh.a in Frameworks */,
+				BBFE2A02268324D400BD44DB /* libbach_naviavatardrive.a in Frameworks */,
+				BBFE2A03268324D400BD44DB /* libbach_audioavatar.a in Frameworks */,
+				BBFE2A07268324D400BD44DB /* libkn_effectmanager.dylib in Frameworks */,
+				BBFE2A06268324D400BD44DB /* libeffect.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +459,7 @@
 		79E8A5EB1A5ED6A700E6A226 = {
 			isa = PBXGroup;
 			children = (
+				BBFE2AA326832AC200BD44DB /* Resources */,
 				79E8A5F61A5ED6A700E6A226 /* SimpleVideoFileFilter */,
 				79E8A61D1A5ED97400E6A226 /* Frameworks */,
 				79E8A60A1A5ED6A700E6A226 /* SimpleVideoFilterTests */,
@@ -121,6 +487,8 @@
 				79E8A5FE1A5ED6A700E6A226 /* Images.xcassets */,
 				79E8A6001A5ED6A700E6A226 /* MainMenu.xib */,
 				79E8A5F71A5ED6A700E6A226 /* Supporting Files */,
+				BBFE2A9E2683278C00BD44DB /* EffectGPUImageFilter.h */,
+				BBFE2A9F2683278C00BD44DB /* EffectGPUImageFilter.mm */,
 			);
 			name = SimpleVideoFileFilter;
 			path = SimpleVideoFilter;
@@ -129,6 +497,7 @@
 		79E8A5F71A5ED6A700E6A226 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BBFE27C22683231200BD44DB /* cats.MP4 */,
 				575AD8C81BEA6FC60088E866 /* sample_iPod.m4v */,
 				79E8A5F81A5ED6A700E6A226 /* Info.plist */,
 				79E8A5FC1A5ED6A700E6A226 /* main.m */,
@@ -156,10 +525,449 @@
 		79E8A61D1A5ED97400E6A226 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BBFE27C5268324D300BD44DB /* effect */,
 				BCF8E9DD1A75DE3F005AE243 /* GPUImageMac.xcodeproj */,
 			);
 			name = Frameworks;
 			path = SimpleVideoFilterTests;
+			sourceTree = "<group>";
+		};
+		BBFE27C5268324D300BD44DB /* effect */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE27C6268324D300BD44DB /* inc */,
+				BBFE283D268324D300BD44DB /* smashHeaders */,
+				BBFE290C268324D400BD44DB /* libs */,
+			);
+			name = effect;
+			path = SimpleVideoFilter/effect;
+			sourceTree = SOURCE_ROOT;
+		};
+		BBFE27C6268324D300BD44DB /* inc */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE27C7268324D300BD44DB /* bef_framework_public_base_define.h */,
+				BBFE27C8268324D300BD44DB /* bef_effect_touch_api.h */,
+				BBFE27C9268324D300BD44DB /* bef_effect_api.h */,
+				BBFE27CA268324D300BD44DB /* bef_framework_public_algorithm_define.h */,
+				BBFE27CB268324D300BD44DB /* bef_effect_build_macro.h */,
+				BBFE27CC268324D300BD44DB /* bef_effect_global_filter.h */,
+				BBFE27CD268324D300BD44DB /* bef_moment_define.h */,
+				BBFE27CE268324D300BD44DB /* AudioPlayerInterface.h */,
+				BBFE27CF268324D300BD44DB /* bef_benchmark_api.h */,
+				BBFE27D0268324D300BD44DB /* bef_ae_video_canvas_api.h */,
+				BBFE27D1268324D300BD44DB /* bef_moment_algorithm_define.h */,
+				BBFE27D2268324D300BD44DB /* bef_moment_api.h */,
+				BBFE27D3268324D300BD44DB /* bef_effect_aerender_api.h */,
+				BBFE27D4268324D300BD44DB /* bef_effect_algorithm_rect_doc_det_api.h */,
+				BBFE27D5268324D300BD44DB /* bef_framework_public_enum_define.h */,
+				BBFE27D6268324D300BD44DB /* bef_effect_algorithm_face.h */,
+				BBFE27D7268324D300BD44DB /* bef_effect_gpu_detect.h */,
+				BBFE27D8268324D300BD44DB /* bef_effect_algorithm_audio_onset_api.h */,
+				BBFE27D9268324D300BD44DB /* bef_effect_public_business_define.h */,
+				BBFE27DA268324D300BD44DB /* bef_effect_algorithm_after_effect.h */,
+				BBFE27DB268324D300BD44DB /* bef_framework_public_geometry_define.h */,
+				BBFE27DC268324D300BD44DB /* bef_effect_public_skeleton_define.h */,
+				BBFE27DD268324D300BD44DB /* bef_effect_ar_core_api.h */,
+				BBFE27DE268324D300BD44DB /* bef_effect_algorithm_face_clusting.h */,
+				BBFE27DF268324D300BD44DB /* bef_effect_hand_detect.h */,
+				BBFE27E0268324D300BD44DB /* bef_effect_auto.h */,
+				BBFE27E1268324D300BD44DB /* bef_msg_delegate_manager.h */,
+				BBFE27E2268324D300BD44DB /* bef_effect_lua_base_object.h */,
+				BBFE27E3268324D300BD44DB /* bef_info_sticker_api.h */,
+				BBFE27E4268324D300BD44DB /* bef_effect_3d_object_manipulate_api.h */,
+				BBFE27E5268324D300BD44DB /* bef_effect_algorithm_similarity.h */,
+				BBFE27E6268324D300BD44DB /* bef_effect_algorithm_portrait_matting_api.h */,
+				BBFE27E7268324D300BD44DB /* interactive_framework */,
+				BBFE2814268324D300BD44DB /* bef_ae_video_feature_api.h */,
+				BBFE2815268324D300BD44DB /* LiveAudioPlayer.h */,
+				BBFE2816268324D300BD44DB /* bef_slam_camera_api.h */,
+				BBFE2817268324D300BD44DB /* bef_effect_algorithm_api.h */,
+				BBFE2818268324D300BD44DB /* bef_effect_javascript_binding.h */,
+				BBFE2819268324D300BD44DB /* bef_effect_common.h */,
+				BBFE281A268324D300BD44DB /* bef_slam_api.h */,
+				BBFE281B268324D300BD44DB /* RequirementDefine.h */,
+				BBFE281C268324D300BD44DB /* bef_effect_public_hand_define.h */,
+				BBFE281D268324D300BD44DB /* bef_effect_body_distortion.h */,
+				BBFE281E268324D300BD44DB /* bef_effect_public_define.h */,
+				BBFE281F268324D300BD44DB /* bef_effect_transition_api.h */,
+				BBFE2820268324D300BD44DB /* bef_effect_public_face_define.h */,
+				BBFE2821268324D300BD44DB /* bef_effect_public_avatar_drive_define.h */,
+				BBFE2822268324D300BD44DB /* bef_effect_algorithm_c1.h */,
+				BBFE2823268324D300BD44DB /* bef_effect_mv_api.h */,
+				BBFE2824268324D300BD44DB /* bef_effect_sticker.h */,
+				BBFE2825268324D300BD44DB /* bef_info_sticker_public_define.h */,
+				BBFE2826268324D300BD44DB /* bef_effect_ar_core_define.h */,
+				BBFE2827268324D300BD44DB /* bef_effect_face_distortionV2.h */,
+				BBFE2828268324D300BD44DB /* bef_effect_brush2d_define.h */,
+				BBFE2829268324D300BD44DB /* bef_effect_xt.h */,
+				BBFE282A268324D300BD44DB /* bef_effect_composer.h */,
+				BBFE282B268324D300BD44DB /* bef_effect_audio_effect.h */,
+				BBFE282C268324D300BD44DB /* bef_effect_face_detect.h */,
+				BBFE282D268324D300BD44DB /* bef_effect_algorithm_face_verify.h */,
+				BBFE282E268324D300BD44DB /* bef_ae_style_api.h */,
+				BBFE282F268324D300BD44DB /* bef_effect_video_after_effect.h */,
+				BBFE2830268324D300BD44DB /* bef_effect_imgproc.h */,
+				BBFE2831268324D300BD44DB /* bef_effect_public_business_mv_define.h */,
+				BBFE2832268324D300BD44DB /* bef_ae_brick_api.h */,
+				BBFE2833268324D300BD44DB /* bef_effect_dynamic_load_library.h */,
+				BBFE2834268324D300BD44DB /* bef_effect_algorithm_general_obj_detect_api.h */,
+				BBFE2835268324D300BD44DB /* bef_app_manager_api.h */,
+				BBFE2836268324D300BD44DB /* bef_effect_photo_face_detect.h */,
+				BBFE2837268324D300BD44DB /* bef_effect_for_faceReshapeTool.h */,
+				BBFE2838268324D300BD44DB /* bef_effect_general_param.h */,
+				BBFE2839268324D300BD44DB /* bef_framework_public_constant_define.h */,
+				BBFE283A268324D300BD44DB /* MessageDefine.h */,
+				BBFE283B268324D300BD44DB /* VEAudioPlayerFactory.h */,
+				BBFE283C268324D300BD44DB /* bef_effect_cloud_rendering_define.h */,
+			);
+			path = inc;
+			sourceTree = "<group>";
+		};
+		BBFE27E7268324D300BD44DB /* interactive_framework */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE27E8268324D300BD44DB /* UI */,
+				BBFE27F1268324D300BD44DB /* 2DV4 */,
+				BBFE2802268324D300BD44DB /* base */,
+			);
+			path = interactive_framework;
+			sourceTree = "<group>";
+		};
+		BBFE27E8268324D300BD44DB /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE27E9268324D300BD44DB /* IFUIButton.h */,
+				BBFE27EA268324D300BD44DB /* IFResponder.h */,
+				BBFE27EB268324D300BD44DB /* IFUIScrollView.hpp */,
+				BBFE27EC268324D300BD44DB /* IFUITab.h */,
+				BBFE27ED268324D300BD44DB /* IFUIScrollBar.hpp */,
+				BBFE27EE268324D300BD44DB /* IFUIControl.h */,
+				BBFE27EF268324D300BD44DB /* IFUISliderThumb.hpp */,
+				BBFE27F0268324D300BD44DB /* IFUISlider.hpp */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		BBFE27F1268324D300BD44DB /* 2DV4 */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE27F2268324D300BD44DB /* IFAnchorAlignmentDefine.h */,
+				BBFE27F3268324D300BD44DB /* IFAnchorAlignment.h */,
+				BBFE27F4268324D300BD44DB /* AnchorAlginmentComponent */,
+				BBFE2800268324D300BD44DB /* IFAnchorAlignmentSystem.h */,
+				BBFE2801268324D300BD44DB /* IFAnchorAlignmentCalibrate.h */,
+			);
+			path = 2DV4;
+			sourceTree = "<group>";
+		};
+		BBFE27F4268324D300BD44DB /* AnchorAlginmentComponent */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE27F5268324D300BD44DB /* IFSkeletonAnchorAlignment.h */,
+				BBFE27F6268324D300BD44DB /* IFHandAnchorAlignment.h */,
+				BBFE27F7268324D300BD44DB /* IFLicensePlateAnchorAlignment.h */,
+				BBFE27F8268324D300BD44DB /* IFJointAnchorAlignment.h */,
+				BBFE27F9268324D300BD44DB /* IFFaceAnchorAlignment.h */,
+				BBFE27FA268324D300BD44DB /* IFTeethAnchorAlignment.h */,
+				BBFE27FB268324D300BD44DB /* IFMugAnchorAlignment.h */,
+				BBFE27FC268324D300BD44DB /* IFARScanAnchorAlignment.h */,
+				BBFE27FD268324D300BD44DB /* IFForegroundAnchorAlignment.h */,
+				BBFE27FE268324D300BD44DB /* IFObjectAnchorAlignment.h */,
+				BBFE27FF268324D300BD44DB /* IFNailAnchorAlignment.h */,
+			);
+			path = AnchorAlginmentComponent;
+			sourceTree = "<group>";
+		};
+		BBFE2802268324D300BD44DB /* base */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE2803268324D300BD44DB /* IFSprite2d.hpp */,
+				BBFE2804268324D300BD44DB /* IFUIAnchor.hpp */,
+				BBFE2805268324D300BD44DB /* IFOBB.h */,
+				BBFE2806268324D300BD44DB /* IFWidget.hpp */,
+				BBFE2807268324D300BD44DB /* IFEventDistributor.hpp */,
+				BBFE2808268324D300BD44DB /* IFUILabel.hpp */,
+				BBFE2809268324D300BD44DB /* IFTransform2d.hpp */,
+				BBFE280A268324D300BD44DB /* IFTween.hpp */,
+				BBFE280B268324D300BD44DB /* IFHelper.h */,
+				BBFE280C268324D300BD44DB /* IFScriptComponent.h */,
+				BBFE280D268324D300BD44DB /* IFBoxCollider.hpp */,
+				BBFE280E268324D300BD44DB /* IFAnimSpriteSystem.hpp */,
+				BBFE280F268324D300BD44DB /* IFLayer2dSystem.hpp */,
+				BBFE2810268324D300BD44DB /* IFCanvas2d.hpp */,
+				BBFE2811268324D300BD44DB /* IFTweenPosition.hpp */,
+				BBFE2812268324D300BD44DB /* IFCollider.hpp */,
+				BBFE2813268324D300BD44DB /* IFLayer2d.hpp */,
+			);
+			path = base;
+			sourceTree = "<group>";
+		};
+		BBFE283D268324D300BD44DB /* smashHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE283E268324D300BD44DB /* Avatar3D_Model.h */,
+				BBFE283F268324D300BD44DB /* FaceGanSDK_API.h */,
+				BBFE2840268324D300BD44DB /* ImageTransform.h */,
+				BBFE2841268324D300BD44DB /* Teeth_Model_.h */,
+				BBFE2842268324D300BD44DB /* FaceNewLandmark_Model.h */,
+				BBFE2843268324D300BD44DB /* PortraitMatting_Model.h */,
+				BBFE2844268324D300BD44DB /* Skeleton_API.h */,
+				BBFE2845268324D300BD44DB /* MVRecommend_Model.h */,
+				BBFE2846268324D300BD44DB /* CarDoor_Model.h */,
+				BBFE2847268324D300BD44DB /* Skeleton_Model.h */,
+				BBFE2848268324D300BD44DB /* IndoorSeg_API.h */,
+				BBFE2849268324D300BD44DB /* ObjectDetection2_API.h */,
+				BBFE284A268324D300BD44DB /* face_fitting_API2.h */,
+				BBFE284B268324D300BD44DB /* FaceFitting_Model.h */,
+				BBFE284C268324D300BD44DB /* PetMatting_Model.h */,
+				BBFE284D268324D300BD44DB /* CarDoorSDK_API.h */,
+				BBFE284E268324D300BD44DB /* BigGan_API.h */,
+				BBFE284F268324D300BD44DB /* GeneralObjectDetection_API.h */,
+				BBFE2850268324D300BD44DB /* FaceLight_Model.h */,
+				BBFE2851268324D300BD44DB /* AvatarDrive_API.h */,
+				BBFE2852268324D300BD44DB /* seg_geometry.h */,
+				BBFE2853268324D300BD44DB /* smash_module_tpl.h */,
+				BBFE2854268324D300BD44DB /* Hand_Model.h */,
+				BBFE2855268324D300BD44DB /* Mug_Model.h */,
+				BBFE2856268324D300BD44DB /* VideoTempRec_Model.h */,
+				BBFE2857268324D300BD44DB /* ActionDetection_API.h */,
+				BBFE2858268324D300BD44DB /* CarLandmarks_API.h */,
+				BBFE2859268324D300BD44DB /* Bling_API.h */,
+				BBFE285A268324D300BD44DB /* Teeth_API.h */,
+				BBFE285B268324D300BD44DB /* C1_API.h */,
+				BBFE285C268324D300BD44DB /* ActionRecognition_Model.h */,
+				BBFE285D268324D300BD44DB /* AttrSDK_API.h */,
+				BBFE285E268324D300BD44DB /* FaceClusting_Model.h */,
+				BBFE285F268324D300BD44DB /* AvgFilterTracker.h */,
+				BBFE2860268324D300BD44DB /* Animoji_Model.h */,
+				BBFE2861268324D300BD44DB /* smash_cJSON.h */,
+				BBFE2862268324D300BD44DB /* FaceClusting_API.h */,
+				BBFE2863268324D300BD44DB /* SkySeg_API.h */,
+				BBFE2864268324D300BD44DB /* ssd_multi_scale_proposal_layer_pytorch.h */,
+				BBFE2865268324D300BD44DB /* MemojiMatch_API.h */,
+				BBFE2866268324D300BD44DB /* face_fitting_API.h */,
+				BBFE2867268324D300BD44DB /* VideoTrans_API.h */,
+				BBFE2868268324D300BD44DB /* gan_utils.hpp */,
+				BBFE2869268324D300BD44DB /* jsonwrapper.hpp */,
+				BBFE286A268324D300BD44DB /* MattingContour_API.h */,
+				BBFE286B268324D300BD44DB /* CarLandmarks_Model.h */,
+				BBFE286C268324D300BD44DB /* GenderGan_API.h */,
+				BBFE286D268324D300BD44DB /* SkinSeg_API.h */,
+				BBFE286E268324D300BD44DB /* PetFace_API.h */,
+				BBFE286F268324D300BD44DB /* mm_detector.h */,
+				BBFE2870268324D300BD44DB /* FaceSDK_API.h */,
+				BBFE2871268324D300BD44DB /* enigma */,
+				BBFE2874268324D300BD44DB /* BigGan_Model.h */,
+				BBFE2875268324D400BD44DB /* FaceBeautifySDK_API.h */,
+				BBFE2876268324D400BD44DB /* ImageTransformNewAlign.h */,
+				BBFE2877268324D400BD44DB /* tag_hub */,
+				BBFE287A268324D400BD44DB /* GroundSeg_API.h */,
+				BBFE287B268324D400BD44DB /* clothes_seg_Model.h */,
+				BBFE287C268324D400BD44DB /* mean_face.h */,
+				BBFE287D268324D400BD44DB /* Blob.h */,
+				BBFE287E268324D400BD44DB /* OldGan_API.h */,
+				BBFE287F268324D400BD44DB /* MemojiMatchsafe_Model.h */,
+				BBFE2880268324D400BD44DB /* GeneralObjectDetection_Model.h */,
+				BBFE2881268324D400BD44DB /* MemojiMatchsafe_API.h */,
+				BBFE2882268324D400BD44DB /* HandTV_Model.h */,
+				BBFE2883268324D400BD44DB /* HdrnetSDK_API.h */,
+				BBFE2884268324D400BD44DB /* AvatarUpperbody3D_API.h */,
+				BBFE2885268324D400BD44DB /* Avacap_API.h */,
+				BBFE2886268324D400BD44DB /* Head3d_Model.h */,
+				BBFE2887268324D400BD44DB /* HairParser_Model.h */,
+				BBFE2888268324D400BD44DB /* common_typedefs.h */,
+				BBFE2889268324D400BD44DB /* mm_multi_scale_proposal_layer.h */,
+				BBFE288A268324D400BD44DB /* DynamicGesture_Model.h */,
+				BBFE288B268324D400BD44DB /* net_decode.h */,
+				BBFE288C268324D400BD44DB /* C2_API.h */,
+				BBFE288D268324D400BD44DB /* GenericObjectSDK_API.h */,
+				BBFE288E268324D400BD44DB /* LaughGan_API.h */,
+				BBFE288F268324D400BD44DB /* LaughGan_Model.h */,
+				BBFE2890268324D400BD44DB /* InstrumentPlay_API.h */,
+				BBFE2891268324D400BD44DB /* InteractiveMatting_API.h */,
+				BBFE2892268324D400BD44DB /* BeautyGan_API.h */,
+				BBFE2893268324D400BD44DB /* Skel4ActionRec_API.h */,
+				BBFE2894268324D400BD44DB /* EarSeg_API.h */,
+				BBFE2895268324D400BD44DB /* GenderGan_Model.h */,
+				BBFE2896268324D400BD44DB /* Enigma_API.h */,
+				BBFE2897268324D400BD44DB /* FaceVerify_Model.h */,
+				BBFE2898268324D400BD44DB /* HumanParsing_API.h */,
+				BBFE2899268324D400BD44DB /* HairParser_API.h */,
+				BBFE289A268324D400BD44DB /* AfterEffect_Model.h */,
+				BBFE289B268324D400BD44DB /* animoji_API.h */,
+				BBFE289C268324D400BD44DB /* LipSegmentationSDK_API.h */,
+				BBFE289D268324D400BD44DB /* MicrophoneAttention_Model.h */,
+				BBFE289E268324D400BD44DB /* FaceNewLandmark_API.h */,
+				BBFE289F268324D400BD44DB /* PortraitMatting_API.h */,
+				BBFE28A0268324D400BD44DB /* ObjectDetection2_Model.h */,
+				BBFE28A1268324D400BD44DB /* C1_Model.h */,
+				BBFE28A2268324D400BD44DB /* ActionDetection_Model.h */,
+				BBFE28A3268324D400BD44DB /* BeautyGan_Model.h */,
+				BBFE28A4268324D400BD44DB /* openssl_aes.h */,
+				BBFE28A5268324D400BD44DB /* CarSegmentation_Model.h */,
+				BBFE28A6268324D400BD44DB /* smash_base.h */,
+				BBFE28A7268324D400BD44DB /* DepthEstimation_API.h */,
+				BBFE28A8268324D400BD44DB /* AvatarDrive_Model.h */,
+				BBFE28A9268324D400BD44DB /* Blob.hpp */,
+				BBFE28AA268324D400BD44DB /* CatFace_API.h */,
+				BBFE28AB268324D400BD44DB /* PetMatting_API.h */,
+				BBFE28AC268324D400BD44DB /* smash_runtime_info.h */,
+				BBFE28AD268324D400BD44DB /* C3Cls_API.h */,
+				BBFE28AE268324D400BD44DB /* Nail_Model.h */,
+				BBFE28AF268324D400BD44DB /* ClothesSeg_API.h */,
+				BBFE28B0268324D400BD44DB /* SwapperMe_API.h */,
+				BBFE28B1268324D400BD44DB /* SkinUnified_API.h */,
+				BBFE28B2268324D400BD44DB /* MemojiMatch_Model.h */,
+				BBFE28B3268324D400BD44DB /* ssd_detector.h */,
+				BBFE28B4268324D400BD44DB /* AvatarUpperbody3D_Model.h */,
+				BBFE28B5268324D400BD44DB /* seg_expval.h */,
+				BBFE28B6268324D400BD44DB /* OldGan_Model.h */,
+				BBFE28B7268324D400BD44DB /* smash_moment_base.h */,
+				BBFE28B8268324D400BD44DB /* IndoorSeg_Model.h */,
+				BBFE28B9268324D400BD44DB /* FaceBeautifySDK_Model.h */,
+				BBFE28BA268324D400BD44DB /* FaceGanSDK_Model.h */,
+				BBFE28BB268324D400BD44DB /* Avatar3D_API.h */,
+				BBFE28BC268324D400BD44DB /* Similarity_Model.h */,
+				BBFE28BD268324D400BD44DB /* GazeEstimation_Model.h */,
+				BBFE28BE268324D400BD44DB /* MicrophoneAttention_API.h */,
+				BBFE28BF268324D400BD44DB /* Joints_Model.h */,
+				BBFE28C0268324D400BD44DB /* HeadSeg_API.h */,
+				BBFE28C1268324D400BD44DB /* DynamicGesture_API.h */,
+				BBFE28C2268324D400BD44DB /* tt_common.h */,
+				BBFE28C3268324D400BD44DB /* Face_Model.h */,
+				BBFE28C4268324D400BD44DB /* tt_utils.h */,
+				BBFE28C5268324D400BD44DB /* ssd_base.h */,
+				BBFE28C6268324D400BD44DB /* CarSegmentation_API.h */,
+				BBFE28C7268324D400BD44DB /* SkinUnified_Model.h */,
+				BBFE28C8268324D400BD44DB /* ssd_detector_pytorch.h */,
+				BBFE28C9268324D400BD44DB /* ObjectDetection_Model.h */,
+				BBFE28CA268324D400BD44DB /* ARScan_Model.h */,
+				BBFE28CB268324D400BD44DB /* MugDetect_API.h */,
+				BBFE28CC268324D400BD44DB /* GazeEstimation_API.h */,
+				BBFE28CD268324D400BD44DB /* AfterEffect_API.h */,
+				BBFE28CE268324D400BD44DB /* ResParser.h */,
+				BBFE28CF268324D400BD44DB /* res_manager.h */,
+				BBFE28D0268324D400BD44DB /* HandTV_API.h */,
+				BBFE28D1268324D400BD44DB /* VideoTrans_Model.h */,
+				BBFE28D2268324D400BD44DB /* ActionRecognition_API.h */,
+				BBFE28D3268324D400BD44DB /* image_processing.h */,
+				BBFE28D4268324D400BD44DB /* SnapShot_API.h */,
+				BBFE28D5268324D400BD44DB /* FaceMask_API.h */,
+				BBFE28D6268324D400BD44DB /* Head3d_API.h */,
+				BBFE28D7268324D400BD44DB /* HandSDK_API.h */,
+				BBFE28D8268324D400BD44DB /* InputParameter.h */,
+				BBFE28D9268324D400BD44DB /* Foot_API.h */,
+				BBFE28DA268324D400BD44DB /* SkinSeg_Model.h */,
+				BBFE28DB268324D400BD44DB /* Foot_Model.h */,
+				BBFE28DC268324D400BD44DB /* MVRecommend_API.h */,
+				BBFE28DD268324D400BD44DB /* predictor.h */,
+				BBFE28DE268324D400BD44DB /* autovector.h */,
+				BBFE28DF268324D400BD44DB /* FacePartBeautySDK_API.h */,
+				BBFE28E0268324D400BD44DB /* CatFace_Model.h */,
+				BBFE28E1268324D400BD44DB /* PetFace_Model.h */,
+				BBFE28E2268324D400BD44DB /* tt_model_package.h */,
+				BBFE28E3268324D400BD44DB /* PornClassifier_Model.h */,
+				BBFE28E4268324D400BD44DB /* BeautySDK_API.h */,
+				BBFE28E5268324D400BD44DB /* VideoCls_API.h */,
+				BBFE28E6268324D400BD44DB /* RfcnDetector.h */,
+				BBFE28E7268324D400BD44DB /* C2_Model.h */,
+				BBFE28E8268324D400BD44DB /* FaceMask_Model.h */,
+				BBFE28E9268324D400BD44DB /* FaceLight_API.h */,
+				BBFE28EA268324D400BD44DB /* PornClassifier_API.h */,
+				BBFE28EB268324D400BD44DB /* ARScan_API.h */,
+				BBFE28EC268324D400BD44DB /* AIMoment_Model.h */,
+				BBFE28ED268324D400BD44DB /* idream_API.h */,
+				BBFE28EE268324D400BD44DB /* HeadSeg_Model.h */,
+				BBFE28EF268324D400BD44DB /* ssd_multi_scale_proposal_layer.h */,
+				BBFE28F0268324D400BD44DB /* SkySeg_Model.h */,
+				BBFE28F1268324D400BD44DB /* VideoTempRec_API.h */,
+				BBFE28F2268324D400BD44DB /* EarSeg_Model.h */,
+				BBFE28F3268324D400BD44DB /* predictor_base.h */,
+				BBFE28F4268324D400BD44DB /* SceneLight_API.h */,
+				BBFE28F5268324D400BD44DB /* FaceClusting_API2.h */,
+				BBFE28F6268324D400BD44DB /* FaceVerifySDK_API.h */,
+				BBFE28F7268324D400BD44DB /* HdrnetSDK_Model.h */,
+				BBFE28F8268324D400BD44DB /* FacePartBeautySDK_Model.h */,
+				BBFE28F9268324D400BD44DB /* AIMoment_API.h */,
+				BBFE28FA268324D400BD44DB /* SceneLight_Model.h */,
+				BBFE28FB268324D400BD44DB /* TTJointsAPI.h */,
+				BBFE28FC268324D400BD44DB /* FaceAttr_Model.h */,
+				BBFE28FD268324D400BD44DB /* idream_Model.h */,
+				BBFE28FE268324D400BD44DB /* groundSeg_Model.h */,
+				BBFE28FF268324D400BD44DB /* internal_smash.h */,
+				BBFE2900268324D400BD44DB /* FaceClusting_Define.h */,
+				BBFE2901268324D400BD44DB /* tt_bench.h */,
+				BBFE2902268324D400BD44DB /* Avacap_Model.h */,
+				BBFE2903268324D400BD44DB /* HumanParsing_Model.h */,
+				BBFE2904268324D400BD44DB /* DepthEstimation_Model.h */,
+				BBFE2905268324D400BD44DB /* Similarity_API.h */,
+				BBFE2906268324D400BD44DB /* ClothMesh_Model.h */,
+				BBFE2907268324D400BD44DB /* ClothMesh_API.h */,
+				BBFE2908268324D400BD44DB /* tt_log.h */,
+				BBFE2909268324D400BD44DB /* Nail_API.h */,
+				BBFE290A268324D400BD44DB /* VideoCls_Model.h */,
+				BBFE290B268324D400BD44DB /* C3Cls_Model.h */,
+			);
+			path = smashHeaders;
+			sourceTree = "<group>";
+		};
+		BBFE2871268324D300BD44DB /* enigma */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE2872268324D300BD44DB /* api */,
+			);
+			path = enigma;
+			sourceTree = "<group>";
+		};
+		BBFE2872268324D300BD44DB /* api */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE2873268324D300BD44DB /* Enigma_API.h */,
+			);
+			path = api;
+			sourceTree = "<group>";
+		};
+		BBFE2877268324D400BD44DB /* tag_hub */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE2878268324D400BD44DB /* utils */,
+			);
+			path = tag_hub;
+			sourceTree = "<group>";
+		};
+		BBFE2878268324D400BD44DB /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE2879268324D400BD44DB /* tag_conf.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		BBFE290C268324D400BD44DB /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE290D268324D400BD44DB /* libbytenn.dylib */,
+				BBFE290E268324D400BD44DB /* libbach_naviavatardrive.a */,
+				BBFE290F268324D400BD44DB /* libbach_audioavatar.a */,
+				BBFE2910268324D400BD44DB /* libbach_audioproducer.a */,
+				BBFE2911268324D400BD44DB /* libbach_carseries.a */,
+				BBFE2912268324D400BD44DB /* libeffect.dylib */,
+				BBFE2913268324D400BD44DB /* libkn_effectmanager.dylib */,
+				BBFE2914268324D400BD44DB /* libglfw.3.dylib */,
+				BBFE2915268324D400BD44DB /* libportaudio.dylib */,
+				BBFE2916268324D400BD44DB /* libbach_nh.a */,
+				BBFE2917268324D400BD44DB /* libbach_deepinpaint.a */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		BBFE2AA326832AC200BD44DB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE2AA426832B9000BD44DB /* EffectResources.bundle */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		BCF8E9DE1A75DE3F005AE243 /* Products */ = {
@@ -233,6 +1041,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -269,9 +1078,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				79E8A5FF1A5ED6A700E6A226 /* Images.xcassets in Resources */,
+				BBFE2AA526832B9000BD44DB /* EffectResources.bundle in Resources */,
 				575AD8C91BEA6FC60088E866 /* sample_iPod.m4v in Resources */,
 				79C26E2E1A5F02B70054857C /* SLSSimpleVideoFileFilterWindowController.xib in Resources */,
 				79E8A6021A5ED6A700E6A226 /* MainMenu.xib in Resources */,
+				BBFE27C32683231200BD44DB /* cats.MP4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +1103,7 @@
 				79E8A5FD1A5ED6A700E6A226 /* main.m in Sources */,
 				79E8A5FB1A5ED6A700E6A226 /* AppDelegate.m in Sources */,
 				79C26E221A5EDD1C0054857C /* SLSSimpleVideoFileFilterWindowController.m in Sources */,
+				BBFE2AA02683278C00BD44DB /* EffectGPUImageFilter.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +1225,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = SimpleVideoFilter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SimpleVideoFilter/effect/libs",
+				);
 				PRODUCT_NAME = SimpleVideoFileFilter;
 			};
 			name = Debug;
@@ -424,6 +1240,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = SimpleVideoFilter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SimpleVideoFilter/effect/libs",
+				);
 				PRODUCT_NAME = SimpleVideoFileFilter;
 			};
 			name = Release;
