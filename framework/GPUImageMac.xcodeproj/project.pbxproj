@@ -1333,6 +1333,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = BCA3F31217239B6500E28AEC;
@@ -1601,6 +1602,8 @@
 				GCC_PREFIX_HEADER = "Source/Mac/GPUImageMac-Prefix.pch";
 				INFOPLIST_FILE = "Source/Mac/GPUImageMac-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -1616,6 +1619,8 @@
 				GCC_PREFIX_HEADER = "Source/Mac/GPUImageMac-Prefix.pch";
 				INFOPLIST_FILE = "Source/Mac/GPUImageMac-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;

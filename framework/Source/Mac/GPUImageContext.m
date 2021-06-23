@@ -192,11 +192,18 @@ static void *openGLESContextQueueKey;
 
 - (NSOpenGLContext *)createContext;
 {
+//    NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
+//        NSOpenGLPFADoubleBuffer,
+//        NSOpenGLPFAAccelerated, 0,
+//        0
+//    };
     NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
-        NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFAAccelerated, 0,
-        0
-    };
+                NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
+                NSOpenGLPFAAllowOfflineRenderers,
+                // Must specify the 3.2 Core Profile to use OpenGL 3.2
+                 NSOpenGLPFAOpenGLProfile,
+                 NSOpenGLProfileVersion3_2Core,
+                0};
     
     _pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
 	if (_pixelFormat == nil)

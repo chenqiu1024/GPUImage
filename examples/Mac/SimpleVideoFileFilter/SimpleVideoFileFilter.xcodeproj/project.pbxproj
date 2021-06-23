@@ -87,7 +87,7 @@
 		79E8A5F41A5ED6A700E6A226 /* SimpleVideoFileFilter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleVideoFileFilter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79E8A5F81A5ED6A700E6A226 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79E8A5F91A5ED6A700E6A226 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		79E8A5FA1A5ED6A700E6A226 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		79E8A5FA1A5ED6A700E6A226 /* AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.m; sourceTree = "<group>"; };
 		79E8A5FC1A5ED6A700E6A226 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		79E8A5FE1A5ED6A700E6A226 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		79E8A6011A5ED6A700E6A226 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -1223,6 +1223,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = SimpleVideoFilter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1230,6 +1231,8 @@
 					"$(PROJECT_DIR)/SimpleVideoFilter/effect/libs",
 				);
 				PRODUCT_NAME = SimpleVideoFileFilter;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = all;
 			};
 			name = Debug;
 		};
@@ -1245,6 +1248,8 @@
 					"$(PROJECT_DIR)/SimpleVideoFilter/effect/libs",
 				);
 				PRODUCT_NAME = SimpleVideoFileFilter;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = all;
 			};
 			name = Release;
 		};

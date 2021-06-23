@@ -137,7 +137,7 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 @synthesize aspectRatio = _aspectRatio;
 
 -(instancetype) init {
-    if (!(self = [self initWithFragmentShaderFromString:kGPUImagePassthroughFragmentShaderString]))
+    if (!(self = [self initWithFragmentShaderFromString:kGPUImagePixellationFragmentShaderString]))
     {
         return nil;
     }
@@ -146,16 +146,19 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
     self.fractionalWidthOfAPixel = 0.05;
     [self setFloat:_fractionalWidthOfAPixel forUniform:fractionalWidthOfAPixelUniform program:filterProgram];
     
-    bef_effect_create_handle(&_effectHandle, false);
-    bef_effect_use_pipeline_processor(_effectHandle, false);
-    bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
-    bef_effect_init_with_resource_finder_v2(_effectHandle, 1280, 720, modelFinder, nullptr ,"MacOS");
-
-//            bef_effect_composer_set_mode(_effectHandle, 1, 0);//A+B+C
-    bef_effect_set_camera_device_position(_effectHandle, bef_camera_position_front);
-
-    bool enable_new_algorithm = true;
-    bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
+    _effectHandle = nullptr;
+//    [self performOnGPUImageQueue:^{
+//        bef_effect_create_handle(&_effectHandle, false);
+//        bef_effect_use_pipeline_processor(_effectHandle, false);
+//        bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
+//        bef_effect_init_with_resource_finder_v2(_effectHandle, 720, 1280, modelFinder, nullptr ,"MacOS");
+//
+//    //    bef_effect_composer_set_mode(_effectHandle, 1, 0);//A+B+C
+//        bef_effect_set_camera_device_position(_effectHandle, bef_camera_position_front);
+//
+//        bool enable_new_algorithm = true;
+//        bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
+//    }];
     
     return self;
 }
@@ -200,6 +203,62 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
     {
         [self adjustAspectRatio];
     }
+}
+
+- (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
+{
+    if (self.preventRendering)
+    {
+        [firstInputFramebuffer unlock];
+        return;
+    }
+    
+//    [GPUImageContext setActiveShaderProgram:filterProgram];
+
+    outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
+//    [outputFramebuffer activateFramebuffer];
+//    if (usingNextFrameForImageCapture)
+//    {
+//        [outputFramebuffer lock];
+//    }
+
+    if (nullptr == _effectHandle)
+    {
+        bef_effect_create_handle(&_effectHandle, false);
+        bef_effect_use_pipeline_processor(_effectHandle, false);
+        bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
+        bef_effect_init_with_resource_finder_v2(_effectHandle, 720, 1280, modelFinder, nullptr ,"MacOS");
+
+    //    bef_effect_composer_set_mode(_effectHandle, 1, 0);//A+B+C
+        bef_effect_set_camera_device_position(_effectHandle, bef_camera_position_front);
+
+        bool enable_new_algorithm = true;
+        bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
+    }
+    
+    double timestamp = CMTimeGetSeconds(frameTime);
+    bef_effect_result_t result;
+    result = bef_effect_set_width_height(_effectHandle, inputTextureSize.width, inputTextureSize.height);//设定处理宽高给effect
+    NSLog(@"result of bef_effect_set_width_height() = %d", result);
+    result = bef_effect_algorithm_texture(_effectHandle, firstInputFramebuffer.texture, timestamp);//effect调资源包中设定的算法处理得到所需的该帧算法结果
+    NSLog(@"result of bef_effect_algorithm_texture() = %d", result);
+    result = bef_effect_process_texture(_effectHandle, firstInputFramebuffer.texture, outputFramebuffer.texture, timestamp);//处理inputTexture叠加特效输出到outputTexture
+    NSLog(@"result of bef_effect_process_texture() = %d", result);
+    
+    [outputFramebuffer activateFramebuffer];
+    if (usingNextFrameForImageCapture)
+    {
+        [outputFramebuffer lock];
+    }
+    
+    [firstInputFramebuffer unlock];
+    
+    if (usingNextFrameForImageCapture)
+    {
+        dispatch_semaphore_signal(imageCaptureSemaphore);
+    }
+
+    [self informTargetsAboutNewFrameAtTime:frameTime];
 }
 
 @end

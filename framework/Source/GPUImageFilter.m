@@ -750,4 +750,8 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 #pragma mark -
 #pragma mark Accessors
 
+-(void) performOnGPUImageQueue:(void (^)(void))block {
+    runAsynchronouslyOnVideoProcessingQueue(block);
+}
+
 @end
