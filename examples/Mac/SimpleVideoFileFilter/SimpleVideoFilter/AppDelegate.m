@@ -5,23 +5,26 @@
 
 extern char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName);
 
-void testEffect()
+void testEffect(GLint inputTexture, GLint outputTexture, bool createContext)
 {
-    NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
-        NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFAAccelerated, 0,
-        0
-    };
-//    NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
-//                NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
-//                NSOpenGLPFAAllowOfflineRenderers,
-//                // Must specify the 3.2 Core Profile to use OpenGL 3.2
-//                // NSOpenGLPFAOpenGLProfile,
-//                // NSOpenGLProfileVersion3_2Core,
-//                0};
-    NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
-    NSOpenGLContext* glCtx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
-    [glCtx makeCurrentContext];
+    if (createContext)
+    {
+        NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
+            NSOpenGLPFADoubleBuffer,
+            NSOpenGLPFAAccelerated, 0,
+            0
+        };
+    //    NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
+    //                NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
+    //                NSOpenGLPFAAllowOfflineRenderers,
+    //                // Must specify the 3.2 Core Profile to use OpenGL 3.2
+    //                // NSOpenGLPFAOpenGLProfile,
+    //                // NSOpenGLProfileVersion3_2Core,
+    //                0};
+        NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
+        NSOpenGLContext* glCtx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+        [glCtx makeCurrentContext];
+    }
     
     bef_effect_handle_t _effectHandle = NULL;
     if (NULL == _effectHandle)
@@ -38,8 +41,6 @@ void testEffect()
         bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
     }
     
-    GLint inputTexture = 0;
-    GLint outputTexture = 0;
     double timestamp = 0.0;///!!!CMTimeGetSeconds(frameTime);
     bef_effect_result_t result;
     result = bef_effect_set_width_height(_effectHandle, 720, 1280);//设定处理宽高给effect
@@ -75,7 +76,7 @@ void testEffect()
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-//    testEffect();///!!!
+//    testEffect(0, 0, true);///!!!
     simpleVideoFileFilterWindowController = [[SLSSimpleVideoFileFilterWindowController alloc] initWithWindowNibName:@"SLSSimpleVideoFileFilterWindowController"];
     [simpleVideoFileFilterWindowController showWindow:self];
 }

@@ -16,6 +16,7 @@
 #import <unistd.h>
 #import <dirent.h>
 
+extern void testEffect(GLint inputTexture, GLint outputTexture, bool createContext);
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 NSString *const kGPUImagePixellationFragmentShaderString = SHADER_STRING
 (
@@ -160,6 +161,8 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 //        bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
 //    }];
     
+//    testEffect(0, 0, true);///!!!
+    
     return self;
 }
 
@@ -222,6 +225,9 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 //        [outputFramebuffer lock];
 //    }
 
+//    testEffect(0, 0, true);///!!!
+    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
+    
     if (nullptr == _effectHandle)
     {
         bef_effect_create_handle(&_effectHandle, false);

@@ -201,8 +201,8 @@ static void *openGLESContextQueueKey;
                 NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
                 NSOpenGLPFAAllowOfflineRenderers,
                 // Must specify the 3.2 Core Profile to use OpenGL 3.2
-                 NSOpenGLPFAOpenGLProfile,
-                 NSOpenGLProfileVersion3_2Core,
+//                 NSOpenGLPFAOpenGLProfile,
+//                 NSOpenGLProfileVersion3_2Core,
                 0};
     
     _pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
