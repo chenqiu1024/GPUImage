@@ -35,6 +35,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 
 NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 (
+ precision highp float;
  varying vec2 textureCoordinate;
  
  uniform sampler2D inputImageTexture;

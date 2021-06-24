@@ -98,8 +98,14 @@ typedef void (*GLLogFunction) (GLuint program, GLsizei bufsize, GLsizei* length,
     GLint status;
     const GLchar *source;
     
+    NSString* finalShaderString = @"#version 100\n";
+    if (type == GL_FRAGMENT_SHADER && [shaderString rangeOfString:@"precision "].location == NSNotFound)
+    {
+        finalShaderString = [finalShaderString stringByAppendingString:@"precision highp float;"];
+    }
+    finalShaderString = [finalShaderString stringByAppendingString:shaderString];
     source = 
-      (GLchar *)[shaderString UTF8String];
+      (GLchar *)[finalShaderString UTF8String];
     if (!source)
     {
         NSLog(@"Failed to load vertex shader");
@@ -174,7 +180,13 @@ typedef void (*GLLogFunction) (GLuint program, GLsizei bufsize, GLsizei* length,
     
     glGetProgramiv(program, GL_LINK_STATUS, &status);
     if (status == GL_FALSE)
+    {
+        GLchar messages[1024];
+        glGetProgramInfoLog(program, sizeof(messages), 0, &messages[0]);
+        NSLog(@"%s\n", messages);
+        ///!!!exit(1);
         return NO;
+    }
     
     if (vertShader)
     {

@@ -26,18 +26,19 @@ void testEffect(GLint inputTexture, GLint outputTexture, bool createContext)
     const int width = 720, height = 1280;
     if (createContext)
     {
-        NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
-            NSOpenGLPFADoubleBuffer,
-            NSOpenGLPFAAccelerated, 0,
-            0
-        };
 //        NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
-//                    NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
-//                    NSOpenGLPFAAllowOfflineRenderers,
-//                    // Must specify the 3.2 Core Profile to use OpenGL 3.2
-//                    // NSOpenGLPFAOpenGLProfile,
-////                     NSOpenGLProfileVersion3_2Core,
-//                    0};
+//            NSOpenGLPFADoubleBuffer,
+//            NSOpenGLPFAAccelerated, 0,
+//            0
+//        };
+        NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
+                    NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
+                    NSOpenGLPFAAllowOfflineRenderers,
+                    // Must specify the 3.2 Core Profile to use OpenGL 3.2
+                    NSOpenGLPFAOpenGLProfile,
+                     NSOpenGLProfileVersion3_2Core,
+//                    NSOpenGLProfileVersion4_1Core,
+                    0};
         NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
         NSOpenGLContext* glCtx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
         [glCtx makeCurrentContext];
@@ -60,11 +61,11 @@ void testEffect(GLint inputTexture, GLint outputTexture, bool createContext)
         bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
     }
     
-    if (inputTexture <= 0)
+    if (inputTexture < 0)
     {
         inputTexture = createTexture(width, height);
     }
-    if (outputTexture <= 0)
+    if (outputTexture < 0)
     {
         outputTexture = createTexture(width, height);
     }
@@ -103,7 +104,7 @@ void testEffect(GLint inputTexture, GLint outputTexture, bool createContext)
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    testEffect(0, 0, true);///!!!
+//    testEffect(-1, -1, true);///!!!
     simpleVideoFileFilterWindowController = [[SLSSimpleVideoFileFilterWindowController alloc] initWithWindowNibName:@"SLSSimpleVideoFileFilterWindowController"];
     [simpleVideoFileFilterWindowController showWindow:self];
 }

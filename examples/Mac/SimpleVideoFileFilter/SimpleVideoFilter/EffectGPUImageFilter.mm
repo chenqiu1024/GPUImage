@@ -161,7 +161,7 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 //        bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
 //    }];
     
-//    testEffect(0, 0, true);///!!!
+//    testEffect(-1, -1, true);///!!!
     
     return self;
 }
@@ -226,7 +226,7 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 //    }
 
 //    testEffect(0, 0, true);///!!!
-//    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
+    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
     
     if (nullptr == _effectHandle)
     {
