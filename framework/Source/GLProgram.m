@@ -101,9 +101,10 @@ typedef void (*GLLogFunction) (GLuint program, GLsizei bufsize, GLsizei* length,
     NSString* finalShaderString = @"#version 100\n";
     if (type == GL_FRAGMENT_SHADER && [shaderString rangeOfString:@"precision "].location == NSNotFound)
     {
-        finalShaderString = [finalShaderString stringByAppendingString:@"precision highp float;"];
+        finalShaderString = [finalShaderString stringByAppendingString:@"precision mediump float;\n"];
     }
     finalShaderString = [finalShaderString stringByAppendingString:shaderString];
+//    finalShaderString = shaderString;
     source = 
       (GLchar *)[finalShaderString UTF8String];
     if (!source)

@@ -35,7 +35,6 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 
 NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 (
- precision highp float;
  varying vec2 textureCoordinate;
  
  uniform sampler2D inputImageTexture;
@@ -751,7 +750,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 #pragma mark -
 #pragma mark Accessors
 
--(void) performOnGPUImageQueue:(void (^)(void))block {
++(void) performOnGPUImageQueue:(void (^)(void))block {
     runAsynchronouslyOnVideoProcessingQueue(block);
 }
 

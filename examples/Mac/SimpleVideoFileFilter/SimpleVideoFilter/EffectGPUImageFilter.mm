@@ -16,7 +16,7 @@
 #import <unistd.h>
 #import <dirent.h>
 
-extern void testEffect(GLint inputTexture, GLint outputTexture, bool createContext);
+//extern void testEffect(GLint inputTexture, GLint outputTexture, bool createContext);
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 NSString *const kGPUImagePixellationFragmentShaderString = SHADER_STRING
 (
@@ -123,6 +123,7 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 {
     GLint fractionalWidthOfAPixelUniform, aspectRatioUniform;
     bef_effect_handle_t _effectHandle;
+    NSOpenGLContext* _glCtx;
 }
 
 @property (readwrite, nonatomic) CGFloat aspectRatio;
@@ -148,20 +149,32 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
     [self setFloat:_fractionalWidthOfAPixel forUniform:fractionalWidthOfAPixelUniform program:filterProgram];
     
     _effectHandle = nullptr;
-//    [self performOnGPUImageQueue:^{
-//        bef_effect_create_handle(&_effectHandle, false);
-//        bef_effect_use_pipeline_processor(_effectHandle, false);
-//        bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
-//        bef_effect_init_with_resource_finder_v2(_effectHandle, 720, 1280, modelFinder, nullptr ,"MacOS");
-//
-//    //    bef_effect_composer_set_mode(_effectHandle, 1, 0);//A+B+C
-//        bef_effect_set_camera_device_position(_effectHandle, bef_camera_position_front);
-//
-//        bool enable_new_algorithm = true;
-//        bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
-//    }];
-    
-//    testEffect(-1, -1, true);///!!!
+    _glCtx = nullptr;
+    [self.class performOnGPUImageQueue:^{
+        NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
+                    NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
+                    NSOpenGLPFAAllowOfflineRenderers,
+                    // Must specify the 3.2 Core Profile to use OpenGL 3.2
+                    NSOpenGLPFAOpenGLProfile,
+//            NSOpenGLProfileVersionLegacy,
+//                     NSOpenGLProfileVersion3_2Core,
+                    NSOpenGLProfileVersion4_1Core,
+                    0};
+        NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
+        _glCtx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:[NSOpenGLContext currentContext]];
+        [_glCtx makeCurrentContext];
+        
+        bef_effect_create_handle(&_effectHandle, false);
+        bef_effect_use_pipeline_processor(_effectHandle, false);
+        bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
+        bef_effect_init_with_resource_finder_v2(_effectHandle, 720, 1280, modelFinder, nullptr ,"MacOS");
+
+    //    bef_effect_composer_set_mode(_effectHandle, 1, 0);//A+B+C
+        bef_effect_set_camera_device_position(_effectHandle, bef_camera_position_front);
+
+        bool enable_new_algorithm = true;
+        bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
+    }];
     
     return self;
 }
@@ -216,32 +229,19 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
         return;
     }
     
-//    [GPUImageContext setActiveShaderProgram:filterProgram];
+    [GPUImageContext setActiveShaderProgram:filterProgram];
 
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
-//    [outputFramebuffer activateFramebuffer];
-//    if (usingNextFrameForImageCapture)
-//    {
-//        [outputFramebuffer lock];
-//    }
-
-//    testEffect(0, 0, true);///!!!
-    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
-    
-    if (nullptr == _effectHandle)
+    [outputFramebuffer activateFramebuffer];
+    if (usingNextFrameForImageCapture)
     {
-        bef_effect_create_handle(&_effectHandle, false);
-        bef_effect_use_pipeline_processor(_effectHandle, false);
-        bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
-        bef_effect_init_with_resource_finder_v2(_effectHandle, 720, 1280, modelFinder, nullptr ,"MacOS");
-
-    //    bef_effect_composer_set_mode(_effectHandle, 1, 0);//A+B+C
-        bef_effect_set_camera_device_position(_effectHandle, bef_camera_position_front);
-
-        bool enable_new_algorithm = true;
-        bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
+        [outputFramebuffer lock];
     }
-    
+
+    NSOpenGLContext* prevGLCtx = [NSOpenGLContext currentContext];
+    [_glCtx makeCurrentContext];
+//    testEffect(0, 0, true);///!!!
+//    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
     GLint inputTexture = firstInputFramebuffer.texture;
     GLint outputTexture = outputFramebuffer.texture;
     double timestamp = CMTimeGetSeconds(frameTime);
@@ -253,12 +253,8 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
     result = bef_effect_process_texture(_effectHandle, inputTexture, outputTexture, timestamp);//处理inputTexture叠加特效输出到outputTexture
     NSLog(@"result of bef_effect_process_texture() = %d", result);
     
-    [outputFramebuffer activateFramebuffer];
-    if (usingNextFrameForImageCapture)
-    {
-        [outputFramebuffer lock];
-    }
-    
+    [prevGLCtx makeCurrentContext];
+
     [firstInputFramebuffer unlock];
     
     if (usingNextFrameForImageCapture)

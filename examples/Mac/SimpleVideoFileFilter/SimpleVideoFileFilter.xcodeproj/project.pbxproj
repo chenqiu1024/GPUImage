@@ -45,18 +45,18 @@
 			remoteGlobalIDString = 79E8A5F31A5ED6A700E6A226;
 			remoteInfo = SimpleVideoFilter;
 		};
+		BB4AFE702685BA0A00B47896 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCF8E9DD1A75DE3F005AE243 /* GPUImageMac.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCA3F31B17239B6500E28AEC;
+			remoteInfo = GPUImage;
+		};
 		BCF8E9E11A75DE3F005AE243 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BCF8E9DD1A75DE3F005AE243 /* GPUImageMac.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = BCA3F31C17239B6500E28AEC;
-			remoteInfo = GPUImage;
-		};
-		BCF8E9E31A75DE5B005AE243 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BCF8E9DD1A75DE3F005AE243 /* GPUImageMac.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BCA3F31B17239B6500E28AEC;
 			remoteInfo = GPUImage;
 		};
 /* End PBXContainerItemProxy section */
@@ -993,7 +993,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				BCF8E9E41A75DE5B005AE243 /* PBXTargetDependency */,
+				BB4AFE712685BA0A00B47896 /* PBXTargetDependency */,
 			);
 			name = SimpleVideoFileFilter;
 			productName = SimpleVideoFilter;
@@ -1123,10 +1123,10 @@
 			target = 79E8A5F31A5ED6A700E6A226 /* SimpleVideoFileFilter */;
 			targetProxy = 79E8A6081A5ED6A700E6A226 /* PBXContainerItemProxy */;
 		};
-		BCF8E9E41A75DE5B005AE243 /* PBXTargetDependency */ = {
+		BB4AFE712685BA0A00B47896 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GPUImage;
-			targetProxy = BCF8E9E31A75DE5B005AE243 /* PBXContainerItemProxy */;
+			targetProxy = BB4AFE702685BA0A00B47896 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
