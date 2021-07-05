@@ -36,19 +36,6 @@
     NSURL *sampleURL = [[NSBundle mainBundle] URLForResource:@"cats" withExtension:@"MP4"];
     [self runProcessingWithURL:sampleURL];
     [self showProcessingUI];
-//    NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-//    [openPanel setPrompt:@"Open Source Media Files"];
-//    openPanel.allowedFileTypes = @[@"mp4", @"mov", @"avi", @"mkv", @"rmvb"];
-//    openPanel.allowsMultipleSelection = YES;
-//    openPanel.directoryURL = nil;
-//    NSLog(@"self.window=%@", self.window);
-//    [openPanel beginSheet:self.window completionHandler:^(NSModalResponse returnCode) {
-//        if (returnCode == 0)
-//        {
-//            [self runProcessingWithURL:openPanel.URL];
-//            [self showProcessingUI];
-//        }
-//    }];
 }
 
 - (IBAction)gpuImageMovieWithURLButtonAction:(id)sender {
@@ -77,8 +64,8 @@
     movieFile = [[GPUImageMovie alloc] initWithPlayerItem:self.playerItem];
     movieFile.runBenchmark = YES;
     movieFile.playAtActualSpeed = NO;
-//    filter = [[GPUImagePixellateFilter alloc] init];
-    filter = [[EffectGPUImageFilter alloc] init];
+    filter = [[GPUImagePixellateFilter alloc] init];
+//    filter = [[EffectGPUImageFilter alloc] init];
     //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
     
     [movieFile addTarget:filter];

@@ -151,22 +151,23 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
     _effectHandle = nullptr;
     _glCtx = nullptr;
     [self.class performOnGPUImageQueue:^{
+        NSOpenGLContext* prevGLCtx = [NSOpenGLContext currentContext];
         NSOpenGLPixelFormatAttribute pixelFormatAttributes[] = {
                     NSOpenGLPFADoubleBuffer, NSOpenGLPFADepthSize, 24,
                     NSOpenGLPFAAllowOfflineRenderers,
                     // Must specify the 3.2 Core Profile to use OpenGL 3.2
                     NSOpenGLPFAOpenGLProfile,
-//            NSOpenGLProfileVersionLegacy,
+//                    NSOpenGLProfileVersionLegacy,
 //                     NSOpenGLProfileVersion3_2Core,
                     NSOpenGLProfileVersion4_1Core,
                     0};
         NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAttributes];
-        _glCtx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:[NSOpenGLContext currentContext]];
+        _glCtx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:prevGLCtx];
         [_glCtx makeCurrentContext];
         
         bef_effect_create_handle(&_effectHandle, false);
         bef_effect_use_pipeline_processor(_effectHandle, false);
-        bef_effect_set_render_api(_effectHandle, bef_render_api_gles30);
+        bef_effect_set_render_api(_effectHandle, bef_render_api_gles20);
         bef_effect_init_with_resource_finder_v2(_effectHandle, 720, 1280, modelFinder, nullptr ,"MacOS");
 
     //    bef_effect_composer_set_mode(_effectHandle, 1, 0);//A+B+C
@@ -174,6 +175,8 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
 
         bool enable_new_algorithm = true;
         bef_effect_config_ab_value("enable_new_algorithm_system", &enable_new_algorithm, BEF_AB_DATA_TYPE_BOOL);
+        
+        [prevGLCtx makeCurrentContext];
     }];
     
     return self;
@@ -221,48 +224,48 @@ char* modelFinder(void* effectHandle, const char* dirPath, const char* modelName
     }
 }
 
-- (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
-{
-    if (self.preventRendering)
-    {
-        [firstInputFramebuffer unlock];
-        return;
-    }
-    
-    [GPUImageContext setActiveShaderProgram:filterProgram];
-
-    outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
-    [outputFramebuffer activateFramebuffer];
-    if (usingNextFrameForImageCapture)
-    {
-        [outputFramebuffer lock];
-    }
-
-    NSOpenGLContext* prevGLCtx = [NSOpenGLContext currentContext];
-    [_glCtx makeCurrentContext];
-//    testEffect(0, 0, true);///!!!
-//    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
-    GLint inputTexture = firstInputFramebuffer.texture;
-    GLint outputTexture = outputFramebuffer.texture;
-    double timestamp = CMTimeGetSeconds(frameTime);
-    bef_effect_result_t result;
-    result = bef_effect_set_width_height(_effectHandle, inputTextureSize.width, inputTextureSize.height);//设定处理宽高给effect
-    NSLog(@"result of bef_effect_set_width_height() = %d", result);
-    result = bef_effect_algorithm_texture(_effectHandle, inputTexture, timestamp);//effect调资源包中设定的算法处理得到所需的该帧算法结果
-    NSLog(@"result of bef_effect_algorithm_texture() = %d", result);
-    result = bef_effect_process_texture(_effectHandle, inputTexture, outputTexture, timestamp);//处理inputTexture叠加特效输出到outputTexture
-    NSLog(@"result of bef_effect_process_texture() = %d", result);
-    
-    [prevGLCtx makeCurrentContext];
-
-    [firstInputFramebuffer unlock];
-    
-    if (usingNextFrameForImageCapture)
-    {
-        dispatch_semaphore_signal(imageCaptureSemaphore);
-    }
-
-    [self informTargetsAboutNewFrameAtTime:frameTime];
-}
+//- (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
+//{
+//    if (self.preventRendering)
+//    {
+//        [firstInputFramebuffer unlock];
+//        return;
+//    }
+//
+//    [GPUImageContext setActiveShaderProgram:filterProgram];
+//
+//    outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
+//    [outputFramebuffer activateFramebuffer];
+//    if (usingNextFrameForImageCapture)
+//    {
+//        [outputFramebuffer lock];
+//    }
+//
+//    NSOpenGLContext* prevGLCtx = [NSOpenGLContext currentContext];
+//    [_glCtx makeCurrentContext];
+////    testEffect(0, 0, true);///!!!
+////    testEffect(firstInputFramebuffer.texture, outputFramebuffer.texture, true);///!!!
+//    GLint inputTexture = firstInputFramebuffer.texture;
+//    GLint outputTexture = outputFramebuffer.texture;
+//    double timestamp = CMTimeGetSeconds(frameTime);
+//    bef_effect_result_t result;
+//    result = bef_effect_set_width_height(_effectHandle, inputTextureSize.width, inputTextureSize.height);//设定处理宽高给effect
+//    NSLog(@"result of bef_effect_set_width_height() = %d", result);
+//    result = bef_effect_algorithm_texture(_effectHandle, inputTexture, timestamp);//effect调资源包中设定的算法处理得到所需的该帧算法结果
+//    NSLog(@"result of bef_effect_algorithm_texture() = %d", result);
+//    result = bef_effect_process_texture(_effectHandle, inputTexture, outputTexture, timestamp);//处理inputTexture叠加特效输出到outputTexture
+//    NSLog(@"result of bef_effect_process_texture() = %d", result);
+//
+//    [prevGLCtx makeCurrentContext];
+//
+//    [firstInputFramebuffer unlock];
+//
+//    if (usingNextFrameForImageCapture)
+//    {
+//        dispatch_semaphore_signal(imageCaptureSemaphore);
+//    }
+//
+//    [self informTargetsAboutNewFrameAtTime:frameTime];
+//}
 
 @end
